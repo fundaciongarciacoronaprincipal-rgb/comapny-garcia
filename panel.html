@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Panel de Usuario</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI;
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  color:white;
+}
+
+.header{
+  background:rgba(0,0,0,0.3);
+  padding:20px;
+  text-align:center;
+  font-size:22px;
+}
+
+.container{
+  padding:20px;
+}
+
+.card{
+  background:white;
+  color:black;
+  padding:20px;
+  border-radius:15px;
+  max-width:400px;
+  margin:auto;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+.info{
+  margin:10px 0;
+  font-size:16px;
+}
+
+button{
+  margin-top:15px;
+  padding:10px 20px;
+  border:none;
+  border-radius:10px;
+  background:#2a5298;
+  color:white;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#1e3c72;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header" id="bienvenida">
+  Bienvenido...
+</div>
+
+<div class="container">
+  <div class="card">
+    <h3>Información del usuario</h3>
+
+    <div class="info"><b>Empresa:</b> <span id="empresa"></span></div>
+    <div class="info"><b>Área:</b> <span id="area"></span></div>
+    <div class="info"><b>Puesto:</b> <span id="puesto"></span></div>
+
+    <button onclick="logout()">Cerrar sesión</button>
+  </div>
+</div>
+
+<script>
+const supabaseClient = supabase.createClient(
+  'https://gdkrzncbvginxvmqorsg.supabase.co',
+  'sb_publishable_gIQvD36G7KeKZu_OC4MI4w_QQKKEpcA'
+);
+
+// 🔐 obtener usuario
+const user_id = localStorage.getItem('user_id');
+
+if(!user_id){
+  alert('Debes iniciar sesión');
+  window.location.href = 'login.html';
+}
+
+// 🔎 cargar datos
+async function cargarUsuario(){
+
+  const { data, error } = await supabaseClient
+    .from('trabajadores')
+    .select('*')
+    .eq('id', user_id)
+    .single();
+
+  if(error || !data){
+    alert('Error al cargar usuario');
+    return;
+  }
+
+  // 🔥 BIENVENIDA
+  document.getElementById('bienvenida').innerText =
+    'Bienvenido ' + data.nombre_completo;
+
+  // 📋 INFO
+  document.getElementById('empresa').innerText = data.empresa;
+  document.getElementById('area').innerText = data.area;
+  document.getElementById('puesto').innerText = data.puesto;
+}
+
+cargarUsuario();
+
+// 🚪 logout
+function logout(){
+  localStorage.clear();
+  window.location.href = 'login.html';
+}
+</script>
+
+</body>
+</html>

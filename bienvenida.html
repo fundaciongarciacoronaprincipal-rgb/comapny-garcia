@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Seguridad</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:white;
+}
+
+.box{
+  background:white;
+  color:black;
+  padding:30px;
+  border-radius:15px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border-radius:8px;
+  border:1px solid #ccc;
+}
+
+button{
+  width:100%;
+  padding:10px;
+  background:#2c5364;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#203a43;
+}
+
+#msg{
+  margin-top:15px;
+  font-size:14px;
+  color:green;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>🔐 Seguridad</h2>
+  <p>Por tu seguridad debes cambiar tu contraseña</p>
+
+  <input id="newpass" type="password" placeholder="Nueva contraseña">
+  <button onclick="cambiar()">Cambiar contraseña</button>
+
+  <p id="msg"></p>
+</div>
+
+<script>
+const supabaseClient = supabase.createClient(
+  'https://gdkrzncbvginxvmqorsg.supabase.co',
+  'sb_publishable_gIQvD36G7KeKZu_OC4MI4w_QQKKEpcA'
+);
+
+async function cambiar(){
+
+  const id = localStorage.getItem('user_id');
+  const nueva = document.getElementById('newpass').value;
+
+  if(!nueva){
+    alert('Escribe una contraseña');
+    return;
+  }
+
+  // Verificar si ya cambió contraseña
+  const { data, error } = await supabaseClient
+    .from('trabajadores')
+    .select('password_cambiada')
+    .eq('id', id)
+    .single();
+
+  if(error){
+    alert('Error al verificar usuario');
+    return;
+  }
+
+  if(data.password_cambiada){
+    document.getElementById('msg').innerText = '⚠️ Ya cambiaste tu contraseña';
+    return;
+  }
+
+  // Actualizar contraseña
+  const { error: updateError } = await supabaseClient
+    .from('trabajadores')
+    .update({
+      password: nueva,
+      password_cambiada: true
+    })
+    .eq('id', id);
+
+  if(updateError){
+    alert('Error al actualizar');
+    return;
+  }
+
+  document.getElementById('msg').innerText =
+    '✅ Gracias, espera a que se actualicen los datos...';
+
+  // Redirigir después
+  setTimeout(()=>{
+    window.location.href = 'panel.html';
+  }, 2000);
+}
+</script>
+
+</body>
+</html>

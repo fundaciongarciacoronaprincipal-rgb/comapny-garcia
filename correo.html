@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Correo Empresarial</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:Segoe UI;
+  background:#1e1e2f;
+  color:white;
+}
+
+#login, #sistema{
+  padding:20px;
+}
+
+.menu{
+  background:#111;
+  padding:10px;
+}
+
+button{
+  margin:5px;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  background:#4caf50;
+  color:white;
+  cursor:pointer;
+}
+
+input, textarea{
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+  border-radius:8px;
+  border:none;
+}
+
+.card{
+  background:#2a2a40;
+  padding:10px;
+  margin:10px;
+  border-radius:10px;
+}
+
+.hidden{display:none;}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <h2>🔐 Iniciar sesión</h2>
+  <input id="correo" placeholder="Correo">
+  <input id="password" type="password" placeholder="Contraseña">
+  <button onclick="login()">Entrar</button>
+</div>
+
+<!-- SISTEMA -->
+<div id="sistema" class="hidden">
+
+<div class="menu">
+  <button onclick="ver('recibidos')">📥 Recibidos</button>
+  <button onclick="ver('enviados')">📤 Enviados</button>
+  <button onclick="ver('redactar')">✍️ Redactar</button>
+  <button onclick="logout()">Salir</button>
+</div>
+
+<div id="recibidos"></div>
+<div id="enviados" class="hidden"></div>
+
+<div id="redactar" class="hidden">
+  <h3>Nuevo mensaje</h3>
+  <input id="destino" placeholder="Destinatario">
+  <input id="asunto" placeholder="Asunto">
+  <textarea id="contenido" placeholder="Mensaje"></textarea>
+  <input id="archivo" placeholder="Link archivo">
+  <button onclick="enviar()">Enviar</button>
+</div>
+
+</div>
+
+<script>
+const supabaseClient = supabase.createClient(
+  'https://gdkrzncbvginxvmqorsg.supabase.co',
+  'sb_publishable_gIQvD36G7KeKZu_OC4MI4w_QQKKEpcA'
+);
+
+// 🔥 CARGAR SESIÓN
+let user = localStorage.getItem('correo');
+
+if(user){
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('sistema').classList.remove('hidden');
+  cargarRecibidos();
+  cargarEnviados();
+}
+
+// 🔐 LOGIN
+async function login(){
+  const correo = document.getElementById('correo').value.trim();
+  const password = document.getElementById('password').value;
+
+  const { data, error } = await supabaseClient
+    .from('trabajadores')
+    .select('*')
+    .eq('correo', correo)
+    .eq('password', password)
+    .single();
+
+  if(error || !data){
+    alert('❌ Datos incorrectos');
+    return;
+  }
+
+  user = correo;
+  localStorage.setItem('correo', correo);
+
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('sistema').classList.remove('hidden');
+
+  cargarRecibidos();
+  cargarEnviados();
+}
+
+// 🔄 CAMBIAR VISTA
+function ver(sec){
+  document.getElementById('recibidos').classList.add('hidden');
+  document.getElementById('enviados').classList.add('hidden');
+  document.getElementById('redactar').classList.add('hidden');
+
+  document.getElementById(sec).classList.remove('hidden');
+}
+
+// 📤 ENVIAR
+async function enviar(){
+  const destino = document.getElementById('destino').value.trim();
+  const asunto = document.getElementById('asunto').value.trim();
+  const contenido = document.getElementById('contenido').value.trim();
+  const archivo = document.getElementById('archivo').value.trim();
+
+  if(!destino || !contenido){
+    alert('⚠️ Faltan datos');
+    return;
+  }
+
+  const { error } = await supabaseClient.from('mensajes').insert([{
+    remitente: user,
+    destinatario: destino,
+    asunto,
+    contenido,
+    archivo
+  }]);
+
+  if(error){
+    alert('❌ Error al enviar');
+    return;
+  }
+
+  alert('✅ Mensaje enviado');
+
+  // 🔥 ACTUALIZA LISTAS
+  cargarRecibidos();
+  cargarEnviados();
+
+  // limpiar campos
+  document.getElementById('destino').value = '';
+  document.getElementById('asunto').value = '';
+  document.getElementById('contenido').value = '';
+  document.getElementById('archivo').value = '';
+}
+
+// 📥 RECIBIDOS
+async function cargarRecibidos(){
+
+  if(!user) return;
+
+  const { data, error } = await supabaseClient
+    .from('mensajes')
+    .select('*')
+    .eq('destinatario', user)
+    .order('created_at', { ascending:false });
+
+  const cont = document.getElementById('recibidos');
+  cont.innerHTML = '<h3>📥 Recibidos</h3>';
+
+  if(error || !data || data.length === 0){
+    cont.innerHTML += '<p>No hay mensajes</p>';
+    return;
+  }
+
+  data.forEach(m=>{
+    cont.innerHTML += `
+    <div class="card">
+      <b>${m.asunto || 'Sin asunto'}</b><br>
+      De: ${m.remitente}<br>
+      ${m.contenido}<br>
+      ${m.archivo ? `<a href="${m.archivo}" target="_blank">📎 Archivo</a>`:''}
+    </div>`;
+  });
+}
+
+// 📤 ENVIADOS
+async function cargarEnviados(){
+
+  if(!user) return;
+
+  const { data, error } = await supabaseClient
+    .from('mensajes')
+    .select('*')
+    .eq('remitente', user)
+    .order('created_at', { ascending:false });
+
+  const cont = document.getElementById('enviados');
+  cont.innerHTML = '<h3>📤 Enviados</h3>';
+
+  if(error || !data || data.length === 0){
+    cont.innerHTML += '<p>No has enviado mensajes</p>';
+    return;
+  }
+
+  data.forEach(m=>{
+    cont.innerHTML += `
+    <div class="card">
+      <b>${m.asunto || 'Sin asunto'}</b><br>
+      Para: ${m.destinatario}<br>
+      ${m.contenido}
+    </div>`;
+  });
+}
+
+// 🚪 LOGOUT
+function logout(){
+  localStorage.clear();
+  location.reload();
+}
+</script>
+
+</body>
+</html>
