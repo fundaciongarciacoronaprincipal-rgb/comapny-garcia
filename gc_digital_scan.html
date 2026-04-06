@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>GC Digital Scan</title>
+
+<!-- LIBRERÍAS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+body{
+    font-family: Arial;
+    background:#0f172a;
+    color:white;
+    text-align:center;
+    margin:0;
+}
+
+header{
+    padding:20px;
+    background:#1e293b;
+}
+
+.container{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    gap:20px;
+    padding:20px;
+}
+
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+}
+
+input, button{
+    padding:10px;
+    margin:10px;
+    width:80%;
+    border-radius:8px;
+    border:none;
+}
+
+button{
+    background:#38bdf8;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    background:#0ea5e9;
+}
+
+#reader{
+    width:100%;
+    max-width:300px;
+    margin:auto;
+}
+
+#qrcode, #barcode{
+    margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>GC Digital Scan</h1>
+    <p>Generador y Escáner de QR y Códigos de Barras</p>
+</header>
+
+<div class="container">
+
+    <!-- GENERADOR -->
+    <div class="card">
+        <h2>Generador</h2>
+
+        <input type="text" id="texto" placeholder="Escribe texto o número">
+
+        <button onclick="generarQR()">Generar QR</button>
+        <button onclick="generarBarcode()">Generar Código de Barras</button>
+
+        <div id="qrcode"></div>
+        <svg id="barcode"></svg>
+    </div>
+
+    <!-- ESCÁNER -->
+    <div class="card">
+        <h2>Escáner QR</h2>
+
+        <div id="reader"></div>
+        <p id="resultado">Resultado aparecerá aquí</p>
+    </div>
+
+</div>
+
+<script>
+
+// QR
+function generarQR(){
+    document.getElementById("qrcode").innerHTML = "";
+    let texto = document.getElementById("texto").value;
+
+    if(texto === "") return alert("Escribe algo");
+
+    new QRCode(document.getElementById("qrcode"), texto);
+}
+
+// Código de barras
+function generarBarcode(){
+    let texto = document.getElementById("texto").value;
+
+    if(texto === "") return alert("Escribe algo");
+
+    JsBarcode("#barcode", texto);
+}
+
+// ESCÁNER QR
+function onScanSuccess(decodedText){
+    document.getElementById("resultado").innerText = "Resultado: " + decodedText;
+}
+
+let scanner = new Html5Qrcode("reader");
+
+scanner.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    onScanSuccess
+);
+
+</script>
+
+</body>
+</html>
