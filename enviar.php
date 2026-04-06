@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mensaje = trim(htmlspecialchars($_POST["mensaje"]));
 
     // Correo destino (temporal)
-    $destino = "fgc@gmail.com";
+    $destino = "companygarciacorona@companygarciacorona.com.mx";
 
     // Asunto
     $asunto = "Nuevo mensaje desde Compañía García Corona";
