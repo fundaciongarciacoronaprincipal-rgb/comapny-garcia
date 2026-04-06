@@ -2,9 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>GC Digital Scan</title>
+<title>GC Digital Scan PRO</title>
 
-<!-- LIBRERÍAS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
@@ -60,8 +59,25 @@ button:hover{
     margin:auto;
 }
 
-#qrcode, #barcode{
+/* RESULTADO */
+.resultado-box{
+    background:white;
+    color:black;
+    padding:15px;
     margin-top:15px;
+    border-radius:10px;
+    min-height:60px;
+    word-wrap:break-word;
+}
+
+.btns{
+    margin-top:10px;
+}
+
+.btns button{
+    width:auto;
+    margin:5px;
+    padding:8px 12px;
 }
 </style>
 </head>
@@ -69,8 +85,8 @@ button:hover{
 <body>
 
 <header>
-    <h1>GC Digital Scan</h1>
-    <p>Generador y Escáner de QR y Códigos de Barras</p>
+    <h1>GC Digital Scan PRO</h1>
+    <p>Generador y Escáner Inteligente</p>
 </header>
 
 <div class="container">
@@ -79,10 +95,10 @@ button:hover{
     <div class="card">
         <h2>Generador</h2>
 
-        <input type="text" id="texto" placeholder="Escribe texto o número">
+        <input type="text" id="texto" placeholder="Texto, link o WiFi">
 
         <button onclick="generarQR()">Generar QR</button>
-        <button onclick="generarBarcode()">Generar Código de Barras</button>
+        <button onclick="generarBarcode()">Código de Barras</button>
 
         <div id="qrcode"></div>
         <svg id="barcode"></svg>
@@ -93,7 +109,13 @@ button:hover{
         <h2>Escáner QR</h2>
 
         <div id="reader"></div>
-        <p id="resultado">Resultado aparecerá aquí</p>
+
+        <!-- RESULTADO -->
+        <div class="resultado-box" id="resultado">
+            Aquí aparecerá el resultado
+        </div>
+
+        <div class="btns" id="acciones"></div>
     </div>
 
 </div>
@@ -104,26 +126,75 @@ button:hover{
 function generarQR(){
     document.getElementById("qrcode").innerHTML = "";
     let texto = document.getElementById("texto").value;
-
-    if(texto === "") return alert("Escribe algo");
-
+    if(!texto) return alert("Escribe algo");
     new QRCode(document.getElementById("qrcode"), texto);
 }
 
-// Código de barras
+// Barcode
 function generarBarcode(){
     let texto = document.getElementById("texto").value;
-
-    if(texto === "") return alert("Escribe algo");
-
+    if(!texto) return alert("Escribe algo");
     JsBarcode("#barcode", texto);
 }
 
-// ESCÁNER QR
-function onScanSuccess(decodedText){
-    document.getElementById("resultado").innerText = "Resultado: " + decodedText;
+// Detectar tipo de contenido
+function detectarTipo(texto){
+    if(texto.startsWith("WIFI:")) return "wifi";
+    if(texto.startsWith("http")) return "link";
+    return "texto";
 }
 
+// Escáner
+function onScanSuccess(decodedText){
+
+    document.getElementById("resultado").innerText = decodedText;
+
+    let acciones = document.getElementById("acciones");
+    acciones.innerHTML = "";
+
+    let tipo = detectarTipo(decodedText);
+
+    // COPIAR
+    let btnCopiar = document.createElement("button");
+    btnCopiar.innerText = "Copiar";
+    btnCopiar.onclick = () => {
+        navigator.clipboard.writeText(decodedText);
+        alert("Copiado");
+    };
+    acciones.appendChild(btnCopiar);
+
+    // LINK
+    if(tipo === "link"){
+        let btnAbrir = document.createElement("button");
+        btnAbrir.innerText = "Abrir link";
+        btnAbrir.onclick = () => {
+            window.open(decodedText, "_blank");
+        };
+        acciones.appendChild(btnAbrir);
+    }
+
+    // WIFI (formato: WIFI:T:WPA;S:nombre;P:password;;)
+    if(tipo === "wifi"){
+        let partes = decodedText.split(";");
+
+        let ssid = partes.find(p => p.startsWith("S:"))?.replace("S:","");
+        let pass = partes.find(p => p.startsWith("P:"))?.replace("P:","");
+
+        let info = document.createElement("p");
+        info.innerHTML = "SSID: " + ssid + "<br>Password: " + pass;
+        document.getElementById("resultado").appendChild(info);
+
+        let btnCopiarPass = document.createElement("button");
+        btnCopiarPass.innerText = "Copiar contraseña";
+        btnCopiarPass.onclick = () => {
+            navigator.clipboard.writeText(pass);
+            alert("Contraseña copiada");
+        };
+        acciones.appendChild(btnCopiarPass);
+    }
+}
+
+// iniciar scanner
 let scanner = new Html5Qrcode("reader");
 
 scanner.start(
