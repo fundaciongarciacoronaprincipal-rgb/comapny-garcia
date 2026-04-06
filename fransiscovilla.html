@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Esc. Telesecundaria Fransisco Villa</title>
+
+<style>
+
+/* 🌈 ANIMACIÓN DE FONDO */
+body{
+margin:0;
+font-family:Arial;
+text-align:center;
+color:white;
+background:linear-gradient(270deg,#1abc9c,#3498db,#9b59b6,#e74c3c);
+background-size:800% 800%;
+animation:fondoAnimado 15s ease infinite;
+}
+
+/* Movimiento del fondo */
+@keyframes fondoAnimado{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* 🔲 BORDE DE PANTALLA RGB */
+body::before{
+content:"";
+position:fixed;
+top:0; left:0;
+width:100%;
+height:100%;
+border:5px solid;
+border-image:linear-gradient(45deg, red, yellow, lime, cyan, blue, magenta, red) 1;
+pointer-events:none;
+animation:bordeAnimado 5s linear infinite;
+}
+
+/* animación del borde */
+@keyframes bordeAnimado{
+0%{filter:hue-rotate(0deg);}
+100%{filter:hue-rotate(360deg);}
+}
+
+.contenedor{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:20px;
+padding:40px;
+}
+
+/* 🔘 BOTONES */
+.boton{
+position:relative;
+background:rgba(0,0,0,0.4);
+padding:20px;
+border-radius:15px;
+cursor:pointer;
+transition:0.3s;
+overflow:hidden;
+}
+
+/* ✨ LUZ ALREDEDOR DEL BOTÓN */
+.boton::before{
+content:"";
+position:absolute;
+top:-2px;
+left:-2px;
+width:calc(100% + 4px);
+height:calc(100% + 4px);
+background:linear-gradient(45deg, red, yellow, lime, cyan, blue, magenta, red);
+background-size:400%;
+border-radius:15px;
+z-index:-1;
+animation:luces 6s linear infinite;
+}
+
+/* Animación luces */
+@keyframes luces{
+0%{background-position:0%;}
+100%{background-position:400%;}
+}
+
+/* Glow interior */
+.boton:hover{
+transform:scale(1.07);
+box-shadow:0 0 20px rgba(255,255,255,0.7);
+}
+
+.boton img{
+width:80px;
+}
+
+a{
+text-decoration:none;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Esc. Telesecundaria Fransisco Villa</h1>
+<p>Emiliano Zapata, San José Bata, Hueypoxtla, Estado de México.</p>
+
+<div class="contenedor">
+
+<div class="boton">
+<a href="OPCIONES DE ACCESOS/DIRECCION/DIRECCION.HTML">
+<img src="https://img.icons8.com/fluency/96/office.png">
+<h3>Dirección</h3>
+</a>
+</div>
+
+<div class="boton">
+<a href="OPCIONES DE ACCESOS/DOCENTES/MENU PRINCIPAL DOCENTES.HTML">
+<img src="https://img.icons8.com/fluency/96/teacher.png">
+<h3>Maestros</h3>
+</a>
+</div>
+
+<div class="boton">
+<a href="OPCIONES DE ACCESOS/ALUMNOS/MENU PRINCIPAL ALUMNOS.HTML">
+<img src="https://img.icons8.com/fluency/96/student-male.png">
+<h3>Alumnos</h3>
+</a>
+</div>
+
+<div class="boton">
+<a href="OPCIONES DE ACCESOS/BIBLIOTECA/MENU PRINCIPAL DE BIBLIOTECA.HTML">
+<img src="https://img.icons8.com/fluency/96/books.png">
+<h3>Biblioteca</h3>
+</a>
+</div>
+
+<div class="boton">
+<a href="OPCIONES DE ACCESOS/SERVICIO SOCIAL Y PRACTICAS PROFECIONALES/MENU PRINCIPAL DE SERVICIO SOCIAL Y PRACTICAS PROFECIONALES.HTML">
+<img src="https://img.icons8.com/fluency/96/qr-code.png">
+<h3>SERVICIO Y PRACTICAS</h3>
+</a>
+</div>
+
+<div class="boton">
+<a href="qr.html">
+<img src="https://img.icons8.com/fluency/96/qr-code.png">
+<h3>QR</h3>
+</a>
+</div>
+
+</div>
+
+</body>
+
+<body>
+
+      <T><strong>Copyright © 2026 Company García Corona. Todos los derechos reservados.</strong> <BR> ESTE SISTEMA ESTA 
+    RESPALDADO Y FUE CREADO CON FINES DE AYUDA A LAS INSTITUCIONES EDUCATIVAS CREADO POR COMPANY GARCIA CORONA</T>
+
+</body>
+
+</html>
