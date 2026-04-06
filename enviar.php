@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contenido .= "Mensaje:\n$mensaje\n";
 
     // Encabezados
-    $headers  = "From: Web García Corona <no-reply@garciacorona.com>\r\n";
+    $headers  = "From: Web García Corona <companygarciacorona@companygarciacorona.com.mx>\r\n";
     $headers .= "Reply-To: $correo\r\n";
     $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
