@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Portal Tutor</title>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+color:white;
+}
+
+header{
+text-align:center;
+padding:15px;
+font-size:22px;
+font-weight:bold;
+position:relative;
+}
+
+.menuBtn{
+position:absolute;
+left:15px;
+top:15px;
+cursor:pointer;
+font-size:22px;
+}
+
+.menu{
+position:fixed;
+top:0;
+left:-220px;
+width:220px;
+height:100%;
+background:rgba(0,0,0,0.9);
+transition:0.3s;
+padding-top:60px;
+}
+
+.menu div{
+padding:15px;
+border-bottom:1px solid rgba(255,255,255,0.2);
+cursor:pointer;
+}
+
+.menu div:hover{
+background:rgba(255,255,255,0.1);
+}
+
+.card{
+background:rgba(255,255,255,0.1);
+padding:20px;
+margin:20px auto;
+border-radius:12px;
+max-width:500px;
+text-align:center;
+}
+
+input{
+width:90%;
+padding:10px;
+margin:8px;
+border-radius:6px;
+border:none;
+}
+
+button{
+padding:10px;
+width:95%;
+border:none;
+border-radius:6px;
+background:#3498db;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.boleta{
+background:rgba(0,0,0,0.5);
+margin:20px auto;
+padding:20px;
+border-radius:12px;
+max-width:700px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid rgba(255,255,255,0.3);
+text-align:center;
+}
+
+h3{
+border-bottom:1px solid white;
+padding-bottom:5px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<span class="menuBtn" onclick="toggleMenu()">☰</span>
+🎓 <span id="tituloTutor">Portal Tutor</span>
+</header>
+
+<!-- MENU -->
+<div id="menu" class="menu">
+<div onclick="mostrarSeccion('calificaciones')">📊 Calificaciones</div>
+<div onclick="mostrarSeccion('asistencias')">📅 Asistencias</div>
+<div onclick="mostrarSeccion('reportes')">📋 Reportes</div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginDiv" class="card">
+<h3>Iniciar Sesión</h3>
+<input id="correo_tutor" placeholder="Correo Tutor">
+<input id="password_tutor" type="password" placeholder="Contraseña Tutor">
+<button onclick="login()">Ingresar</button>
+</div>
+
+<!-- PANEL -->
+<div id="panel" style="display:none;">
+
+<div class="card">
+<h3 id="infoAlumno"></h3>
+</div>
+
+<div id="contenedor"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const supabaseClient = supabase.createClient(
+"https://nlpdpvjtdxknhvgqbfls.supabase.co",
+"sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+let alumno = null;
+
+function toggleMenu(){
+let menu = document.getElementById("menu");
+menu.style.left = (menu.style.left === "0px") ? "-220px" : "0px";
+}
+
+function mostrarSeccion(tipo){
+document.getElementById("menu").style.left = "-220px";
+
+let cont = document.getElementById("contenedor");
+cont.innerHTML = "";
+
+if(tipo === "calificaciones") cargarDatos();
+if(tipo === "asistencias") cargarAsistencias();
+if(tipo === "reportes") cargarReportes();
+}
+
+/* LOGIN */
+async function login(){
+
+let email = document.getElementById("correo_tutor").value.trim();
+let pass = document.getElementById("password_tutor").value.trim();
+
+if(!email || !pass){
+alert("Completa los campos");
+return;
+}
+
+let { data } = await supabaseClient
+.from("alumnos")
+.select("*")
+.ilike("correo_tutor", email)
+.eq("password_tutor", pass);
+
+if(data && data.length > 0){
+
+alumno = data[0];
+
+document.getElementById("tituloTutor").innerText =
+"Bienvenid@ tutor(a) " + (alumno.tutor_nombre || "");
+
+document.getElementById("loginDiv").style.display = "none";
+document.getElementById("panel").style.display = "block";
+
+document.getElementById("infoAlumno").innerText =
+alumno.nombre_completo + " | " + alumno.matricula;
+
+cargarDatos();
+
+}else{
+alert("Datos incorrectos");
+}
+
+}
+
+/* CALIFICACIONES */
+async function cargarDatos(){
+
+let cont = document.getElementById("contenedor");
+cont.innerHTML = "";
+
+let { data } = await supabaseClient
+.from("calificaciones")
+.select("*")
+.eq("alumno_id", alumno.id);
+
+render("📊 CALIFICACIONES", data, cont);
+}
+
+/* 📅 ASISTENCIAS CON -6 HORAS */
+async function cargarAsistencias(){
+
+let cont = document.getElementById("contenedor");
+cont.innerHTML = "";
+
+let { data } = await supabaseClient
+.from("asistencias")
+.select("*")
+.eq("alumno_id", alumno.id)
+.order("fecha",{ascending:false});
+
+if(!data || data.length===0){
+cont.innerHTML = "<div class='card'>Sin asistencias</div>";
+return;
+}
+
+let html = `
+<div class="boleta">
+<h3>📅 ASISTENCIAS</h3>
+<table>
+<tr>
+<th>Fecha</th>
+<th>Entrada</th>
+<th>Salida</th>
+</tr>
+`;
+
+data.forEach(a=>{
+html += `
+<tr>
+<td>${a.fecha}</td>
+
+<td>${
+a.hora_entrada
+? new Date(new Date(a.hora_entrada).getTime() - 6 * 60 * 60 * 1000)
+.toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit",hour12:true})
+: "-"
+}</td>
+
+<td>${
+a.hora_salida
+? new Date(new Date(a.hora_salida).getTime() - 6 * 60 * 60 * 1000)
+.toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit",hour12:true})
+: "-"
+}</td>
+
+</tr>
+`;
+});
+
+html += "</table></div>";
+
+cont.innerHTML = html;
+}
+
+/* 📋 REPORTES CON -6 HORAS */
+async function cargarReportes(){
+
+let cont = document.getElementById("contenedor");
+cont.innerHTML = "";
+
+let { data } = await supabaseClient
+.from("reportes")
+.select("*")
+.eq("alumno_id", alumno.id)
+.order("fecha",{ascending:false});
+
+if(!data || data.length === 0){
+cont.innerHTML = "<div class='card'>Sin reportes</div>";
+return;
+}
+
+let html = "";
+
+data.forEach(r=>{
+html += `
+<div class="boleta">
+<h3>📋 Reporte</h3>
+
+<p><b>Fecha:</b> ${
+new Date(
+new Date(r.fecha).getTime() - 6 * 60 * 60 * 1000
+).toLocaleString("es-MX", {
+dateStyle: "medium",
+timeStyle: "short",
+hour12: true
+})
+}</p>
+
+<p><b>Motivo:</b> ${r.motivo}</p>
+<p><b>Solución:</b> ${r.solucion}</p>
+
+</div>
+`;
+});
+
+cont.innerHTML = html;
+}
+
+/* RENDER */
+function render(titulo, data, cont){
+
+if(!data || data.length === 0){
+cont.innerHTML = "<div class='card'>Sin datos</div>";
+return;
+}
+
+let html = `
+<div class="boleta">
+<h3>${titulo}</h3>
+<table>
+<tr>
+<th>Materia</th>
+<th>Calificación</th>
+</tr>
+`;
+
+data.forEach(r=>{
+html += `
+<tr>
+<td>${r.materia}</td>
+<td>${r.calificacion}</td>
+</tr>
+`;
+});
+
+html += "</table></div>";
+
+cont.innerHTML = html;
+}
+
+</script>
+
+</body>
+</html>
