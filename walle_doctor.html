@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>WALLE Doctor</title>
+<style>
+body{
+    margin:0;
+    background:#0f172a;
+    font-family:Arial, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.watch{
+    width:320px;
+    height:600px;
+    background:#020617;
+    border-radius:40px;
+    box-shadow:0 0 30px #000;
+    padding:15px;
+    color:white;
+    display:flex;
+    flex-direction:column;
+}
+
+.header{
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.section{
+    background:#111827;
+    border-radius:15px;
+    padding:10px;
+    margin-bottom:10px;
+}
+
+input{
+    width:100%;
+    padding:8px;
+    border-radius:8px;
+    border:none;
+    margin-top:5px;
+    outline:none;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:#22c55e;
+    color:white;
+    margin-top:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#16a34a;
+}
+
+.data{
+    display:flex;
+    justify-content:space-between;
+    margin-top:5px;
+}
+
+.history{
+    height:120px;
+    overflow-y:auto;
+    font-size:12px;
+}
+
+.nav{
+    display:flex;
+    justify-content:space-around;
+    margin-top:auto;
+}
+
+.nav button{
+    width:30%;
+    background:#1f2937;
+}
+</style>
+</head>
+
+<body>
+
+<div class="watch">
+
+<div class="header">WALLE Doctor</div>
+
+<!-- VINCULACIÓN -->
+<div class="section">
+    <b>Vincular Robot</b>
+    <input id="codigo" placeholder="12AB-34CD-56FG-2350" maxlength="19">
+    <button onclick="vincular()">Vincular</button>
+    <div id="estado"></div>
+</div>
+
+<!-- PERFIL -->
+<div class="section">
+    <b>Paciente</b>
+    <input id="nombre" placeholder="Nombre">
+    <input id="edad" placeholder="Edad">
+</div>
+
+<!-- DATOS DE SALUD -->
+<div class="section">
+    <b>Datos en Tiempo Real</b>
+    <div class="data">🌡 Temp: <span id="temp">--</span> °C</div>
+    <div class="data">💓 Ritmo: <span id="ritmo">--</span> bpm</div>
+    <div class="data">🩺 Presión: <span id="presion">--</span></div>
+</div>
+
+<!-- HISTORIAL -->
+<div class="section">
+    <b>Historial</b>
+    <div class="history" id="historial"></div>
+</div>
+
+<!-- BOTONES -->
+<div class="nav">
+    <button onclick="simular()">Simular</button>
+    <button onclick="guardar()">Guardar</button>
+    <button onclick="limpiar()">Limpiar</button>
+</div>
+
+</div>
+
+<script>
+
+// FORMATO AUTOMÁTICO DEL CÓDIGO
+document.getElementById("codigo").addEventListener("input", function(e){
+    let valor = e.target.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+    let formato = valor.match(/.{1,4}/g);
+    if(formato){
+        e.target.value = formato.join('-');
+    }
+});
+
+// VINCULACIÓN
+function vincular(){
+    let codigo = document.getElementById("codigo").value;
+    if(codigo.length === 19){
+        document.getElementById("estado").innerHTML = "✅ Conectado a WALLE Doctor";
+    } else {
+        document.getElementById("estado").innerHTML = "❌ Código inválido";
+    }
+}
+
+// SIMULAR DATOS (PARA PRUEBA)
+function simular(){
+    let temp = (36 + Math.random()*2).toFixed(1);
+    let ritmo = Math.floor(60 + Math.random()*40);
+    let presion = (100 + Math.floor(Math.random()*30)) + "/" + (70 + Math.floor(Math.random()*20));
+
+    document.getElementById("temp").innerText = temp;
+    document.getElementById("ritmo").innerText = ritmo;
+    document.getElementById("presion").innerText = presion;
+}
+
+// GUARDAR HISTORIAL
+function guardar(){
+    let nombre = document.getElementById("nombre").value;
+    let temp = document.getElementById("temp").innerText;
+    let ritmo = document.getElementById("ritmo").innerText;
+    let presion = document.getElementById("presion").innerText;
+
+    let registro = `
+        <div>
+        👤 ${nombre} | 🌡 ${temp}°C | 💓 ${ritmo} bpm | 🩺 ${presion}
+        </div>
+    `;
+
+    document.getElementById("historial").innerHTML += registro;
+}
+
+// LIMPIAR HISTORIAL
+function limpiar(){
+    document.getElementById("historial").innerHTML = "";
+}
+
+</script>
+
+</body>
+</html>
