@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario Pantalla Completa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Contenedor del formulario */
+    .form-container {
+      width: 100%;
+      height: 100vh;
+    }
+
+    /* Iframe que genera Jotform */
+    .form-container iframe {
+      width: 100% !important;
+      height: 100% !important;
+      border: none;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="form-container">
+    <script type="text/javascript" src="https://form.jotform.com/jsform/261244738521052"></script>
+  </div>
+
+</body>
+</html>
