@@ -2,225 +2,312 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>GC Digital Scan PRO</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
+<title>Scanner Azul Rey</title>
+
+<script src="https://unpkg.com/@zxing/library@latest"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
-<script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode"></script>
 
 <style>
+
 body{
-    font-family: Arial;
-    background:#0f172a;
-    color:white;
-    text-align:center;
-    margin:0;
+margin:0;
+font-family:Arial;
+background:white;
+text-align:center;
 }
 
-header{
-    padding:20px;
-    background:#1e293b;
+/* MENU */
+.menu{
+position:fixed;
+left:-260px;
+top:0;
+width:260px;
+height:100%;
+background:#0047AB;
+transition:.3s;
+padding-top:60px;
 }
 
-.container{
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-    gap:20px;
-    padding:20px;
+.menu a{
+display:block;
+padding:15px;
+color:white;
+text-decoration:none;
+border-bottom:1px solid rgba(255,255,255,.2);
 }
 
-.card{
-    background:#1e293b;
-    padding:20px;
-    border-radius:12px;
+.menu.active{left:0;}
+
+/* TOPBAR */
+.topbar{
+height:60px;
+background:#0047AB;
+color:white;
+display:flex;
+align-items:center;
+padding-left:15px;
+font-size:24px;
 }
 
-input, button{
-    padding:10px;
-    margin:10px;
-    width:80%;
-    border-radius:8px;
-    border:none;
+/* CONTENIDO */
+.content{
+padding:20px;
 }
 
+/* SCANNER */
+.scanner-box{
+position:relative;
+margin:auto;
+width:260px;
+height:260px;
+border:4px solid #0047AB;
+border-radius:15px;
+overflow:hidden;
+background:white;
+}
+
+video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.scan-line{
+position:absolute;
+width:100%;
+height:3px;
+background:red;
+animation:scan 1.5s linear infinite;
+}
+
+@keyframes scan{
+0%{top:0;}
+50%{top:50%;}
+100%{top:100%;}
+}
+
+/* INPUTS */
+input,textarea{
+width:90%;
+max-width:300px;
+padding:10px;
+margin:8px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+/* BOTONES */
 button{
-    background:#38bdf8;
-    cursor:pointer;
-    font-weight:bold;
+background:#0047AB;
+color:white;
+border:none;
+padding:12px 20px;
+border-radius:20px;
+margin:5px;
 }
 
-button:hover{
-    background:#0ea5e9;
+#qrcode,#miqrcode{
+background:white;
+padding:10px;
+display:flex;
+justify-content:center;
 }
 
-#reader{
-    width:100%;
-    max-width:300px;
-    margin:auto;
+svg{
+background:white;
+margin-top:10px;
 }
 
-/* RESULTADO */
-.resultado-box{
-    background:white;
-    color:black;
-    padding:15px;
-    margin-top:15px;
-    border-radius:10px;
-    min-height:60px;
-    word-wrap:break-word;
-}
-
-.btns{
-    margin-top:10px;
-}
-
-.btns button{
-    width:auto;
-    margin:5px;
-    padding:8px 12px;
-}
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>GC Digital Scan PRO</h1>
-    <p>Generador y Escáner Inteligente</p>
-</header>
+<div class="menu" id="menu">
+<a onclick="mostrar('scan')">📷 Escanear</a>
+<a onclick="mostrar('crear')">➕ Crear QR</a>
+<a onclick="mostrar('barcode')">🏷 Código Barras</a>
+<a onclick="mostrar('miqr')">👤 Mi Código QR</a>
+</div>
 
-<div class="container">
+<div class="topbar">
+<span onclick="toggleMenu()">☰</span>
+</div>
 
-    <!-- GENERADOR -->
-    <div class="card">
-        <h2>Generador</h2>
+<div class="content">
 
-        <input type="text" id="texto" placeholder="Texto, link o WiFi">
+<!-- ESCANER -->
+<div id="scan">
+<h2>Escáner</h2>
 
-        <button onclick="generarQR()">Generar QR</button>
-        <button onclick="generarBarcode()">Código de Barras</button>
+<div class="scanner-box">
+<video id="video"></video>
+<div class="scan-line"></div>
+</div>
 
-        <div id="qrcode"></div>
-        <svg id="barcode"></svg>
-    </div>
+<p id="resultado">Escaneando rápido...</p>
+</div>
 
-    <!-- ESCÁNER -->
-    <div class="card">
-        <h2>Escáner QR</h2>
+<!-- CREAR QR -->
+<div id="crear" style="display:none;">
+<h2>Crear QR</h2>
 
-        <div id="reader"></div>
+<input id="qrtext" placeholder="Link, texto, WiFi o datos">
+<br>
+<button onclick="crearQR()">Generar QR</button>
+<button onclick="descargarQR('qrcode')">Descargar</button>
 
-        <!-- RESULTADO -->
-        <div class="resultado-box" id="resultado">
-            Aquí aparecerá el resultado
-        </div>
+<div id="qrcode"></div>
+</div>
 
-        <div class="btns" id="acciones"></div>
-    </div>
+<!-- CODIGO BARRAS -->
+<div id="barcode" style="display:none;">
+<h2>Código de Barras</h2>
+
+<input id="barcodeText" placeholder="Número o texto">
+<br>
+<button onclick="crearBarcode()">Generar</button>
+<button onclick="descargarBarcode()">Descargar</button>
+
+<svg id="barcodeSVG"></svg>
+</div>
+
+<!-- MI QR -->
+<div id="miqr" style="display:none;">
+<h2>Mi Código QR</h2>
+
+<input id="nombre" placeholder="Nombre">
+<input id="telefono" placeholder="Teléfono">
+<input id="correo" placeholder="Correo">
+<textarea id="direccion" placeholder="Dirección"></textarea>
+
+<button onclick="crearMiQR()">Crear Mi QR</button>
+<button onclick="descargarQR('miqrcode')">Guardar</button>
+
+<div id="miqrcode"></div>
+</div>
 
 </div>
 
 <script>
 
-// QR
-function generarQR(){
-    document.getElementById("qrcode").innerHTML = "";
-    let texto = document.getElementById("texto").value;
-    if(!texto) return alert("Escribe algo");
-    new QRCode(document.getElementById("qrcode"), texto);
+/* MENU */
+function toggleMenu(){
+menu.classList.toggle("active");
 }
 
-// Barcode
-function generarBarcode(){
-    let texto = document.getElementById("texto").value;
-    if(!texto) return alert("Escribe algo");
-    JsBarcode("#barcode", texto);
+function mostrar(id){
+document.querySelectorAll(".content > div")
+.forEach(d=>d.style.display="none");
+
+document.getElementById(id).style.display="block";
+toggleMenu();
 }
 
-// Detectar tipo de contenido
-function detectarTipo(texto){
-    if(texto.startsWith("WIFI:")) return "wifi";
-    if(texto.startsWith("http")) return "link";
-    return "texto";
+/* ESCANER ULTRA RAPIDO */
+const reader=new ZXing.BrowserMultiFormatReader();
+
+reader.decodeFromVideoDevice(
+null,
+'video',
+(result,err)=>{
+if(result){
+resultado.innerText="✅ "+result.text;
+navigator.vibrate(100);
 }
-
-// Escáner
-function onScanSuccess(decodedText){
-
-    document.getElementById("resultado").innerText = decodedText;
-
-    let acciones = document.getElementById("acciones");
-    acciones.innerHTML = "";
-
-    let tipo = detectarTipo(decodedText);
-
-    // COPIAR
-    let btnCopiar = document.createElement("button");
-    btnCopiar.innerText = "Copiar";
-    btnCopiar.onclick = () => {
-        navigator.clipboard.writeText(decodedText);
-        alert("Copiado");
-    };
-    acciones.appendChild(btnCopiar);
-
-    // LINK
-    if(tipo === "link"){
-        let btnAbrir = document.createElement("button");
-        btnAbrir.innerText = "Abrir link";
-        btnAbrir.onclick = () => {
-            window.open(decodedText, "_blank");
-        };
-        acciones.appendChild(btnAbrir);
-    }
-
-    // WIFI (formato: WIFI:T:WPA;S:nombre;P:password;;)
-    if(tipo === "wifi"){
-        let partes = decodedText.split(";");
-
-        let ssid = partes.find(p => p.startsWith("S:"))?.replace("S:","");
-        let pass = partes.find(p => p.startsWith("P:"))?.replace("P:","");
-
-        let info = document.createElement("p");
-        info.innerHTML = "SSID: " + ssid + "<br>Password: " + pass;
-        document.getElementById("resultado").appendChild(info);
-
-        let btnCopiarPass = document.createElement("button");
-        btnCopiarPass.innerText = "Copiar contraseña";
-        btnCopiarPass.onclick = () => {
-            navigator.clipboard.writeText(pass);
-            alert("Contraseña copiada");
-        };
-        acciones.appendChild(btnCopiarPass);
-    }
+},
+{
+fps:30,
+delayBetweenScanAttempts:50
 }
-
-// iniciar scanner
-let scanner = new Html5Qrcode("reader");
-
-scanner.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
-    onScanSuccess
 );
+
+/* CREAR QR */
+function crearQR(){
+qrcode.innerHTML="";
+new QRCode("qrcode",{
+text:qrtext.value,
+width:220,
+height:220
+});
+}
+
+/* MI QR PERSONAL */
+function crearMiQR(){
+
+let datos=`BEGIN:VCARD
+FN:${nombre.value}
+TEL:${telefono.value}
+EMAIL:${correo.value}
+ADR:${direccion.value}
+END:VCARD`;
+
+miqrcode.innerHTML="";
+
+new QRCode("miqrcode",{
+text:datos,
+width:220,
+height:220
+});
+}
+
+/* CODIGO BARRAS CORREGIDO */
+function crearBarcode(){
+
+let texto=document.getElementById("barcodeText").value.trim();
+
+if(texto===""){
+alert("Escribe algo para generar el código");
+return;
+}
+
+document.getElementById("barcodeSVG").innerHTML="";
+
+JsBarcode("#barcodeSVG",texto,{
+format:"CODE128",
+width:2,
+height:100,
+displayValue:true,
+margin:10
+});
+
+}
+
+/* DESCARGAR QR */
+function descargarQR(id){
+
+let img=document.querySelector(`#${id} img`);
+
+if(!img){
+alert("Primero genera el código");
+return;
+}
+
+let a=document.createElement("a");
+a.href=img.src;
+a.download="codigoQR.png";
+a.click();
+}
+
+/* DESCARGAR BARRAS */
+function descargarBarcode(){
+
+let svg=document.getElementById("barcodeSVG");
+let data=new XMLSerializer().serializeToString(svg);
+
+let blob=new Blob([data],{type:"image/svg+xml"});
+let url=URL.createObjectURL(blob);
+
+let a=document.createElement("a");
+a.href=url;
+a.download="codigoBarras.svg";
+a.click();
+}
 
 </script>
 
 </body>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-    <body>
-
-      <p>© 2026 Company García Corona | Todos los derechos reservados</p>
-      <p></p>
-
-</body>
-    
 </html>
