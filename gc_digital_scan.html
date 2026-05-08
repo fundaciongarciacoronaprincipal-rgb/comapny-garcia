@@ -2,137 +2,76 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>GC Digital Scan</title>
+<title>Scanner Azul Rey PRO</title>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
+<script src="https://unpkg.com/@zxing/library@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
 <style>
 
-/* ===================== */
-/* GENERAL */
-/* ===================== */
+body{margin:0;font-family:Arial;background:white;text-align:center;}
 
-body{
-margin:0;
-font-family:Arial;
-background:white;
-color:#111;
+.menu{
+position:fixed;
+left:-260px;
+width:260px;height:100%;
+background:#0047AB;
+transition:.3s;padding-top:60px;
+}
+.menu a{display:block;padding:15px;color:white;text-decoration:none;}
+.menu.active{left:0;}
+
+.topbar{
+height:60px;background:#0047AB;color:white;
+display:flex;align-items:center;padding-left:15px;font-size:24px;
 }
 
-/* ===================== */
-/* BARRA SUPERIOR */
-/* ===================== */
+.content{padding:20px;}
 
-header{
-background:#0d6efd;
-color:white;
-padding:15px;
-text-align:center;
-font-size:20px;
-font-weight:bold;
+.scanner-box{
+margin:auto;width:260px;height:260px;
+border:4px solid #0047AB;border-radius:15px;
+overflow:hidden;position:relative;background:white;
 }
 
-nav{
-display:flex;
-overflow:auto;
-background:#0d6efd;
-}
+video{width:100%;height:100%;object-fit:cover;}
 
-nav button{
-flex:1;
-border:none;
-background:#0d6efd;
-color:white;
-padding:12px;
-cursor:pointer;
-}
-
-nav button:hover{
-background:#084298;
-}
-
-/* ===================== */
-/* SECCIONES */
-/* ===================== */
-
-section{
-display:none;
-padding:20px;
-text-align:center;
-}
-
-.activo{
-display:block;
-}
-
-/* ===================== */
-/* ESCANER */
-/* ===================== */
-
-.scanner{
-width:260px;
-height:260px;
-border:3px solid #0d6efd;
-margin:auto;
-position:relative;
-overflow:hidden;
-border-radius:10px;
-}
-
-.linea{
-position:absolute;
-width:100%;
-height:3px;
-background:red;
-animation:scan 2s infinite linear;
+.scan-line{
+position:absolute;width:100%;height:3px;background:red;
+animation:scan 1.5s linear infinite;
 }
 
 @keyframes scan{
-0%{top:0}
-100%{top:100%}
+0%{top:0;}
+50%{top:50%;}
+100%{top:100%;}
 }
 
-.info{
-margin-top:20px;
-border:2px dashed #0d6efd;
-padding:15px;
-border-radius:10px;
-min-height:60px;
-}
-
-/* ===================== */
-/* BOTONES */
-/* ===================== */
-
-input{
-width:90%;
-padding:10px;
-margin:8px;
+.result-box{
+margin-top:15px;
+background:rgba(0,0,0,.05);
+padding:12px;border-radius:12px;
 }
 
 button{
-padding:10px;
-margin:5px;
-background:#0d6efd;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
+background:#0047AB;color:white;border:none;
+padding:10px 15px;border-radius:20px;margin:4px;
 }
 
-.resultado{
-margin-top:15px;
+input,textarea{
+width:90%;max-width:300px;
+padding:10px;margin:8px;border-radius:8px;border:1px solid #ccc;
+}
+
+.switch{
 display:flex;
 justify-content:center;
-}
-
-/* HISTORIAL */
-.item{
-border-bottom:1px solid #ccc;
-padding:8px;
+align-items:center;
+gap:10px;
+margin:10px;
 }
 
 </style>
@@ -140,219 +79,207 @@ padding:8px;
 
 <body>
 
-<header>GC Digital Scan</header>
+<div class="menu" id="menu">
+<a onclick="mostrar('scan')">📷 Escanear</a>
+<a onclick="mostrar('crear')">➕ Crear QR</a>
+<a onclick="mostrar('miqr')">👤 Mi Código</a>
+<a onclick="mostrar('historial')">🕘 Historial</a>
+<a onclick="mostrar('config')">⚙️ Configuración</a>
+</div>
 
-<nav>
-<button onclick="mostrar('scan')">Escanear</button>
-<button onclick="mostrar('qr')">QR</button>
-<button onclick="mostrar('barras')">Barras</button>
-<button onclick="mostrar('micode')">Mi Código</button>
-<button onclick="mostrar('historial')">Historial</button>
-<button onclick="mostrar('config')">Config</button>
-</nav>
+<div class="topbar">
+<span onclick="menu.classList.toggle('active')">☰</span>
+</div>
 
-<!-- ================= ESCANEAR ================= -->
-<section id="scan" class="activo">
+<div class="content">
 
+<!-- SCAN -->
+<div id="scan">
 <h2>Escáner</h2>
 
-<div class="scanner">
-<div class="linea"></div>
+<div class="scanner-box">
+<video id="video"></video>
+<div class="scan-line"></div>
 </div>
 
-<div class="info" id="infoCodigo">
-Aquí aparecerá la información del código
+<div class="result-box" id="resultBox">Escanea un código...</div>
 </div>
 
-</section>
-
-<!-- ================= QR ================= -->
-<section id="qr">
-
-<h2>Crear Código QR</h2>
-
-<input id="textoQR" placeholder="Texto o dirección">
-
-<button onclick="crearQR()">Crear QR</button>
-<button onclick="guardarQR()">Guardar</button>
-
-<div class="resultado">
+<!-- CREAR -->
+<div id="crear" style="display:none;">
+<h2>Crear QR</h2>
+<input id="qrtext" placeholder="Texto o link">
+<button onclick="crearQR()">Generar</button>
 <div id="qrcode"></div>
 </div>
 
-</section>
+<!-- MI QR -->
+<div id="miqr" style="display:none;">
+<h2>Mi Código QR</h2>
 
-<!-- ================= BARRAS ================= -->
-<section id="barras">
-
-<h2>Crear Código de Barras</h2>
-
-<input id="textoBarras" placeholder="Número o texto">
-
-<button onclick="crearBarras()">Crear</button>
-<button onclick="guardarBarras()">Guardar</button>
-
-<div class="resultado">
-<svg id="barcode"></svg>
-</div>
-
-</section>
-
-<!-- ================= MI CODIGO ================= -->
-<section id="micode">
-
-<h2>Crear Mi Código</h2>
-
-<input id="nombre" placeholder="Nombre completo">
-<input id="correo" placeholder="Correo electrónico">
+<input id="nombre" placeholder="Nombre">
 <input id="telefono" placeholder="Teléfono">
-<input id="direccion" placeholder="Dirección">
-<input id="extra" placeholder="Dato opcional">
+<input id="correo" placeholder="Correo">
+<textarea id="direccion" placeholder="Dirección"></textarea>
 
-<button onclick="crearMiCodigo()">Crear Mi QR</button>
-
-<div class="resultado">
-<div id="miQR"></div>
+<button onclick="crearMiQR()">Crear</button>
+<div id="miqrcode"></div>
 </div>
 
-</section>
-
-<!-- ================= HISTORIAL ================= -->
-<section id="historial">
-
+<!-- HISTORIAL -->
+<div id="historial" style="display:none;">
 <h2>Historial</h2>
-
 <div id="listaHistorial"></div>
+<button onclick="borrarHistorial()">Borrar Historial</button>
+</div>
 
-</section>
-
-<!-- ================= CONFIG ================= -->
-<section id="config">
-
+<!-- CONFIG -->
+<div id="config" style="display:none;">
 <h2>Configuración</h2>
 
-<label>
+<div class="switch">
+<label>Vibración</label>
 <input type="checkbox" id="vibracion">
- Activar vibración
-</label>
+</div>
 
-<br><br>
-
-<label>
+<div class="switch">
+<label>Sonido</label>
 <input type="checkbox" id="sonido">
- Activar sonido
-</label>
+</div>
 
-</section>
+</div>
 
+</div>
 
 <script>
 
-/* CAMBIAR SECCIONES */
-function mostrar(id){
-document.querySelectorAll("section")
-.forEach(s=>s.classList.remove("activo"));
+/* CONFIGURACION */
+let config=JSON.parse(localStorage.getItem("config"))||
+{vibracion:true,sonido:true};
 
-document.getElementById(id)
-.classList.add("activo");
+vibracion.checked=config.vibracion;
+sonido.checked=config.sonido;
+
+vibracion.onchange=()=>guardarConfig();
+sonido.onchange=()=>guardarConfig();
+
+function guardarConfig(){
+config={
+vibracion:vibracion.checked,
+sonido:sonido.checked
+};
+localStorage.setItem("config",JSON.stringify(config));
+}
+
+/* MENU */
+function mostrar(id){
+document.querySelectorAll(".content>div")
+.forEach(d=>d.style.display="none");
+document.getElementById(id).style.display="block";
+menu.classList.remove("active");
 
 if(id==="historial") cargarHistorial();
 }
 
-/* ================= QR ================= */
-
-function crearQR(){
-
-document.getElementById("qrcode").innerHTML="";
-
-let texto=document.getElementById("textoQR").value;
-
-new QRCode("qrcode",{
-text:texto,
-width:200,
-height:200
-});
-
-guardarHistorial("QR: "+texto);
-}
-
-function guardarQR(){
-let img=document.querySelector("#qrcode img");
-if(!img)return;
-
-let a=document.createElement("a");
-a.href=img.src;
-a.download="qr.png";
-a.click();
-}
-
-/* ================= BARRAS ================= */
-
-function crearBarras(){
-
-let txt=document.getElementById("textoBarras").value;
-
-JsBarcode("#barcode",txt,{
-format:"CODE128",
-displayValue:true
-});
-
-guardarHistorial("BARRAS: "+txt);
-}
-
-function guardarBarras(){
-
-let svg=document.getElementById("barcode");
-let data=new XMLSerializer().serializeToString(svg);
-
-let a=document.createElement("a");
-a.href="data:image/svg+xml,"+encodeURIComponent(data);
-a.download="barras.svg";
-a.click();
-}
-
-/* ================= MI CODIGO ================= */
-
-function crearMiCodigo(){
-
-document.getElementById("miQR").innerHTML="";
-
-let datos=
-"Nombre:"+nombre.value+
-"\nCorreo:"+correo.value+
-"\nTel:"+telefono.value+
-"\nDir:"+direccion.value+
-"\nExtra:"+extra.value;
-
-new QRCode("miQR",{
-text:datos,
-width:200,
-height:200
-});
-
-guardarHistorial("MI CODIGO: "+nombre.value);
-}
-
-/* ================= HISTORIAL ================= */
-
+/* HISTORIAL */
 function guardarHistorial(texto){
-
-let h=JSON.parse(localStorage.getItem("historial"))||[];
-h.push(texto);
-
-localStorage.setItem("historial",JSON.stringify(h));
+let hist=JSON.parse(localStorage.getItem("historial"))||[];
+hist.unshift(texto);
+localStorage.setItem("historial",JSON.stringify(hist.slice(0,50)));
 }
 
 function cargarHistorial(){
+let hist=JSON.parse(localStorage.getItem("historial"))||[];
+listaHistorial.innerHTML=hist.map(h=>`<p>${h}</p>`).join("");
+}
 
-let lista=document.getElementById("listaHistorial");
-lista.innerHTML="";
+function borrarHistorial(){
+localStorage.removeItem("historial");
+cargarHistorial();
+}
 
-let h=JSON.parse(localStorage.getItem("historial"))||[];
+/* SONIDO */
+const beep=new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
 
-h.reverse().forEach(e=>{
-lista.innerHTML+=`<div class="item">${e}</div>`;
-});
+/* ESCANER */
+const reader=new ZXing.BrowserMultiFormatReader();
+
+reader.decodeFromVideoDevice(null,'video',(result)=>{
+
+if(result){
+
+let texto=result.text;
+
+guardarHistorial(texto);
+
+/* vibracion */
+if(config.vibracion) navigator.vibrate(120);
+
+/* sonido */
+if(config.sonido) beep.play();
+
+detectarTipo(texto);
+
+}
+
+},{fps:30,delayBetweenScanAttempts:40});
+
+/* DETECTAR TIPO */
+function detectarTipo(texto){
+
+let html=`<b>${texto}</b><br>
+<button onclick="copiar('${texto}')">Copiar</button>`;
+
+/* WIFI */
+if(texto.startsWith("WIFI:")){
+
+let datos=texto
+.replace("WIFI:","")
+.split(";");
+
+let ssid=datos[0].split(":")[1];
+let pass=datos[2]?.split(":")[1];
+
+html+=`<button onclick="alert('Conéctate manualmente a: ${ssid}')">📶 Conectar WiFi</button>`;
+}
+
+/* LINK */
+if(texto.startsWith("http"))
+html+=`<button onclick="window.open('${texto}')">Abrir Link</button>`;
+
+/* TEL */
+if(/^[0-9+]+$/.test(texto))
+html+=`<button onclick="location='tel:${texto}'">Llamar</button>`;
+
+/* MAIL */
+if(texto.includes("@"))
+html+=`<button onclick="location='mailto:${texto}'">Correo</button>`;
+
+resultBox.innerHTML=html;
+}
+
+function copiar(t){
+navigator.clipboard.writeText(t);
+}
+
+/* QR */
+function crearQR(){
+qrcode.innerHTML="";
+new QRCode("qrcode",{text:qrtext.value,width:220,height:220});
+}
+
+/* MI QR */
+function crearMiQR(){
+
+let vcard=`BEGIN:VCARD
+FN:${nombre.value}
+TEL:${telefono.value}
+EMAIL:${correo.value}
+ADR:${direccion.value}
+END:VCARD`;
+
+miqrcode.innerHTML="";
+new QRCode("miqrcode",{text:vcard,width:220,height:220});
 }
 
 </script>
