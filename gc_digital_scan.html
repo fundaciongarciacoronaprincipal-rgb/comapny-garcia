@@ -2,123 +2,137 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Scanner Azul Rey</title>
+<title>GC Digital Scan</title>
 
-<script src="https://unpkg.com/@zxing/library@latest"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode/dist/JsBarcode.all.min.js"></script>
 
 <style>
+
+/* ===================== */
+/* GENERAL */
+/* ===================== */
 
 body{
 margin:0;
 font-family:Arial;
 background:white;
+color:#111;
+}
+
+/* ===================== */
+/* BARRA SUPERIOR */
+/* ===================== */
+
+header{
+background:#0d6efd;
+color:white;
+padding:15px;
+text-align:center;
+font-size:20px;
+font-weight:bold;
+}
+
+nav{
+display:flex;
+overflow:auto;
+background:#0d6efd;
+}
+
+nav button{
+flex:1;
+border:none;
+background:#0d6efd;
+color:white;
+padding:12px;
+cursor:pointer;
+}
+
+nav button:hover{
+background:#084298;
+}
+
+/* ===================== */
+/* SECCIONES */
+/* ===================== */
+
+section{
+display:none;
+padding:20px;
 text-align:center;
 }
 
-/* MENU */
-.menu{
-position:fixed;
-left:-260px;
-top:0;
-width:260px;
-height:100%;
-background:#0047AB;
-transition:.3s;
-padding-top:60px;
-}
-
-.menu a{
+.activo{
 display:block;
-padding:15px;
-color:white;
-text-decoration:none;
-border-bottom:1px solid rgba(255,255,255,.2);
 }
 
-.menu.active{left:0;}
+/* ===================== */
+/* ESCANER */
+/* ===================== */
 
-/* TOPBAR */
-.topbar{
-height:60px;
-background:#0047AB;
-color:white;
-display:flex;
-align-items:center;
-padding-left:15px;
-font-size:24px;
-}
-
-/* CONTENIDO */
-.content{
-padding:20px;
-}
-
-/* SCANNER */
-.scanner-box{
-position:relative;
-margin:auto;
+.scanner{
 width:260px;
 height:260px;
-border:4px solid #0047AB;
-border-radius:15px;
+border:3px solid #0d6efd;
+margin:auto;
+position:relative;
 overflow:hidden;
-background:white;
+border-radius:10px;
 }
 
-video{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.scan-line{
+.linea{
 position:absolute;
 width:100%;
 height:3px;
 background:red;
-animation:scan 1.5s linear infinite;
+animation:scan 2s infinite linear;
 }
 
 @keyframes scan{
-0%{top:0;}
-50%{top:50%;}
-100%{top:100%;}
+0%{top:0}
+100%{top:100%}
 }
 
-/* INPUTS */
-input,textarea{
+.info{
+margin-top:20px;
+border:2px dashed #0d6efd;
+padding:15px;
+border-radius:10px;
+min-height:60px;
+}
+
+/* ===================== */
+/* BOTONES */
+/* ===================== */
+
+input{
 width:90%;
-max-width:300px;
 padding:10px;
 margin:8px;
-border-radius:8px;
-border:1px solid #ccc;
 }
 
-/* BOTONES */
 button{
-background:#0047AB;
+padding:10px;
+margin:5px;
+background:#0d6efd;
 color:white;
 border:none;
-padding:12px 20px;
-border-radius:20px;
-margin:5px;
+border-radius:6px;
+cursor:pointer;
 }
 
-#qrcode,#miqrcode{
-background:white;
-padding:10px;
+.resultado{
+margin-top:15px;
 display:flex;
 justify-content:center;
 }
 
-svg{
-background:white;
-margin-top:10px;
+/* HISTORIAL */
+.item{
+border-bottom:1px solid #ccc;
+padding:8px;
 }
 
 </style>
@@ -126,185 +140,219 @@ margin-top:10px;
 
 <body>
 
-<div class="menu" id="menu">
-<a onclick="mostrar('scan')">📷 Escanear</a>
-<a onclick="mostrar('crear')">➕ Crear QR</a>
-<a onclick="mostrar('barcode')">🏷 Código Barras</a>
-<a onclick="mostrar('miqr')">👤 Mi Código QR</a>
-</div>
+<header>GC Digital Scan</header>
 
-<div class="topbar">
-<span onclick="toggleMenu()">☰</span>
-</div>
+<nav>
+<button onclick="mostrar('scan')">Escanear</button>
+<button onclick="mostrar('qr')">QR</button>
+<button onclick="mostrar('barras')">Barras</button>
+<button onclick="mostrar('micode')">Mi Código</button>
+<button onclick="mostrar('historial')">Historial</button>
+<button onclick="mostrar('config')">Config</button>
+</nav>
 
-<div class="content">
+<!-- ================= ESCANEAR ================= -->
+<section id="scan" class="activo">
 
-<!-- ESCANER -->
-<div id="scan">
 <h2>Escáner</h2>
 
-<div class="scanner-box">
-<video id="video"></video>
-<div class="scan-line"></div>
+<div class="scanner">
+<div class="linea"></div>
 </div>
 
-<p id="resultado">Escaneando rápido...</p>
+<div class="info" id="infoCodigo">
+Aquí aparecerá la información del código
 </div>
 
-<!-- CREAR QR -->
-<div id="crear" style="display:none;">
-<h2>Crear QR</h2>
+</section>
 
-<input id="qrtext" placeholder="Link, texto, WiFi o datos">
-<br>
-<button onclick="crearQR()">Generar QR</button>
-<button onclick="descargarQR('qrcode')">Descargar</button>
+<!-- ================= QR ================= -->
+<section id="qr">
 
+<h2>Crear Código QR</h2>
+
+<input id="textoQR" placeholder="Texto o dirección">
+
+<button onclick="crearQR()">Crear QR</button>
+<button onclick="guardarQR()">Guardar</button>
+
+<div class="resultado">
 <div id="qrcode"></div>
 </div>
 
-<!-- CODIGO BARRAS -->
-<div id="barcode" style="display:none;">
-<h2>Código de Barras</h2>
+</section>
 
-<input id="barcodeText" placeholder="Número o texto">
-<br>
-<button onclick="crearBarcode()">Generar</button>
-<button onclick="descargarBarcode()">Descargar</button>
+<!-- ================= BARRAS ================= -->
+<section id="barras">
 
-<svg id="barcodeSVG"></svg>
+<h2>Crear Código de Barras</h2>
+
+<input id="textoBarras" placeholder="Número o texto">
+
+<button onclick="crearBarras()">Crear</button>
+<button onclick="guardarBarras()">Guardar</button>
+
+<div class="resultado">
+<svg id="barcode"></svg>
 </div>
 
-<!-- MI QR -->
-<div id="miqr" style="display:none;">
-<h2>Mi Código QR</h2>
+</section>
 
-<input id="nombre" placeholder="Nombre">
+<!-- ================= MI CODIGO ================= -->
+<section id="micode">
+
+<h2>Crear Mi Código</h2>
+
+<input id="nombre" placeholder="Nombre completo">
+<input id="correo" placeholder="Correo electrónico">
 <input id="telefono" placeholder="Teléfono">
-<input id="correo" placeholder="Correo">
-<textarea id="direccion" placeholder="Dirección"></textarea>
+<input id="direccion" placeholder="Dirección">
+<input id="extra" placeholder="Dato opcional">
 
-<button onclick="crearMiQR()">Crear Mi QR</button>
-<button onclick="descargarQR('miqrcode')">Guardar</button>
+<button onclick="crearMiCodigo()">Crear Mi QR</button>
 
-<div id="miqrcode"></div>
+<div class="resultado">
+<div id="miQR"></div>
 </div>
 
-</div>
+</section>
+
+<!-- ================= HISTORIAL ================= -->
+<section id="historial">
+
+<h2>Historial</h2>
+
+<div id="listaHistorial"></div>
+
+</section>
+
+<!-- ================= CONFIG ================= -->
+<section id="config">
+
+<h2>Configuración</h2>
+
+<label>
+<input type="checkbox" id="vibracion">
+ Activar vibración
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox" id="sonido">
+ Activar sonido
+</label>
+
+</section>
+
 
 <script>
 
-/* MENU */
-function toggleMenu(){
-menu.classList.toggle("active");
-}
-
+/* CAMBIAR SECCIONES */
 function mostrar(id){
-document.querySelectorAll(".content > div")
-.forEach(d=>d.style.display="none");
+document.querySelectorAll("section")
+.forEach(s=>s.classList.remove("activo"));
 
-document.getElementById(id).style.display="block";
-toggleMenu();
+document.getElementById(id)
+.classList.add("activo");
+
+if(id==="historial") cargarHistorial();
 }
 
-/* ESCANER ULTRA RAPIDO */
-const reader=new ZXing.BrowserMultiFormatReader();
+/* ================= QR ================= */
 
-reader.decodeFromVideoDevice(
-null,
-'video',
-(result,err)=>{
-if(result){
-resultado.innerText="✅ "+result.text;
-navigator.vibrate(100);
-}
-},
-{
-fps:30,
-delayBetweenScanAttempts:50
-}
-);
-
-/* CREAR QR */
 function crearQR(){
-qrcode.innerHTML="";
+
+document.getElementById("qrcode").innerHTML="";
+
+let texto=document.getElementById("textoQR").value;
+
 new QRCode("qrcode",{
-text:qrtext.value,
-width:220,
-height:220
-});
-}
-
-/* MI QR PERSONAL */
-function crearMiQR(){
-
-let datos=`BEGIN:VCARD
-FN:${nombre.value}
-TEL:${telefono.value}
-EMAIL:${correo.value}
-ADR:${direccion.value}
-END:VCARD`;
-
-miqrcode.innerHTML="";
-
-new QRCode("miqrcode",{
-text:datos,
-width:220,
-height:220
-});
-}
-
-/* CODIGO BARRAS CORREGIDO */
-function crearBarcode(){
-
-let texto=document.getElementById("barcodeText").value.trim();
-
-if(texto===""){
-alert("Escribe algo para generar el código");
-return;
-}
-
-document.getElementById("barcodeSVG").innerHTML="";
-
-JsBarcode("#barcodeSVG",texto,{
-format:"CODE128",
-width:2,
-height:100,
-displayValue:true,
-margin:10
+text:texto,
+width:200,
+height:200
 });
 
+guardarHistorial("QR: "+texto);
 }
 
-/* DESCARGAR QR */
-function descargarQR(id){
-
-let img=document.querySelector(`#${id} img`);
-
-if(!img){
-alert("Primero genera el código");
-return;
-}
+function guardarQR(){
+let img=document.querySelector("#qrcode img");
+if(!img)return;
 
 let a=document.createElement("a");
 a.href=img.src;
-a.download="codigoQR.png";
+a.download="qr.png";
 a.click();
 }
 
-/* DESCARGAR BARRAS */
-function descargarBarcode(){
+/* ================= BARRAS ================= */
 
-let svg=document.getElementById("barcodeSVG");
+function crearBarras(){
+
+let txt=document.getElementById("textoBarras").value;
+
+JsBarcode("#barcode",txt,{
+format:"CODE128",
+displayValue:true
+});
+
+guardarHistorial("BARRAS: "+txt);
+}
+
+function guardarBarras(){
+
+let svg=document.getElementById("barcode");
 let data=new XMLSerializer().serializeToString(svg);
 
-let blob=new Blob([data],{type:"image/svg+xml"});
-let url=URL.createObjectURL(blob);
-
 let a=document.createElement("a");
-a.href=url;
-a.download="codigoBarras.svg";
+a.href="data:image/svg+xml,"+encodeURIComponent(data);
+a.download="barras.svg";
 a.click();
+}
+
+/* ================= MI CODIGO ================= */
+
+function crearMiCodigo(){
+
+document.getElementById("miQR").innerHTML="";
+
+let datos=
+"Nombre:"+nombre.value+
+"\nCorreo:"+correo.value+
+"\nTel:"+telefono.value+
+"\nDir:"+direccion.value+
+"\nExtra:"+extra.value;
+
+new QRCode("miQR",{
+text:datos,
+width:200,
+height:200
+});
+
+guardarHistorial("MI CODIGO: "+nombre.value);
+}
+
+/* ================= HISTORIAL ================= */
+
+function guardarHistorial(texto){
+
+let h=JSON.parse(localStorage.getItem("historial"))||[];
+h.push(texto);
+
+localStorage.setItem("historial",JSON.stringify(h));
+}
+
+function cargarHistorial(){
+
+let lista=document.getElementById("listaHistorial");
+lista.innerHTML="";
+
+let h=JSON.parse(localStorage.getItem("historial"))||[];
+
+h.reverse().forEach(e=>{
+lista.innerHTML+=`<div class="item">${e}</div>`;
+});
 }
 
 </script>
