@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Media Scanner</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:#0f172a;
+color:white;
+padding:20px;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+font-size:35px;
+color:#38bdf8;
+}
+
+button{
+padding:15px 25px;
+border:none;
+border-radius:12px;
+background:#2563eb;
+color:white;
+font-size:16px;
+cursor:pointer;
+margin-bottom:20px;
+}
+
+.section{
+margin-top:30px;
+background:#111827;
+padding:20px;
+border-radius:20px;
+}
+
+.section h2{
+margin-bottom:15px;
+color:#38bdf8;
+}
+
+.item{
+background:#1e293b;
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+audio,
+video{
+width:100%;
+margin-top:10px;
+border-radius:12px;
+}
+
+.file-name{
+font-size:14px;
+margin-bottom:10px;
+word-break:break-all;
+}
+
+.empty{
+color:#94a3b8;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Media Scanner</h1>
+
+<button onclick="requestAccess()">
+Permitir Acceso a Archivos
+</button>
+
+<div class="section">
+
+<h2>🎵 MP3</h2>
+
+<div id="mp3List">
+<div class="empty">
+Esperando permisos...
+</div>
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>🎬 MP4</h2>
+
+<div id="mp4List">
+<div class="empty">
+Esperando permisos...
+</div>
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>🟢 Audios de WhatsApp</h2>
+
+<div id="waList">
+<div class="empty">
+Esperando permisos...
+</div>
+</div>
+
+</div>
+
+<script>
+
+async function requestAccess(){
+
+try{
+
+const dirHandle =
+await window.showDirectoryPicker();
+
+scanDirectory(dirHandle);
+
+}catch(err){
+
+alert("Permiso cancelado");
+
+}
+
+}
+
+async function scanDirectory(dirHandle){
+
+const mp3List =
+document.getElementById("mp3List");
+
+const mp4List =
+document.getElementById("mp4List");
+
+const waList =
+document.getElementById("waList");
+
+mp3List.innerHTML = "";
+mp4List.innerHTML = "";
+waList.innerHTML = "";
+
+let mp3Found = false;
+let mp4Found = false;
+let waFound = false;
+
+async function scanFolder(folder){
+
+for await (const entry of folder.values()){
+
+if(entry.kind === "file"){
+
+const file =
+await entry.getFile();
+
+const url =
+URL.createObjectURL(file);
+
+const name =
+file.name.toLowerCase();
+
+if(name.endsWith(".mp3")){
+
+mp3Found = true;
+
+const div =
+document.createElement("div");
+
+div.className = "item";
+
+div.innerHTML = `
+<div class="file-name">
+${file.name}
+</div>
+
+<audio controls>
+<source src="${url}">
+</audio>
+`;
+
+mp3List.appendChild(div);
+
+}
+
+else if(name.endsWith(".mp4")){
+
+mp4Found = true;
+
+const div =
+document.createElement("div");
+
+div.className = "item";
+
+div.innerHTML = `
+<div class="file-name">
+${file.name}
+</div>
+
+<video controls>
+<source src="${url}">
+</video>
+`;
+
+mp4List.appendChild(div);
+
+}
+
+else if(
+name.includes("whatsapp") ||
+name.includes("ptt") ||
+name.endsWith(".opus") ||
+name.endsWith(".ogg")
+){
+
+waFound = true;
+
+const div =
+document.createElement("div");
+
+div.className = "item";
+
+div.innerHTML = `
+<div class="file-name">
+${file.name}
+</div>
+
+<audio controls>
+<source src="${url}">
+</audio>
+`;
+
+waList.appendChild(div);
+
+}
+
+}
+
+if(entry.kind === "directory"){
+
+await scanFolder(entry);
+
+}
+
+}
+
+}
+
+await scanFolder(dirHandle);
+
+if(!mp3Found){
+
+mp3List.innerHTML =
+'<div class="empty">No se encontraron MP3</div>';
+
+}
+
+if(!mp4Found){
+
+mp4List.innerHTML =
+'<div class="empty">No se encontraron MP4</div>';
+
+}
+
+if(!waFound){
+
+waList.innerHTML =
+'<div class="empty">No se encontraron audios de WhatsApp</div>';
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
