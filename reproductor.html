@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Media Scanner</title>
+<title>Scanner Media</title>
 
 <style>
 
@@ -18,24 +18,48 @@ body{
 background:#0f172a;
 color:white;
 padding:20px;
+overflow-x:hidden;
 }
 
-h1{
+.permission-screen{
+position:fixed;
+inset:0;
+background:#0f172a;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.permission-box{
+background:#111827;
+padding:40px;
+border-radius:20px;
+width:400px;
 text-align:center;
+box-shadow:0 0 30px rgba(0,0,0,0.5);
+}
+
+.permission-box h1{
+font-size:32px;
 margin-bottom:20px;
-font-size:35px;
 color:#38bdf8;
 }
 
-button{
-padding:15px 25px;
+.permission-box p{
+color:#94a3b8;
+margin-bottom:20px;
+}
+
+.permission-box button{
+width:100%;
+padding:15px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:#2563eb;
 color:white;
 font-size:16px;
 cursor:pointer;
-margin-bottom:20px;
 }
 
 .section{
@@ -46,28 +70,34 @@ border-radius:20px;
 }
 
 .section h2{
-margin-bottom:15px;
+margin-bottom:20px;
 color:#38bdf8;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:15px;
 }
 
 .item{
 background:#1e293b;
 padding:15px;
-border-radius:12px;
-margin-bottom:15px;
+border-radius:14px;
+overflow:hidden;
 }
 
-audio,
-video{
+.item video,
+.item audio{
 width:100%;
 margin-top:10px;
-border-radius:12px;
+border-radius:10px;
 }
 
 .file-name{
-font-size:14px;
-margin-bottom:10px;
+font-size:13px;
 word-break:break-all;
+margin-bottom:10px;
 }
 
 .empty{
@@ -79,68 +109,90 @@ color:#94a3b8;
 
 <body>
 
-<h1>Media Scanner</h1>
+<div class="permission-screen" id="permissionScreen">
 
-<button onclick="requestAccess()">
-Permitir Acceso a Archivos
+<div class="permission-box">
+
+<h1>Scanner Media</h1>
+
+<p>
+Permite acceso para escanear archivos multimedia del dispositivo.
+</p>
+
+<button onclick="startScan()">
+Permitir Escaneo
 </button>
+
+</div>
+
+</div>
 
 <div class="section">
 
 <h2>🎵 MP3</h2>
 
-<div id="mp3List">
+<div class="grid" id="mp3List">
+
 <div class="empty">
-Esperando permisos...
+No se encontraron MP3
 </div>
+
 </div>
 
 </div>
 
 <div class="section">
 
-<h2>🎬 MP4</h2>
+<h2>🎬 Videos MP4</h2>
 
-<div id="mp4List">
+<div class="grid" id="mp4List">
+
 <div class="empty">
-Esperando permisos...
+No se encontraron videos
 </div>
+
 </div>
 
 </div>
 
 <div class="section">
 
-<h2>🟢 Audios de WhatsApp</h2>
+<h2>🟢 Audios WhatsApp</h2>
 
-<div id="waList">
+<div class="grid" id="waList">
+
 <div class="empty">
-Esperando permisos...
+No se encontraron audios WhatsApp
 </div>
+
 </div>
 
 </div>
 
 <script>
 
-async function requestAccess(){
+async function startScan(){
 
 try{
 
-const dirHandle =
+const directory =
 await window.showDirectoryPicker();
 
-scanDirectory(dirHandle);
+document
+.getElementById("permissionScreen")
+.style.display = "none";
+
+scanFiles(directory);
 
 }catch(err){
 
-alert("Permiso cancelado");
+alert("Permiso denegado");
 
 }
 
 }
 
-async function scanDirectory(dirHandle){
+async function scanFiles(folder){
 
 const mp3List =
 document.getElementById("mp3List");
@@ -159,9 +211,9 @@ let mp3Found = false;
 let mp4Found = false;
 let waFound = false;
 
-async function scanFolder(folder){
+async function readFolder(dir){
 
-for await (const entry of folder.values()){
+for await(const entry of dir.values()){
 
 if(entry.kind === "file"){
 
@@ -252,7 +304,7 @@ waList.appendChild(div);
 
 if(entry.kind === "directory"){
 
-await scanFolder(entry);
+await readFolder(entry);
 
 }
 
@@ -260,7 +312,7 @@ await scanFolder(entry);
 
 }
 
-await scanFolder(dirHandle);
+await readFolder(folder);
 
 if(!mp3Found){
 
@@ -272,14 +324,14 @@ mp3List.innerHTML =
 if(!mp4Found){
 
 mp4List.innerHTML =
-'<div class="empty">No se encontraron MP4</div>';
+'<div class="empty">No se encontraron videos</div>';
 
 }
 
 if(!waFound){
 
 waList.innerHTML =
-'<div class="empty">No se encontraron audios de WhatsApp</div>';
+'<div class="empty">No se encontraron audios WhatsApp</div>';
 
 }
 
