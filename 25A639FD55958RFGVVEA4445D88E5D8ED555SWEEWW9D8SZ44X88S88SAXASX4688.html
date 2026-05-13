@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Portal Docente</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(45deg,#1abc9c,#3498db,#9b59b6);
+color:white;
+}
+
+header{
+background:rgba(0,0,0,0.6);
+padding:15px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+}
+
+.container{ padding:20px; }
+
+.card{
+background:rgba(0,0,0,0.7);
+padding:20px;
+border-radius:10px;
+max-width:400px;
+margin:auto;
+}
+
+input, button{
+padding:10px;
+margin:5px;
+border-radius:6px;
+border:none;
+width:90%;
+}
+
+button{
+cursor:pointer;
+background:#2ecc71;
+color:white;
+font-weight:bold;
+}
+
+.hidden{display:none;}
+
+.section{
+margin-top:20px;
+background:rgba(0,0,0,0.6);
+padding:15px;
+border-radius:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+background:rgba(0,0,0,0.8);
+}
+
+th, td{
+border:1px solid rgba(255,255,255,0.3);
+padding:8px;
+text-align:center;
+}
+
+th{
+background:rgba(255,255,255,0.1);
+}
+</style>
+</head>
+
+<body>
+
+<header>🎓 Portal Docente</header>
+
+<div class="container">
+
+<!-- LOGIN -->
+<div id="loginBox" class="card">
+<h3>Iniciar Sesión</h3>
+<input id="servidor" placeholder="Número servidor">
+<input id="password" type="password" placeholder="Contraseña">
+<button onclick="login()">Entrar</button>
+</div>
+
+<!-- PANEL -->
+<div id="panel" class="hidden">
+
+<div class="section">
+<h3 id="infoDocente"></h3>
+<p id="grupoInfo"></p>
+</div>
+
+<div class="section">
+<h3>Calificaciones</h3>
+
+<table>
+<thead id="thead"></thead>
+<tbody id="tbody"></tbody>
+</table>
+
+<br>
+
+<button onclick="guardarCalificaciones()">💾 Guardar</button>
+
+<button onclick="moverAHistorial()" style="background:#e74c3c;">
+📦 Cerrar ciclo
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const supabaseClient = supabase.createClient(
+"https://nlpdpvjtdxknhvgqbfls.supabase.co",
+"sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+let docenteActual = null;
+let alumnosGlobal = [];
+let materiasGlobal = [];
+
+// LOGIN
+async function login(){
+
+let servidor = document.getElementById("servidor").value.trim();
+let password = document.getElementById("password").value.trim();
+
+let { data } = await supabaseClient
+.from("docentes")
+.select("*")
+.eq("numero_servidor", servidor)
+.eq("password", password);
+
+if(!data || data.length === 0){
+alert("Credenciales incorrectas");
+return;
+}
+
+docenteActual = data[0];
+
+document.getElementById("loginBox").classList.add("hidden");
+document.getElementById("panel").classList.remove("hidden");
+
+document.getElementById("infoDocente").innerText =
+docenteActual.nombre_completo;
+
+document.getElementById("grupoInfo").innerText =
+"Grado: " + docenteActual.grado + " | Grupo: " + docenteActual.grupo;
+
+cargarDatos();
+}
+
+// CARGAR DATOS
+async function cargarDatos(){
+
+let { data: alumnos } = await supabaseClient
+.from("alumnos")
+.select("*")
+.eq("grado", docenteActual.grado)
+.eq("grupo", docenteActual.grupo);
+
+alumnosGlobal = alumnos;
+
+// materias
+materiasGlobal = [];
+
+for(let i=1;i<=10;i++){
+let m = docenteActual["materia"+i];
+if(m && m.trim() !== ""){
+materiasGlobal.push(m);
+}
+}
+
+renderTabla();
+cargarCalificacionesExistentes();
+}
+
+// TABLA
+function renderTabla(){
+
+let thead = document.getElementById("thead");
+let tbody = document.getElementById("tbody");
+
+thead.innerHTML = "";
+tbody.innerHTML = "";
+
+// encabezado
+let head = "<tr><th>Alumno</th>";
+
+materiasGlobal.forEach(m=>{
+head += `<th>${m}</th>`;
+});
+
+head += "</tr>";
+thead.innerHTML = head;
+
+// filas
+alumnosGlobal.forEach(al=>{
+
+let row = `<tr><td>${al.nombre_completo}</td>`;
+
+materiasGlobal.forEach(m=>{
+row += `
+<td>
+<input id="calif-${al.id}-${m}" style="width:60px">
+</td>
+`;
+});
+
+row += "</tr>";
+tbody.innerHTML += row;
+
+});
+
+}
+
+// CARGAR CALIFICACIONES
+async function cargarCalificacionesExistentes(){
+
+for(let al of alumnosGlobal){
+
+let { data } = await supabaseClient
+.from("calificaciones")
+.select("*")
+.eq("alumno_id", al.id);
+
+if(data){
+
+data.forEach(cal=>{
+let input = document.getElementById(`calif-${al.id}-${cal.materia}`);
+if(input){
+input.value = cal.calificacion;
+}
+});
+
+}
+
+}
+
+}
+
+// GUARDAR
+async function guardarCalificaciones(){
+
+for(let al of alumnosGlobal){
+
+for(let m of materiasGlobal){
+
+let input = document.getElementById(`calif-${al.id}-${m}`);
+if(!input) continue;
+
+let valor = input.value;
+
+if(!valor) continue;
+
+// upsert (evita duplicados)
+await supabaseClient
+.from("calificaciones")
+.upsert({
+alumno_id: al.id,
+materia: m,
+calificacion: valor,
+grado: docenteActual.grado,
+grupo: docenteActual.grupo
+}, { onConflict: 'alumno_id,materia' });
+
+}
+
+}
+
+alert("✅ Guardado correctamente");
+}
+
+// CERRAR CICLO
+async function moverAHistorial(){
+
+let { data: calificaciones } = await supabaseClient
+.from("calificaciones")
+.select("*");
+
+if(!calificaciones || calificaciones.length === 0){
+alert("No hay datos");
+return;
+}
+
+for(let cal of calificaciones){
+
+let { data: alumno } = await supabaseClient
+.from("alumnos")
+.select("nombre_completo")
+.eq("id", cal.alumno_id)
+.single();
+
+await supabaseClient
+.from("historial_calificaciones")
+.insert([{
+alumno_id: cal.alumno_id,
+nombre_alumno: alumno?.nombre_completo || "",
+materia: cal.materia,
+calificacion: cal.calificacion,
+grado: cal.grado,
+grupo: cal.grupo
+}]);
+
+}
+
+// limpiar actuales
+await supabaseClient
+.from("calificaciones")
+.delete()
+.neq("id", 0);
+
+alert("📦 Ciclo cerrado correctamente");
+
+// reset docente (opcional)
+await supabaseClient
+.from("docentes")
+.update({
+grado: null,
+grupo: null
+})
+.eq("id", docenteActual.id);
+
+for(let i=1;i<=10;i++){
+await supabaseClient
+.from("docentes")
+.update({ ["materia"+i]: null })
+.eq("id", docenteActual.id);
+}
+
+location.reload();
+}
+
+</script>
+
+</body>
+</html>
