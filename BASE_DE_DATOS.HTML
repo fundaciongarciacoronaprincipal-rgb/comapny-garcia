@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BASE DE DATOS PROTEGIDA</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .contenedor {
+            width: 95%;
+            max-width: 1200px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 35px;
+        }
+
+        p {
+            margin-bottom: 25px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        iframe {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.4);
+            background: white;
+        }
+    </style>
+
+    <script>
+        // CONTRASEÑAS
+        const contraseña1 = "CGC-0001";
+        const contraseña2 = "NEXUS WEB 2026";
+
+        // PRIMERA CONTRASEÑA
+        let acceso1 = prompt("Ingrese la primera contraseña:");
+
+        if (acceso1 !== contraseña1) {
+            alert("Primera contraseña incorrecta");
+            window.location.href = "about:blank";
+        } else {
+
+            // SEGUNDA CONTRASEÑA
+            let acceso2 = prompt("Ingrese la segunda contraseña:");
+
+            if (acceso2 !== contraseña2) {
+                alert("Segunda contraseña incorrecta");
+                window.location.href = "about:blank";
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="contenedor">
+        <h1>BASE DE DATOS PROTEGIDA</h1>
+        <p>Acceso restringido únicamente para personal autorizado.</p>
+
+        <iframe 
+            id="JotFormIFrame-261260458343859"
+            title="BASE DE DATOS"
+            allow="geolocation; microphone; camera"
+            src="https://www.jotform.com/app/261260458343859?appEmbedded=1">
+        </iframe>
+    </div>
+
+</body>
+</html>
