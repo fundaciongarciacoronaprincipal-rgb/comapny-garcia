@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NexusMail</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(270deg,#ff00cc,#3333ff,#00ffcc);
+  background-size:600% 600%;
+  animation:fondo 12s ease infinite;
+  min-height:100vh;
+  color:white;
+}
+
+@keyframes fondo{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+.container{
+  width:95%;
+  margin:20px auto;
+  padding:3px;
+  border-radius:18px;
+  background:linear-gradient(90deg,red,orange,yellow,green,cyan,blue,violet);
+  background-size:500%;
+  animation:borde 8s linear infinite;
+}
+
+@keyframes borde{
+  0%{background-position:0%;}
+  100%{background-position:500%;}
+}
+
+.app{
+  display:flex;
+  min-height:90vh;
+  background:#0f0f0f;
+  border-radius:15px;
+  overflow:hidden;
+}
+
+/* LOGIN */
+
+.login{
+  width:100%;
+  max-width:400px;
+  margin:80px auto;
+  background:#111;
+  padding:30px;
+  border-radius:15px;
+}
+
+.logo{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.logo h1{
+  color:#00ffcc;
+  font-size:40px;
+}
+
+.logo p{
+  color:#aaa;
+  margin-top:5px;
+}
+
+input,
+textarea{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  background:#1e1e1e;
+  color:white;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+button{
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+button:hover{
+  transform:scale(1.02);
+}
+
+/* MENU */
+
+.menu{
+  width:240px;
+  background:#151515;
+  padding:15px;
+  border-right:1px solid #222;
+}
+
+.menu h2{
+  color:#00ffcc;
+  margin-bottom:20px;
+}
+
+.menu button{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  background:#1f1f1f;
+  color:white;
+  text-align:left;
+}
+
+.menu button:hover{
+  background:#2a2a2a;
+}
+
+/* CONTENT */
+
+.content{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* TOPBAR */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+  border-bottom:1px solid #222;
+  background:#111;
+}
+
+.redactarBtn{
+  background:#00ff99;
+  color:black;
+  font-weight:bold;
+  padding:12px 20px;
+}
+
+.tituloVista{
+  font-size:22px;
+  font-weight:bold;
+}
+
+/* LISTA */
+
+.lista{
+  flex:1;
+  overflow:auto;
+  padding:15px;
+}
+
+.mensaje{
+  background:#1a1a1a;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:10px;
+  cursor:pointer;
+  border:1px solid #222;
+  transition:.2s;
+}
+
+.mensaje:hover{
+  background:#242424;
+}
+
+.nuevo{
+  font-weight:bold;
+  border-left:5px solid #00ff99;
+}
+
+.normal{
+  font-weight:normal;
+}
+
+/* DETALLE */
+
+.detalle{
+  display:none;
+  padding:20px;
+  overflow:auto;
+}
+
+.detalle h2{
+  margin-bottom:10px;
+}
+
+.detalle p{
+  margin-bottom:8px;
+}
+
+/* REDACTAR */
+
+.redactar{
+  display:none;
+  padding:20px;
+}
+
+.enviarBtn{
+  background:#00ff99;
+  color:black;
+  padding:12px;
+  margin-top:10px;
+  font-weight:bold;
+}
+
+/* LINKS */
+
+a{
+  color:#00bfff;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+a:hover{
+  text-decoration:underline;
+}
+
+hr{
+  border:none;
+  border-top:1px solid #333;
+  margin:15px 0;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:10px;
+}
+
+@media(max-width:800px){
+
+  .app{
+    flex-direction:column;
+  }
+
+  .menu{
+    width:100%;
+    border-right:none;
+    border-bottom:1px solid #222;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LOGIN -->
+
+<div id="loginView" class="login">
+
+  <div class="logo">
+    <h1>📧 NexusMail</h1>
+    <p>Sistema escolar</p>
+  </div>
+
+  <input type="text" id="correo" placeholder="Correo">
+
+  <input type="password" id="password" placeholder="Contraseña">
+
+  <button onclick="login()" style="width:100%;padding:12px;background:#00ff99;color:black;font-weight:bold;margin-top:15px;">
+    Iniciar sesión
+  </button>
+
+</div>
+
+<!-- APP -->
+
+<div id="appView" class="app" style="display:none;">
+
+  <!-- MENU -->
+
+  <div class="menu">
+
+    <h2>NexusMail</h2>
+
+    <button onclick="cambiarVista('recibidos')">📥 Bandeja de entrada</button>
+
+    <button onclick="cambiarVista('enviados')">📤 Enviados</button>
+
+    <button onclick="logout()">🚪 Cerrar sesión</button>
+
+  </div>
+
+  <!-- CONTENT -->
+
+  <div class="content">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+      <div class="tituloVista" id="tituloVista">
+        📥 Bandeja de entrada
+      </div>
+
+      <button class="redactarBtn" onclick="abrirRedactar()">
+        ✏️ Redactar
+      </button>
+
+    </div>
+
+    <!-- LISTA -->
+
+    <div id="lista" class="lista"></div>
+
+    <!-- DETALLE -->
+
+    <div id="detalle" class="detalle"></div>
+
+    <!-- REDACTAR -->
+
+    <div id="redactar" class="redactar">
+
+      <h2>Nuevo mensaje</h2>
+
+      <input type="text" id="receptor" placeholder="Destinatario">
+
+      <input type="text" id="asunto" placeholder="Asunto">
+
+      <textarea id="mensaje" placeholder="Escribe tu mensaje..."></textarea>
+
+      <button class="enviarBtn" onclick="enviar()">
+        Enviar mensaje
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+<!-- MODAL -->
+
+<div id="modalImg" class="modal">
+  <img id="imgGrande">
+</div>
+
+<script>
+
+/* SUPABASE */
+
+const supabaseClient = supabase.createClient(
+  "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+  "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+let usuarioActual = null;
+let vista = "recibidos";
+let mensajes = [];
+
+/* LOGIN */
+
+async function login(){
+
+  const correo = document.getElementById("correo").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  let usuario = null;
+
+  /* DOCENTES */
+
+  const { data: docentes } = await supabaseClient
+    .from("docentes")
+    .select("*")
+    .eq("correo", correo)
+    .eq("password", password);
+
+  if(docentes && docentes.length > 0){
+    usuario = docentes[0];
+  }
+
+  /* SERVICIO PRACTICAS */
+
+  if(!usuario){
+
+    const { data: practicas } = await supabaseClient
+      .from("servicio_practicas")
+      .select("*")
+      .eq("correo", correo)
+      .eq("password", password);
+
+    if(practicas && practicas.length > 0){
+      usuario = practicas[0];
+    }
+
+  }
+
+  /* ALUMNOS */
+
+  if(!usuario){
+
+    const { data: alumnos1 } = await supabaseClient
+      .from("alumnos")
+      .select("*")
+      .eq("correo_alumno", correo)
+      .eq("password_alumno", password);
+
+    if(alumnos1 && alumnos1.length > 0){
+      usuario = alumnos1[0];
+    }
+
+  }
+
+  if(!usuario){
+
+    const { data: alumnos2 } = await supabaseClient
+      .from("alumnos")
+      .select("*")
+      .eq("correo_tutor", correo)
+      .eq("password_tutor", password);
+
+    if(alumnos2 && alumnos2.length > 0){
+      usuario = alumnos2[0];
+    }
+
+  }
+
+  if(usuario){
+
+    usuarioActual = correo;
+
+    document.getElementById("loginView").style.display = "none";
+    document.getElementById("appView").style.display = "flex";
+
+    cargar();
+    tiempoReal();
+
+  }else{
+
+    alert("❌ Credenciales incorrectas");
+
+  }
+
+}
+
+/* CARGAR */
+
+async function cargar(){
+
+  const { data } = await supabaseClient
+    .from("mensajes")
+    .select("*")
+    .order("id",{ascending:false});
+
+  mensajes = data || [];
+
+  mostrar();
+
+}
+
+/* TIEMPO REAL */
+
+function tiempoReal(){
+
+  supabaseClient
+    .channel("mensajes-tiempo-real")
+    .on(
+      "postgres_changes",
+      {
+        event:"*",
+        schema:"public",
+        table:"mensajes"
+      },
+      () => {
+        cargar();
+      }
+    )
+    .subscribe();
+
+}
+
+/* CAMBIAR VISTA */
+
+function cambiarVista(v){
+
+  vista = v;
+
+  document.getElementById("detalle").style.display = "none";
+  document.getElementById("redactar").style.display = "none";
+  document.getElementById("lista").style.display = "block";
+
+  document.getElementById("tituloVista").innerHTML =
+    vista === "recibidos"
+    ? "📥 Bandeja de entrada"
+    : "📤 Mensajes enviados";
+
+  mostrar();
+
+}
+
+/* MOSTRAR */
+
+function mostrar(){
+
+  const lista = document.getElementById("lista");
+
+  lista.innerHTML = "";
+
+  mensajes.forEach(m => {
+
+    if(vista === "recibidos" && m.receptor !== usuarioActual){
+      return;
+    }
+
+    if(vista === "enviados" && m.emisor !== usuarioActual){
+      return;
+    }
+
+    const div = document.createElement("div");
+
+    div.className = m.leido ? "mensaje normal" : "mensaje nuevo";
+
+    div.innerHTML = `
+      <div>
+        <b>${m.asunto || "(Sin asunto)"}</b>
+      </div>
+
+      <div style="margin-top:5px;color:#aaa;">
+        ${
+          vista === "recibidos"
+          ? "De: " + m.emisor
+          : "Para: " + m.receptor
+        }
+      </div>
+    `;
+
+    div.onclick = () => ver(m);
+
+    lista.appendChild(div);
+
+  });
+
+}
+
+/* VER */
+
+async function ver(m){
+
+  document.getElementById("lista").style.display = "none";
+  document.getElementById("redactar").style.display = "none";
+
+  const detalle = document.getElementById("detalle");
+
+  detalle.style.display = "block";
+
+  detalle.innerHTML = `
+
+    <button onclick="volverLista()" style="padding:10px;background:#00ff99;color:black;font-weight:bold;">
+      ⬅ Volver
+    </button>
+
+    <br><br>
+
+    <h2>${m.asunto || "(Sin asunto)"}</h2>
+
+    <p><b>De:</b> ${m.emisor}</p>
+
+    <p><b>Para:</b> ${m.receptor}</p>
+
+    <hr>
+
+    <div>
+      ${procesarMensaje(m.mensaje)}
+    </div>
+
+  `;
+
+  if(m.receptor === usuarioActual && !m.leido){
+
+    await supabaseClient
+      .from("mensajes")
+      .update({ leido:true })
+      .eq("id",m.id);
+
+  }
+
+}
+
+/* VOLVER */
+
+function volverLista(){
+
+  document.getElementById("detalle").style.display = "none";
+  document.getElementById("redactar").style.display = "none";
+  document.getElementById("lista").style.display = "block";
+
+}
+
+/* REDACTAR */
+
+function abrirRedactar(){
+
+  document.getElementById("lista").style.display = "none";
+  document.getElementById("detalle").style.display = "none";
+  document.getElementById("redactar").style.display = "block";
+
+}
+
+/* VALIDAR DESTINATARIO */
+
+async function existeUsuario(correo){
+
+  const { data: docentes } = await supabaseClient
+    .from("docentes")
+    .select("*")
+    .eq("correo",correo);
+
+  if(docentes.length) return true;
+
+  const { data: practicas } = await supabaseClient
+    .from("servicio_practicas")
+    .select("*")
+    .eq("correo",correo);
+
+  if(practicas.length) return true;
+
+  const { data: alumnos1 } = await supabaseClient
+    .from("alumnos")
+    .select("*")
+    .eq("correo_alumno",correo);
+
+  if(alumnos1.length) return true;
+
+  const { data: alumnos2 } = await supabaseClient
+    .from("alumnos")
+    .select("*")
+    .eq("correo_tutor",correo);
+
+  if(alumnos2.length) return true;
+
+  return false;
+
+}
+
+/* ENVIAR */
+
+async function enviar(){
+
+  const receptor = document.getElementById("receptor").value.trim();
+  const asunto = document.getElementById("asunto").value.trim();
+  const mensaje = document.getElementById("mensaje").value.trim();
+
+  if(!receptor || !mensaje){
+
+    alert("Completa los campos");
+    return;
+
+  }
+
+  const existe = await existeUsuario(receptor);
+
+  if(!existe){
+
+    alert("❌ Destinatario no encontrado");
+    return;
+
+  }
+
+  await supabaseClient
+    .from("mensajes")
+    .insert([{
+
+      emisor:usuarioActual,
+      receptor:receptor,
+      asunto:asunto,
+      mensaje:mensaje,
+      leido:false
+
+    }]);
+
+  alert("✅ Mensaje enviado");
+
+  document.getElementById("receptor").value = "";
+  document.getElementById("asunto").value = "";
+  document.getElementById("mensaje").value = "";
+
+  cambiarVista("enviados");
+
+}
+
+/* LINKS */
+
+function procesarMensaje(texto){
+
+  return texto.replace(
+    /(https?:\/\/[^\s]+)/g,
+    function(url){
+
+      if(url.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
+
+        return `
+          <br><br>
+          <img 
+            src="${url}"
+            onclick="verImagen('${url}')"
+            style="max-width:250px;border-radius:10px;cursor:pointer;"
+          >
+          <br><br>
+          <a href="${url}" target="_blank">
+            Abrir imagen
+          </a>
+        `;
+
+      }
+
+      return `
+        <a href="${url}" target="_blank">
+          ${url}
+        </a>
+      `;
+
+    }
+  );
+
+}
+
+/* IMAGEN */
+
+function verImagen(src){
+
+  document.getElementById("modalImg").style.display = "flex";
+  document.getElementById("imgGrande").src = src;
+
+}
+
+document.getElementById("modalImg").onclick = () => {
+
+  document.getElementById("modalImg").style.display = "none";
+
+};
+
+/* LOGOUT */
+
+function logout(){
+
+  location.reload();
+
+}
+
+</script>
+
+</body>
+</html>
