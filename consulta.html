@@ -13,7 +13,7 @@
 body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
-    background:#87CEEB;
+    background:linear-gradient(135deg,#4facfe,#00f2fe);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -21,12 +21,16 @@ body{
 }
 
 .container{
-    width:400px;
+    width:420px;
     background:white;
     padding:25px;
-    border-radius:15px;
-    box-shadow:0 0 10px rgba(0,0,0,0.2);
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.25);
     text-align:center;
+}
+
+h2{
+    color:#007BFF;
 }
 
 input{
@@ -36,6 +40,7 @@ input{
     border-radius:10px;
     border:1px solid #ccc;
     font-size:16px;
+    box-sizing:border-box;
 }
 
 button{
@@ -46,6 +51,7 @@ button{
     border-radius:10px;
     font-size:16px;
     cursor:pointer;
+    transition:0.3s;
 }
 
 .buscar{
@@ -53,9 +59,17 @@ button{
     color:white;
 }
 
+.buscar:hover{
+    background:#0056b3;
+}
+
 .confirmar{
     background:#28a745;
     color:white;
+}
+
+.confirmar:hover{
+    background:#1d7f35;
 }
 
 .pagos{
@@ -75,51 +89,136 @@ button{
     border-radius:10px;
     margin-top:10px;
     font-weight:bold;
+    transition:0.3s;
+}
+
+.pago-btn:hover{
+    transform:scale(1.02);
 }
 
 .pago-btn img{
-    width:30px;
+    width:32px;
+    height:32px;
+    object-fit:contain;
+}
+
+#saldoTexto{
+    color:#dc3545;
+    margin-top:20px;
+}
+
+.codigo-box{
+    margin-top:25px;
+    border-top:1px solid #ccc;
+    padding-top:20px;
+}
+
+.btn-canjear{
+    background:#ff9800;
+    color:white;
+}
+
+.btn-canjear:hover{
+    background:#d97d00;
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
-<h2>Consulta de Adeudo</h2>
+<h2>Consulta de Saldo</h2>
 
-<input type="text" id="busqueda" placeholder="Número de servicio o referencia">
+<input
+type="text"
+id="busqueda"
+placeholder="Número de servicio o referencia"
+>
 
-<button class="buscar" onclick="buscar()">
+<button
+class="buscar"
+onclick="buscar()"
+>
 Buscar
 </button>
 
 <div id="resultado"></div>
 
-<div class="pagos" id="pagos">
+<div
+class="pagos"
+id="pagos"
+>
 
 <h3 id="saldoTexto"></h3>
 
-<a class="pago-btn" href="TU_LINK_PAYPAL" target="_blank">
+<a
+class="pago-btn"
+href="TU_LINK_PAYPAL"
+target="_blank"
+>
+
 <img src="https://cdn-icons-png.flaticon.com/512/174/174861.png">
+
 PayPal
+
 </a>
 
-<a class="pago-btn" href="TU_LINK_CLIP" target="_blank">
+<a
+class="pago-btn"
+href="TU_LINK_CLIP"
+target="_blank"
+>
+
 <img src="https://seeklogo.com/images/C/clip-logo-3D5CE6E30B-seeklogo.com.png">
+
 Clip
+
 </a>
 
-<a class="pago-btn" href="TU_LINK_MERCADOPAGO" target="_blank">
+<a
+class="pago-btn"
+href="TU_LINK_MERCADOPAGO"
+target="_blank"
+>
+
 <img src="https://logodownload.org/wp-content/uploads/2019/06/mercado-pago-logo.png">
+
 Mercado Pago
+
 </a>
 
-<a class="pago-btn" href="TU_LINK_TRANSFERENCIA" target="_blank">
+<a
+class="pago-btn"
+href="TU_LINK_TRANSFERENCIA"
+target="_blank"
+>
+
 <img src="https://cdn-icons-png.flaticon.com/512/2830/2830284.png">
+
 Transferencia
+
 </a>
+
+<div class="codigo-box">
+
+<h3>Canjear código</h3>
+
+<input
+type="text"
+id="codigoCanje"
+placeholder="Ingresa tu código"
+>
+
+<button
+class="btn-canjear"
+onclick="canjearCodigo()"
+>
+Canjear código
+</button>
+
+</div>
 
 </div>
 
@@ -127,52 +226,171 @@ Transferencia
 
 <script>
 
-const SUPABASE_URL = "https://ieaielptonscbsimbtyx.supabase.co";
+const SUPABASE_URL =
+"https://ieaielptonscbsimbtyx.supabase.co";
 
-const SUPABASE_KEY = "sb_publishable_pmJ3fN_2FUKM1AskoReusA_0vaZz7f_";
+const SUPABASE_KEY =
+"sb_publishable_pmJ3fN_2FUKM1AskoReusA_0vaZz7f_";
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 let clienteActual = null;
 
 async function buscar(){
 
-    const valor = document.getElementById("busqueda").value;
+    const valor =
+    document.getElementById("busqueda").value;
 
-    const { data, error } = await supabaseClient
+    const { data, error } =
+    await supabaseClient
     .from("clientes_servicio")
     .select("*")
-    .or(`numero_servicio.eq.${valor},numero_referencia.eq.${valor}`);
+    .or(
+        `numero_servicio.eq.${valor},numero_referencia.eq.${valor}`
+    );
 
     if(error || data.length === 0){
 
-        document.getElementById("resultado").innerHTML =
+        document.getElementById(
+            "resultado"
+        ).innerHTML =
         "<p>No encontrado</p>";
 
         return;
+
     }
 
     clienteActual = data[0];
 
-    document.getElementById("resultado").innerHTML = `
+    document.getElementById(
+        "resultado"
+    ).innerHTML = `
+
         <p>
         Cliente encontrado:
         <b>${clienteActual.iniciales}</b>
         </p>
 
-        <button class="confirmar" onclick="confirmar()">
+        <button
+        class="confirmar"
+        onclick="confirmar()"
+        >
         Confirmar
         </button>
+
     `;
 
 }
 
 function confirmar(){
 
-    document.getElementById("saldoTexto").innerHTML =
+    document.getElementById(
+        "saldoTexto"
+    ).innerHTML =
     `Saldo pendiente: <b>$${clienteActual.saldo}</b>`;
 
-    document.getElementById("pagos").style.display = "block";
+    document.getElementById(
+        "pagos"
+    ).style.display = "block";
+
+}
+
+async function canjearCodigo(){
+
+    if(!clienteActual){
+
+        alert("Primero busca y confirma un cliente");
+
+        return;
+
+    }
+
+    const codigo =
+    document.getElementById("codigoCanje").value;
+
+    if(codigo === ""){
+
+        alert("Ingresa un código");
+
+        return;
+
+    }
+
+    const { data, error } =
+    await supabaseClient
+    .from("codigos_saldo")
+    .select("*")
+    .eq("codigo", codigo)
+    .eq("usado", false);
+
+    if(error || data.length === 0){
+
+        alert("Código inválido o usado");
+
+        return;
+
+    }
+
+    const codigoData = data[0];
+
+    const nuevoSaldo =
+    Number(clienteActual.saldo)
+    - Number(codigoData.saldo);
+
+    const saldoFinal =
+    nuevoSaldo < 0 ? 0 : nuevoSaldo;
+
+    const { error: errorSaldo } =
+    await supabaseClient
+    .from("clientes_servicio")
+    .update({
+        saldo: saldoFinal
+    })
+    .eq("id", clienteActual.id);
+
+    if(errorSaldo){
+
+        alert("Error al actualizar saldo");
+
+        return;
+
+    }
+
+    const { error: errorCodigo } =
+    await supabaseClient
+    .from("codigos_saldo")
+    .update({
+        usado:true
+    })
+    .eq("id", codigoData.id);
+
+    if(errorCodigo){
+
+        alert("Error al usar código");
+
+        return;
+
+    }
+
+    alert(
+        "Código aplicado correctamente.\nNuevo saldo: $" +
+        saldoFinal
+    );
+
+    clienteActual.saldo = saldoFinal;
+
+    document.getElementById(
+        "saldoTexto"
+    ).innerHTML =
+    `Saldo pendiente: <b>$${saldoFinal}</b>`;
+
+    document.getElementById(
+        "codigoCanje"
+    ).value = "";
 
 }
 
