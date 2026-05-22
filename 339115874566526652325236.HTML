@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Panel Company García Corona</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:linear-gradient(135deg,#ff512f,#dd2476,#1e3c72);
+    color:white;
+}
+
+.menu-btn{
+    position:fixed;
+    top:15px;
+    left:15px;
+    background:white;
+    color:black;
+    border:none;
+    font-size:28px;
+    border-radius:10px;
+    width:50px;
+    height:50px;
+    cursor:pointer;
+    z-index:1000;
+}
+
+.sidebar{
+    position:fixed;
+    top:0;
+    left:-250px;
+    width:250px;
+    height:100%;
+    background:#111;
+    transition:0.3s;
+    padding-top:80px;
+    z-index:999;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    padding:15px;
+    text-decoration:none;
+    font-size:18px;
+}
+
+.sidebar a:hover{
+    background:#333;
+}
+
+.sidebar.active{
+    left:0;
+}
+
+.container{
+    max-width:1100px;
+    margin:80px auto;
+    background:white;
+    color:black;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.35);
+}
+
+h1{
+    text-align:center;
+    color:#1e3c72;
+}
+
+.seccion{
+    display:none;
+}
+
+.seccion.active{
+    display:block;
+}
+
+form{
+    display:grid;
+    gap:15px;
+    margin-bottom:30px;
+}
+
+input{
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+button{
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.btn-principal{
+    background:#1e3c72;
+}
+
+.btn-agregar{
+    background:#28a745;
+}
+
+.btn-quitar{
+    background:#dc3545;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+table th,
+table td{
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:center;
+}
+
+table th{
+    background:#1e3c72;
+    color:white;
+}
+
+.codigo-box{
+    background:#f5f5f5;
+    padding:15px;
+    border-radius:10px;
+    margin-top:20px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+}
+
+</style>
+
+<script>
+
+const contraseñaCorrecta = "CGC-0001";
+
+let intento = prompt("Ingrese la contraseña:");
+
+if(intento !== contraseñaCorrecta){
+
+    alert("Contraseña incorrecta");
+
+    window.location.href = "about:blank";
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<button class="menu-btn" onclick="toggleMenu()">
+☰
+</button>
+
+<div class="sidebar" id="sidebar">
+
+<a href="#" onclick="mostrarSeccion('registro')">
+Registro
+</a>
+
+<a href="#" onclick="mostrarSeccion('codigos')">
+Generador de códigos
+</a>
+
+</div>
+
+<div class="container">
+
+<div id="registro" class="seccion active">
+
+<h1>Registro de Servicios</h1>
+
+<form id="registroForm">
+
+<input type="text" id="servicio" placeholder="Número de servicio" required>
+
+<input type="text" id="referencia" placeholder="Número de referencia" required>
+
+<input type="number" id="saldo" placeholder="Saldo" min="0" required>
+
+<input type="text" id="iniciales" placeholder="Iniciales" required>
+
+<button type="submit" class="btn-principal">
+Registrar
+</button>
+
+</form>
+
+<table>
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>Servicio</th>
+<th>Referencia</th>
+<th>Saldo</th>
+<th>Ajustar</th>
+<th>Iniciales</th>
+</tr>
+
+</thead>
+
+<tbody id="tablaDatos"></tbody>
+
+</table>
+
+</div>
+
+<div id="codigos" class="seccion">
+
+<h1>Generador de códigos</h1>
+
+<input type="number" id="saldoCodigo" placeholder="Saldo del código">
+
+<button class="btn-principal" onclick="generarCodigo()">
+Generar código
+</button>
+
+<div class="codigo-box" id="codigoGenerado">
+Sin generar
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL =
+"https://ieaielptonscbsimbtyx.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_pmJ3fN_2FUKM1AskoReusA_0vaZz7f_";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+function toggleMenu(){
+
+    document
+    .getElementById("sidebar")
+    .classList
+    .toggle("active");
+
+}
+
+function mostrarSeccion(id){
+
+    document
+    .querySelectorAll(".seccion")
+    .forEach(sec=>{
+
+        sec.classList.remove("active");
+
+    });
+
+    document
+    .getElementById(id)
+    .classList.add("active");
+
+    document
+    .getElementById("sidebar")
+    .classList.remove("active");
+
+}
+
+const form =
+document.getElementById("registroForm");
+
+async function cargarDatos(){
+
+    const { data } =
+    await supabaseClient
+    .from("clientes_servicio")
+    .select("*")
+    .order("id",{ascending:false});
+
+    const tabla =
+    document.getElementById("tablaDatos");
+
+    tabla.innerHTML = "";
+
+    data.forEach(cliente=>{
+
+        tabla.innerHTML += `
+
+        <tr>
+
+            <td>${cliente.id}</td>
+
+            <td>${cliente.numero_servicio}</td>
+
+            <td>${cliente.numero_referencia}</td>
+
+            <td>$${cliente.saldo}</td>
+
+            <td>
+
+                <input
+                type="number"
+                id="monto-${cliente.id}"
+                placeholder="Cantidad"
+                style="width:90px;"
+                >
+
+                <br><br>
+
+                <button
+                class="btn-agregar"
+                onclick="agregarSaldo(${cliente.id}, ${cliente.saldo})"
+                >
+                +
+                </button>
+
+                <button
+                class="btn-quitar"
+                onclick="quitarSaldo(${cliente.id}, ${cliente.saldo})"
+                >
+                -
+                </button>
+
+            </td>
+
+            <td>${cliente.iniciales}</td>
+
+        </tr>
+
+        `;
+    });
+
+}
+
+form.addEventListener("submit", async(e)=>{
+
+    e.preventDefault();
+
+    const numero_servicio =
+    document.getElementById("servicio").value;
+
+    const numero_referencia =
+    document.getElementById("referencia").value;
+
+    const saldo =
+    document.getElementById("saldo").value;
+
+    const iniciales =
+    document.getElementById("iniciales").value;
+
+    await supabaseClient
+    .from("clientes_servicio")
+    .insert([
+        {
+            numero_servicio,
+            numero_referencia,
+            saldo,
+            iniciales
+        }
+    ]);
+
+    alert("Registro guardado");
+
+    form.reset();
+
+    cargarDatos();
+
+});
+
+async function agregarSaldo(id,saldoActual){
+
+    const cantidad = Number(
+        document.getElementById(`monto-${id}`).value
+    );
+
+    const nuevoSaldo =
+    Number(saldoActual) + cantidad;
+
+    await supabaseClient
+    .from("clientes_servicio")
+    .update({
+        saldo:nuevoSaldo
+    })
+    .eq("id",id);
+
+    cargarDatos();
+
+}
+
+async function quitarSaldo(id,saldoActual){
+
+    const cantidad = Number(
+        document.getElementById(`monto-${id}`).value
+    );
+
+    const nuevoSaldo =
+    Number(saldoActual) - cantidad;
+
+    if(nuevoSaldo < 0){
+
+        alert("Saldo insuficiente");
+
+        return;
+
+    }
+
+    await supabaseClient
+    .from("clientes_servicio")
+    .update({
+        saldo:nuevoSaldo
+    })
+    .eq("id",id);
+
+    cargarDatos();
+
+}
+
+function generarTextoAleatorio(longitud){
+
+    const caracteres =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    let resultado = "";
+
+    for(let i=0;i<longitud;i++){
+
+        resultado += caracteres.charAt(
+            Math.floor(Math.random() * caracteres.length)
+        );
+
+    }
+
+    return resultado;
+
+}
+
+async function generarCodigo(){
+
+    const saldo =
+    document.getElementById("saldoCodigo").value;
+
+    if(saldo <= 0){
+
+        alert("Ingresa saldo válido");
+
+        return;
+
+    }
+
+    const codigo =
+    "CGC-" + generarTextoAleatorio(8);
+
+    const { error } =
+    await supabaseClient
+    .from("codigos_saldo")
+    .insert([
+        {
+            codigo,
+            saldo
+        }
+    ]);
+
+    if(error){
+
+        alert("Error al guardar");
+
+        return;
+
+    }
+
+    document.getElementById(
+        "codigoGenerado"
+    ).innerHTML = codigo;
+
+}
+
+cargarDatos();
+
+</script>
+
+</body>
+</html>
