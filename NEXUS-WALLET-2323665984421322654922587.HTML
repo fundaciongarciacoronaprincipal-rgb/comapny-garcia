@@ -15,7 +15,6 @@ body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
     background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color:white;
 }
 
 .container{
@@ -52,6 +51,7 @@ button{
     color:white;
     font-size:16px;
     cursor:pointer;
+    transition:0.3s;
 }
 
 button:hover{
@@ -66,27 +66,139 @@ button:hover{
     display:block;
 }
 
-.saldo{
-    background:#203a43;
-    color:white;
-    padding:20px;
-    border-radius:15px;
-    text-align:center;
-    margin-bottom:20px;
-}
-
-.info{
-    background:#f5f5f5;
-    padding:10px;
-    border-radius:10px;
-    margin-top:10px;
-}
-
 .card{
     margin-top:20px;
     background:#f5f5f5;
     padding:15px;
     border-radius:10px;
+}
+
+/* SALUDO */
+
+#saludoUsuario{
+    color:black;
+    text-align:center;
+    margin-bottom:20px;
+    font-size:24px;
+}
+
+/* TARJETA */
+
+.saldoCard{
+    position:relative;
+    width:320px;
+    height:190px;
+    margin:auto;
+    background:
+    linear-gradient(
+        135deg,
+        #111827,
+        #1e3a8a,
+        #2563eb
+    );
+    border-radius:22px;
+    padding:18px;
+    color:white;
+    overflow:hidden;
+    box-shadow:
+    0 15px 35px rgba(0,0,0,0.35);
+    margin-bottom:20px;
+}
+
+.walletTitle{
+    position:absolute;
+    top:18px;
+    right:20px;
+    font-size:15px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.chip{
+    width:60px;
+    height:40px;
+    border-radius:10px;
+    background:
+    linear-gradient(
+        135deg,
+        #fcd34d,
+        #f59e0b
+    );
+    position:absolute;
+    top:38px;
+    left:20px;
+}
+
+.chip::before{
+    content:'';
+    position:absolute;
+    left:12px;
+    top:0;
+    width:2px;
+    height:40px;
+    background:rgba(255,255,255,0.4);
+}
+
+.chip::after{
+    content:'';
+    position:absolute;
+    left:28px;
+    top:0;
+    width:2px;
+    height:40px;
+    background:rgba(255,255,255,0.4);
+}
+
+.saldoNumero{
+    position:absolute;
+    top:78px;
+    left:20px;
+    font-size:32px;
+    font-weight:bold;
+}
+
+.saldoLabel{
+    position:absolute;
+    top:122px;
+    left:22px;
+    opacity:0.8;
+    font-size:13px;
+}
+
+.usuarioCardNombre{
+    position:absolute;
+    top:142px;
+    left:22px;
+    font-size:14px;
+    font-weight:bold;
+    opacity:0.95;
+    letter-spacing:1px;
+}
+
+.lineaCard{
+    display:none;
+}
+
+.cardBottom{
+    position:absolute;
+    bottom:18px;
+    right:18px;
+    display:flex;
+    gap:25px;
+}
+
+.small{
+    font-size:11px;
+    opacity:0.7;
+    margin:0;
+}
+
+#clabeInfoCard,
+#referenciaInfoCard{
+    margin:0;
+    margin-top:4px;
+    font-weight:bold;
+    font-size:13px;
 }
 
 </style>
@@ -95,6 +207,8 @@ button:hover{
 <body>
 
 <div class="container">
+
+<!-- INICIO -->
 
 <div id="inicio" class="seccion active">
 
@@ -110,6 +224,8 @@ Crear cuenta
 
 </div>
 
+<!-- REGISTRO -->
+
 <div id="registro" class="seccion">
 
 <h2>Crear cuenta</h2>
@@ -123,7 +239,7 @@ placeholder="Nombre de usuario"
 <input
 type="password"
 id="nuevoPassword"
-placeholder="Contraseña alfanumérica"
+placeholder="Contraseña"
 >
 
 <button onclick="crearCuenta()">
@@ -135,6 +251,8 @@ Volver
 </button>
 
 </div>
+
+<!-- LOGIN -->
 
 <div id="login" class="seccion">
 
@@ -162,35 +280,66 @@ Volver
 
 </div>
 
+<!-- WALLET -->
+
 <div id="wallet" class="seccion">
 
-<h2>Nexus Wallet</h2>
+<h2 id="saludoUsuario">
+¡HOLA! BIENVENID@
+</h2>
 
-<div class="saldo" style="color: white;">
+<div class="saldoCard">
 
-<h1 id="saldoTexto" style="color: white;">
+<div class="walletTitle">
+NEXUS WALLET
+</div>
+
+<div class="chip"></div>
+
+<div
+id="saldoTexto"
+class="saldoNumero"
+>
 $0
-</h1>
+</div>
 
-<p>
+<div class="saldoLabel">
 Saldo disponible
+</div>
+
+<div
+id="usuarioCardNombre"
+class="usuarioCardNombre"
+>
+usuario
+</div>
+
+<div class="lineaCard"></div>
+
+<div class="cardBottom">
+
+<div>
+<p class="small">
+CLABE
 </p>
 
+<p id="clabeInfoCard">
+0000000000
+</p>
 </div>
 
-<div class="info">
-Usuario:
-<b id="usuarioInfo"></b>
+<div>
+<p class="small">
+Referencia
+</p>
+
+<p id="referenciaInfoCard">
+0000000
+</p>
 </div>
 
-<div class="info">
-Identificador:
-<b id="identificadorInfo"></b>
 </div>
 
-<div class="info">
-Referencia:
-<b id="referenciaInfo"></b>
 </div>
 
 <button onclick="mostrarPagoServicio()">
@@ -211,6 +360,8 @@ Cerrar sesión
 
 </div>
 
+<!-- PAGAR SERVICIO -->
+
 <div id="pagoServicio" class="seccion">
 
 <h2>Pagar servicio</h2>
@@ -218,7 +369,7 @@ Cerrar sesión
 <input
 type="text"
 id="numeroServicioPago"
-placeholder="Número de servicio"
+placeholder="Número de servicio o referencia"
 >
 
 <button onclick="consultarServicio()">
@@ -253,6 +404,8 @@ Volver
 
 </div>
 
+<!-- TRANSFERENCIA -->
+
 <div id="transferencia" class="seccion">
 
 <h2>Transferencia interna</h2>
@@ -260,7 +413,7 @@ Volver
 <input
 type="text"
 id="destinoTransferencia"
-placeholder="Usuario destino"
+placeholder="Usuario, CLABE o referencia"
 >
 
 <input
@@ -278,6 +431,8 @@ Volver
 </button>
 
 </div>
+
+<!-- CANJEAR -->
 
 <div id="canje" class="seccion">
 
@@ -363,14 +518,6 @@ async function crearCuenta(){
     const password =
     document.getElementById("nuevoPassword").value;
 
-    if(usuario.length < 3){
-
-        alert("Usuario inválido");
-
-        return;
-
-    }
-
     const identificador =
     generarNumeros(10);
 
@@ -385,14 +532,14 @@ async function crearCuenta(){
             usuario,
             password,
             identificador,
-            referencia
+            referencia,
+            saldo:0
         }
     ]);
 
     if(error){
 
         alert(error.message);
-
         return;
 
     }
@@ -421,7 +568,6 @@ async function iniciarSesion(){
     if(error || data.length === 0){
 
         alert("Datos incorrectos");
-
         return;
 
     }
@@ -442,19 +588,25 @@ function actualizarWallet(){
     "$" + usuarioActual.saldo;
 
     document.getElementById(
-        "usuarioInfo"
+        "usuarioCardNombre"
     ).innerHTML =
     usuarioActual.usuario;
 
     document.getElementById(
-        "identificadorInfo"
+        "clabeInfoCard"
     ).innerHTML =
     usuarioActual.identificador;
 
     document.getElementById(
-        "referenciaInfo"
+        "referenciaInfoCard"
     ).innerHTML =
     usuarioActual.referencia;
+
+    document.getElementById(
+        "saludoUsuario"
+    ).innerHTML =
+    "¡HOLA! BIENVENID@ " +
+    usuarioActual.usuario;
 
 }
 
@@ -486,21 +638,22 @@ function volverWallet(){
 
 async function consultarServicio(){
 
-    const numeroServicio =
+    const dato =
     document.getElementById(
         "numeroServicioPago"
     ).value;
 
-    const { data, error } =
+    let { data, error } =
     await supabaseClient
     .from("clientes_servicio")
     .select("*")
-    .eq("numero_servicio",numeroServicio);
+    .or(
+        `numero_servicio.eq.${dato},numero_referencia.eq.${dato}`
+    );
 
     if(error || data.length === 0){
 
         alert("Servicio no encontrado");
-
         return;
 
     }
@@ -524,11 +677,7 @@ async function consultarServicio(){
 
 }
 
-function generarPDF(
-    tipo,
-    folio,
-    datos
-){
+function generarPDF(tipo,folio,datos){
 
     const { jsPDF } = window.jspdf;
 
@@ -538,52 +687,26 @@ function generarPDF(
     new Date().toLocaleString();
 
     doc.setFontSize(22);
-
-    doc.text(
-        "NEXUS WALLET",
-        20,
-        20
-    );
+    doc.text("NEXUS WALLET",20,20);
 
     doc.setFontSize(16);
-
-    doc.text(
-        tipo,
-        20,
-        40
-    );
+    doc.text(tipo,20,40);
 
     doc.setFontSize(12);
-
-    doc.text(
-        "Folio: " + folio,
-        20,
-        55
-    );
-
-    doc.text(
-        "Fecha: " + fecha,
-        20,
-        65
-    );
+    doc.text("Folio: " + folio,20,55);
+    doc.text("Fecha: " + fecha,20,65);
 
     let y = 80;
 
     datos.forEach(item=>{
 
-        doc.text(
-            item,
-            20,
-            y
-        );
+        doc.text(item,20,y);
 
         y += 10;
 
     });
 
-    doc.save(
-        folio + ".pdf"
-    );
+    doc.save(folio + ".pdf");
 
 }
 
@@ -592,7 +715,6 @@ async function pagarServicio(){
     if(!servicioActual){
 
         alert("Primero consulta el servicio");
-
         return;
 
     }
@@ -605,7 +727,6 @@ async function pagarServicio(){
     if(monto <= 0){
 
         alert("Monto inválido");
-
         return;
 
     }
@@ -613,7 +734,6 @@ async function pagarServicio(){
     if(monto > usuarioActual.saldo){
 
         alert("Saldo insuficiente");
-
         return;
 
     }
@@ -643,48 +763,25 @@ async function pagarServicio(){
     })
     .eq("id",servicioActual.id);
 
-    const comprobante =
-    generarFolio("COMP");
-
-    await supabaseClient
-    .from("nexus_wallet_pagos")
-    .insert([
-        {
-            comprobante_id:comprobante,
-            tipo:"Pago de servicio",
-            usuario:usuarioActual.usuario,
-            numero_servicio:
-            servicioActual.numero_servicio,
-            monto,
-            saldo_restante:
-            nuevoSaldoWallet
-        }
-    ]);
-
     usuarioActual.saldo =
     nuevoSaldoWallet;
+
+    const comprobante =
+    generarFolio("COMP");
 
     generarPDF(
         "COMPROBANTE DE PAGO",
         comprobante,
         [
             "Usuario: " + usuarioActual.usuario,
-            "Servicio: " +
-            servicioActual.numero_servicio,
+            "Servicio: " + servicioActual.numero_servicio,
             "Monto pagado: $" + monto,
-            "Saldo anterior servicio: $" +
-            servicioActual.saldo,
-            "Saldo restante servicio: $" +
-            saldoFinalServicio,
-            "Saldo wallet restante: $" +
-            nuevoSaldoWallet
+            "Saldo restante servicio: $" + saldoFinalServicio,
+            "Saldo wallet restante: $" + nuevoSaldoWallet
         ]
     );
 
     alert("Pago realizado");
-
-    servicioActual.saldo =
-    saldoFinalServicio;
 
     volverWallet();
 
@@ -707,7 +804,6 @@ async function hacerTransferencia(){
     if(monto <= 0){
 
         alert("Monto inválido");
-
         return;
 
     }
@@ -715,73 +811,62 @@ async function hacerTransferencia(){
     if(monto > usuarioActual.saldo){
 
         alert("Saldo insuficiente");
-
         return;
 
     }
 
-    const { data } =
+    const { data, error } =
     await supabaseClient
     .from("nexus_wallet_users")
     .select("*")
-    .eq("usuario",destino);
+    .or(
+        `usuario.eq.${destino},identificador.eq.${destino},referencia.eq.${destino}`
+    );
 
-    if(data.length === 0){
+    if(error || data.length === 0){
 
         alert("Usuario no encontrado");
-
         return;
 
     }
 
     const receptor = data[0];
 
+    const nuevoSaldoEmisor =
+    Number(usuarioActual.saldo) - monto;
+
+    const nuevoSaldoReceptor =
+    Number(receptor.saldo) + monto;
+
     await supabaseClient
     .from("nexus_wallet_users")
     .update({
-        saldo:
-        Number(usuarioActual.saldo) - monto
+        saldo:nuevoSaldoEmisor
     })
     .eq("id",usuarioActual.id);
 
     await supabaseClient
     .from("nexus_wallet_users")
     .update({
-        saldo:
-        Number(receptor.saldo) + monto
+        saldo:nuevoSaldoReceptor
     })
     .eq("id",receptor.id);
 
     usuarioActual.saldo =
-    Number(usuarioActual.saldo) - monto;
+    nuevoSaldoEmisor;
 
     const folio =
     generarFolio("TRX");
-
-    await supabaseClient
-    .from("nexus_wallet_pagos")
-    .insert([
-        {
-            comprobante_id:folio,
-            tipo:"Transferencia",
-            usuario:usuarioActual.usuario,
-            destinatario:destino,
-            monto,
-            saldo_restante:
-            usuarioActual.saldo
-        }
-    ]);
 
     generarPDF(
         "COMPROBANTE DE TRANSFERENCIA",
         folio,
         [
-            "Emisor: " +
-            usuarioActual.usuario,
-            "Receptor: " + destino,
+            "Emisor: " + usuarioActual.usuario,
+            "Receptor: " + receptor.usuario,
+            "CLABE receptor: " + receptor.identificador,
             "Monto: $" + monto,
-            "Saldo restante: $" +
-            usuarioActual.saldo
+            "Saldo restante: $" + nuevoSaldoEmisor
         ]
     );
 
@@ -808,7 +893,6 @@ async function canjearCodigo(){
     if(data.length === 0){
 
         alert("Código inválido");
-
         return;
 
     }
@@ -839,30 +923,14 @@ async function canjearCodigo(){
     const folio =
     generarFolio("REC");
 
-    await supabaseClient
-    .from("nexus_wallet_pagos")
-    .insert([
-        {
-            comprobante_id:folio,
-            tipo:"Recarga",
-            usuario:usuarioActual.usuario,
-            codigo_usado:codigo,
-            monto:codigoData.saldo,
-            saldo_restante:nuevoSaldo
-        }
-    ]);
-
     generarPDF(
         "COMPROBANTE DE RECARGA",
         folio,
         [
-            "Usuario: " +
-            usuarioActual.usuario,
-            "Codigo usado: " + codigo,
-            "Saldo agregado: $" +
-            codigoData.saldo,
-            "Nuevo saldo: $" +
-            nuevoSaldo
+            "Usuario: " + usuarioActual.usuario,
+            "Código usado: " + codigo,
+            "Saldo agregado: $" + codigoData.saldo,
+            "Nuevo saldo: $" + nuevoSaldo
         ]
     );
 
