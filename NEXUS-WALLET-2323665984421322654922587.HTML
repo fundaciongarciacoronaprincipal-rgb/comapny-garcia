@@ -8,6 +8,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 
 *{
@@ -505,6 +507,78 @@ function generarNumeros(longitud){
 
 }
 
+/* PDF */
+
+function generarPDF(
+    tipo,
+    datos
+){
+
+    const { jsPDF } =
+    window.jspdf;
+
+    const doc =
+    new jsPDF();
+
+    const fecha =
+    new Date().toLocaleString();
+
+    const folio =
+    "NX-" +
+    Math.floor(
+        Math.random() * 999999999
+    );
+
+    doc.setFontSize(24);
+
+    doc.text(
+        "NEXUS WALLET",
+        20,
+        25
+    );
+
+    doc.setFontSize(16);
+
+    doc.text(
+        tipo,
+        20,
+        45
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+        "Folio: " + folio,
+        20,
+        60
+    );
+
+    doc.text(
+        "Fecha: " + fecha,
+        20,
+        70
+    );
+
+    let y = 90;
+
+    datos.forEach(item=>{
+
+        doc.text(
+            item,
+            20,
+            y
+        );
+
+        y += 12;
+
+    });
+
+    doc.save(
+        folio + ".pdf"
+    );
+
+}
+
 /* CREAR CUENTA */
 
 async function crearCuenta(){
@@ -791,6 +865,20 @@ async function pagarServicio(){
 
     actualizarWallet();
 
+    generarPDF(
+        "COMPROBANTE DE PAGO",
+        [
+            "Usuario: " +
+            usuarioActual.usuario,
+
+            "Servicio: " +
+            servicioActual.numero_servicio,
+
+            "Monto pagado: $" +
+            monto
+        ]
+    );
+
     alert("Pago realizado");
 
     volverWallet();
@@ -906,6 +994,20 @@ async function hacerTransferencia(){
 
     actualizarWallet();
 
+    generarPDF(
+        "COMPROBANTE DE TRANSFERENCIA",
+        [
+            "Emisor: " +
+            usuarioActual.usuario,
+
+            "Destino: " +
+            destino,
+
+            "Monto transferido: $" +
+            monto
+        ]
+    );
+
     alert(
         "Transferencia realizada"
     );
@@ -962,6 +1064,20 @@ async function canjearCodigo(){
     saldoNuevo;
 
     actualizarWallet();
+
+    generarPDF(
+        "COMPROBANTE DE RECARGA",
+        [
+            "Usuario: " +
+            usuarioActual.usuario,
+
+            "Código: " +
+            codigo,
+
+            "Saldo agregado: $" +
+            codigoData.saldo
+        ]
+    );
 
     alert(
         "Código canjeado correctamente"
