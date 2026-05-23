@@ -34,6 +34,26 @@ body{
     box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
+@media (max-width:600px){
+
+    body{
+        padding:10px;
+    }
+
+    .container{
+        max-width:100%;
+        padding:20px;
+        border-radius:18px;
+    }
+
+    .saldoCard{
+        width:100%;
+        max-width:320px;
+        height:220px;
+    }
+
+}
+
 h1,h2,h3{
     text-align:center;
     color:#203a43;
@@ -86,6 +106,8 @@ button:hover{
     margin-bottom:20px;
     font-size:24px;
 }
+
+/* TARJETA */
 
 .saldoCard{
     position:relative;
@@ -406,7 +428,7 @@ Volver
 
 </div>
 
-<!-- CANJEAR -->
+<!-- CANJE -->
 
 <div id="canje" class="seccion">
 
@@ -447,26 +469,6 @@ supabase.createClient(
 let usuarioActual = null;
 let servicioActual = null;
 
-/* RESTAURAR SESION */
-
-const sesionGuardada =
-localStorage.getItem(
-    "nexus_wallet_user"
-);
-
-if(sesionGuardada){
-
-    usuarioActual =
-    JSON.parse(sesionGuardada);
-
-    mostrar("wallet");
-
-    actualizarWallet();
-
-    iniciarAutoRefresh();
-
-}
-
 function mostrar(id){
 
     document
@@ -498,17 +500,80 @@ function generarNumeros(longitud){
 
 }
 
+function generarFolio(prefijo){
+
+    return prefijo + "-" + generarNumeros(10);
+
+}
+
+function generarPDF(
+    titulo,
+    folio,
+    datos
+){
+
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF();
+
+    doc.setFontSize(22);
+
+    doc.text(
+        "NEXUS WALLET",
+        20,
+        20
+    );
+
+    doc.setFontSize(16);
+
+    doc.text(
+        titulo,
+        20,
+        40
+    );
+
+    doc.setFontSize(12);
+
+    doc.text(
+        "Folio: " + folio,
+        20,
+        55
+    );
+
+    doc.text(
+        "Fecha: " +
+        new Date().toLocaleString(),
+        20,
+        65
+    );
+
+    let y = 85;
+
+    datos.forEach(item=>{
+
+        doc.text(
+            item,
+            20,
+            y
+        );
+
+        y += 10;
+
+    });
+
+    doc.save(
+        folio + ".pdf"
+    );
+
+}
+
 async function crearCuenta(){
 
     const usuario =
-    document.getElementById(
-        "nuevoUsuario"
-    ).value;
+    document.getElementById("nuevoUsuario").value;
 
     const password =
-    document.getElementById(
-        "nuevoPassword"
-    ).value;
+    document.getElementById("nuevoPassword").value;
 
     const identificador =
     generarNumeros(10);
@@ -545,14 +610,10 @@ async function crearCuenta(){
 async function iniciarSesion(){
 
     const usuario =
-    document.getElementById(
-        "loginUsuario"
-    ).value;
+    document.getElementById("loginUsuario").value;
 
     const password =
-    document.getElementById(
-        "loginPassword"
-    ).value;
+    document.getElementById("loginPassword").value;
 
     const { data, error } =
     await supabaseClient
@@ -570,51 +631,9 @@ async function iniciarSesion(){
 
     usuarioActual = data[0];
 
-    localStorage.setItem(
-        "nexus_wallet_user",
-        JSON.stringify(usuarioActual)
-    );
-
     actualizarWallet();
 
     mostrar("wallet");
-
-    iniciarAutoRefresh();
-
-}
-
-async function refrescarDatos(){
-
-    if(!usuarioActual) return;
-
-    const { data } =
-    await supabaseClient
-    .from("nexus_wallet_users")
-    .select("*")
-    .eq("id",usuarioActual.id);
-
-    if(data && data.length > 0){
-
-        usuarioActual = data[0];
-
-        localStorage.setItem(
-            "nexus_wallet_user",
-            JSON.stringify(usuarioActual)
-        );
-
-        actualizarWallet();
-
-    }
-
-}
-
-function iniciarAutoRefresh(){
-
-    setInterval(()=>{
-
-        refrescarDatos();
-
-    },1000);
 
 }
 
@@ -674,13 +693,345 @@ function volverWallet(){
 
 }
 
+async function consultarServicio(){
+
+    const datoBusqueda =
+    document.getElementById(
+        "numeroServicioPago"
+    ).value;
+
+    let { data } =
+    await supabaseClient
+    .from("clientes_servicio")
+    .select("*")
+    .eq("numero_servicio",datoBusqueda);
+
+    if(!data || data.length === 0){
+
+        const respuesta =
+        await supabaseClient
+        .from("clientes_servicio")
+        .select("*")
+        .eq("numero_referencia",datoBusqueda);
+
+        data = respuesta.data;
+
+    }
+
+    if(!data || data.length === 0){
+
+        alert("Servicio no encontrado");
+
+        return;
+
+    }
+
+    servicioActual = data[0];
+
+    document.getElementById(
+        "infoServicio"
+    ).style.display = "block";
+
+    document.getElementById(
+        "saldoServicioTexto"
+    ).innerHTML =
+    "Saldo pendiente: $" +
+    servicioActual.saldo;
+
+    document.getElementById(
+        "montoPago"
+    ).value =
+    servicioActual.saldo;
+
+}
+
+async function pagarServicio(){
+
+    const monto =
+    Number(
+        document.getElementById(
+            "montoPago"
+        ).value
+    );
+
+    if(monto <= 0){
+
+        alert("Monto inválido");
+
+        return;
+
+    }
+
+    if(monto > usuarioActual.saldo){
+
+        alert("Saldo insuficiente");
+
+        return;
+
+    }
+
+    const nuevoSaldo =
+    Number(usuarioActual.saldo) - monto;
+
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .update({
+        saldo:nuevoSaldo
+    })
+    .eq("id",usuarioActual.id);
+
+    const saldoServicioNuevo =
+    Number(servicioActual.saldo) - monto;
+
+    await supabaseClient
+    .from("clientes_servicio")
+    .update({
+        saldo:
+        saldoServicioNuevo < 0
+        ? 0
+        : saldoServicioNuevo
+    })
+    .eq("id",servicioActual.id);
+
+    usuarioActual.saldo =
+    nuevoSaldo;
+
+    const folio =
+    generarFolio("PAGO");
+
+    generarPDF(
+        "COMPROBANTE DE PAGO",
+        folio,
+        [
+            "Usuario: " +
+            usuarioActual.usuario,
+
+            "Servicio: " +
+            servicioActual.numero_servicio,
+
+            "Monto pagado: $" +
+            monto,
+
+            "Saldo restante wallet: $" +
+            nuevoSaldo
+        ]
+    );
+
+    alert("Pago realizado");
+
+    volverWallet();
+
+}
+
+async function hacerTransferencia(){
+
+    const destino =
+    document.getElementById(
+        "destinoTransferencia"
+    ).value;
+
+    const monto =
+    Number(
+        document.getElementById(
+            "montoTransferencia"
+        ).value
+    );
+
+    if(destino === ""){
+
+        alert(
+            "Ingresa usuario, CLABE o referencia"
+        );
+
+        return;
+
+    }
+
+    if(monto <= 0){
+
+        alert("Monto inválido");
+
+        return;
+
+    }
+
+    if(monto > Number(usuarioActual.saldo)){
+
+        alert("Saldo insuficiente");
+
+        return;
+
+    }
+
+    let { data, error } =
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .select("*")
+    .eq("usuario",destino);
+
+    if(!data || data.length === 0){
+
+        const respuesta =
+        await supabaseClient
+        .from("nexus_wallet_users")
+        .select("*")
+        .eq("identificador",destino);
+
+        data = respuesta.data;
+        error = respuesta.error;
+
+    }
+
+    if(!data || data.length === 0){
+
+        const respuesta2 =
+        await supabaseClient
+        .from("nexus_wallet_users")
+        .select("*")
+        .eq("referencia",destino);
+
+        data = respuesta2.data;
+        error = respuesta2.error;
+
+    }
+
+    if(error || !data || data.length === 0){
+
+        alert("Usuario no encontrado");
+
+        return;
+
+    }
+
+    const receptor = data[0];
+
+    const saldoNuevoEmisor =
+    Number(usuarioActual.saldo) - monto;
+
+    const saldoNuevoReceptor =
+    Number(receptor.saldo) + monto;
+
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .update({
+        saldo:saldoNuevoEmisor
+    })
+    .eq("id",usuarioActual.id);
+
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .update({
+        saldo:saldoNuevoReceptor
+    })
+    .eq("id",receptor.id);
+
+    usuarioActual.saldo =
+    saldoNuevoEmisor;
+
+    const folio =
+    generarFolio("TRX");
+
+    generarPDF(
+        "COMPROBANTE DE TRANSFERENCIA",
+        folio,
+        [
+            "Emisor: " +
+            usuarioActual.usuario,
+
+            "Receptor: " +
+            receptor.usuario,
+
+            "Monto enviado: $" +
+            monto,
+
+            "Saldo restante: $" +
+            saldoNuevoEmisor
+        ]
+    );
+
+    alert(
+        "Transferencia realizada"
+    );
+
+    volverWallet();
+
+}
+
+async function canjearCodigo(){
+
+    const codigo =
+    document.getElementById(
+        "codigoCanje"
+    ).value;
+
+    const { data } =
+    await supabaseClient
+    .from("codigos_saldo")
+    .select("*")
+    .eq("codigo",codigo)
+    .eq("usado",false);
+
+    if(!data || data.length === 0){
+
+        alert("Código inválido");
+
+        return;
+
+    }
+
+    const codigoData = data[0];
+
+    const nuevoSaldo =
+    Number(usuarioActual.saldo)
+    + Number(codigoData.saldo);
+
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .update({
+        saldo:nuevoSaldo
+    })
+    .eq("id",usuarioActual.id);
+
+    await supabaseClient
+    .from("codigos_saldo")
+    .update({
+        usado:true
+    })
+    .eq("id",codigoData.id);
+
+    usuarioActual.saldo =
+    nuevoSaldo;
+
+    const folio =
+    generarFolio("REC");
+
+    generarPDF(
+        "COMPROBANTE DE RECARGA",
+        folio,
+        [
+            "Usuario: " +
+            usuarioActual.usuario,
+
+            "Código: " +
+            codigo,
+
+            "Saldo agregado: $" +
+            codigoData.saldo,
+
+            "Nuevo saldo: $" +
+            nuevoSaldo
+        ]
+    );
+
+    alert("Código canjeado");
+
+    volverWallet();
+
+}
+
 function cerrarSesion(){
 
     usuarioActual = null;
-
-    localStorage.removeItem(
-        "nexus_wallet_user"
-    );
 
     mostrar("inicio");
 
