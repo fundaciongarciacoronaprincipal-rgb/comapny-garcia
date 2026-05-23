@@ -34,50 +34,6 @@ body{
     box-shadow:0 10px 25px rgba(0,0,0,0.25);
 }
 
-@media (max-width:600px){
-
-    body{
-        padding:10px;
-    }
-
-    .container{
-        max-width:100%;
-        padding:20px;
-        border-radius:18px;
-    }
-
-    .saldoCard{
-        width:100%;
-        max-width:320px;
-        height:190px;
-    }
-
-    .saldoNumero{
-        font-size:28px;
-    }
-
-    #saludoUsuario{
-        font-size:22px;
-    }
-
-}
-
-@media (min-width:601px) and (max-width:1024px){
-
-    .container{
-        max-width:500px;
-    }
-
-}
-
-@media (min-width:1025px){
-
-    .container{
-        max-width:450px;
-    }
-
-}
-
 h1,h2,h3{
     text-align:center;
     color:#203a43;
@@ -102,7 +58,6 @@ button{
     color:white;
     font-size:16px;
     cursor:pointer;
-    transition:0.3s;
     font-weight:bold;
 }
 
@@ -135,7 +90,7 @@ button:hover{
 .saldoCard{
     position:relative;
     width:320px;
-    height:190px;
+    height:220px;
     margin:auto;
     background:
     linear-gradient(
@@ -159,7 +114,6 @@ button:hover{
     right:20px;
     font-size:15px;
     font-weight:bold;
-    letter-spacing:1px;
 }
 
 .chip{
@@ -177,29 +131,9 @@ button:hover{
     left:20px;
 }
 
-.chip::before{
-    content:'';
-    position:absolute;
-    left:12px;
-    top:0;
-    width:2px;
-    height:40px;
-    background:rgba(255,255,255,0.4);
-}
-
-.chip::after{
-    content:'';
-    position:absolute;
-    left:28px;
-    top:0;
-    width:2px;
-    height:40px;
-    background:rgba(255,255,255,0.4);
-}
-
 .saldoNumero{
     position:absolute;
-    top:78px;
+    top:95px;
     left:20px;
     font-size:32px;
     font-weight:bold;
@@ -207,7 +141,7 @@ button:hover{
 
 .saldoLabel{
     position:absolute;
-    top:122px;
+    top:138px;
     left:22px;
     opacity:0.8;
     font-size:13px;
@@ -215,17 +149,15 @@ button:hover{
 
 .usuarioCardNombre{
     position:absolute;
-    top:132px;
+    top:158px;
     left:22px;
     font-size:14px;
     font-weight:bold;
-    opacity:0.95;
-    letter-spacing:1px;
 }
 
 .cardBottom{
     position:absolute;
-    bottom:10px;
+    bottom:12px;
     right:18px;
     display:flex;
     gap:25px;
@@ -515,17 +447,25 @@ supabase.createClient(
 let usuarioActual = null;
 let servicioActual = null;
 
-const dispositivo =
-window.innerWidth <= 600
-? "Telefono"
-: window.innerWidth <= 1024
-? "Tableta"
-: "Computadora";
+/* RESTAURAR SESION */
 
-console.log(
-"Dispositivo detectado:",
-dispositivo
+const sesionGuardada =
+localStorage.getItem(
+    "nexus_wallet_user"
 );
+
+if(sesionGuardada){
+
+    usuarioActual =
+    JSON.parse(sesionGuardada);
+
+    mostrar("wallet");
+
+    actualizarWallet();
+
+    iniciarAutoRefresh();
+
+}
 
 function mostrar(id){
 
@@ -558,19 +498,17 @@ function generarNumeros(longitud){
 
 }
 
-function generarFolio(prefijo){
-
-    return prefijo + "-" + generarNumeros(10);
-
-}
-
 async function crearCuenta(){
 
     const usuario =
-    document.getElementById("nuevoUsuario").value;
+    document.getElementById(
+        "nuevoUsuario"
+    ).value;
 
     const password =
-    document.getElementById("nuevoPassword").value;
+    document.getElementById(
+        "nuevoPassword"
+    ).value;
 
     const identificador =
     generarNumeros(10);
@@ -607,10 +545,14 @@ async function crearCuenta(){
 async function iniciarSesion(){
 
     const usuario =
-    document.getElementById("loginUsuario").value;
+    document.getElementById(
+        "loginUsuario"
+    ).value;
 
     const password =
-    document.getElementById("loginPassword").value;
+    document.getElementById(
+        "loginPassword"
+    ).value;
 
     const { data, error } =
     await supabaseClient
@@ -628,9 +570,51 @@ async function iniciarSesion(){
 
     usuarioActual = data[0];
 
+    localStorage.setItem(
+        "nexus_wallet_user",
+        JSON.stringify(usuarioActual)
+    );
+
     actualizarWallet();
 
     mostrar("wallet");
+
+    iniciarAutoRefresh();
+
+}
+
+async function refrescarDatos(){
+
+    if(!usuarioActual) return;
+
+    const { data } =
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .select("*")
+    .eq("id",usuarioActual.id);
+
+    if(data && data.length > 0){
+
+        usuarioActual = data[0];
+
+        localStorage.setItem(
+            "nexus_wallet_user",
+            JSON.stringify(usuarioActual)
+        );
+
+        actualizarWallet();
+
+    }
+
+}
+
+function iniciarAutoRefresh(){
+
+    setInterval(()=>{
+
+        refrescarDatos();
+
+    },1000);
 
 }
 
@@ -693,6 +677,10 @@ function volverWallet(){
 function cerrarSesion(){
 
     usuarioActual = null;
+
+    localStorage.removeItem(
+        "nexus_wallet_user"
+    );
 
     mostrar("inicio");
 
