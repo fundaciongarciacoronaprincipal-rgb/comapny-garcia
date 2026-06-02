@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Consulta y Edición de Libros</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#1d2671,#c33764);
+color:white;
+padding:20px;
+text-align:center;
+}
+
+h1{
+margin-bottom:20px;
+}
+
+.container{
+width:95%;
+max-width:1300px;
+margin:auto;
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:20px;
+backdrop-filter:blur(10px);
+overflow:auto;
+}
+
+.barra{
+display:flex;
+gap:10px;
+justify-content:center;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+.barra input{
+width:320px;
+max-width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
+font-size:17px;
+outline:none;
+text-align:center;
+}
+
+button{
+padding:14px 20px;
+border:none;
+border-radius:10px;
+background:#2ecc71;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#27ae60;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+th{
+background:rgba(0,0,0,0.3);
+}
+
+td input{
+width:100%;
+padding:8px;
+border:none;
+border-radius:8px;
+outline:none;
+}
+
+.msg{
+margin-top:15px;
+font-weight:bold;
+}
+
+.acciones{
+display:flex;
+gap:5px;
+justify-content:center;
+}
+
+.btnEliminar{
+background:#e74c3c;
+}
+
+.btnEliminar:hover{
+background:#c0392b;
+}
+
+@media(max-width:700px){
+
+.barra{
+flex-direction:column;
+}
+
+button{
+width:100%;
+}
+
+table{
+font-size:12px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>📚 Sistema de Libros</h1>
+
+<div class="container">
+
+<div class="barra">
+
+<input 
+type="text"
+id="codigoInput"
+placeholder="Escribe o escanea el código"
+>
+
+<button onclick="buscarLibro()">
+🔍 Buscar
+</button>
+
+<button onclick="guardarCambios()">
+💾 Guardar Cambios
+</button>
+
+<button onclick="cargarLibros()">
+🔄 Actualizar
+</button>
+
+</div>
+
+<div id="mensaje" class="msg"></div>
+
+<table>
+
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Autor</th>
+<th>Editorial</th>
+<th>Cantidad</th>
+<th>Código de Barras</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaLibros">
+
+<tr>
+<td colspan="6">
+Cargando libros...
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+// ==============================
+// CONEXIÓN SUPABASE
+// ==============================
+
+const supabaseClient = supabase.createClient(
+"https://nlpdpvjtdxknhvgqbfls.supabase.co",
+"sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+// ==============================
+// CARGAR LIBROS
+// ==============================
+
+async function cargarLibros(){
+
+const tabla = document.getElementById("tablaLibros");
+
+tabla.innerHTML = `
+<tr>
+<td colspan="6">
+Cargando...
+</td>
+</tr>
+`;
+
+let { data, error } = await supabaseClient
+.from("libros")
+.select("*")
+.order("id",{ascending:true});
+
+if(error){
+
+document.getElementById("mensaje").innerHTML =
+"❌ Error al cargar libros";
+
+return;
+
+}
+
+if(data.length === 0){
+
+tabla.innerHTML = `
+<tr>
+<td colspan="6">
+No hay libros registrados
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+tabla.innerHTML = "";
+
+data.forEach(libro=>{
+
+tabla.innerHTML += `
+
+<tr data-id="${libro.id}">
+
+<td>
+<input 
+value="${libro.nombre_libro || ""}"
+class="nombre"
+>
+</td>
+
+<td>
+<input 
+value="${libro.autor || ""}"
+class="autor"
+>
+</td>
+
+<td>
+<input 
+value="${libro.editorial || ""}"
+class="editorial"
+>
+</td>
+
+<td>
+<input 
+type="number"
+value="${libro.cantidad || ""}"
+class="cantidad"
+>
+</td>
+
+<td>
+<input 
+value="${libro.codigo_barras || ""}"
+class="codigo"
+>
+</td>
+
+<td>
+
+<div class="acciones">
+
+<button onclick="guardarFila(this)">
+💾
+</button>
+
+<button 
+class="btnEliminar"
+onclick="eliminarFila(${libro.id})"
+>
+🗑️
+</button>
+
+</div>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+// ==============================
+// BUSCAR LIBRO
+// ==============================
+
+async function buscarLibro(){
+
+const codigo = document
+.getElementById("codigoInput")
+.value
+.trim();
+
+if(codigo === ""){
+
+document.getElementById("mensaje").innerHTML =
+"⚠️ Escribe un código";
+
+return;
+
+}
+
+let { data, error } = await supabaseClient
+.from("libros")
+.select("*")
+.eq("codigo_barras",codigo);
+
+if(error){
+
+document.getElementById("mensaje").innerHTML =
+"❌ Error al buscar";
+
+return;
+
+}
+
+if(data.length === 0){
+
+document.getElementById("mensaje").innerHTML =
+"⚠️ No encontrado";
+
+return;
+
+}
+
+document.getElementById("mensaje").innerHTML =
+"✅ Libro encontrado";
+
+const fila = document.querySelector(
+`tr[data-id="${data[0].id}"]`
+);
+
+if(fila){
+
+fila.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+fila.style.background =
+"rgba(46,204,113,0.4)";
+
+setTimeout(()=>{
+
+fila.style.background = "";
+
+},3000);
+
+}
+
+}
+
+// ==============================
+// GUARDAR FILA
+// ==============================
+
+async function guardarFila(btn){
+
+const fila = btn.closest("tr");
+
+const id = fila.dataset.id;
+
+const nombre = fila.querySelector(".nombre").value;
+const autor = fila.querySelector(".autor").value;
+const editorial = fila.querySelector(".editorial").value;
+const cantidad = fila.querySelector(".cantidad").value;
+const codigo = fila.querySelector(".codigo").value;
+
+let { error } = await supabaseClient
+.from("libros")
+.update({
+
+nombre_libro:nombre,
+autor:autor,
+editorial:editorial,
+cantidad:cantidad,
+codigo_barras:codigo
+
+})
+.eq("id",id);
+
+if(error){
+
+document.getElementById("mensaje").innerHTML =
+"❌ Error al guardar";
+
+return;
+
+}
+
+document.getElementById("mensaje").innerHTML =
+"✅ Libro actualizado";
+
+}
+
+// ==============================
+// GUARDAR TODOS
+// ==============================
+
+async function guardarCambios(){
+
+const filas = document.querySelectorAll("#tablaLibros tr");
+
+for(const fila of filas){
+
+const id = fila.dataset.id;
+
+if(!id) continue;
+
+const nombre = fila.querySelector(".nombre").value;
+const autor = fila.querySelector(".autor").value;
+const editorial = fila.querySelector(".editorial").value;
+const cantidad = fila.querySelector(".cantidad").value;
+const codigo = fila.querySelector(".codigo").value;
+
+await supabaseClient
+.from("libros")
+.update({
+
+nombre_libro:nombre,
+autor:autor,
+editorial:editorial,
+cantidad:cantidad,
+codigo_barras:codigo
+
+})
+.eq("id",id);
+
+}
+
+document.getElementById("mensaje").innerHTML =
+"💾 Todos los cambios guardados";
+
+}
+
+// ==============================
+// ELIMINAR
+// ==============================
+
+async function eliminarFila(id){
+
+if(!confirm("¿Eliminar libro?")) return;
+
+await supabaseClient
+.from("libros")
+.delete()
+.eq("id",id);
+
+cargarLibros();
+
+document.getElementById("mensaje").innerHTML =
+"🗑️ Libro eliminado";
+
+}
+
+// ==============================
+// ENTER BUSCAR
+// ==============================
+
+document
+.getElementById("codigoInput")
+.addEventListener("keypress",function(e){
+
+if(e.key === "Enter"){
+
+buscarLibro();
+
+}
+
+});
+
+// ==============================
+// INICIAR
+// ==============================
+
+cargarLibros();
+
+</script>
+
+</body>
+</html>
