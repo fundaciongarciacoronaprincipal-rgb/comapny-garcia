@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Registro Sistema</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+<h2>Registrar Sistema</h2>
+
+<input id="sistema" placeholder="Nombre del sistema"><br><br>
+<input id="codigo" placeholder="Código"><br><br>
+<input id="titular" placeholder="Nombre del titular"><br><br>
+
+<button onclick="guardar()">Guardar</button>
+
+<p id="resultado"></p>
+
+<button onclick="copiar()">Copiar link</button>
+
+<script>
+const supabaseUrl = "https://guefunmlvfwvbrqnmbsn.supabase.co";
+const supabaseKey = "sb_publishable_YdagTcFfjPpmUKJPJC2gdQ_5HjUIwjy";
+
+const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+let linkFinal = "";
+
+function generarID() {
+    return Math.random().toString(36).substring(2, 10);
+}
+
+async function guardar() {
+
+    const sistema = document.getElementById("sistema").value;
+    const codigo = document.getElementById("codigo").value;
+    const titular = document.getElementById("titular").value;
+
+    const id = generarID();
+
+    const { error } = await client.from("sistemas").insert([
+        {
+            id,
+            sistema,
+            codigo,
+            titular
+        }
+    ]);
+
+    if (error) {
+        alert("Error al guardar");
+        console.log(error);
+        return;
+    }
+
+    linkFinal = window.location.origin + "/ver.html?id=" + id;
+
+    document.getElementById("resultado").innerText = linkFinal;
+}
+
+function copiar() {
+    navigator.clipboard.writeText(linkFinal);
+    alert("Link copiado");
+}
+</script>
+
+</body>
+</html>
