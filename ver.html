@@ -8,44 +8,97 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body {
+* {
     margin:0;
-    font-family: Arial;
-    background: #0f172a;
-    color:white;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    width:100vw;
+    height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
+    background: linear-gradient(135deg,#0f172a,#020617);
+    color:white;
 }
 
+/* tarjeta principal */
 .card {
-    background:#111827;
+    width:90%;
+    max-width:420px;
     padding:25px;
-    border-radius:12px;
-    width:320px;
+    border-radius:16px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(15px);
+    border:1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
 }
 
+/* título */
 h2 {
     text-align:center;
+    margin-bottom:15px;
     color:#38bdf8;
 }
 
+/* contenido */
 .box {
-    margin-top:10px;
-    padding:10px;
-    background:#1f2937;
-    border-radius:8px;
+    padding:15px;
+    border-radius:10px;
+    background: rgba(255,255,255,0.05);
+    line-height:1.6;
+    font-size:15px;
+    word-break:break-word;
 }
 
+/* errores */
 .error {
     color:#f87171;
+    text-align:center;
 }
 
+/* debug */
 .debug {
     margin-top:10px;
     font-size:12px;
     color:#fbbf24;
+    text-align:center;
+}
+
+/* 📱 TABLET */
+@media (max-width: 768px) {
+    .card {
+        width:92%;
+        padding:20px;
+    }
+
+    h2 {
+        font-size:20px;
+    }
+
+    .box {
+        font-size:14px;
+    }
+}
+
+/* 📱 CELULAR */
+@media (max-width: 480px) {
+    .card {
+        width:95%;
+        padding:18px;
+        border-radius:12px;
+    }
+
+    h2 {
+        font-size:18px;
+    }
+
+    .box {
+        font-size:13px;
+    }
 }
 </style>
 </head>
@@ -53,7 +106,7 @@ h2 {
 <body>
 
 <div class="card">
-    <h2>📄 Ver Sistema</h2>
+    <h2>📄 Sistema</h2>
 
     <div id="content" class="box">Cargando...</div>
     <div id="debug" class="debug"></div>
@@ -65,15 +118,13 @@ const supabaseKey = "sb_publishable_YdagTcFfjPpmUKJPJC2gdQ_5HjUIwjy";
 
 const client = supabase.createClient(supabaseUrl, supabaseKey);
 
-// 1. Obtener ID de la URL
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+// obtener id del link
+const id = new URLSearchParams(window.location.search).get("id");
 
 function log(msg){
     document.getElementById("debug").innerText = "DEBUG: " + msg;
 }
 
-// 2. Cargar datos
 async function cargar(){
 
     if(!id){
@@ -83,7 +134,7 @@ async function cargar(){
         return;
     }
 
-    log("Buscando ID: " + id);
+    log("Buscando: " + id);
 
     const { data, error } = await client
         .from("sistemas")
@@ -92,17 +143,16 @@ async function cargar(){
         .maybeSingle();
 
     if(error){
-        console.log(error);
         document.getElementById("content").innerHTML =
             "<div class='error'>Error en Supabase</div>";
-        log("Error en consulta");
+        log("Error Supabase");
         return;
     }
 
     if(!data){
         document.getElementById("content").innerHTML =
             "<div class='error'>No encontrado</div>";
-        log("ID no existe en base");
+        log("ID no existe");
         return;
     }
 
@@ -112,7 +162,7 @@ async function cargar(){
         <b>Titular:</b> ${data.titular}
     `;
 
-    log("Datos cargados correctamente");
+    log("OK cargado");
 }
 
 cargar();
