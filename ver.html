@@ -1,12 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Ver sistema</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ver Sistema</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+body {
+    margin:0;
+    font-family: Arial;
+    background: #0f172a;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card {
+    background:#111827;
+    padding:25px;
+    border-radius:12px;
+    width:320px;
+}
+
+h2 {
+    text-align:center;
+    color:#38bdf8;
+}
+
+.box {
+    margin-top:10px;
+    padding:10px;
+    background:#1f2937;
+    border-radius:8px;
+}
+
+.error {
+    color:#f87171;
+}
+
+.debug {
+    margin-top:10px;
+    font-size:12px;
+    color:#fbbf24;
+}
+</style>
 </head>
+
 <body>
 
-<h1>Cargando...</h1>
+<div class="card">
+    <h2>📄 Ver Sistema</h2>
+
+    <div id="content" class="box">Cargando...</div>
+    <div id="debug" class="debug"></div>
+</div>
+
+<script>
+const supabaseUrl = "https://guefunmlvfwvbrqnmbsn.supabase.co";
+const supabaseKey = "sb_publishable_YdagTcFfjPpmUKJPJC2gdQ_5HjUIwjy";
+
+const client = supabase.createClient(supabaseUrl, supabaseKey);
+
+// 1. Obtener ID de la URL
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+function log(msg){
+    document.getElementById("debug").innerText = "DEBUG: " + msg;
+}
+
+// 2. Cargar datos
+async function cargar(){
+
+    if(!id){
+        document.getElementById("content").innerHTML =
+            "<div class='error'>No hay ID en el link</div>";
+        log("Falta ID");
+        return;
+    }
+
+    log("Buscando ID: " + id);
+
+    const { data, error } = await client
+        .from("sistemas")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+    if(error){
+        console.log(error);
+        document.getElementById("content").innerHTML =
+            "<div class='error'>Error en Supabase</div>";
+        log("Error en consulta");
+        return;
+    }
+
+    if(!data){
+        document.getElementById("content").innerHTML =
+            "<div class='error'>No encontrado</div>";
+        log("ID no existe en base");
+        return;
+    }
+
+    document.getElementById("content").innerHTML = `
+        <b>Sistema:</b> ${data.sistema}<br><br>
+        <b>Código:</b> ${data.codigo}<br><br>
+        <b>Titular:</b> ${data.titular}
+    `;
+
+    log("Datos cargados correctamente");
+}
+
+cargar();
+</script>
 
 </body>
 </html>
