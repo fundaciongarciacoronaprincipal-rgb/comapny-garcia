@@ -111,41 +111,36 @@ footer{
 
 <div class="contenedor">
 
-    <!-- EMPRESA 1 -->
+    <!-- EMPRESA 1 (REDIRECCIONA) -->
     <div class="tarjeta">
-        <img src="https://companygarciacorona.com.mx/logo_corporativo_nexel_digital.png" class="logo">
+        <img src="https://companygarciacorona.com.mx/logo_corporativo_nexel_digital.png" class="logo" alt="Corporativo Nexel Digital">
         <div class="info">
             <h2>Corporativo Nexel Digital</h2>
-            <a href="#" class="boton">Conocer</a>
+            <a href="https://companygarciacorona.com.mx" class="boton">
+                Conocer
+            </a>
         </div>
     </div>
 
-
-
-    <!-- EMPRESA 2 -->
+    <!-- EMPRESA 2 (PROXIMAMENTE) -->
   <!--  <div class="tarjeta">
-        <img src="https://via.placeholder.com/300x180.png?text=LOGO+EMPRESA+2" class="logo">
+        <img src="https://via.placeholder.com/300x180.png?text=PROXIMAMENTE" class="logo" alt="Próximamente">
         <div class="info">
-            <h2>Empresa 2</h2>
-            <a href="#" class="boton">Conocer</a>
+            <h2>Nueva Empresa</h2>
+            <a href="#" class="boton">
+                Conocer
+            </a>
         </div>
     </div> -->
 
-    <!-- EMPRESA 3 -->
-   <!-- <div class="tarjeta">
-        <img src="https://via.placeholder.com/300x180.png?text=LOGO+EMPRESA+3" class="logo">
+    <!-- EMPRESA 3 (PROXIMAMENTE) -->
+  <!--  <div class="tarjeta">
+        <img src="https://via.placeholder.com/300x180.png?text=PROXIMAMENTE" class="logo" alt="Próximamente">
         <div class="info">
-            <h2>Empresa 3</h2>
-            <a href="#" class="boton">Conocer</a>
-        </div>
-    </div> -->
-
-    <!-- EMPRESA 4 -->
- <!--   <div class="tarjeta">
-        <img src="https://via.placeholder.com/300x180.png?text=LOGO+EMPRESA+4" class="logo">
-        <div class="info">
-            <h2>Empresa 4</h2>
-            <a href="#" class="boton">Conocer</a>
+            <h2>Próximamente</h2>
+            <a href="#" class="boton">
+                Conocer
+            </a>
         </div>
     </div> -->
 
@@ -156,11 +151,19 @@ footer{
 </footer>
 
 <script>
-document.querySelectorAll('.boton').forEach(btn=>{
-    btn.addEventListener('click',function(e){
-        e.preventDefault();
-        alert('Próximamente más información de esta empresa.');
+document.querySelectorAll('.boton').forEach(btn => {
+
+    btn.addEventListener('click', function(e) {
+
+        const enlace = this.getAttribute('href');
+
+        if(enlace === '#' || enlace === ''){
+            e.preventDefault();
+            alert('Próximamente más información de esta empresa.');
+        }
+
     });
+
 });
 </script>
 
