@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuestras Empresas</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    color:white;
+    min-height:100vh;
+}
+
+header{
+    text-align:center;
+    padding:30px 15px;
+}
+
+header h1{
+    font-size:2.5rem;
+}
+
+header p{
+    margin-top:10px;
+    color:#cbd5e1;
+}
+
+.contenedor{
+    width:95%;
+    max-width:1400px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+    padding:20px;
+}
+
+.tarjeta{
+    background:white;
+    color:black;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+    transition:.3s;
+}
+
+.tarjeta:hover{
+    transform:translateY(-10px);
+}
+
+.logo{
+    width:100%;
+    height:180px;
+    object-fit:contain;
+    background:#f8fafc;
+    padding:15px;
+}
+
+.info{
+    padding:20px;
+    text-align:center;
+}
+
+.info h2{
+    margin-bottom:15px;
+}
+
+.boton{
+    display:inline-block;
+    text-decoration:none;
+    background:#2563eb;
+    color:white;
+    padding:12px 25px;
+    border-radius:10px;
+    transition:.3s;
+    font-weight:bold;
+}
+
+.boton:hover{
+    background:#1d4ed8;
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#cbd5e1;
+}
+
+@media(max-width:600px){
+    header h1{
+        font-size:2rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Grupo Garcia Corona</h1>
+    <p>Conoce nuestras empresas y servicios</p>
+</header>
+
+<div class="contenedor">
+
+    <!-- EMPRESA 1 -->
+    <div class="tarjeta">
+        <img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png" class="logo">
+        <div class="info">
+            <h2>Corporativo Nexel Digital</h2>
+            <a href="#" class="boton">Conocer</a>
+        </div>
+    </div>
+
+
+
+    <!-- EMPRESA 2 -->
+  <!--  <div class="tarjeta">
+        <img src="https://via.placeholder.com/300x180.png?text=LOGO+EMPRESA+2" class="logo">
+        <div class="info">
+            <h2>Empresa 2</h2>
+            <a href="#" class="boton">Conocer</a>
+        </div>
+    </div> -->
+
+    <!-- EMPRESA 3 -->
+   <!-- <div class="tarjeta">
+        <img src="https://via.placeholder.com/300x180.png?text=LOGO+EMPRESA+3" class="logo">
+        <div class="info">
+            <h2>Empresa 3</h2>
+            <a href="#" class="boton">Conocer</a>
+        </div>
+    </div> -->
+
+    <!-- EMPRESA 4 -->
+ <!--   <div class="tarjeta">
+        <img src="https://via.placeholder.com/300x180.png?text=LOGO+EMPRESA+4" class="logo">
+        <div class="info">
+            <h2>Empresa 4</h2>
+            <a href="#" class="boton">Conocer</a>
+        </div>
+    </div> -->
+
+</div>
+
+<footer>
+    © 2026 Grupo Garcia Corona - Todos los derechos reservados
+</footer>
+
+<script>
+document.querySelectorAll('.boton').forEach(btn=>{
+    btn.addEventListener('click',function(e){
+        e.preventDefault();
+        alert('Próximamente más información de esta empresa.');
+    });
+});
+</script>
+
+</body>
+</html>
