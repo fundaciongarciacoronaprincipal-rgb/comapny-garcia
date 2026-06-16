@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estado del Sistema</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f1f5f9;
+    padding:20px;
+}
+
+.contenedor{
+    max-width:1000px;
+    margin:auto;
+}
+
+.titulo{
+    background:#0f172a;
+    color:white;
+    padding:20px;
+    text-align:center;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:15px;
+}
+
+.tarjeta{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.tarjeta h3{
+    color:#2563eb;
+    margin-bottom:10px;
+}
+
+.valor{
+    font-size:24px;
+    font-weight:bold;
+    color:#0f172a;
+}
+
+.activo{
+    color:#16a34a;
+}
+
+.inactivo{
+    color:#dc2626;
+}
+
+.barra{
+    width:100%;
+    height:25px;
+    background:#e2e8f0;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.progreso{
+    width:76%;
+    height:100%;
+    background:#2563eb;
+}
+
+.info{
+    margin-top:8px;
+    color:#475569;
+}
+
+.footer{
+    margin-top:20px;
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.footer h2{
+    color:#2563eb;
+    margin-bottom:15px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #e2e8f0;
+}
+
+@media(max-width:600px){
+    .valor{
+        font-size:20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="contenedor">
+
+    <div class="titulo">
+        <h1>ESTADO DEL SISTEMA</h1>
+        <p>Monitoreo General de Recursos y Servicios</p>
+    </div>
+
+    <div class="grid">
+
+        <div class="tarjeta">
+            <h3>Almacenamiento Asignado</h3>
+            <div class="valor">100 GB</div>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Almacenamiento Disponible</h3>
+            <div class="valor">24 GB</div>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Almacenamiento Consumido</h3>
+            <div class="valor">76 GB</div>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Uso de Almacenamiento</h3>
+            <div class="valor">76% de 100%</div>
+
+            <div class="barra">
+                <div class="progreso"></div>
+            </div>
+
+            <div class="info">
+                Espacio utilizado actualmente.
+            </div>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Estado del Sistema</h3>
+            <div class="valor activo">ACTIVO</div>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Motivo del Estado</h3>
+            <div class="info">
+                Todos los servicios operan correctamente.
+            </div>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Actualizar Antes de</h3>
+            <div class="valor">02 Agosto 2026</div>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Mantenimiento Antes de</h3>
+            <div class="valor">15 Junio 2026</div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <h2>Información Adicional</h2>
+
+        <table>
+            <tr>
+                <td>Nombre del Sistema</td>
+                <td>NEXEL DIGITAL CORE</td>
+            </tr>
+
+            <tr>
+                <td>Versión</td>
+                <td>V3.5.2</td>
+            </tr>
+
+            <tr>
+                <td>Última Actualización</td>
+                <td>01 Junio 2026</td>
+            </tr>
+
+            <tr>
+                <td>Tiempo de Actividad</td>
+                <td>128 días</td>
+            </tr>
+
+            <tr>
+                <td>Estado de Base de Datos</td>
+                <td>Operativa</td>
+            </tr>
+
+            <tr>
+                <td>Estado de Red</td>
+                <td>Conectada</td>
+            </tr>
+
+            <tr>
+                <td>Respaldos</td>
+                <td>Automáticos cada 24 horas</td>
+            </tr>
+
+            <tr>
+                <td>Último Respaldo</td>
+                <td>16 Junio 2026 - 08:30 AM</td>
+            </tr>
+
+            <tr>
+                <td>Seguridad</td>
+                <td>Protección Activa</td>
+            </tr>
+
+            <tr>
+                <td>Licencia</td>
+                <td>Vigente</td>
+            </tr>
+
+            <tr>
+                <td>Expiración de Licencia</td>
+                <td>31 Diciembre 2027</td>
+            </tr>
+
+            <tr>
+                <td>Servidor Principal</td>
+                <td>En Línea</td>
+            </tr>
+
+            <tr>
+                <td>Servidor Secundario</td>
+                <td>En Espera</td>
+            </tr>
+
+            <tr>
+                <td>CPU Utilizado</td>
+                <td>43%</td>
+            </tr>
+
+            <tr>
+                <td>RAM Utilizada</td>
+                <td>58%</td>
+            </tr>
+
+            <tr>
+                <td>Temperatura del Sistema</td>
+                <td>41°C</td>
+            </tr>
+
+            <tr>
+                <td>ID del Sistema</td>
+                <td>NXD-2026-001</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
