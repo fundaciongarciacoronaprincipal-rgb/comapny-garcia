@@ -10,7 +10,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
 
 body{
@@ -19,7 +19,7 @@ body{
 }
 
 .contenedor{
-    max-width:1000px;
+    max-width:1100px;
     margin:auto;
 }
 
@@ -74,9 +74,10 @@ body{
 }
 
 .progreso{
-    width:76%;
+    width:0%;
     height:100%;
     background:#2563eb;
+    transition:1s;
 }
 
 .info{
@@ -118,157 +119,301 @@ td{
 
 <div class="contenedor">
 
-    <div class="titulo">
-        <h1>ESTADO DEL SISTEMA</h1>
-        <p>Monitoreo General de Recursos y Servicios</p>
+<div class="titulo">
+    <h1>ESTADO DEL SISTEMA</h1>
+    <p>Monitoreo General de Recursos y Servicios</p>
+</div>
+
+<div class="grid">
+
+<div class="tarjeta">
+    <h3>Almacenamiento Asignado</h3>
+    <div class="valor" id="almacenamientoAsignado">1 GB</div>
+</div>
+
+<div class="tarjeta">
+    <h3>Almacenamiento Disponible</h3>
+    <div class="valor" id="almacenamientoDisponible">24 GB</div>
+</div>
+
+<div class="tarjeta">
+    <h3>Almacenamiento Consumido</h3>
+    <div class="valor" id="almacenamientoConsumido">0.03 GB</div>
+</div>
+
+<div class="tarjeta">
+    <h3>Uso de Almacenamiento</h3>
+
+    <div class="valor" id="textoPorcentaje">
+        0% de 100%
     </div>
 
-    <div class="grid">
-
-        <div class="tarjeta">
-            <h3>Almacenamiento Asignado</h3>
-            <div class="valor">100 GB</div>
-        </div>
-
-        <div class="tarjeta">
-            <h3>Almacenamiento Disponible</h3>
-            <div class="valor">24 GB</div>
-        </div>
-
-        <div class="tarjeta">
-            <h3>Almacenamiento Consumido</h3>
-            <div class="valor">76 GB</div>
-        </div>
-
-        <div class="tarjeta">
-            <h3>Uso de Almacenamiento</h3>
-            <div class="valor">50% de 100%</div>
-
-            <div class="barra">
-                <div class="progreso"></div>
-            </div>
-
-            <div class="info">
-                Espacio utilizado actualmente.
-            </div>
-        </div>
-
-        <div class="tarjeta">
-            <h3>Estado del Sistema</h3>
-            <div class="valor activo">ACTIVO</div>
-        </div>
-
-        <div class="tarjeta">
-            <h3>Motivo del Estado</h3>
-            <div class="info">
-                Todos los servicios operan correctamente.
-            </div>
-        </div>
-
-        <div class="tarjeta">
-            <h3>Actualizar Antes de</h3>
-            <div class="valor">02 Agosto 2026</div>
-        </div>
-
-        <div class="tarjeta">
-            <h3>Mantenimiento Antes de</h3>
-            <div class="valor">15 Junio 2026</div>
-        </div>
-
+    <div class="barra">
+        <div class="progreso" id="barraProgreso"></div>
     </div>
 
-    <div class="footer">
-        <h2>Información Adicional</h2>
-
-        <table>
-            <tr>
-                <td>Nombre del Sistema</td>
-                <td>NEXEL DIGITAL CORE</td>
-            </tr>
-
-            <tr>
-                <td>Versión</td>
-                <td>V3.5.2</td>
-            </tr>
-
-            <tr>
-                <td>Última Actualización</td>
-                <td>01 Junio 2026</td>
-            </tr>
-
-            <tr>
-                <td>Tiempo de Actividad</td>
-                <td>128 días</td>
-            </tr>
-
-            <tr>
-                <td>Estado de Base de Datos</td>
-                <td>Operativa</td>
-            </tr>
-
-            <tr>
-                <td>Estado de Red</td>
-                <td>Conectada</td>
-            </tr>
-
-            <tr>
-                <td>Respaldos</td>
-                <td>Automáticos cada 24 horas</td>
-            </tr>
-
-            <tr>
-                <td>Último Respaldo</td>
-                <td>16 Junio 2026 - 08:30 AM</td>
-            </tr>
-
-            <tr>
-                <td>Seguridad</td>
-                <td>Protección Activa</td>
-            </tr>
-
-            <tr>
-                <td>Licencia</td>
-                <td>Vigente</td>
-            </tr>
-
-            <tr>
-                <td>Expiración de Licencia</td>
-                <td>31 Diciembre 2027</td>
-            </tr>
-
-            <tr>
-                <td>Servidor Principal</td>
-                <td>En Línea</td>
-            </tr>
-
-            <tr>
-                <td>Servidor Secundario</td>
-                <td>En Espera</td>
-            </tr>
-
-            <tr>
-                <td>CPU Utilizado</td>
-                <td>43%</td>
-            </tr>
-
-            <tr>
-                <td>RAM Utilizada</td>
-                <td>58%</td>
-            </tr>
-
-            <tr>
-                <td>Temperatura del Sistema</td>
-                <td>41°C</td>
-            </tr>
-
-            <tr>
-                <td>ID del Sistema</td>
-                <td>NXD-2026-001</td>
-            </tr>
-        </table>
+    <div class="info">
+        Espacio utilizado actualmente.
     </div>
+</div>
+
+<div class="tarjeta">
+    <h3>Estado del Sistema</h3>
+    <div class="valor activo">ACTIVO</div>
+</div>
+
+<div class="tarjeta">
+    <h3>Motivo del Estado</h3>
+    <div class="info">
+        Todos los servicios operan correctamente.
+    </div>
+</div>
+
+<div class="tarjeta">
+    <h3>Actualizar Antes de</h3>
+    <div class="valor">02 Agosto 2026</div>
+</div>
+
+<div class="tarjeta">
+    <h3>Mantenimiento Antes de</h3>
+    <div class="valor">2 Agosto 2026</div>
+</div>
+
+<div class="tarjeta">
+    <h3>Día de Pago</h3>
+
+    <div style="font-size:13px;font-weight:bold;color:#64748b;">
+        Próximo pago:
+    </div>
+
+    <div class="valor" id="fechaPago">
+        Cargando...
+    </div>
+
+    <div class="info">
+        Pago programado el día 1 de cada mes.
+    </div>
+
+    <hr style="margin:15px 0;">
+
+    <div style="font-size:13px;font-weight:bold;color:#64748b;">
+        Tiempo restante:
+    </div>
+
+    <div class="valor" id="contadorPago" style="font-size:20px;">
+        00d 00h 00m 00s
+    </div>
+</div>
+</div>
+
+<div class="footer">
+    <h2>Información Adicional</h2>
+
+    <table>
+        <tr>
+            <td>Nombre del Sistema</td>
+            <td>GESTIÓN Y APOYO ESCOLAR</td>
+        </tr>
+
+        <tr>
+            <td>Versión</td>
+            <td>V0.0.9</td>
+        </tr>
+
+        <tr>
+            <td>Última Actualización</td>
+            <td>01 Junio 2026</td>
+        </tr>
+
+        <tr>
+            <td>Tiempo de Actividad</td>
+            <td>128 días</td>
+        </tr>
+
+        <tr>
+            <td>Estado de Base de Datos</td>
+            <td>Operativa</td>
+        </tr>
+
+        <tr>
+            <td>Estado de Red</td>
+            <td>Conectada</td>
+        </tr>
+
+        <tr>
+            <td>Respaldos</td>
+            <td>Automáticos cada 24 horas</td>
+        </tr>
+
+        <tr>
+            <td>Último Respaldo</td>
+            <td>16 Junio 2026 - 08:30 AM</td>
+        </tr>
+
+        <tr>
+            <td>Seguridad</td>
+            <td>Protección Activa</td>
+        </tr>
+
+        <tr>
+            <td>Licencia</td>
+            <td>Vigente</td>
+        </tr>
+
+        <tr>
+            <td>Expiración de Licencia</td>
+            <td>31 Diciembre 2027</td>
+        </tr>
+
+        <tr>
+            <td>Servidor Principal</td>
+            <td>En Línea</td>
+        </tr>
+
+        <tr>
+            <td>Servidor Secundario</td>
+            <td>En Espera</td>
+        </tr>
+
+        <tr>
+            <td>CPU Utilizado</td>
+            <td>43%</td>
+        </tr>
+
+        <tr>
+            <td>RAM Utilizada</td>
+            <td>58%</td>
+        </tr>
+
+        <tr>
+            <td>Temperatura del Sistema</td>
+            <td>41°C</td>
+        </tr>
+
+        <tr>
+            <td>ID del Sistema</td>
+            <td>NXD-2026-001</td>
+        </tr>
+    </table>
+</div>
 
 </div>
+
+<script>
+
+function actualizarAlmacenamiento(){
+
+    const asignado = parseFloat(
+        document.getElementById("almacenamientoAsignado").innerText
+    );
+
+    const consumido = parseFloat(
+        document.getElementById("almacenamientoConsumido").innerText
+    );
+
+    const disponible = asignado - consumido;
+
+    const porcentaje = (consumido / asignado) * 100;
+
+    document.getElementById("almacenamientoDisponible").innerText =
+        disponible + " GB";
+
+    document.getElementById("textoPorcentaje").innerText =
+        porcentaje.toFixed(0) + "% de 100%";
+
+    document.getElementById("barraProgreso").style.width =
+        porcentaje + "%";
+}
+
+actualizarAlmacenamiento();
+
+
+function iniciarContadorPago(){
+
+    function actualizar(){
+
+        const ahora = new Date();
+
+        let proximoPago = new Date(
+            ahora.getFullYear(),
+            ahora.getMonth(),
+            1,
+            0,
+            0,
+            0
+        );
+
+        if(ahora >= proximoPago){
+            proximoPago = new Date(
+                ahora.getFullYear(),
+                ahora.getMonth() + 1,
+                1,
+                0,
+                0,
+                0
+            );
+        }
+
+        const opciones = {
+            day:'2-digit',
+            month:'long',
+            year:'numeric'
+        };
+
+        document.getElementById("fechaPago").innerText =
+            proximoPago.toLocaleDateString(
+                "es-MX",
+                opciones
+            );
+
+        const diferencia =
+            proximoPago.getTime() -
+            ahora.getTime();
+
+        const dias =
+            Math.floor(
+                diferencia /
+                (1000 * 60 * 60 * 24)
+            );
+
+        const horas =
+            Math.floor(
+                (diferencia %
+                (1000 * 60 * 60 * 24))
+                /
+                (1000 * 60 * 60)
+            );
+
+        const minutos =
+            Math.floor(
+                (diferencia %
+                (1000 * 60 * 60))
+                /
+                (1000 * 60)
+            );
+
+        const segundos =
+            Math.floor(
+                (diferencia %
+                (1000 * 60))
+                /
+                1000
+            );
+
+        document.getElementById("contadorPago").innerText =
+            dias + "d " +
+            horas + "h " +
+            minutos + "m " +
+            segundos + "s";
+    }
+
+    actualizar();
+    setInterval(actualizar,1000);
+}
+
+iniciarContadorPago();
+
+</script>
 
 </body>
 </html>
