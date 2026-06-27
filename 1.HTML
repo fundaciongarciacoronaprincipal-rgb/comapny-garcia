@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Lector Seguro</title>
+<title>Lector Seguro PRO</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
@@ -29,12 +29,14 @@ body{
     text-align:center;
 }
 
+/* SCANNER */
 #scanner{
     background:white;
     padding:10px;
     border-radius:10px;
 }
 
+/* INPUTS */
 input,button{
     width:100%;
     padding:12px;
@@ -49,23 +51,27 @@ button{
     font-weight:bold;
 }
 
-#auth{
+/* SECCIONES */
+#auth, #resultBox{
     display:none;
 }
 
-#result{
-    display:none;
+/* RESULTADO */
+#resultBox{
     margin-top:20px;
     padding:20px;
-    background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.2);
     border-radius:15px;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(10px);
     white-space:pre-wrap;
     text-align:left;
 }
 
-h2{
-    margin-bottom:10px;
+/* BOTON VOLVER */
+#restartBtn{
+    margin-top:15px;
+    background:#3b82f6;
 }
 
 .small{
@@ -80,31 +86,31 @@ h2{
 
 <div class="box">
 
-<h2>🔍 Lector de Documentos Seguros</h2>
+<h2>🔐 Lector Seguro</h2>
 
-<!-- ESCANER -->
+<!-- SCANNER -->
 <div id="scanner"></div>
 
 <p class="small">o escribe el código manualmente</p>
 
-<!-- BUSQUEDA MANUAL -->
-<input id="manualId" placeholder="Código de 30 caracteres">
-<button onclick="buscarManual()">Buscar código</button>
+<input id="manualId" placeholder="Código de 30 dígitos">
+<button onclick="usarManual()">Buscar código</button>
 
 <!-- CONTRASEÑA -->
 <div id="auth">
     <input id="pass" type="password" placeholder="Contraseña">
-    <button onclick="descifrar()">Descifrar documento</button>
+    <button onclick="descifrar()">Descifrar</button>
 </div>
 
 <!-- RESULTADO -->
-<div id="result"></div>
+<div id="resultBox"></div>
+
+<button id="restartBtn" onclick="reiniciar()">Escanear otro código</button>
 
 </div>
 
 <script>
 
-// 🔥 CONEXIÓN SUPABASE
 const supabaseClient = window.supabase.createClient(
   "https://etluxtltuwjsnwevlany.supabase.co",
   "sb_publishable_rDUR-NjwHiLNJKHBVYMriw_KfxdMKzd"
@@ -112,27 +118,45 @@ const supabaseClient = window.supabase.createClient(
 
 let docID = "";
 let cifrado = "";
+let scanner;
 
-// 📷 ESCANER QR
-const scanner = new Html5Qrcode("scanner");
+// 📷 INICIAR SCANNER
+function iniciarScanner(){
 
-scanner.start(
-  { facingMode: "environment" },
-  { fps: 10, qrbox: 250 },
-  (decodedText) => {
+    scanner = new Html5Qrcode("scanner");
 
-    docID = decodedText;
+    scanner.start(
+        { facingMode:"environment" },
+        { fps:10, qrbox:250 },
+        (text)=>{
+
+            procesarCodigo(text);
+
+        }
+    );
+
+}
+
+iniciarScanner();
+
+// 🔁 PROCESAR CODIGO (QR O MANUAL)
+function procesarCodigo(text){
+
+    docID = text;
+
+    // 🧼 ocultar todo
+    document.getElementById("scanner").style.display="none";
+    document.getElementById("manualId").style.display="none";
+    document.querySelector(".small").style.display="none";
 
     scanner.stop();
 
-    document.getElementById("scanner").style.display = "none";
-    document.getElementById("auth").style.display = "block";
+    document.getElementById("auth").style.display="block";
 
-  }
-);
+}
 
-// 🔍 BUSQUEDA MANUAL
-async function buscarManual(){
+// 🔍 MANUAL
+function usarManual(){
 
     const id = document.getElementById("manualId").value;
 
@@ -141,13 +165,7 @@ async function buscarManual(){
         return;
     }
 
-    docID = id;
-
-    await scanner.stop();
-
-    document.getElementById("scanner").style.display = "none";
-    document.getElementById("auth").style.display = "block";
-
+    procesarCodigo(id);
 }
 
 // 🔓 DESCIFRAR
@@ -156,7 +174,7 @@ async function descifrar(){
     const pass = document.getElementById("pass").value;
 
     if(!docID){
-        alert("No hay documento seleccionado");
+        alert("No hay código");
         return;
     }
 
@@ -167,8 +185,7 @@ async function descifrar(){
         .single();
 
     if(error || !data){
-        alert("Documento no encontrado");
-        console.log(error);
+        alert("No encontrado");
         return;
     }
 
@@ -182,14 +199,34 @@ async function descifrar(){
         return;
     }
 
-    // 🧼 ocultar todo
-    document.getElementById("auth").style.display = "none";
-    document.getElementById("scanner").style.display = "none";
-    document.getElementById("manualId").style.display = "none";
+    // 🧼 ocultar todo otra vez
+    document.getElementById("auth").style.display="none";
 
     // mostrar resultado
-    document.getElementById("result").style.display = "block";
-    document.getElementById("result").textContent = texto;
+    document.getElementById("resultBox").style.display="block";
+    document.getElementById("resultBox").textContent = texto;
+
+    document.getElementById("restartBtn").style.display="block";
+
+}
+
+// 🔄 REINICIAR TODO
+function reiniciar(){
+
+    docID = "";
+    cifrado = "";
+
+    document.getElementById("resultBox").style.display="none";
+    document.getElementById("restartBtn").style.display="none";
+    document.getElementById("pass").value = "";
+
+    document.getElementById("scanner").style.display="block";
+    document.getElementById("manualId").style.display="block";
+    document.querySelector(".small").style.display="block";
+
+    document.getElementById("auth").style.display="none";
+
+    iniciarScanner();
 
 }
 
