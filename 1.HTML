@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lector QR Seguro</title>
+<title>Descifrar QR</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
@@ -12,72 +12,62 @@
 <style>
 
 body{
-    margin:0;
-    font-family:Arial;
     background:#0f172a;
     color:white;
+    font-family:Arial;
     display:flex;
     justify-content:center;
     align-items:center;
     min-height:100vh;
 }
 
-.box{
+.contenedor{
     width:95%;
-    max-width:800px;
+    max-width:900px;
     text-align:center;
 }
 
-/* Scanner */
 #reader{
+    width:100%;
+    max-width:500px;
+    margin:auto;
     background:white;
     border-radius:15px;
     overflow:hidden;
-}
-
-/* Password */
-#auth{
     display:none;
-    margin-top:20px;
-}
-
-input{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    margin-top:10px;
-    font-size:16px;
 }
 
 button{
     width:100%;
-    padding:12px;
+    padding:15px;
+    margin-top:10px;
     border:none;
     border-radius:10px;
-    margin-top:10px;
-    font-size:16px;
     font-weight:bold;
     cursor:pointer;
     background:#22c55e;
     color:white;
 }
 
-/* Resultado transparente */
-#result{
+#passwordSection,
+#resultadoSection{
     display:none;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    border:none;
+    border-radius:10px;
+}
+
+#resultado{
     margin-top:20px;
     padding:20px;
     border-radius:15px;
     background:rgba(255,255,255,0.08);
-    border:1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(10px);
     white-space:pre-wrap;
-    text-align:left;
-}
-
-h2{
-    margin-bottom:15px;
 }
 
 </style>
@@ -85,97 +75,106 @@ h2{
 
 <body>
 
-<div class="box">
+<div class="contenedor">
 
-<h2>📷 Escanea el QR</h2>
+<h2>📷 Lector QR</h2>
+
+<!-- BOTÓN OBLIGATORIO -->
+<button onclick="startCamera()">
+    Iniciar cámara
+</button>
 
 <div id="reader"></div>
 
-<div id="auth">
+<div id="passwordSection">
 
-    <h3>🔐 Contraseña</h3>
+    <input type="password" id="password" placeholder="Contraseña">
 
-    <input type="password" id="pass" placeholder="Introduce contraseña">
-
-    <button onclick="descifrar()">
-        🔓 Descifrar documento
+    <button onclick="descifrarTexto()">
+        Descifrar
     </button>
 
 </div>
 
-<div id="result"></div>
+<div id="resultadoSection">
+    <div id="resultado"></div>
+</div>
 
 </div>
 
 <script>
 
-// 🔥 SUPABASE CONECTADO
 const supabase = window.supabase.createClient(
   "https://etluxtltuwjsnwevlany.supabase.co",
   "sb_publishable_rDUR-NjwHiLNJKHBVYMriw_KfxdMKzd"
 );
 
+let scanner;
+let textoCifrado = "";
 let docID = "";
-let cifrado = "";
 
-// 📷 Scanner
-const scanner = new Html5Qrcode("reader");
+async function startCamera(){
 
-scanner.start(
-  { facingMode: "environment" },
-  {
-    fps: 10,
-    qrbox: 250
-  },
-  async (text) => {
+    try{
 
-    docID = text;
+        document.getElementById("reader").style.display = "block";
 
-    await scanner.stop();
+        scanner = new Html5Qrcode("reader");
 
-    document.getElementById("reader").style.display = "none";
-    document.getElementById("auth").style.display = "block";
+        await scanner.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: 250
+            },
+            async (text)=>{
 
-  }
-);
+                docID = text;
 
-// 🔓 DESCIFRAR
-async function descifrar(){
+                const { data, error } = await supabase
+                    .from("documentos")
+                    .select("data")
+                    .eq("id", docID)
+                    .single();
 
-    const pass = document.getElementById("pass").value;
+                if(error || !data){
+                    alert("No encontrado en Supabase");
+                    return;
+                }
 
-    if(!pass){
-        alert("Escribe la contraseña");
-        return;
+                textoCifrado = data.data;
+
+                await scanner.stop();
+
+                document.getElementById("passwordSection").style.display = "block";
+
+            }
+        );
+
+    }catch(err){
+
+        console.log(err);
+
+        alert("❌ No se pudo abrir la cámara. Usa HTTPS o Live Server.");
+
     }
+}
 
-    // 🔎 Buscar en Supabase
-    const { data, error } = await supabase
-        .from("documentos")
-        .select("data")
-        .eq("id", docID)
-        .single();
+function descifrarTexto(){
 
-    if(error || !data){
-        alert("Documento no encontrado");
-        console.log(error);
-        return;
-    }
+    const pass = document.getElementById("password").value;
 
-    cifrado = data.data;
+    const bytes = CryptoJS.AES.decrypt(textoCifrado, pass);
+    const text = bytes.toString(CryptoJS.enc.Utf8);
 
-    const bytes = CryptoJS.AES.decrypt(cifrado, pass);
-    const texto = bytes.toString(CryptoJS.enc.Utf8);
-
-    if(!texto){
+    if(!text){
         alert("Contraseña incorrecta");
         return;
     }
 
-    // 🧊 ocultar todo y mostrar resultado
-    document.getElementById("auth").style.display = "none";
-    document.getElementById("result").style.display = "block";
-    document.getElementById("result").textContent = texto;
+    document.getElementById("passwordSection").style.display = "none";
+    document.getElementById("resultadoSection").style.display = "block";
+    document.getElementById("resultado").textContent = text;
 
 }
 
