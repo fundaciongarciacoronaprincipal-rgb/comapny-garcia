@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Descifrar Documento QR</title>
+<title>Lector QR Auto Cámara</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
@@ -11,20 +11,15 @@
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
-
 body{
+    margin:0;
+    font-family:Arial;
     background:#0f172a;
     color:white;
-    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
+    min-height:100vh;
 }
 
 .contenedor{
@@ -42,10 +37,7 @@ body{
     overflow:hidden;
 }
 
-#passwordSection{
-    display:none;
-}
-
+#passwordSection,
 #resultadoSection{
     display:none;
 }
@@ -56,7 +48,6 @@ input{
     margin-top:20px;
     border:none;
     border-radius:10px;
-    font-size:16px;
 }
 
 button{
@@ -66,28 +57,23 @@ button{
     border:none;
     border-radius:10px;
     cursor:pointer;
-    font-size:16px;
     font-weight:bold;
     background:#22c55e;
     color:white;
 }
 
-#resultado{
-    width:100%;
-    min-height:400px;
-    margin-top:20px;
-    padding:20px;
-    border:2px solid rgba(255,255,255,.25);
-    border-radius:15px;
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(10px);
-    text-align:left;
-    white-space:pre-wrap;
-    overflow:auto;
+#msg{
+    margin-bottom:10px;
+    opacity:0.8;
 }
 
-h2{
-    margin-bottom:20px;
+#resultado{
+    margin-top:20px;
+    padding:20px;
+    border-radius:15px;
+    background:rgba(255,255,255,0.08);
+    white-space:pre-wrap;
+    text-align:left;
 }
 
 </style>
@@ -97,39 +83,32 @@ h2{
 
 <div class="contenedor">
 
-    <!-- ESCANER -->
-    <div id="scannerSection">
-        <h2>Escanea el QR</h2>
+<h2>📷 Escaneando QR...</h2>
 
-        <button onclick="iniciarScanner()">
-            Iniciar cámara
-        </button>
+<div id="msg">Solicitando permiso de cámara...</div>
 
-        <div id="reader"></div>
-    </div>
+<div id="reader"></div>
 
-    <!-- CONTRASEÑA -->
-    <div id="passwordSection">
-        <h2>Introduce la contraseña</h2>
+<div id="passwordSection">
 
-        <input type="password" id="password" placeholder="Contraseña">
+    <input type="password" id="password" placeholder="Contraseña">
 
-        <button onclick="descifrarTexto()">
-            Descifrar Texto
-        </button>
-    </div>
+    <button onclick="descifrarTexto()">
+        Descifrar
+    </button>
 
-    <!-- RESULTADO -->
-    <div id="resultadoSection">
-        <div id="resultado"></div>
-    </div>
+</div>
+
+<div id="resultadoSection">
+    <div id="resultado"></div>
+</div>
 
 </div>
 
 <script>
 
 //////////////////////////////
-// 🔥 SUPABASE CONEXIÓN
+// 🔥 SUPABASE
 //////////////////////////////
 
 const supabase = window.supabase.createClient(
@@ -137,35 +116,32 @@ const supabase = window.supabase.createClient(
   "sb_publishable_rDUR-NjwHiLNJKHBVYMriw_KfxdMKzd"
 );
 
-//////////////////////////////
-// VARIABLES
-//////////////////////////////
-
 let textoCifrado = "";
-let qrScanner = null;
+let scanner;
 
 //////////////////////////////
-// 📷 ESCÁNER
+// 📷 AUTO INICIAR CÁMARA
 //////////////////////////////
 
-function iniciarScanner(){
+async function iniciarCamaraAuto(){
 
-    if(qrScanner){
-        qrScanner.clear();
-    }
+    try{
 
-    qrScanner = new Html5Qrcode("reader");
+        scanner = new Html5Qrcode("reader");
 
-    qrScanner.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        async (decodedText)=>{
+        document.getElementById("msg").innerText =
+        "📷 Pidiendo permiso de cámara...";
 
-            try{
+        await scanner.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: 250
+            },
+            async (decodedText)=>{
 
                 const docID = decodedText;
 
-                // 🔎 BUSCAR EN SUPABASE
                 const { data, error } = await supabase
                     .from("documentos")
                     .select("data")
@@ -179,20 +155,26 @@ function iniciarScanner(){
 
                 textoCifrado = data.data;
 
-                await qrScanner.stop();
+                await scanner.stop();
 
-                document.getElementById("scannerSection").style.display="none";
+                document.getElementById("reader").style.display="none";
+                document.getElementById("msg").style.display="none";
                 document.getElementById("passwordSection").style.display="block";
 
-            }catch(err){
-                console.log(err);
             }
+        );
 
-        }
-    ).catch(err=>{
-        console.log("ERROR CÁMARA:", err);
-        alert("No se pudo abrir la cámara (usa HTTPS o Live Server)");
-    });
+        document.getElementById("msg").innerText =
+        "📷 Cámara activa, escanea el QR";
+
+    }catch(err){
+
+        console.log(err);
+
+        document.getElementById("msg").innerText =
+        "❌ No se pudo acceder a la cámara (usa HTTPS o permite permisos)";
+
+    }
 
 }
 
@@ -202,36 +184,27 @@ function iniciarScanner(){
 
 function descifrarTexto(){
 
-    const password =
-        document.getElementById("password").value;
+    const pass = document.getElementById("password").value;
 
-    if(!password){
-        alert("Introduce una contraseña");
+    const bytes = CryptoJS.AES.decrypt(textoCifrado, pass);
+    const text = bytes.toString(CryptoJS.enc.Utf8);
+
+    if(!text){
+        alert("Contraseña incorrecta");
         return;
     }
 
-    try{
-
-        const bytes =
-            CryptoJS.AES.decrypt(textoCifrado, password);
-
-        const texto =
-            bytes.toString(CryptoJS.enc.Utf8);
-
-        if(!texto){
-            alert("Contraseña incorrecta o QR inválido");
-            return;
-        }
-
-        document.getElementById("passwordSection").style.display="none";
-        document.getElementById("resultadoSection").style.display="block";
-        document.getElementById("resultado").textContent = texto;
-
-    }catch(error){
-        alert("Error al descifrar");
-    }
+    document.getElementById("passwordSection").style.display="none";
+    document.getElementById("resultadoSection").style.display="block";
+    document.getElementById("resultado").textContent = text;
 
 }
+
+//////////////////////////////
+// 🚀 INICIAR AUTOMÁTICO
+//////////////////////////////
+
+iniciarCamaraAuto();
 
 </script>
 
