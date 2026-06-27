@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lector QR Auto Cámara</title>
+<title>Lector QR PRO</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
@@ -22,9 +22,9 @@ body{
     min-height:100vh;
 }
 
-.contenedor{
+.box{
     width:95%;
-    max-width:900px;
+    max-width:800px;
     text-align:center;
 }
 
@@ -37,37 +37,24 @@ body{
     overflow:hidden;
 }
 
-#passwordSection,
-#resultadoSection{
-    display:none;
-}
-
-input{
-    width:100%;
-    padding:15px;
-    margin-top:20px;
-    border:none;
-    border-radius:10px;
-}
-
 button{
     width:100%;
     padding:15px;
-    margin-top:15px;
+    margin-top:10px;
     border:none;
     border-radius:10px;
-    cursor:pointer;
     font-weight:bold;
-    background:#22c55e;
+    cursor:pointer;
+    background:#3b82f6;
     color:white;
 }
 
-#msg{
-    margin-bottom:10px;
-    opacity:0.8;
+#auth{
+    display:none;
 }
 
-#resultado{
+#result{
+    display:none;
     margin-top:20px;
     padding:20px;
     border-radius:15px;
@@ -76,32 +63,40 @@ button{
     text-align:left;
 }
 
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    margin-top:10px;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="contenedor">
+<div class="box">
 
-<h2>📷 Escaneando QR...</h2>
+<h2>📷 Lector QR Seguro</h2>
 
-<div id="msg">Solicitando permiso de cámara...</div>
+<button onclick="startScanner()">
+    Iniciar cámara
+</button>
 
 <div id="reader"></div>
 
-<div id="passwordSection">
+<div id="auth">
 
-    <input type="password" id="password" placeholder="Contraseña">
+    <input type="password" id="pass" placeholder="Contraseña">
 
-    <button onclick="descifrarTexto()">
+    <button onclick="decrypt()">
         Descifrar
     </button>
 
 </div>
 
-<div id="resultadoSection">
-    <div id="resultado"></div>
-</div>
+<div id="result"></div>
 
 </div>
 
@@ -116,21 +111,18 @@ const supabase = window.supabase.createClient(
   "sb_publishable_rDUR-NjwHiLNJKHBVYMriw_KfxdMKzd"
 );
 
-let textoCifrado = "";
 let scanner;
+let encryptedText = "";
 
 //////////////////////////////
-// 📷 AUTO INICIAR CÁMARA
+// 📷 SCANNER
 //////////////////////////////
 
-async function iniciarCamaraAuto(){
+async function startScanner(){
 
     try{
 
         scanner = new Html5Qrcode("reader");
-
-        document.getElementById("msg").innerText =
-        "📷 Pidiendo permiso de cámara...";
 
         await scanner.start(
             { facingMode: "environment" },
@@ -138,9 +130,9 @@ async function iniciarCamaraAuto(){
                 fps: 10,
                 qrbox: 250
             },
-            async (decodedText)=>{
+            async (text)=>{
 
-                const docID = decodedText;
+                const docID = text;
 
                 const { data, error } = await supabase
                     .from("documentos")
@@ -150,30 +142,22 @@ async function iniciarCamaraAuto(){
 
                 if(error || !data){
                     alert("No encontrado en Supabase");
+                    console.log(error);
                     return;
                 }
 
-                textoCifrado = data.data;
+                encryptedText = data.data;
 
                 await scanner.stop();
 
-                document.getElementById("reader").style.display="none";
-                document.getElementById("msg").style.display="none";
-                document.getElementById("passwordSection").style.display="block";
+                document.getElementById("auth").style.display = "block";
 
             }
         );
 
-        document.getElementById("msg").innerText =
-        "📷 Cámara activa, escanea el QR";
-
     }catch(err){
-
         console.log(err);
-
-        document.getElementById("msg").innerText =
-        "❌ No se pudo acceder a la cámara (usa HTTPS o permite permisos)";
-
+        alert("No se pudo abrir la cámara. Usa HTTPS o Live Server.");
     }
 
 }
@@ -182,11 +166,11 @@ async function iniciarCamaraAuto(){
 // 🔓 DESCIFRAR
 //////////////////////////////
 
-function descifrarTexto(){
+function decrypt(){
 
-    const pass = document.getElementById("password").value;
+    const pass = document.getElementById("pass").value;
 
-    const bytes = CryptoJS.AES.decrypt(textoCifrado, pass);
+    const bytes = CryptoJS.AES.decrypt(encryptedText, pass);
     const text = bytes.toString(CryptoJS.enc.Utf8);
 
     if(!text){
@@ -194,17 +178,11 @@ function descifrarTexto(){
         return;
     }
 
-    document.getElementById("passwordSection").style.display="none";
-    document.getElementById("resultadoSection").style.display="block";
-    document.getElementById("resultado").textContent = text;
+    document.getElementById("auth").style.display = "none";
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").textContent = text;
 
 }
-
-//////////////////////////////
-// 🚀 INICIAR AUTOMÁTICO
-//////////////////////////////
-
-iniciarCamaraAuto();
 
 </script>
 
