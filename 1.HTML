@@ -7,6 +7,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -91,14 +92,15 @@ h2{
 
 </style>
 </head>
+
 <body>
 
 <div class="contenedor">
 
+    <!-- ESCANER -->
     <div id="scannerSection">
         <h2>Escanea el QR</h2>
 
-        <!-- 🔥 BOTÓN OBLIGATORIO PARA ACTIVAR CÁMARA -->
         <button onclick="iniciarScanner()">
             Iniciar cámara
         </button>
@@ -106,6 +108,7 @@ h2{
         <div id="reader"></div>
     </div>
 
+    <!-- CONTRASEÑA -->
     <div id="passwordSection">
         <h2>Introduce la contraseña</h2>
 
@@ -116,6 +119,7 @@ h2{
         </button>
     </div>
 
+    <!-- RESULTADO -->
     <div id="resultadoSection">
         <div id="resultado"></div>
     </div>
@@ -124,12 +128,28 @@ h2{
 
 <script>
 
+//////////////////////////////
+// 🔥 SUPABASE CONEXIÓN
+//////////////////////////////
+
+const supabase = window.supabase.createClient(
+  "https://etluxtltuwjsnwevlany.supabase.co",
+  "sb_publishable_rDUR-NjwHiLNJKHBVYMriw_KfxdMKzd"
+);
+
+//////////////////////////////
+// VARIABLES
+//////////////////////////////
+
 let textoCifrado = "";
 let qrScanner = null;
 
+//////////////////////////////
+// 📷 ESCÁNER
+//////////////////////////////
+
 function iniciarScanner(){
 
-    // 🔥 IMPORTANTE: limpiar si ya existe
     if(qrScanner){
         qrScanner.clear();
     }
@@ -138,20 +158,35 @@ function iniciarScanner(){
 
     qrScanner.start(
         { facingMode: "environment" },
-        {
-            fps: 10,
-            qrbox: 250
-        },
-        (decodedText)=>{
+        { fps: 10, qrbox: 250 },
+        async (decodedText)=>{
 
-            textoCifrado = decodedText;
+            try{
 
-            qrScanner.stop().then(()=>{
+                const docID = decodedText;
+
+                // 🔎 BUSCAR EN SUPABASE
+                const { data, error } = await supabase
+                    .from("documentos")
+                    .select("data")
+                    .eq("id", docID)
+                    .single();
+
+                if(error || !data){
+                    alert("No encontrado en Supabase");
+                    return;
+                }
+
+                textoCifrado = data.data;
+
+                await qrScanner.stop();
 
                 document.getElementById("scannerSection").style.display="none";
                 document.getElementById("passwordSection").style.display="block";
 
-            });
+            }catch(err){
+                console.log(err);
+            }
 
         }
     ).catch(err=>{
@@ -160,6 +195,10 @@ function iniciarScanner(){
     });
 
 }
+
+//////////////////////////////
+// 🔓 DESCIFRAR
+//////////////////////////////
 
 function descifrarTexto(){
 
