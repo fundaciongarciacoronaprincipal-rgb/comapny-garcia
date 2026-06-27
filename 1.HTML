@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lector QR Final</title>
+<title>Lector Híbrido QR</title>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
@@ -43,22 +43,33 @@ button{
     margin-top:10px;
     border:none;
     border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.primary{
     background:#3b82f6;
     color:white;
-    font-weight:bold;
+}
+
+.green{
+    background:#22c55e;
+    color:white;
 }
 
 input{
     width:100%;
     padding:15px;
-    margin-top:15px;
+    margin-top:10px;
     border:none;
     border-radius:10px;
 }
 
-#auth, #result{
+#manualBox,
+#auth,
+#result{
     display:none;
-    margin-top:20px;
+    margin-top:15px;
 }
 
 #result{
@@ -76,27 +87,52 @@ input{
 
 <div class="box">
 
-<h2>📷 Lector QR 001</h2>
+<h2>📷 Lector híbrido</h2>
 
-<button onclick="startScanner()">Iniciar cámara</button>
+<button class="primary" onclick="startCamera()">
+    Iniciar cámara QR
+</button>
+
+<button class="primary" onclick="showManual()">
+    Ingresar código manualmente
+</button>
 
 <div id="reader"></div>
 
+<!-- MANUAL -->
+<div id="manualBox">
+
+    <h3>✍️ Código manual (escáner externo)</h3>
+
+    <input type="text" id="manualCode" placeholder="Escanea o escribe código">
+
+    <button class="green" onclick="processCode()">
+        Buscar documento
+    </button>
+
+</div>
+
+<!-- PASSWORD -->
 <div id="auth">
 
     <input type="password" id="pass" placeholder="Contraseña">
 
-    <button onclick="decrypt()">
+    <button class="green" onclick="decrypt()">
         Descifrar
     </button>
 
 </div>
 
+<!-- RESULT -->
 <div id="result"></div>
 
 </div>
 
 <script>
+
+//////////////////////////////
+// SUPABASE
+//////////////////////////////
 
 const supabase = window.supabase.createClient(
   "https://etluxtltuwjsnwevlany.supabase.co",
@@ -105,42 +141,30 @@ const supabase = window.supabase.createClient(
 
 let scanner;
 let encryptedText = "";
+let docID = "";
 
-async function startScanner(){
+//////////////////////////////
+// CÁMARA
+//////////////////////////////
+
+async function startCamera(){
 
     try{
+
+        document.getElementById("manualBox").style.display="none";
 
         scanner = new Html5Qrcode("reader");
 
         await scanner.start(
             { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: 250
-            },
-            async (qrText)=>{
+            { fps: 10, qrbox: 250 },
+            async (text)=>{
 
-                // 🔥 detener cámara primero (IMPORTANTE)
                 await scanner.stop();
 
-                const docID = qrText;
+                docID = text;
 
-                // 🔎 Supabase DESPUÉS de escaneo
-                const { data, error } = await supabase
-                    .from("documentos")
-                    .select("data")
-                    .eq("id", docID)
-                    .single();
-
-                if(error || !data){
-                    alert("No encontrado en Supabase");
-                    console.log(error);
-                    return;
-                }
-
-                encryptedText = data.data;
-
-                document.getElementById("auth").style.display = "block";
+                await loadFromSupabase(docID);
 
             }
         );
@@ -151,6 +175,60 @@ async function startScanner(){
     }
 
 }
+
+//////////////////////////////
+// MANUAL
+//////////////////////////////
+
+function showManual(){
+
+    document.getElementById("manualBox").style.display="block";
+    document.getElementById("reader").innerHTML="";
+
+}
+
+async function processCode(){
+
+    const code = document.getElementById("manualCode").value;
+
+    if(!code){
+        alert("Ingresa un código");
+        return;
+    }
+
+    docID = code;
+
+    await loadFromSupabase(docID);
+
+}
+
+//////////////////////////////
+// SUPABASE LOAD
+//////////////////////////////
+
+async function loadFromSupabase(id){
+
+    const { data, error } = await supabase
+        .from("documentos")
+        .select("data")
+        .eq("id", id)
+        .single();
+
+    if(error || !data){
+        console.log(error);
+        alert("No encontrado en Supabase");
+        return;
+    }
+
+    encryptedText = data.data;
+
+    document.getElementById("auth").style.display="block";
+
+}
+
+//////////////////////////////
+// DESCIFRAR
+//////////////////////////////
 
 function decrypt(){
 
@@ -164,8 +242,8 @@ function decrypt(){
         return;
     }
 
-    document.getElementById("auth").style.display = "none";
-    document.getElementById("result").style.display = "block";
+    document.getElementById("auth").style.display="none";
+    document.getElementById("result").style.display="block";
     document.getElementById("result").textContent = text;
 
 }
