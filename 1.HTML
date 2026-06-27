@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descifrar Documento QR</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.contenedor{
+    width:95%;
+    max-width:900px;
+    text-align:center;
+}
+
+#reader{
+    width:100%;
+    max-width:500px;
+    margin:auto;
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+}
+
+#passwordSection{
+    display:none;
+}
+
+#resultadoSection{
+    display:none;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    margin-top:20px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    background:#22c55e;
+    color:white;
+}
+
+#resultado{
+    width:100%;
+    min-height:400px;
+    margin-top:20px;
+    padding:20px;
+    border:2px solid rgba(255,255,255,.25);
+    border-radius:15px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    text-align:left;
+    white-space:pre-wrap;
+    overflow:auto;
+}
+
+h2{
+    margin-bottom:20px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="contenedor">
+
+    <!-- ESCANER -->
+    <div id="scannerSection">
+        <h2>Escanea el QR</h2>
+        <div id="reader"></div>
+    </div>
+
+    <!-- CONTRASEÑA -->
+    <div id="passwordSection">
+        <h2>Introduce la contraseña</h2>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Contraseña"
+        >
+
+        <button onclick="descifrarTexto()">
+            Descifrar Texto
+        </button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultadoSection">
+        <div id="resultado"></div>
+    </div>
+
+</div>
+
+<script>
+
+let textoCifrado = "";
+let qrScanner = null;
+
+function iniciarScanner(){
+
+    qrScanner = new Html5Qrcode("reader");
+
+    qrScanner.start(
+        { facingMode: "environment" },
+        {
+            fps: 10,
+            qrbox: 250
+        },
+        (decodedText)=>{
+
+            textoCifrado = decodedText;
+
+            qrScanner.stop().then(()=>{
+
+                document.getElementById("scannerSection").style.display="none";
+
+                document.getElementById("passwordSection").style.display="block";
+
+            });
+
+        }
+    ).catch(err=>{
+        console.log(err);
+    });
+
+}
+
+function descifrarTexto(){
+
+    const password =
+        document.getElementById("password").value;
+
+    if(!password){
+        alert("Introduce una contraseña");
+        return;
+    }
+
+    try{
+
+        const bytes =
+            CryptoJS.AES.decrypt(
+                textoCifrado,
+                password
+            );
+
+        const texto =
+            bytes.toString(
+                CryptoJS.enc.Utf8
+            );
+
+        if(!texto){
+
+            alert(
+                "Contraseña incorrecta o QR inválido"
+            );
+
+            return;
+        }
+
+        document.getElementById(
+            "passwordSection"
+        ).style.display="none";
+
+        document.getElementById(
+            "resultadoSection"
+        ).style.display="block";
+
+        document.getElementById(
+            "resultado"
+        ).textContent = texto;
+
+    }catch(error){
+
+        alert("Error al descifrar");
+
+    }
+
+}
+
+iniciarScanner();
+
+</script>
+
+</body>
+</html>
