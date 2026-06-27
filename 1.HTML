@@ -3,22 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Descifrar QR</title>
+<title>Descifrar Documento QR</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
 body{
     background:#0f172a;
     color:white;
-    font-family:Arial;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    min-height:100vh;
 }
 
 .contenedor{
@@ -34,22 +39,12 @@ body{
     background:white;
     border-radius:15px;
     overflow:hidden;
+}
+
+#passwordSection{
     display:none;
 }
 
-button{
-    width:100%;
-    padding:15px;
-    margin-top:10px;
-    border:none;
-    border-radius:10px;
-    font-weight:bold;
-    cursor:pointer;
-    background:#22c55e;
-    color:white;
-}
-
-#passwordSection,
 #resultadoSection{
     display:none;
 }
@@ -60,121 +55,142 @@ input{
     margin-top:20px;
     border:none;
     border-radius:10px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:15px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    background:#22c55e;
+    color:white;
 }
 
 #resultado{
+    width:100%;
+    min-height:400px;
     margin-top:20px;
     padding:20px;
+    border:2px solid rgba(255,255,255,.25);
     border-radius:15px;
-    background:rgba(255,255,255,0.08);
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    text-align:left;
     white-space:pre-wrap;
+    overflow:auto;
+}
+
+h2{
+    margin-bottom:20px;
 }
 
 </style>
 </head>
-
 <body>
 
 <div class="contenedor">
 
-<h2>📷 Lector QR</h2>
+    <div id="scannerSection">
+        <h2>Escanea el QR</h2>
 
-<!-- BOTÓN OBLIGATORIO -->
-<button onclick="startCamera()">
-    Iniciar cámara
-</button>
+        <!-- 🔥 BOTÓN OBLIGATORIO PARA ACTIVAR CÁMARA -->
+        <button onclick="iniciarScanner()">
+            Iniciar cámara
+        </button>
 
-<div id="reader"></div>
+        <div id="reader"></div>
+    </div>
 
-<div id="passwordSection">
+    <div id="passwordSection">
+        <h2>Introduce la contraseña</h2>
 
-    <input type="password" id="password" placeholder="Contraseña">
+        <input type="password" id="password" placeholder="Contraseña">
 
-    <button onclick="descifrarTexto()">
-        Descifrar
-    </button>
+        <button onclick="descifrarTexto()">
+            Descifrar Texto
+        </button>
+    </div>
 
-</div>
-
-<div id="resultadoSection">
-    <div id="resultado"></div>
-</div>
+    <div id="resultadoSection">
+        <div id="resultado"></div>
+    </div>
 
 </div>
 
 <script>
 
-const supabase = window.supabase.createClient(
-  "https://etluxtltuwjsnwevlany.supabase.co",
-  "sb_publishable_rDUR-NjwHiLNJKHBVYMriw_KfxdMKzd"
-);
-
-let scanner;
 let textoCifrado = "";
-let docID = "";
+let qrScanner = null;
 
-async function startCamera(){
+function iniciarScanner(){
 
-    try{
-
-        document.getElementById("reader").style.display = "block";
-
-        scanner = new Html5Qrcode("reader");
-
-        await scanner.start(
-            { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: 250
-            },
-            async (text)=>{
-
-                docID = text;
-
-                const { data, error } = await supabase
-                    .from("documentos")
-                    .select("data")
-                    .eq("id", docID)
-                    .single();
-
-                if(error || !data){
-                    alert("No encontrado en Supabase");
-                    return;
-                }
-
-                textoCifrado = data.data;
-
-                await scanner.stop();
-
-                document.getElementById("passwordSection").style.display = "block";
-
-            }
-        );
-
-    }catch(err){
-
-        console.log(err);
-
-        alert("❌ No se pudo abrir la cámara. Usa HTTPS o Live Server.");
-
+    // 🔥 IMPORTANTE: limpiar si ya existe
+    if(qrScanner){
+        qrScanner.clear();
     }
+
+    qrScanner = new Html5Qrcode("reader");
+
+    qrScanner.start(
+        { facingMode: "environment" },
+        {
+            fps: 10,
+            qrbox: 250
+        },
+        (decodedText)=>{
+
+            textoCifrado = decodedText;
+
+            qrScanner.stop().then(()=>{
+
+                document.getElementById("scannerSection").style.display="none";
+                document.getElementById("passwordSection").style.display="block";
+
+            });
+
+        }
+    ).catch(err=>{
+        console.log("ERROR CÁMARA:", err);
+        alert("No se pudo abrir la cámara (usa HTTPS o Live Server)");
+    });
+
 }
 
 function descifrarTexto(){
 
-    const pass = document.getElementById("password").value;
+    const password =
+        document.getElementById("password").value;
 
-    const bytes = CryptoJS.AES.decrypt(textoCifrado, pass);
-    const text = bytes.toString(CryptoJS.enc.Utf8);
-
-    if(!text){
-        alert("Contraseña incorrecta");
+    if(!password){
+        alert("Introduce una contraseña");
         return;
     }
 
-    document.getElementById("passwordSection").style.display = "none";
-    document.getElementById("resultadoSection").style.display = "block";
-    document.getElementById("resultado").textContent = text;
+    try{
+
+        const bytes =
+            CryptoJS.AES.decrypt(textoCifrado, password);
+
+        const texto =
+            bytes.toString(CryptoJS.enc.Utf8);
+
+        if(!texto){
+            alert("Contraseña incorrecta o QR inválido");
+            return;
+        }
+
+        document.getElementById("passwordSection").style.display="none";
+        document.getElementById("resultadoSection").style.display="block";
+        document.getElementById("resultado").textContent = texto;
+
+    }catch(error){
+        alert("Error al descifrar");
+    }
 
 }
 
