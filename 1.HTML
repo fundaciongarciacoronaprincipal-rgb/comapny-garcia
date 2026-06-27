@@ -1,9 +1,12 @@
+<!--PARTE A-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Descifrar Documento QR</title>
+
+<title>Lector MultiQR Seguro</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
@@ -24,38 +27,47 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
+    padding:20px;
 }
 
 .contenedor{
-    width:95%;
+    width:100%;
     max-width:900px;
     text-align:center;
+}
+
+h1{
+    margin-bottom:20px;
+}
+
+.panel{
+    background:#1e293b;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
 }
 
 #reader{
     width:100%;
     max-width:500px;
     margin:auto;
-    background:white;
     border-radius:15px;
     overflow:hidden;
+    background:white;
 }
 
-#passwordSection{
-    display:none;
-}
-
-#resultadoSection{
-    display:none;
+.estado{
+    margin-top:15px;
+    font-weight:bold;
 }
 
 input{
     width:100%;
     padding:15px;
-    margin-top:20px;
+    margin-top:15px;
     border:none;
     border-radius:10px;
-    font-size:16px;
+    font-size:15px;
 }
 
 button{
@@ -64,154 +76,285 @@ button{
     margin-top:15px;
     border:none;
     border-radius:10px;
-    cursor:pointer;
-    font-size:16px;
+    font-size:15px;
     font-weight:bold;
+    cursor:pointer;
+}
+
+#btnDescifrar{
     background:#22c55e;
     color:white;
+    display:none;
+}
+
+#panelPassword{
+    display:none;
 }
 
 #resultado{
-    width:100%;
-    min-height:400px;
+    display:none;
     margin-top:20px;
     padding:20px;
-    border:2px solid rgba(255,255,255,.25);
     border-radius:15px;
-    background:rgba(255,255,255,.08);
+    background:rgba(255,255,255,0.08);
     backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.2);
     text-align:left;
     white-space:pre-wrap;
-    overflow:auto;
-}
-
-h2{
-    margin-bottom:20px;
 }
 
 </style>
+
 </head>
+
 <body>
 
 <div class="contenedor">
 
-    <!-- ESCANER -->
-    <div id="scannerSection">
-        <h2>Escanea el QR</h2>
-        <div id="reader"></div>
-    </div>
+<h1>🔓 Lector de Documentos Multi-QR</h1>
 
-    <!-- CONTRASEÑA -->
-    <div id="passwordSection">
-        <h2>Introduce la contraseña</h2>
+<div class="panel">
 
-        <input
-            type="password"
-            id="password"
-            placeholder="Contraseña"
-        >
+<div id="reader"></div>
 
-        <button onclick="descifrarTexto()">
-            Descifrar Texto
-        </button>
-    </div>
-
-    <!-- RESULTADO -->
-    <div id="resultadoSection">
-        <div id="resultado"></div>
-    </div>
+<div class="estado" id="estado">
+Escanea el primer QR
+</div>
 
 </div>
 
+<div id="panelPassword">
+
+<input type="password" id="password" placeholder="Introduce la contraseña">
+
+<button id="btnDescifrar">
+Descifrar Documento
+</button>
+
+</div>
+
+<div id="resultado"></div>
+
 <script>
 
-let textoCifrado = "";
-let qrScanner = null;
+let scanner;
+
+let documentoID = null;
+
+let totalPartes = 0;
+
+let partesRecibidas = {};
+
+let contador = 0;
+
+let datosCompletos = "";
 
 function iniciarScanner(){
 
-    qrScanner = new Html5Qrcode("reader");
+    scanner = new Html5Qrcode("reader");
 
-    qrScanner.start(
+    scanner.start(
         { facingMode: "environment" },
         {
             fps: 10,
             qrbox: 250
         },
-        (decodedText)=>{
-
-            textoCifrado = decodedText;
-
-            qrScanner.stop().then(()=>{
-
-                document.getElementById("scannerSection").style.display="none";
-
-                document.getElementById("passwordSection").style.display="block";
-
-            });
-
-        }
+        onScan
     ).catch(err=>{
         console.log(err);
     });
 
 }
 
-function descifrarTexto(){
+function onScan(texto){
+
+    procesarQR(texto);
+
+}
+<!--PARTE B-->
+function procesarQR(texto){
+
+    // Formato esperado:
+    // DOCID|parte|total|datos
+
+    const partes =
+    texto.split("|");
+
+    if(partes.length < 4){
+        return;
+    }
+
+    const id = partes[0];
+    const parteActual = parseInt(partes[1]);
+    const total = parseInt(partes[2]);
+    const datos = partes.slice(3).join("|");
+
+    // Primera lectura
+    if(!documentoID){
+
+        documentoID = id;
+        totalPartes = total;
+
+        partesRecibidas = {};
+
+        document.getElementById("estado").innerHTML =
+        "Documento detectado: " + id +
+        "<br>Escaneados: 0 / " + total;
+
+    }
+
+    // Validar mismo documento
+    if(id !== documentoID){
+        document.getElementById("estado").innerHTML =
+        "❌ Este QR no pertenece al documento actual";
+        return;
+    }
+
+    // Guardar parte
+    partesRecibidas[parteActual] = datos;
+
+    contador = Object.keys(partesRecibidas).length;
+
+    document.getElementById("estado").innerHTML =
+    "Documento: " + documentoID +
+    "<br>Escaneados: " + contador + " / " + totalPartes;
+
+    // Si ya tenemos todas las partes
+    if(contador === totalPartes){
+
+        scanner.stop();
+
+        reconstruirDocumento();
+
+    }
+
+}
+
+function reconstruirDocumento(){
+
+    let ordenado = "";
+
+    for(let i = 1; i <= totalPartes; i++){
+
+        ordenado += partesRecibidas[i];
+
+    }
+
+    datosCompletos = ordenado;
+
+    document.getElementById("estado").innerHTML =
+    "✔ Documento completo. Ingresa la contraseña.";
+
+    document.getElementById("panelPassword").style.display =
+    "block";
+
+}
+<!--PARTE C-->
+document.getElementById("btnDescifrar").onclick = function(){
 
     const password =
-        document.getElementById("password").value;
+    document.getElementById("password").value;
 
     if(!password){
-        alert("Introduce una contraseña");
+        alert("Introduce la contraseña");
         return;
     }
 
     try{
 
         const bytes =
-            CryptoJS.AES.decrypt(
-                textoCifrado,
-                password
-            );
+        CryptoJS.AES.decrypt(
+            datosCompletos,
+            password
+        );
 
         const texto =
-            bytes.toString(
-                CryptoJS.enc.Utf8
-            );
+        bytes.toString(
+            CryptoJS.enc.Utf8
+        );
 
         if(!texto){
 
-            alert(
-                "Contraseña incorrecta o QR inválido"
-            );
-
+            alert("Contraseña incorrecta o datos dañados");
             return;
+
         }
 
-        document.getElementById(
-            "passwordSection"
-        ).style.display="none";
+        mostrarResultado(texto);
 
-        document.getElementById(
-            "resultadoSection"
-        ).style.display="block";
+    }catch(err){
 
-        document.getElementById(
-            "resultado"
-        ).textContent = texto;
-
-    }catch(error){
-
+        console.log(err);
         alert("Error al descifrar");
 
     }
 
+};
+
+function mostrarResultado(texto){
+
+    document.getElementById("reader").style.display =
+    "none";
+
+    document.getElementById("panelPassword").style.display =
+    "none";
+
+    document.getElementById("estado").style.display =
+    "none";
+
+    const resultado =
+    document.getElementById("resultado");
+
+    resultado.style.display =
+    "block";
+
+    resultado.textContent =
+    texto;
+
+}
+<!--PARTE D FINAL-->
+function reiniciarSistema(){
+
+    documentoID = null;
+    totalPartes = 0;
+    partesRecibidas = {};
+    contador = 0;
+    datosCompletos = "";
+
+    document.getElementById("resultado").style.display = "none";
+    document.getElementById("panelPassword").style.display = "none";
+
+    document.getElementById("estado").style.display = "block";
+    document.getElementById("estado").innerHTML =
+    "Escanea el primer QR";
+
+    document.getElementById("reader").style.display = "block";
+
+    iniciarScanner();
+
 }
 
-iniciarScanner();
+// Botón opcional de reinicio (puedes agregarlo si quieres)
+const btnReset = document.createElement("button");
+
+btnReset.innerHTML = "Reiniciar escaneo";
+btnReset.style.background = "#3b82f6";
+btnReset.style.color = "white";
+
+btnReset.style.marginTop = "15px";
+
+btnReset.onclick = reiniciarSistema;
+
+document.querySelector(".panel").appendChild(btnReset);
+
+// Iniciar automáticamente el escáner al cargar
+window.onload = function(){
+    iniciarScanner();
+};
 
 </script>
+
+</div>
 
 </body>
 </html>
