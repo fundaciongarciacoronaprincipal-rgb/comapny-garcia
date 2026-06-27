@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lector QR PRO</title>
+<title>Lector QR Final</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -30,10 +30,10 @@ body{
 
 #reader{
     width:100%;
-    max-width:500px;
+    max-width:450px;
     margin:auto;
     background:white;
-    border-radius:15px;
+    border-radius:10px;
     overflow:hidden;
 }
 
@@ -43,32 +43,30 @@ button{
     margin-top:10px;
     border:none;
     border-radius:10px;
-    font-weight:bold;
-    cursor:pointer;
     background:#3b82f6;
     color:white;
-}
-
-#auth{
-    display:none;
-}
-
-#result{
-    display:none;
-    margin-top:20px;
-    padding:20px;
-    border-radius:15px;
-    background:rgba(255,255,255,0.08);
-    white-space:pre-wrap;
-    text-align:left;
+    font-weight:bold;
 }
 
 input{
     width:100%;
     padding:15px;
+    margin-top:15px;
     border:none;
     border-radius:10px;
-    margin-top:10px;
+}
+
+#auth, #result{
+    display:none;
+    margin-top:20px;
+}
+
+#result{
+    padding:20px;
+    background:rgba(255,255,255,0.08);
+    border-radius:10px;
+    white-space:pre-wrap;
+    text-align:left;
 }
 
 </style>
@@ -78,11 +76,9 @@ input{
 
 <div class="box">
 
-<h2>📷 Lector QR Seguro</h2>
+<h2>📷 Lector QR</h2>
 
-<button onclick="startScanner()">
-    Iniciar cámara
-</button>
+<button onclick="startScanner()">Iniciar cámara</button>
 
 <div id="reader"></div>
 
@@ -102,10 +98,6 @@ input{
 
 <script>
 
-//////////////////////////////
-// 🔥 SUPABASE
-//////////////////////////////
-
 const supabase = window.supabase.createClient(
   "https://etluxtltuwjsnwevlany.supabase.co",
   "sb_publishable_rDUR-NjwHiLNJKHBVYMriw_KfxdMKzd"
@@ -113,10 +105,6 @@ const supabase = window.supabase.createClient(
 
 let scanner;
 let encryptedText = "";
-
-//////////////////////////////
-// 📷 SCANNER
-//////////////////////////////
 
 async function startScanner(){
 
@@ -130,10 +118,14 @@ async function startScanner(){
                 fps: 10,
                 qrbox: 250
             },
-            async (text)=>{
+            async (qrText)=>{
 
-                const docID = text;
+                // 🔥 detener cámara primero (IMPORTANTE)
+                await scanner.stop();
 
+                const docID = qrText;
+
+                // 🔎 Supabase DESPUÉS de escaneo
                 const { data, error } = await supabase
                     .from("documentos")
                     .select("data")
@@ -148,8 +140,6 @@ async function startScanner(){
 
                 encryptedText = data.data;
 
-                await scanner.stop();
-
                 document.getElementById("auth").style.display = "block";
 
             }
@@ -157,14 +147,10 @@ async function startScanner(){
 
     }catch(err){
         console.log(err);
-        alert("No se pudo abrir la cámara. Usa HTTPS o Live Server.");
+        alert("Error cámara");
     }
 
 }
-
-//////////////////////////////
-// 🔓 DESCIFRAR
-//////////////////////////////
 
 function decrypt(){
 
