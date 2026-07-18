@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Portal Alumno</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+color:white;
+}
+
+header{
+text-align:center;
+padding:15px;
+font-size:22px;
+font-weight:bold;
+position:relative;
+}
+
+.menuBtn{
+position:absolute;
+left:15px;
+top:15px;
+cursor:pointer;
+font-size:22px;
+}
+
+.menu{
+position:fixed;
+top:0;
+left:-220px;
+width:220px;
+height:100%;
+background:rgba(0,0,0,0.9);
+transition:0.3s;
+padding-top:60px;
+}
+
+.menu div{
+padding:15px;
+border-bottom:1px solid rgba(255,255,255,0.2);
+cursor:pointer;
+}
+
+.menu div:hover{
+background:rgba(255,255,255,0.1);
+}
+
+.card{
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(10px);
+padding:25px;
+margin:20px auto;
+border-radius:15px;
+max-width:420px;
+text-align:center;
+}
+
+input{
+width:90%;
+padding:12px;
+margin:8px;
+border-radius:8px;
+border:none;
+outline:none;
+}
+
+button{
+padding:12px;
+width:95%;
+border:none;
+border-radius:8px;
+background:#3498db;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.boleta{
+background:rgba(0,0,0,0.4);
+margin:20px auto;
+padding:15px;
+border-radius:12px;
+max-width:850px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:10px;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid rgba(255,255,255,0.3);
+text-align:center;
+color:white;
+}
+
+/* ===== COLORES POR CALIFICACIÓN ===== */
+
+.row-bajo{
+background:#b71c1c; /* rojo fuerte */
+}
+
+.row-medio{
+background:#f1c40f; /* amarillo */
+color:black;
+}
+
+.row-alto{
+background:#1e8449; /* verde */
+}
+
+/* PDF */
+#boletaPDF{
+position:absolute;
+left:-9999px;
+width:800px;
+background:white;
+color:black;
+padding:20px;
+font-family:Arial;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<span class="menuBtn" onclick="toggleMenu()">☰</span>
+🎓 Portal Alumno
+</header>
+
+<div id="menu" class="menu">
+<div onclick="mostrarSeccion('calificaciones')">📊 Calificaciones</div>
+<div onclick="mostrarSeccion('asistencias')">📅 Asistencias</div>
+<div onclick="mostrarSeccion('reportes')">📋 Reportes</div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginDiv" class="card">
+<h2>Iniciar Sesión</h2>
+<input id="matricula" placeholder="Matrícula">
+<input id="password" type="password" placeholder="Contraseña">
+<button onclick="login()">Ingresar</button>
+</div>
+
+<!-- PANEL -->
+<div id="panel" style="display:none;">
+
+<div class="card">
+<h3 id="infoAlumno"></h3>
+
+<!--<button onclick="descargarBoleta()">📄 Descargar Boleta Interna</button>-->
+</div>
+
+<div id="contenedor"></div>
+
+</div>
+
+<!-- PDF OCULTO -->
+<div id="boletaPDF">
+
+<div style="text-align:center">
+<img src="logo.png" style="width:80px;height:80px;object-fit:contain;">
+<h2>OFTV No. 0216 "FRANCISCO VILLA"</h2>
+<p>CCT: 15ETV0714T</p>
+<p>Calle Michoacán Norte Barrio Alto, Emiliano Zapata</p>
+<p>Hueypoxtla, Estado de México</p>
+<hr>
+</div>
+
+<h3 id="pdfAlumno"></h3>
+<div id="pdfContenido"></div>
+
+</div>
+
+<script>
+
+const supabaseClient = supabase.createClient(
+"https://nlpdpvjtdxknhvgqbfls.supabase.co",
+"sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+let alumno=null;
+
+function toggleMenu(){
+let m=document.getElementById("menu");
+m.style.left=(m.style.left==="0px")?"-220px":"0px";
+}
+
+function mostrarSeccion(t){
+document.getElementById("menu").style.left="-220px";
+if(t==="calificaciones") cargarDatos();
+if(t==="asistencias") cargarAsistencias();
+if(t==="reportes") cargarReportes();
+}
+
+async function login(){
+
+let mat=document.getElementById("matricula").value.trim();
+let pass=document.getElementById("password").value.trim();
+
+let {data}=await supabaseClient
+.from("alumnos")
+.select("*")
+.eq("matricula",mat)
+.eq("password_alumno",pass);
+
+if(!data||data.length===0){
+alert("Datos incorrectos");
+return;
+}
+
+alumno=data[0];
+
+document.getElementById("loginDiv").style.display="none";
+document.getElementById("panel").style.display="block";
+
+document.getElementById("infoAlumno").innerText=
+alumno.nombre_completo+" | "+alumno.matricula;
+
+cargarDatos();
+}
+
+/* ===== CALIFICACIONES ===== */
+
+function getColorClass(prom){
+if(prom <= 4) return "row-bajo";
+if(prom == 5) return "row-medio";
+return "row-alto";
+}
+
+async function cargarDatos(){
+
+let cont=document.getElementById("contenedor");
+cont.innerHTML="";
+
+let {data}=await supabaseClient
+.from("evaluaciones")
+.select("*")
+.eq("alumno_id",alumno.id);
+
+if(!data || data.length===0){
+cont.innerHTML="<div class='boleta'>Sin calificaciones</div>";
+return;
+}
+
+let html=`<div class="boleta">
+<h3>📊 Calificaciones</h3>
+<table>
+<tr>
+<th>Materia</th>
+<th>E1</th>
+<th>E2</th>
+<th>E3</th>
+<th>Promedio</th>
+</tr>`;
+
+data.forEach(e=>{
+
+let cls=getColorClass(e.promedio_final);
+
+html+=`
+<tr class="${cls}">
+<td>${e.materia}</td>
+<td>${e.evaluacion1}</td>
+<td>${e.evaluacion2}</td>
+<td>${e.evaluacion3}</td>
+<td><b>${e.promedio_final}</b></td>
+</tr>`;
+});
+
+html+="</table></div>";
+cont.innerHTML=html;
+}
+
+/* ===== ASISTENCIAS ===== */
+
+function hora(fecha){
+return new Date(new Date(fecha).getTime()-6*3600000)
+.toLocaleTimeString("es-MX",{hour:"2-digit",minute:"2-digit",hour12:true});
+}
+
+async function cargarAsistencias(){
+
+let cont=document.getElementById("contenedor");
+cont.innerHTML="";
+
+let {data}=await supabaseClient
+.from("asistencias")
+.select("*")
+.eq("alumno_id",alumno.id)
+.order("fecha",{ascending:false});
+
+let html=`<div class="boleta">
+<h3>📅 Asistencias</h3>
+<table>
+<tr><th>Fecha</th><th>Entrada</th><th>Salida</th></tr>`;
+
+data.forEach(a=>{
+html+=`
+<tr>
+<td>${a.fecha}</td>
+<td>${a.hora_entrada?hora(a.hora_entrada):"-"}</td>
+<td>${a.hora_salida?hora(a.hora_salida):"-"}</td>
+</tr>`;
+});
+
+html+="</table></div>";
+cont.innerHTML=html;
+}
+
+/* ===== REPORTES ===== */
+
+async function cargarReportes(){
+
+let cont=document.getElementById("contenedor");
+cont.innerHTML="";
+
+let {data}=await supabaseClient
+.from("reportes")
+.select("*")
+.eq("alumno_id",alumno.id)
+.order("fecha",{ascending:false});
+
+if(!data || data.length===0){
+cont.innerHTML="<div class='boleta'>Sin reportes</div>";
+return;
+}
+
+let html=`<div class="boleta"><h3>📋 Reportes</h3>`;
+
+data.forEach(r=>{
+
+let fecha = new Date(new Date(r.fecha).getTime()-6*3600000)
+.toLocaleString("es-MX",{dateStyle:"medium",timeStyle:"short"});
+
+html+=`
+<div style="margin-bottom:15px">
+<p><b>📅 Fecha:</b> ${fecha}</p>
+<p><b>📝 Motivo:</b><br>${r.motivo}</p>
+<p><b>✅ Solución:</b><br>${r.solucion}</p>
+</div>`;
+});
+
+html+="</div>";
+cont.innerHTML=html;
+}
+
+/* 📄 DESCARGAR BOLETA PDF */
+async function descargarBoleta(){
+
+document.getElementById("pdfAlumno").innerText =
+alumno.nombre_completo + " | " + alumno.matricula;
+
+let { data } = await supabaseClient
+.from("evaluaciones")
+.select("*")
+.eq("alumno_id", alumno.id);
+
+if(!data || data.length === 0){
+alert("Sin datos");
+return;
+}
+
+let ciclos = {};
+
+data.forEach(e=>{
+let key = e.ciclo_escolar + " - " + e.grado + e.grupo;
+if(!ciclos[key]) ciclos[key] = [];
+ciclos[key].push(e);
+});
+
+let html = "";
+
+for(let c in ciclos){
+
+html += `<h3>${c}</h3>
+<table border="1" width="100%" cellpadding="5">
+<tr>
+<th>Materia</th>
+<th>E1</th>
+<th>E2</th>
+<th>E3</th>
+<th>Promedio</th>
+</tr>`;
+
+ciclos[c].forEach(e=>{
+html += `
+<tr>
+<td>${e.materia}</td>
+<td>${e.evaluacion1}</td>
+<td>${e.evaluacion2}</td>
+<td>${e.evaluacion3}</td>
+<td>${e.promedio_final}</td>
+</tr>
+`;
+});
+
+html += "</table><br>";
+}
+
+document.getElementById("pdfContenido").innerHTML = html;
+
+const canvas = await html2canvas(document.getElementById("boletaPDF"));
+const img = canvas.toDataURL("image/png");
+
+const { jsPDF } = window.jspdf;
+const pdf = new jsPDF("p","mm","a4");
+
+const width = 210;
+const height = (canvas.height * width) / canvas.width;
+
+pdf.addImage(img,"PNG",0,0,width,height);
+pdf.save("boleta.pdf");
+
+}
+
+</script>
+
+</body>
+</html>
