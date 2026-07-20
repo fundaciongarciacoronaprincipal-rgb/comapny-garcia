@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Acceso a Portales | Grupo Garcia Corona</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+
+background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+
+}
+
+.card{
+
+width:100%;
+max-width:950px;
+background:#ffffff;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 20px 45px rgba(0,0,0,.35);
+
+}
+
+.header{
+
+background:linear-gradient(90deg,#003366,#0059b3);
+color:#fff;
+padding:30px;
+text-align:center;
+
+}
+
+.header h1{
+
+font-size:34px;
+letter-spacing:1px;
+
+}
+
+.header p{
+
+margin-top:10px;
+font-size:17px;
+opacity:.9;
+
+}
+
+.contenido{
+
+padding:35px;
+
+}
+
+.contenido h2{
+
+margin-bottom:20px;
+color:#003366;
+font-size:28px;
+
+}
+
+.terminos{
+
+border:2px solid #d7d7d7;
+background:#fafafa;
+padding:25px;
+max-height:360px;
+overflow-y:auto;
+
+}
+
+.terminos ol{
+
+padding-left:25px;
+
+}
+
+.terminos li{
+
+margin-bottom:15px;
+line-height:1.7;
+font-size:16px;
+color:#333;
+
+}
+
+.check{
+
+margin-top:25px;
+font-size:18px;
+font-weight:bold;
+
+}
+
+.check input{
+
+transform:scale(1.3);
+margin-right:10px;
+
+}
+
+#guardar{
+
+margin-top:30px;
+width:100%;
+padding:18px;
+border:none;
+background:#009933;
+color:white;
+font-size:20px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+
+}
+
+#guardar:hover{
+
+background:#007d2b;
+
+}
+
+.portal{
+
+display:none;
+text-align:center;
+
+}
+
+.portal h1{
+
+font-size:34px;
+color:#003366;
+margin-bottom:15px;
+
+}
+
+.portal p{
+
+font-size:20px;
+color:#555;
+margin-bottom:40px;
+line-height:1.8;
+
+}
+
+.botones{
+
+display:flex;
+justify-content:center;
+gap:25px;
+flex-wrap:wrap;
+
+}
+
+.botones button{
+
+width:220px;
+height:220px;
+
+border:none;
+
+border-radius:0;
+
+font-size:24px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:.30s;
+
+color:white;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+box-shadow:0 12px 25px rgba(0,0,0,.30);
+
+}
+
+.botones button:hover{
+
+transform:translateY(-8px);
+
+}
+
+.alumno{
+
+background:#0066ff;
+
+}
+
+.alumno:hover{
+
+background:#0055d4;
+
+}
+
+.tutor{
+
+background:#0ca63c;
+
+}
+
+.tutor:hover{
+
+background:#087f2d;
+
+}
+
+.avisos{
+
+background:#ff7300;
+
+}
+
+.avisos:hover{
+
+background:#d85d00;
+
+}
+
+footer{
+
+margin-top:50px;
+padding-top:25px;
+border-top:2px solid #ddd;
+font-size:16px;
+color:#555;
+line-height:1.7;
+
+}
+
+@media(max-width:768px){
+
+.botones{
+
+flex-direction:column;
+align-items:center;
+
+}
+
+.botones button{
+
+width:100%;
+max-width:320px;
+height:120px;
+
+}
+
+.header h1{
+
+font-size:28px;
+
+}
+
+.portal h1{
+
+font-size:28px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="header">
+
+<h1>GRUPO GARCIA CORONA</h1>
+
+<p>Sistema de Acceso a Portales</p>
+
+</div>
+
+<div class="contenido" id="pantallaTerminos">
+
+<h2>Términos y Condiciones</h2>
+
+<div class="terminos">
+
+<ol>
+
+<li>El uso del sistema implica la aceptación total de los presentes términos y condiciones.</li>
+
+<li>La información almacenada dentro del sistema es confidencial.</li>
+
+<li>Queda estrictamente prohibida la copia, distribución o modificación del contenido sin autorización.</li>
+
+<li>El usuario será responsable del uso correcto de sus credenciales de acceso.</li>
+
+<li>Las cuentas son personales e intransferibles.</li>
+
+<li>La empresa podrá realizar actualizaciones al sistema cuando lo considere necesario.</li>
+
+<li>El acceso podrá suspenderse temporal o definitivamente por uso indebido.</li>
+
+<li>El usuario acepta las políticas de privacidad establecidas por la empresa.</li>
+
+<li>El sistema es propiedad intelectual de Grupo Garcia Corona.</li>
+
+<li>No se permite la ingeniería inversa, modificación o extracción del código fuente.</li>
+
+<li>El acceso queda registrado para fines administrativos.</li>
+
+<li>Toda la información proporcionada deberá ser verídica.</li>
+
+<li>Las actualizaciones podrán modificar funciones sin previo aviso.</li>
+
+<li>El usuario acepta el tratamiento de datos conforme a la legislación aplicable.</li>
+
+<li>Al continuar confirma haber leído y aceptado todos los términos y condiciones.</li>
+
+</ol>
+
+</div>
+
+<div class="check">
+
+<label>
+
+<input type="checkbox" id="acepto">
+
+Acepto los términos y condiciones.
+
+</label>
+
+</div>
+
+<button id="guardar" onclick="aceptar()">
+
+Guardar
+
+</button>
+
+</div>
+<div class="contenido portal" id="portal">
+
+<h1>Bienvenidos a los Portales Alumno y Tutor</h1>
+
+<p>
+
+Gracias por usar nuestros servicios.<br><br>
+
+Les damos una cordial invitación para acceder al portal correspondiente.
+Seleccione una de las siguientes opciones para continuar.
+
+</p>
+
+<div class="botones">
+
+<button
+class="alumno"
+onclick="window.location.href=LINK_PORTAL_ALUMNO">
+
+📘<br><br>
+
+Portal Alumno
+
+</button>
+
+<button
+class="tutor"
+onclick="window.location.href=LINK_PORTAL_TUTOR">
+
+👨‍🏫<br><br>
+
+Portal Tutor
+
+</button>
+
+<button
+class="avisos"
+onclick="window.location.href=LINK_PORTAL_DE_AVISOS">
+
+📢<br><br>
+
+Avisos
+
+</button>
+
+</div>
+
+<footer>
+
+ &copy; 2026 Grupo
+         García Corona — Todos los derechos reservados
+</footer>
+
+</div>
+
+</div>
+
+<script>
+
+//=============================
+// CONFIGURA TUS ENLACES AQUÍ
+//=============================
+
+const LINK_PORTAL_ALUMNO="https://companygarciacorona.com.mx/francisco_villa/portal_alumno_v0.0.10_2026.html";
+
+const LINK_PORTAL_TUTOR="https://companygarciacorona.com.mx/francisco_villa/portal_tutor_v.0.0.10_2026.html";
+
+const LINK_PORTAL_DE_AVISOS="https://companygarciacorona.com.mx/avisos.html";
+
+//=============================
+
+function aceptar(){
+
+if(!document.getElementById("acepto").checked){
+
+alert("Debe aceptar los términos y condiciones para continuar.");
+
+return;
+
+}
+
+document.getElementById("pantallaTerminos").style.display="none";
+
+document.getElementById("portal").style.display="block";
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+</script>
+
+</body>
+</html>
