@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comunicado Oficial</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e293b);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:30px;
+}
+
+.container{
+max-width:900px;
+width:100%;
+background:#fff;
+border-radius:20px;
+padding:50px;
+box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+
+.logo{
+text-align:center;
+margin-bottom:25px;
+}
+
+.logo h1{
+font-size:2.2rem;
+color:#0f172a;
+}
+
+.logo p{
+color:#64748b;
+}
+
+.badge{
+display:inline-block;
+background:#dc2626;
+color:#fff;
+padding:10px 25px;
+border-radius:50px;
+font-weight:bold;
+margin-bottom:25px;
+}
+
+h2{
+font-size:2rem;
+color:#0f172a;
+margin-bottom:25px;
+}
+
+#contenido p{
+color:#334155;
+line-height:1.8;
+margin-bottom:18px;
+font-size:1.05rem;
+}
+
+.date-box{
+display:none;
+background:#eff6ff;
+border-left:5px solid #2563eb;
+padding:18px;
+border-radius:8px;
+margin:25px 0;
+color:#1e3a8a;
+font-weight:bold;
+}
+
+.signature{
+margin-top:35px;
+border-top:1px solid #e2e8f0;
+padding-top:25px;
+}
+
+.signature strong{
+display:block;
+font-size:1.2rem;
+color:#0f172a;
+}
+
+footer{
+margin-top:30px;
+text-align:center;
+color:#64748b;
+font-size:.9rem;
+}
+
+@media(max-width:768px){
+
+.container{
+padding:30px;
+}
+
+.logo h1{
+font-size:1.8rem;
+}
+
+h2{
+font-size:1.6rem;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+<h1>Grupo García Corona</h1>
+<p>Comunicado Oficial</p>
+</div>
+
+<center>
+<span class="badge">AVISO IMPORTANTE</span>
+</center>
+
+<h2 id="titulo"></h2>
+
+<div id="contenido"></div>
+
+<div class="date-box" id="fechaBox">
+<span id="fecha"></span>
+</div>
+
+<div class="signature">
+<p><strong>Atentamente,</strong></p>
+<strong>Grupo García Corona</strong>
+</div>
+
+<footer>
+© 2026 Grupo García Corona. Todos los derechos reservados.
+</footer>
+
+</div>
+
+<script src="avisos.js"></script>
+
+</body>
+</html>
