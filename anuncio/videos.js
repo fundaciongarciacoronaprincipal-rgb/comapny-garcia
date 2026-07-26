@@ -1,7 +1,7 @@
 const anuncios = [
 {
     id: 1,
-    video: "https://miservidor.com/videos/anuncio1.mp4",
+    video: "https://companygarciacorona.com.mx/anuncio/hola1.mp4",
     inicio: "08:00",
     fin: "18:00",
     maxReproducciones: 4
