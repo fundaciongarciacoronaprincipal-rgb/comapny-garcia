@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Línea del Tiempo | GRUPO GARCIA CORONA</title>
 
+<!-- Fuente Poppins corregida -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -19,113 +18,73 @@ box-sizing:border-box;
 font-family:'Poppins',sans-serif;
 }
 
-
 body{
-
 background:#f4f7fb;
 overflow-x:hidden;
-
+min-width: 320px;
 }
 
-
 /* HEADER */
-
 header{
-
 background:linear-gradient(135deg,#003b8e,#0077ff);
 color:white;
 text-align:center;
-padding:70px 20px;
-
+padding: clamp(40px, 10vw, 70px) 20px;
 }
-
 
 header h1{
-
-font-size:42px;
+font-size: clamp(26px, 6vw, 42px);
 margin-bottom:15px;
-
 }
-
 
 header p{
-
 max-width:850px;
 margin:auto;
-font-size:18px;
-
+font-size: clamp(16px, 4vw, 18px);
 }
 
-
-
 /* INICIO */
-
-
 .inicio-timeline{
-
 width:90%;
 max-width:950px;
-margin:70px auto;
+margin: clamp(40px, 8vw, 70px) auto;
 background:white;
-padding:45px;
+padding: clamp(25px, 6vw, 45px);
 border-radius:18px;
 text-align:center;
 box-shadow:0 20px 40px rgba(0,0,0,.10);
-
 }
 
-
-
 .logo-timeline{
-
 width:100%;
 max-width:300px;
 display:block;
 margin:auto;
 margin-bottom:25px;
-
 }
-
-
 
 .inicio-timeline h2{
-
 color:#003b8e;
-font-size:34px;
+font-size: clamp(24px, 5vw, 34px);
 margin-bottom:15px;
-
 }
-
-
 
 .inicio-timeline p{
-
 color:#555;
-font-size:18px;
+font-size: clamp(15px, 3.5vw, 18px);
 line-height:1.8;
-
 }
 
-
-
-
 /* TIMELINE */
-
-
 .timeline{
-
 position:relative;
 width:90%;
 max-width:1200px;
 margin:auto;
 padding:20px 0 80px;
-
 }
 
-
-
 .timeline::after{
-
 content:'';
 position:absolute;
 width:5px;
@@ -134,23 +93,15 @@ top:0;
 bottom:0;
 left:50%;
 margin-left:-2px;
-
 }
 
-
-
 .container{
-
 position:relative;
 width:50%;
 padding:20px 40px;
-
 }
 
-
-
 .container::after{
-
 content:'';
 position:absolute;
 width:24px;
@@ -160,66 +111,37 @@ border:5px solid #0059ff;
 border-radius:50%;
 top:35px;
 z-index:5;
-
 }
-
-
 
 .left{
-
 left:0;
-
 }
-
-
 
 .right{
-
 left:50%;
-
 }
-
-
 
 .left::after{
-
 right:-15px;
-
 }
-
-
 
 .right::after{
-
 left:-15px;
-
 }
 
-
-
-
 .content{
-
 background:white;
-padding:28px;
+padding: clamp(20px, 5vw, 28px);
 border-radius:15px;
 box-shadow:0 15px 35px rgba(0,0,0,.12);
 transition:.4s;
-
 }
-
-
 
 .content:hover{
-
 transform:translateY(-8px);
-
 }
 
-
-
 .year{
-
 display:inline-block;
 background:#0059ff;
 color:white;
@@ -227,313 +149,144 @@ padding:8px 20px;
 border-radius:50px;
 font-weight:bold;
 margin-bottom:15px;
-
+font-size: clamp(14px, 3.5vw, 16px);
 }
-
-
 
 .content h2{
-
 color:#003b8e;
 margin-bottom:15px;
-
+font-size: clamp(20px, 4.5vw, 26px);
 }
-
-
 
 .content p{
-
 color:#555;
+font-size: clamp(15px, 3.5vw, 17px);
 line-height:1.8;
-
 }
 
-
-
-
-/* CONTINUARA */
-
-
+/* CONTINUARÁ */
 .continuara{
-
 width:90%;
 max-width:900px;
 margin:40px auto 90px;
 background:linear-gradient(135deg,#003b8e,#0077ff);
 color:white;
 text-align:center;
-padding:55px 35px;
+padding: clamp(30px, 7vw, 55px) clamp(20px, 5vw, 35px);
 border-radius:20px;
 box-shadow:0 20px 45px rgba(0,0,0,.18);
-
 }
-
-
 
 .icono{
-
 font-size:70px;
 animation:flotar 2.5s infinite;
-
 }
-
-
 
 .continuara h2{
-
-font-size:40px;
+font-size: clamp(24px, 5vw, 40px);
 margin-top:15px;
-
 }
-
-
 
 .continuara p{
-
-font-size:18px;
+font-size: clamp(15px, 3.5vw, 18px);
 line-height:1.8;
 margin-top:20px;
-
 }
-
-
 
 @keyframes flotar{
-
-0%,100%{
-
-transform:translateY(0);
-
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
 }
-
-50%{
-
-transform:translateY(-10px);
-
-}
-
-}
-
-
-
-/* FOOTER */
-
 
 footer{
-
 background:#003b8e;
 color:white;
 text-align:center;
 padding:25px;
-
+font-size: clamp(13px, 3vw, 15px);
 }
 
-
-
-
-/* RESPONSIVE */
-
-
+/* AJUSTES PARA TABLET Y CELULAR */
 @media(max-width:900px){
-
-
 .timeline::after{
-
 left:30px;
-
 }
-
-
 .container{
-
 width:100%;
 padding-left:75px;
 padding-right:20px;
-
 }
-
-
 .right{
-
 left:0;
-
 }
-
-
-
 .left::after,
 .right::after{
-
 left:18px;
-
+}
 }
 
-
-header h1{
-
-font-size:34px;
-
+@media(max-width:480px){
+.icono{font-size:50px;}
 }
-
-
-}
-
 </style>
 
-
 </head>
-
-
-
 <body>
 
-
-
 <header>
-
 <h1>GRUPO GARCIA CORONA</h1>
-
 <p>
 Línea del tiempo corporativa que presenta los acontecimientos más importantes
 en la evolución, crecimiento e innovación de GRUPO GARCIA CORONA.
 </p>
-
 </header>
 
-
-
-
 <section class="inicio-timeline">
-
-
 <img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png"
-alt="Grupo García Corona"
-class="logo-timeline">
-
-
+alt="Grupo García Corona" class="logo-timeline">
 <h2>Inicio de la Historia</h2>
-
-
 <p>
-
 Todo gran proyecto comienza con una visión.
 La historia de <strong>GRUPO GARCIA CORONA</strong>
 representa el compromiso por desarrollar soluciones tecnológicas,
 impulsar nuevos proyectos y construir un grupo empresarial enfocado
 en la innovación y crecimiento continuo.
-
 </p>
-
-
 </section>
 
-
-
-
-<!-- LOS EVENTOS APARECEN DESDE JS -->
-
-<section class="timeline" id="timeline">
-
-</section>
-
-
-
-
-
+<section class="timeline" id="timeline"></section>
 
 <section class="continuara">
-
-
 <div class="icono">⏳</div>
-
-
 <h2>CONTINUARÁ...</h2>
-
-
 <p>
-
-La historia de <strong>GRUPO GARCIA CORONA</strong>
-continúa escribiéndose.
-
+La historia de <strong>GRUPO GARCIA CORONA</strong> continúa escribiéndose.
 Cada nuevo proyecto, empresa, alianza estratégica e innovación
 será agregado a esta línea del tiempo para documentar el crecimiento
 y evolución del grupo empresarial.
-
 </p>
-
-
 </section>
 
-
-
-
-
 <footer>
-
 © 2026 GRUPO GARCIA CORONA · Todos los derechos reservados.
-
 </footer>
 
-
-
 <script src="timeline.js"></script>
-
-
 <script>
-
-
 let timeline = document.getElementById("timeline");
-
-
 timelineData.forEach((evento,index)=>{
-
-
 let lado = index % 2 === 0 ? "left":"right";
-
-
 timeline.innerHTML += `
-
-
 <div class="container ${lado}">
-
 <div class="content">
-
-
-<div class="year">
-
-${evento.fecha}
-
+<div class="year">${evento.fecha}</div>
+<h2>${evento.titulo}</h2>
+<p>${evento.descripcion}</p>
 </div>
-
-
-<h2>
-
-${evento.titulo}
-
-</h2>
-
-
-<p>
-
-${evento.descripcion}
-
-</p>
-
-
 </div>
-
-</div>
-
-
 `;
-
-
 });
-
-
 </script>
-
-
 
 </body>
 </html>
