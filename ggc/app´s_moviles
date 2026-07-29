@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRUPO GARCIA CORONA</title>
+
+<!-- Fuente Poppins corregida y sin errores -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+overflow:hidden;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(-45deg,#ff0055,#6a00ff,#009dff,#00d084,#ffd500);
+background-size:500% 500%;
+animation:fondo 15s infinite alternate;
+position:relative;
+}
+
+@keyframes fondo{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.luz{
+position:absolute;
+top:-20%;
+width:120px;
+height:140%;
+background:rgba(255,255,255,.15);
+filter:blur(20px);
+transform:rotate(20deg);
+animation:rayos 8s infinite linear;
+}
+.l1{left:10%;animation-delay:0s;}
+.l2{left:40%;animation-delay:3s;}
+.l3{right:15%;animation-delay:6s;}
+
+@keyframes rayos{
+0%{transform:translateY(-50px) rotate(20deg);opacity:.2;}
+50%{opacity:.6;}
+100%{transform:translateY(100px) rotate(20deg);opacity:.2;}
+}
+
+.contenedor{
+position:relative;
+z-index:20;
+width:90%;
+max-width:900px;
+padding:45px;
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(15px);
+border-radius:30px;
+text-align:center;
+box-shadow:0 0 50px rgba(0,0,0,.3);
+color:white;
+animation:brillo-caja 5s infinite;
+}
+
+@keyframes brillo-caja{
+0%,100%{box-shadow:0 0 50px rgba(255,255,255,.2);}
+50%{box-shadow:0 0 70px rgba(255,255,255,.6);}
+}
+
+.logo{
+font-size:38px;
+font-weight:900;
+margin-bottom:10px;
+text-shadow:0 0 15px white;
+}
+h2{
+font-size:30px;
+margin-bottom:20px;
+animation:latido 2s infinite;
+}
+@keyframes latido{50%{transform:scale(1.05);}}
+p{
+font-size:20px;
+line-height:1.8;
+font-weight:500;
+}
+footer{
+margin-top:35px;
+font-size:15px;
+opacity:.9;
+}
+
+.figura{
+position:absolute;
+z-index:15;
+padding:18px 30px;
+border-radius:50px;
+font-size:22px;
+font-weight:bold;
+color:white;
+box-shadow:0 0 30px rgba(255,255,255,.5);
+animation:mover 12s linear infinite;
+opacity:0;
+backdrop-filter:blur(8px);
+}
+
+.lo1{background:#ff1744;top:8%;left:-20%;animation-delay:0s;}
+.lo2{background:#ff9100;bottom:15%;right:-20%;animation-delay:2s;}
+.lo3{background:#ff4081;top:60%;left:-25%;animation-delay:4s;}
+.lo4{background:#ff3d00;top:25%;right:-25%;animation-delay:6s;}
+
+.cre1{background:#00e676;top:15%;left:-20%;animation-delay:8s;}
+.cre2{background:#00b0ff;bottom:18%;right:-20%;animation-delay:10s;}
+.cre3{background:#651fff;top:70%;left:-25%;animation-delay:12s;}
+.cre4{background:#00c853;top:30%;right:-25%;animation-delay:14s;}
+
+@keyframes mover{
+0%{transform:translateX(0) rotate(0deg) scale(.2);opacity:0;}
+10%{opacity:1;transform:scale(1);}
+40%{opacity:1;}
+60%{opacity:1;}
+90%{opacity:0;transform:scale(.4);}
+100%{transform:translateX(180vw) rotate(360deg);opacity:0;}
+}
+
+.burbuja{
+position:absolute;
+bottom:-100px;
+border-radius:50%;
+background:rgba(255,255,255,.25);
+border:2px solid rgba(255,255,255,.5);
+animation:subir linear infinite;
+z-index:5;
+}
+.b1{width:25px;height:25px;left:10%;animation-duration:12s;}
+.b2{width:45px;height:45px;left:25%;animation-duration:18s;animation-delay:2s;}
+.b3{width:18px;height:18px;left:45%;animation-duration:10s;animation-delay:5s;}
+.b4{width:60px;height:60px;left:70%;animation-duration:20s;animation-delay:3s;}
+.b5{width:30px;height:30px;right:15%;animation-duration:14s;animation-delay:7s;}
+
+@keyframes subir{
+0%{transform:translateY(0) scale(1);opacity:0;}
+10%{opacity:1;}
+50%{transform:translateY(-50vh) scale(1.2);}
+100%{transform:translateY(-120vh) scale(.5);opacity:0;}
+}
+
+.particula{
+position:absolute;
+width:5px;
+height:5px;
+background:white;
+border-radius:50%;
+box-shadow:0 0 15px white;
+animation:brillo 5s infinite;
+z-index:6;
+}
+.p1{left:20%;top:30%;}
+.p2{left:80%;top:40%;animation-delay:2s;}
+.p3{left:50%;top:15%;animation-delay:4s;}
+.p4{left:35%;top:70%;animation-delay:1s;}
+
+@keyframes brillo{
+0%,100%{opacity:.2;transform:scale(.5);}
+50%{opacity:1;transform:scale(2);}
+}
+
+.pez{
+position:absolute;
+z-index:8;
+font-size:45px;
+animation:nadar linear infinite;
+filter:drop-shadow(0 0 10px rgba(255,255,255,.5));
+}
+.pez1{top:20%;left:-10%;animation-duration:18s;}
+.pez2{top:65%;left:-15%;animation-duration:25s;animation-delay:4s;font-size:35px;}
+.pez3{top:40%;right:-15%;animation-duration:22s;animation-delay:8s;transform:scaleX(-1);}
+.pez4{top:80%;right:-20%;animation-duration:30s;animation-delay:3s;font-size:55px;transform:scaleX(-1);}
+.pez5{top:10%;left:-20%;animation-duration:35s;animation-delay:12s;font-size:30px;}
+.pez6{top:55%;right:-20%;animation-duration:28s;animation-delay:15s;font-size:40px;transform:scaleX(-1);}
+
+@keyframes nadar{
+0%{transform:translateX(-150px) translateY(0) rotate(0deg);opacity:0;}
+10%{opacity:1;}
+25%{transform:translateX(30vw) translateY(-40px) rotate(5deg);}
+50%{transform:translateX(60vw) translateY(30px) rotate(-5deg);}
+75%{transform:translateX(100vw) translateY(-30px) rotate(5deg);}
+100%{transform:translateX(130vw) translateY(0) rotate(0deg);opacity:0;}
+}
+
+.pez-reversa{animation-name:nadar-reversa;}
+@keyframes nadar-reversa{
+0%{transform:translateX(150vw) scaleX(-1);opacity:0;}
+10%{opacity:1;}
+50%{transform:translateX(40vw) translateY(-50px) scaleX(-1);}
+100%{transform:translateX(-200px) scaleX(-1);opacity:0;}
+}
+
+.pez-lejano{
+position:absolute;
+z-index:3;
+font-size:25px;
+opacity:.35;
+animation:lejano 35s linear infinite;
+}
+@keyframes lejano{0%{left:-20%;}100%{left:120%;}}
+
+.onda{
+position:absolute;
+bottom:0;
+left:0;
+width:100%;
+height:120px;
+background:rgba(255,255,255,.08);
+border-radius:50% 50% 0 0;
+animation:olas 6s ease-in-out infinite;
+z-index:7;
+}
+@keyframes olas{
+0%,100%{transform:translateY(0) scaleX(1);}
+50%{transform:translateY(-20px) scaleX(1.1);}
+}
+
+.alga{
+position:absolute;
+bottom:0;
+z-index:6;
+width:25px;
+height:180px;
+background:linear-gradient(90deg,#00c853,#69f0ae,#00a152);
+border-radius:50% 50% 0 0;
+transform-origin:bottom;
+animation:mover-alga 4s ease-in-out infinite;
+}
+.alga:before{
+content:"";position:absolute;width:20px;height:120px;background:inherit;left:-15px;bottom:20px;border-radius:50%;transform:rotate(-25deg);
+}
+.alga:after{
+content:"";position:absolute;width:18px;height:100px;background:inherit;right:-18px;bottom:40px;border-radius:50%;transform:rotate(25deg);
+}
+.a1{left:5%;height:160px;}
+.a2{left:12%;height:220px;animation-delay:1s;}
+.a3{right:10%;height:190px;animation-delay:2s;}
+.a4{right:3%;height:150px;animation-delay:3s;}
+
+@keyframes mover-alga{
+0%,100%{transform:rotate(-8deg);}
+50%{transform:rotate(8deg);}
+}
+
+.coral{
+position:absolute;
+bottom:0;
+z-index:5;
+filter:drop-shadow(0 0 10px rgba(255,255,255,.3));
+}
+.coral span{display:block;position:absolute;bottom:0;border-radius:50px 50px 0 0;}
+.cor1{left:20%;}
+.cor2{right:20%;}
+.cor1 span:nth-child(1){width:35px;height:100px;background:#ff4081;left:0;}
+.cor1 span:nth-child(2){width:25px;height:140px;background:#ff80ab;left:40px;}
+.cor1 span:nth-child(3){width:30px;height:90px;background:#f50057;left:75px;}
+.cor2 span:nth-child(1){width:40px;height:130px;background:#ff9100;}
+.cor2 span:nth-child(2){width:30px;height:100px;background:#ffd740;left:45px;}
+.cor2 span:nth-child(3){width:25px;height:160px;background:#ff6d00;left:80px;}
+
+.medusa{
+position:absolute;
+z-index:9;
+font-size:70px;
+animation:flotar-medusa 12s ease-in-out infinite;
+}
+.m1{left:15%;top:25%;}
+.m2{right:15%;top:35%;animation-delay:5s;font-size:55px;}
+@keyframes flotar-medusa{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-80px);}
+}
+
+.tortuga{
+position:absolute;
+z-index:8;
+font-size:65px;
+top:45%;
+left:-15%;
+animation:tortuga-nadar 35s linear infinite;
+}
+@keyframes tortuga-nadar{
+0%{left:-20%;transform:rotate(5deg);opacity:0;}
+10%{opacity:1;}
+50%{transform:translateY(-40px) rotate(-5deg);}
+100%{left:120%;transform:rotate(5deg);opacity:0;}
+}
+
+.estrella{
+position:absolute;
+bottom:25px;
+z-index:7;
+font-size:45px;
+animation:girar-estrella 8s infinite;
+}
+.e1{left:30%;}
+.e2{right:35%;animation-delay:3s;}
+@keyframes girar-estrella{
+0%,100%{transform:rotate(0deg);}
+50%{transform:rotate(180deg);}
+}
+
+.telefono{
+position:absolute;
+z-index:12;
+right:8%;
+bottom:15%;
+width:180px;
+height:330px;
+background:rgba(0,0,0,.65);
+border-radius:35px;
+border:5px solid rgba(255,255,255,.7);
+box-shadow:0 0 40px rgba(255,255,255,.6);
+animation:flotar-telefono 5s ease-in-out infinite;
+overflow:hidden;
+}
+@keyframes flotar-telefono{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-25px);}
+}
+
+.pantalla{
+position:absolute;
+top:15px;left:15px;right:15px;bottom:15px;
+background:linear-gradient(180deg,#001f3f,#0066cc,#00d4ff);
+border-radius:25px;
+padding:20px;
+color:white;
+text-align:center;
+}
+.icono-app{font-size:50px;margin-top:20px;animation:latido 2s infinite;}
+.cargando{margin-top:25px;font-size:14px;font-weight:bold;}
+.barra{width:100%;height:12px;background:rgba(255,255,255,.3);border-radius:20px;overflow:hidden;margin-top:15px;}
+.progreso{height:100%;width:80%;background:linear-gradient(90deg,#00ff87,#60efff);border-radius:20px;animation:cargar 4s infinite alternate;}
+@keyframes cargar{from{width:35%;}to{width:85%;}}
+
+.mensaje-app{
+position:absolute;
+z-index:13;
+right:6%;
+bottom:3%;
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(10px);
+padding:15px 25px;
+border-radius:30px;
+color:white;
+font-size:15px;
+font-weight:bold;
+box-shadow:0 0 25px rgba(255,255,255,.4);
+animation:aparecer-mensaje 3s infinite;
+}
+@keyframes aparecer-mensaje{
+0%,100%{opacity:.5;transform:translateY(10px);}
+50%{opacity:1;transform:translateY(0);}
+}
+
+.pez-mini{
+position:absolute;
+font-size:20px;
+z-index:4;
+animation:pez-mini-mover 20s linear infinite;
+opacity:.6;
+}
+.pm1{top:30%;}
+.pm2{top:75%;animation-delay:5s;}
+.pm3{top:50%;animation-delay:10s;}
+@keyframes pez-mini-mover{0%{left:-10%;}100%{left:120%;}}
+
+.sombra-agua{
+position:absolute;
+bottom:0;left:0;
+width:100%;height:200px;
+background:linear-gradient(transparent,rgba(0,0,0,.25));
+z-index:11;
+pointer-events:none;
+}
+
+.profundidad{
+position:absolute;
+border-radius:50%;
+background:rgba(255,255,255,.08);
+filter:blur(2px);
+animation:profundidad-mover 20s infinite;
+}
+.pr1{width:250px;height:250px;left:-80px;top:20%;}
+.pr2{width:180px;height:180px;right:-50px;top:60%;animation-delay:8s;}
+@keyframes profundidad-mover{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-60px);}
+}
+
+.reflejo{
+position:absolute;
+z-index:2;
+width:300px;height:300px;
+border-radius:50%;
+background:radial-gradient(circle,rgba(255,255,255,.25),transparent 70%);
+animation:mover-reflejo 12s infinite alternate;
+}
+.r1{left:-100px;top:15%;}
+.r2{right:-120px;bottom:20%;animation-delay:5s;}
+@keyframes mover-reflejo{
+0%{transform:translate(0,0) scale(1);opacity:.3;}
+100%{transform:translate(80px,-50px) scale(1.4);opacity:.6;}
+}
+
+.pez-color{
+position:absolute;
+z-index:7;
+font-size:50px;
+animation:pez-color-mover 24s linear infinite;
+}
+.pc1{top:18%;left:-15%;}
+.pc2{top:50%;right:-15%;animation-delay:8s;transform:scaleX(-1);}
+.pc3{top:75%;left:-15%;animation-delay:14s;font-size:35px;}
+@keyframes pez-color-mover{
+0%{transform:translateX(-100px) translateY(0);opacity:0;}
+15%{opacity:1;}
+50%{transform:translateX(60vw) translateY(-40px);}
+100%{transform:translateX(130vw) translateY(20px);opacity:0;}
+}
+
+.burbuja-extra{
+position:absolute;
+bottom:-50px;
+width:12px;height:12px;
+border-radius:50%;
+background:rgba(255,255,255,.4);
+animation:burbuja-extra-subir 9s infinite;
+z-index:6;
+}
+.be1{left:18%;animation-delay:1s;}
+.be2{left:38%;animation-delay:4s;}
+.be3{left:60%;animation-delay:2s;}
+.be4{left:85%;animation-delay:6s;}
+@keyframes burbuja-extra-subir{
+0%{transform:translateY(0) scale(.5);opacity:0;}
+20%{opacity:1;}
+100%{transform:translateY(-100vh) scale(1.5);opacity:0;}
+}
+
+.agua-movimiento{
+position:absolute;
+inset:0;
+z-index:1;
+background:linear-gradient(120deg,transparent,rgba(255,255,255,.08),transparent);
+animation:agua-pasar 8s infinite linear;
+}
+@keyframes agua-pasar{
+0%{transform:translateX(-100%);}
+100%{transform:translateX(100%);}
+}
+
+.decoracion-marina{
+position:absolute;
+bottom:20px;
+left:45%;
+z-index:8;
+display:flex;
+gap:30px;
+}
+.concha{font-size:45px;animation:rotar-marino 6s infinite;}
+.perla{font-size:35px;animation:brillo-perla 3s infinite;}
+@keyframes rotar-marino{0%,100%{transform:rotate(0deg);}50%{transform:rotate(20deg);}}
+@keyframes brillo-perla{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.3);}}
+
+.pez-burbuja{
+position:absolute;
+z-index:4;
+font-size:28px;
+opacity:.5;
+left:5%;top:45%;
+animation:pez-profundo 35s linear infinite;
+}
+.pb2{top:65%;font-size:22px;animation-delay:12s;}
+@keyframes pez-profundo{
+0%{transform:translateX(-100px) translateY(0);opacity:0;}
+20%{opacity:.5;}
+50%{transform:translateX(60vw) translateY(-50px);}
+100%{transform:translateX(120vw) translateY(30px);opacity:0;}
+}
+
+body:after{
+content:"";
+position:absolute;
+inset:0;
+z-index:14;
+pointer-events:none;
+background:radial-gradient(circle at top,rgba(255,255,255,.15),transparent 45%);
+animation:respirar-agua 6s infinite;
+}
+@keyframes respirar-agua{
+0%,100%{opacity:.3;}
+50%{opacity:.7;}
+}
+
+@media(max-width:700px){
+.contenedor{width:94%;padding:25px;}
+.logo{font-size:25px;}
+h2{font-size:22px;}
+p{font-size:15px;line-height:1.6;}
+.telefono{width:120px;height:230px;right:3%;bottom:5%;}
+.pantalla{padding:10px;}
+.icono-app{font-size:35px;}
+.mensaje-app{font-size:11px;right:2%;max-width:200px;}
+.figura{font-size:15px;padding:12px 20px;}
+}
+</style>
+
+</head>
+<body>
+
+<div class="luz l1"></div>
+<div class="luz l2"></div>
+<div class="luz l3"></div>
+
+<div class="burbuja b1"></div>
+<div class="burbuja b2"></div>
+<div class="burbuja b3"></div>
+<div class="burbuja b4"></div>
+<div class="burbuja b5"></div>
+
+<div class="particula p1"></div>
+<div class="particula p2"></div>
+<div class="particula p3"></div>
+<div class="particula p4"></div>
+
+<div class="pez pez1">🐠</div>
+<div class="pez pez2">🐟</div>
+<div class="pez pez3 pez-reversa">🐡</div>
+<div class="pez pez4 pez-reversa">🐠</div>
+<div class="pez pez5">🐟</div>
+<div class="pez pez6 pez-reversa">🐡</div>
+
+<div class="pez-lejano" style="top:25%;">🐟</div>
+<div class="pez-lejano" style="top:70%; animation-delay:10s;">🐠</div>
+
+<div class="medusa m1">🪼</div>
+<div class="medusa m2">🪼</div>
+
+<div class="tortuga">🐢</div>
+
+<div class="estrella e1">⭐</div>
+<div class="estrella e2">⭐</div>
+
+<div class="alga a1"></div>
+<div class="alga a2"></div>
+<div class="alga a3"></div>
+<div class="alga a4"></div>
+
+<div class="coral cor1"><span></span><span></span><span></span></div>
+<div class="coral cor2"><span></span><span></span><span></span></div>
+
+<div class="profundidad pr1"></div>
+<div class="profundidad pr2"></div>
+
+<div class="onda"></div>
+
+<div class="figura lo1">😔 Lo sentimos</div>
+<div class="figura lo2">😔 Lo sentimos</div>
+<div class="figura lo3">😔 Lo sentimos</div>
+<div class="figura lo4">😔 Lo sentimos</div>
+<div class="figura cre1">🚧 En creación</div>
+<div class="figura cre2">🚧 En creación</div>
+<div class="figura cre3">🚧 En creación</div>
+<div class="figura cre4">🚧 En creación</div>
+
+<div class="telefono">
+    <div class="pantalla">
+        <div class="icono-app">📱</div>
+        <h3>GGC APP</h3>
+        <div class="cargando">Construyendo App Oficial...</div>
+        <div class="barra"><div class="progreso"></div></div>
+        <br><small>Próximamente disponible</small>
+    </div>
+</div>
+
+<div class="mensaje-app">🚀 Desarrollando una nueva experiencia para nuestros clientes</div>
+<div class="sombra-agua"></div>
+
+<div class="contenedor">
+<div class="logo">GRUPO GARCIA CORONA</div>
+<h2>📱 Aplicación Oficial</h2>
+<p>
+<strong>¡Lo sentimos!</strong><br><br>
+Actualmente <b>GRUPO GARCIA CORONA</b> aún no cuenta con una aplicación oficial para nuestros clientes.<br><br>
+🚀 Nuestro equipo continúa trabajando para desarrollar una aplicación moderna, segura e innovadora que ofrecerá una mejor experiencia.<br><br>
+💙 Esperamos ponerla a su disposición lo más pronto posible.<br><br>
+✨ ¡Gracias por su paciencia y por confiar en nosotros!
+</p>
+<footer>© 2026 GRUPO GARCIA CORONA<br>Innovación • Tecnología • Desarrollo</footer>
+</div>
+
+<div class="agua-movimiento"></div>
+<div class="reflejo r1"></div>
+<div class="reflejo r2"></div>
+
+<div class="pez-color pc1">🐠</div>
+<div class="pez-color pc2">🐡</div>
+<div class="pez-color pc3">🐟</div>
+
+<div class="burbuja-extra be1"></div>
+<div class="burbuja-extra be2"></div>
+<div class="burbuja-extra be3"></div>
+<div class="burbuja-extra be4"></div>
+
+<div class="decoracion-marina">
+<div class="concha">🐚</div>
+<div class="perla">⚪</div>
+</div>
+
+<div class="pez-burbuja">🐠</div>
+<div class="pez-burbuja pb2">🐟</div>
+
+</body>
+</html>
