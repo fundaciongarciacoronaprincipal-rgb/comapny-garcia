@@ -3,7 +3,7 @@ const timelineData = [
 
 {
 
-fecha:"26 de Julio de 2026",
+fecha:"01 de Enero de 2026",
 
 titulo:"Nacimiento de GRUPO GARCIA CORONA",
 
@@ -16,7 +16,7 @@ descripcion:
 
 {
 
-fecha:"26 de Julio de 2026",
+fecha:"01 de Febrero de 2026",
 
 titulo:"Nacimiento de Corporativo Nexel Digital",
 
