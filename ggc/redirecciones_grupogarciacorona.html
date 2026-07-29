@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRUPO GARCÍA CORONA</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+overflow:hidden;
+background:linear-gradient(135deg,#003366,#0057B8,#007BFF);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+}
+
+/* Fondo animado */
+
+body::before{
+content:"";
+position:absolute;
+width:200%;
+height:200%;
+background:
+radial-gradient(circle,rgba(255,255,255,.08) 2px,transparent 2px);
+background-size:60px 60px;
+animation:mover 30s linear infinite;
+opacity:.5;
+}
+
+@keyframes mover{
+0%{transform:translate(0,0);}
+100%{transform:translate(-120px,-120px);}
+}
+
+/* Contenedor */
+
+.loader{
+position:relative;
+z-index:2;
+text-align:center;
+width:420px;
+}
+
+/* Logo */
+
+.logo{
+
+width:130px;
+height:130px;
+margin:auto;
+border-radius:50%;
+border:5px solid rgba(255,255,255,.25);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:48px;
+font-weight:bold;
+animation:girar 5s linear infinite;
+box-shadow:0 0 35px rgba(255,255,255,.3);
+
+}
+
+@keyframes girar{
+
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+
+}
+
+h1{
+
+margin-top:30px;
+font-size:34px;
+letter-spacing:2px;
+
+}
+
+h2{
+
+font-size:18px;
+font-weight:normal;
+opacity:.9;
+margin-top:8px;
+
+}
+
+.texto{
+
+margin-top:30px;
+font-size:18px;
+animation:parpadeo 1s infinite;
+
+}
+
+@keyframes parpadeo{
+
+50%{opacity:.35;}
+
+}
+
+/* Barra */
+
+.barra{
+
+margin-top:30px;
+width:100%;
+height:18px;
+border-radius:30px;
+overflow:hidden;
+background:rgba(255,255,255,.2);
+
+}
+
+.progreso{
+
+height:100%;
+width:0%;
+background:white;
+border-radius:30px;
+animation:progreso 7s linear forwards;
+
+}
+
+@keyframes progreso{
+
+0%{width:0%;}
+100%{width:100%;}
+
+}
+
+#porcentaje{
+
+margin-top:18px;
+font-size:22px;
+font-weight:bold;
+
+}
+
+.footer{
+
+margin-top:45px;
+font-size:14px;
+opacity:.8;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="loader">
+
+<div class="logo">
+G
+</div>
+
+<h1>GRUPO GARCÍA CORONA</h1>
+
+<h2>Sistema Corporativo</h2>
+
+<div class="texto">
+Inicializando plataforma empresarial...
+</div>
+
+<div class="barra">
+<div class="progreso"></div>
+</div>
+
+<div id="porcentaje">
+0%
+</div>
+
+<div class="footer">
+© 2026 GRUPO GARCÍA CORONA<br>
+Todos los derechos reservados.
+</div>
+
+</div>
+
+<script>
+
+let porcentaje=0;
+
+const contador=setInterval(()=>{
+
+porcentaje++;
+
+document.getElementById("porcentaje").innerHTML=porcentaje+"%";
+
+if(porcentaje>=100){
+
+clearInterval(contador);
+
+setTimeout(()=>{
+
+// CAMBIA AQUÍ LA PÁGINA A LA QUE QUIERES ENTRAR
+window.location.href="https://companygarciacorona.com.mx/ggc/app´s_moviles";
+
+},500);
+
+}
+
+},70);
+
+</script>
+
+</body>
+</html>
