@@ -1,0 +1,2964 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Portal Escolar | OFTV No. 0216</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    margin:0;
+
+    font-family:"Segoe UI",Arial,sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #123b72,
+            #1d5da8,
+            #2476c7
+        );
+
+    color:white;
+
+    min-height:100vh;
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:900;
+
+    height:65px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:rgba(0,0,0,.25);
+
+    backdrop-filter:blur(12px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.15);
+
+    font-size:21px;
+
+    font-weight:bold;
+
+}
+
+.menuBtn{
+
+    position:absolute;
+
+    left:18px;
+
+    width:40px;
+
+    height:40px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:24px;
+
+    transition:.2s;
+
+}
+
+.menuBtn:hover{
+
+    background:
+        rgba(255,255,255,.15);
+
+}
+
+
+/* =====================================================
+   MENÚ
+===================================================== */
+
+.menu{
+
+    position:fixed;
+
+    top:0;
+
+    left:-290px;
+
+    width:280px;
+
+    height:100vh;
+
+    z-index:1000;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(8,20,40,.98),
+            rgba(10,34,68,.98)
+        );
+
+    box-shadow:
+        5px 0 25px rgba(0,0,0,.35);
+
+    transition:.3s ease;
+
+    padding-top:70px;
+
+}
+
+.menu.active{
+
+    left:0;
+
+}
+
+.menuTitle{
+
+    padding:15px 20px;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    color:#9fd5ff;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.1);
+
+}
+
+.menuItem{
+
+    padding:17px 20px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.menuItem:hover{
+
+    background:
+        rgba(255,255,255,.10);
+
+    padding-left:27px;
+
+}
+
+.menuClose{
+
+    position:absolute;
+
+    top:15px;
+
+    right:15px;
+
+    cursor:pointer;
+
+    font-size:22px;
+
+    opacity:.8;
+
+}
+
+.menuClose:hover{
+
+    opacity:1;
+
+}
+
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.45);
+
+    z-index:950;
+
+    display:none;
+
+}
+
+.overlay.active{
+
+    display:block;
+
+}
+
+
+/* =====================================================
+   CONTENEDOR
+===================================================== */
+
+.main{
+
+    width:100%;
+
+    max-width:1100px;
+
+    margin:auto;
+
+    padding:25px 15px 60px;
+
+}
+
+
+/* =====================================================
+   TARJETAS
+===================================================== */
+
+.card{
+
+    background:
+        rgba(255,255,255,.12);
+
+    backdrop-filter:blur(12px);
+
+    padding:25px;
+
+    margin:20px auto;
+
+    border-radius:18px;
+
+    width:100%;
+
+    max-width:500px;
+
+    text-align:center;
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.15);
+
+}
+
+
+/* =====================================================
+   SELECCIÓN DE PORTAL
+===================================================== */
+
+.portalSelector{
+
+    max-width:700px;
+
+    margin:50px auto;
+
+    text-align:center;
+
+}
+
+.portalSelector h1{
+
+    margin-bottom:10px;
+
+}
+
+.portalSelector p{
+
+    opacity:.8;
+
+}
+
+.portalButtons{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:20px;
+
+    margin-top:30px;
+
+}
+
+.portalButton{
+
+    padding:30px 20px;
+
+    border-radius:18px;
+
+    background:
+        rgba(255,255,255,.12);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.portalButton:hover{
+
+    transform:
+        translateY(-5px);
+
+    background:
+        rgba(255,255,255,.20);
+
+}
+
+.portalIcon{
+
+    font-size:55px;
+
+    margin-bottom:10px;
+
+}
+
+.portalButton h2{
+
+    margin:5px 0;
+
+}
+
+.portalButton p{
+
+    font-size:14px;
+
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+.loginLogo{
+
+    width:90px;
+
+    height:90px;
+
+    object-fit:contain;
+
+    margin-bottom:10px;
+
+}
+
+.loginTitle{
+
+    margin:5px 0;
+
+    font-size:25px;
+
+}
+
+.loginSubtitle{
+
+    margin-top:0;
+
+    opacity:.8;
+
+    font-size:14px;
+
+}
+
+input{
+
+    width:100%;
+
+    padding:13px 15px;
+
+    margin:8px 0;
+
+    border-radius:10px;
+
+    border:
+        1px solid rgba(255,255,255,.2);
+
+    outline:none;
+
+    background:
+        rgba(255,255,255,.95);
+
+    color:#222;
+
+    font-size:15px;
+
+}
+
+input:focus{
+
+    border-color:#5eb7ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(94,183,255,.20);
+
+}
+
+
+/* =====================================================
+   BOTONES
+===================================================== */
+
+button{
+
+    width:100%;
+
+    padding:13px;
+
+    margin-top:10px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#1687dc;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+button:hover{
+
+    background:#0d72bd;
+
+    transform:
+        translateY(-1px);
+
+}
+
+.btnSecondary{
+
+    background:
+        rgba(255,255,255,.15);
+
+}
+
+.btnSecondary:hover{
+
+    background:
+        rgba(255,255,255,.22);
+
+}
+
+
+/* =====================================================
+   INFORMACIÓN DEL ALUMNO
+===================================================== */
+
+.studentCard{
+
+    max-width:850px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    text-align:left;
+
+}
+
+.studentInfo h2{
+
+    margin:
+        0 0 5px;
+
+}
+
+.studentInfo p{
+
+    margin:4px 0;
+
+    opacity:.85;
+
+}
+
+.studentIcon{
+
+    font-size:50px;
+
+}
+
+
+/* =====================================================
+   BOLETA
+===================================================== */
+
+.boleta{
+
+    width:100%;
+
+    max-width:950px;
+
+    margin:20px auto;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    background:
+        rgba(0,0,0,.20);
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    overflow-x:auto;
+
+}
+
+.boleta h3{
+
+    margin-top:0;
+
+    font-size:21px;
+
+}
+
+
+/* =====================================================
+   TABLAS
+===================================================== */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:15px;
+
+    min-width:600px;
+
+}
+
+th,
+td{
+
+    padding:12px 10px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.18);
+
+    text-align:center;
+
+}
+
+th{
+
+    background:
+        rgba(0,0,0,.25);
+
+    font-weight:bold;
+
+}
+
+
+/* =====================================================
+   COLORES
+===================================================== */
+
+.row-bajo{
+
+    background:#b71c1c !important;
+
+}
+
+.row-medio{
+
+    background:#f1c40f !important;
+
+    color:#111 !important;
+
+}
+
+.row-alto{
+
+    background:#1e8449 !important;
+
+}
+
+
+/* =====================================================
+   REPORTES
+===================================================== */
+
+.reporte{
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    border-left:
+        4px solid #55b8ff;
+
+}
+
+.reporte p{
+
+    margin:7px 0;
+
+}
+
+
+/* =====================================================
+   MENSAJES
+===================================================== */
+
+.mensaje{
+
+    padding:20px;
+
+    text-align:center;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    margin-top:15px;
+
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.loading{
+
+    text-align:center;
+
+    padding:35px;
+
+    font-size:18px;
+
+    opacity:.8;
+
+}
+
+
+/* =====================================================
+   PDF
+===================================================== */
+
+#boletaPDF{
+
+    position:absolute;
+
+    left:-99999px;
+
+    top:0;
+
+    width:800px;
+
+    background:white;
+
+    color:black;
+
+    padding:30px;
+
+    font-family:Arial,sans-serif;
+
+}
+
+#boletaPDF table{
+
+    width:100%;
+
+    min-width:auto;
+
+    border-collapse:collapse;
+
+}
+
+#boletaPDF th,
+#boletaPDF td{
+
+    color:black;
+
+    border:
+        1px solid #333;
+
+    padding:7px;
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.footer{
+
+    text-align:center;
+
+    margin-top:40px;
+
+    opacity:.65;
+
+    font-size:13px;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:700px){
+
+    header{
+
+        font-size:18px;
+
+    }
+
+    .main{
+
+        padding:
+            15px 10px 40px;
+
+    }
+
+    .card{
+
+        padding:20px;
+
+    }
+
+    .studentCard{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .studentIcon{
+
+        font-size:40px;
+
+    }
+
+    .boleta{
+
+        padding:14px;
+
+    }
+
+    th,
+    td{
+
+        padding:
+            9px 7px;
+
+        font-size:13px;
+
+    }
+
+    .portalButtons{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+<span
+    id="menuBtn"
+    class="menuBtn"
+    onclick="toggleMenu()"
+    style="display:none;"
+>
+    ☰
+</span>
+
+🎓 <span id="tituloPortal">
+    Portal Escolar
+</span>
+
+</header>
+
+<!-- =====================================================
+     OVERLAY
+===================================================== -->
+
+<div
+    id="overlay"
+    class="overlay"
+    onclick="cerrarMenu()">
+</div>
+
+<!-- =====================================================
+     MENÚ
+===================================================== -->
+
+<div
+    id="menu"
+    class="menu">
+
+
+<span
+    class="menuClose"
+    onclick="cerrarMenu()">
+    ✕
+</span>
+
+
+<div
+    class="menuTitle"
+    id="menuTitulo">
+
+    📚 MENÚ
+
+</div>
+
+
+<div
+    class="menuItem"
+    onclick="mostrarSeccion('calificaciones')">
+
+    📊 Calificaciones
+
+</div>
+
+
+<div
+    class="menuItem"
+    onclick="mostrarSeccion('asistencias')">
+
+    📅 Asistencias
+
+</div>
+
+
+<div
+    class="menuItem"
+    onclick="mostrarSeccion('reportes')">
+
+    📋 Reportes
+
+</div>
+
+
+<!-- =================================================
+     ENCUESTAS
+================================================== -->
+
+<div
+    class="menuItem"
+    onclick="abrirEncuestas()">
+
+    📝 Encuestas
+
+</div>
+
+
+<!-- =================================================
+     BOLETA
+================================================== -->
+
+<div
+    class="menuItem"
+    id="menuBoleta"
+    onclick="descargarBoleta()">
+
+    📄 Descargar Boleta
+
+</div>
+
+
+<div
+    class="menuItem"
+    onclick="cerrarSesion()">
+
+    🚪 Cerrar sesión
+
+</div>
+
+
+</div>
+
+<!-- =====================================================
+     CONTENIDO
+===================================================== -->
+
+<div class="main">
+
+
+<!-- =================================================
+     SELECTOR
+================================================== -->
+
+<div
+    id="selectorPortal"
+    class="portalSelector">
+
+    <div class="card">
+
+        <img
+            src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
+            class="loginLogo"
+            onerror="this.style.display='none';"
+        >
+
+        <h1>
+            Portal Escolar
+        </h1>
+
+        <p>
+            OFTV No. 0216 "FRANCISCO VILLA"
+        </p>
+
+        <p>
+            Selecciona el tipo de acceso
+        </p>
+
+    </div>
+
+
+    <div class="portalButtons">
+
+
+        <div
+            class="portalButton"
+            onclick="mostrarLogin('alumno')">
+
+            <div class="portalIcon">
+                🎓
+            </div>
+
+            <h2>
+                Alumno
+            </h2>
+
+            <p>
+                Accede con tu matrícula
+                y contraseña.
+            </p>
+
+        </div>
+
+
+        <div
+            class="portalButton"
+            onclick="mostrarLogin('tutor')">
+
+            <div class="portalIcon">
+                👨‍👩‍👧
+            </div>
+
+            <h2>
+                Tutor
+            </h2>
+
+            <p>
+                Accede con tu correo
+                y contraseña.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =================================================
+     LOGIN ALUMNO
+================================================== -->
+
+<div
+    id="loginAlumno"
+    class="card"
+    style="display:none;">
+
+    <img
+        src="logo.png"
+        class="loginLogo"
+        onerror="this.style.display='none';"
+    >
+
+    <h2 class="loginTitle">
+        Portal Alumno
+    </h2>
+
+    <p class="loginSubtitle">
+        OFTV No. 0216 "FRANCISCO VILLA"
+    </p>
+
+    <input
+        id="matricula"
+        type="text"
+        placeholder="Matrícula"
+        autocomplete="username"
+    >
+
+    <input
+        id="password"
+        type="password"
+        placeholder="Contraseña"
+        autocomplete="current-password"
+    >
+
+    <button onclick="loginAlumno()">
+        🔐 Ingresar
+    </button>
+
+    <button
+        class="btnSecondary"
+        onclick="volverSelector()">
+
+        ← Regresar
+
+    </button>
+
+</div>
+
+
+<!-- =================================================
+     LOGIN TUTOR
+================================================== -->
+
+<div
+    id="loginTutor"
+    class="card"
+    style="display:none;">
+
+    <img
+        src="logo.png"
+        class="loginLogo"
+        onerror="this.style.display='none';"
+    >
+
+    <h2 class="loginTitle">
+        Portal Tutor
+    </h2>
+
+    <p class="loginSubtitle">
+        OFTV No. 0216 "FRANCISCO VILLA"
+    </p>
+
+    <input
+        id="correo_tutor"
+        type="email"
+        placeholder="Correo del tutor"
+        autocomplete="username"
+    >
+
+    <input
+        id="password_tutor"
+        type="password"
+        placeholder="Contraseña"
+        autocomplete="current-password"
+    >
+
+    <button onclick="loginTutor()">
+        🔐 Ingresar
+    </button>
+
+    <button
+        class="btnSecondary"
+        onclick="volverSelector()">
+
+        ← Regresar
+
+    </button>
+
+</div>
+
+
+<!-- =================================================
+     PANEL
+================================================== -->
+
+<div
+    id="panel"
+    style="display:none;">
+
+
+    <div class="card studentCard">
+
+        <div class="studentInfo">
+
+            <h2 id="infoAlumno">
+                Alumno
+            </h2>
+
+            <p>
+                🏫 OFTV No. 0216 "FRANCISCO VILLA"
+            </p>
+
+            <p>
+                CCT: 15ETV0714T
+            </p>
+
+        </div>
+
+        <div
+            id="studentIcon"
+            class="studentIcon">
+
+            🎓
+
+        </div>
+
+    </div>
+
+
+    <div id="contenedor">
+
+        <div class="loading">
+
+            Cargando información...
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        Sistema de Apoyo y Gestión Escolar
+
+        <br>
+
+        OFTV No. 0216 "FRANCISCO VILLA"
+
+    </div>
+
+</div>
+
+
+</div>
+
+<!-- =====================================================
+     PDF
+===================================================== -->
+
+<div id="boletaPDF">
+
+
+<div style="text-align:center;">
+
+    <img
+        src="logo.png"
+        style="
+            width:80px;
+            height:80px;
+            object-fit:contain;
+        "
+    >
+
+    <h2>
+        OFTV No. 0216 "FRANCISCO VILLA"
+    </h2>
+
+    <p>
+        CCT: 15ETV0714T
+    </p>
+
+    <p>
+        Calle Michoacán Norte Barrio Alto,
+        Emiliano Zapata
+    </p>
+
+    <p>
+        Hueypoxtla, Estado de México
+    </p>
+
+    <hr>
+
+</div>
+
+
+<h3 id="pdfAlumno"></h3>
+
+<div id="pdfContenido"></div>
+
+
+</div>
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const supabaseClient = supabase.createClient(
+
+    "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+
+);
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let usuarioActual = null;
+
+let tipoUsuario = null;
+
+
+/* =====================================================
+   ESCAPAR HTML
+===================================================== */
+
+function escaparHTML(texto){
+
+    if(
+        texto === null ||
+        texto === undefined
+    ){
+
+        return "";
+
+    }
+
+    return String(texto)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   SELECTOR DE PORTAL
+===================================================== */
+
+function mostrarLogin(tipo){
+
+    document
+        .getElementById("selectorPortal")
+        .style.display="none";
+
+    document
+        .getElementById("loginAlumno")
+        .style.display="none";
+
+    document
+        .getElementById("loginTutor")
+        .style.display="none";
+
+
+    if(tipo==="alumno"){
+
+        document
+            .getElementById("loginAlumno")
+            .style.display="block";
+
+    }
+
+
+    if(tipo==="tutor"){
+
+        document
+            .getElementById("loginTutor")
+            .style.display="block";
+
+    }
+
+}
+
+
+function volverSelector(){
+
+    document
+        .getElementById("loginAlumno")
+        .style.display="none";
+
+    document
+        .getElementById("loginTutor")
+        .style.display="none";
+
+    document
+        .getElementById("selectorPortal")
+        .style.display="block";
+
+}
+
+
+/* =====================================================
+   MENÚ
+===================================================== */
+
+function toggleMenu(){
+
+    document
+        .getElementById("menu")
+        .classList.toggle("active");
+
+    document
+        .getElementById("overlay")
+        .classList.toggle("active");
+
+}
+
+
+function cerrarMenu(){
+
+    document
+        .getElementById("menu")
+        .classList.remove("active");
+
+    document
+        .getElementById("overlay")
+        .classList.remove("active");
+
+}
+
+
+/* =====================================================
+   ENCUESTAS
+===================================================== */
+
+function abrirEncuestas(){
+
+    cerrarMenu();
+
+    window.location.href =
+        "https://companygarciacorona.com.mx/francisco_villa/form";
+
+}
+
+
+/* =====================================================
+   SECCIONES
+===================================================== */
+
+function mostrarSeccion(tipo){
+
+    cerrarMenu();
+
+    if(!usuarioActual){
+
+        return;
+
+    }
+
+
+    if(tipo==="calificaciones"){
+
+        cargarCalificaciones();
+
+    }
+
+
+    if(tipo==="asistencias"){
+
+        cargarAsistencias();
+
+    }
+
+
+    if(tipo==="reportes"){
+
+        cargarReportes();
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGIN ALUMNO
+===================================================== */
+
+async function loginAlumno(){
+
+    const mat =
+        document
+        .getElementById("matricula")
+        .value
+        .trim();
+
+
+    const pass =
+        document
+        .getElementById("password")
+        .value
+        .trim();
+
+
+    if(!mat || !pass){
+
+        alert(
+            "Ingresa tu matrícula y contraseña."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const {data,error}=
+
+            await supabaseClient
+
+                .from("alumnos")
+
+                .select("*")
+
+                .eq(
+                    "matricula",
+                    mat
+                )
+
+                .eq(
+                    "password_alumno",
+                    pass
+                );
+
+
+        if(error){
+
+            console.error(error);
+
+            alert(
+                "Ocurrió un error al iniciar sesión."
+            );
+
+            return;
+
+        }
+
+
+        if(!data || data.length===0){
+
+            alert(
+                "Matrícula o contraseña incorrecta."
+            );
+
+            return;
+
+        }
+
+
+        usuarioActual=data[0];
+
+        tipoUsuario="alumno";
+
+
+        iniciarPanel();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "No fue posible conectarse con el sistema."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGIN TUTOR
+===================================================== */
+
+async function loginTutor(){
+
+    const email =
+        document
+        .getElementById("correo_tutor")
+        .value
+        .trim();
+
+
+    const pass =
+        document
+        .getElementById("password_tutor")
+        .value
+        .trim();
+
+
+    if(!email || !pass){
+
+        alert(
+            "Completa los campos."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const {data,error}=
+
+            await supabaseClient
+
+                .from("alumnos")
+
+                .select("*")
+
+                .ilike(
+                    "correo_tutor",
+                    email
+                )
+
+                .eq(
+                    "password_tutor",
+                    pass
+                );
+
+
+        if(error){
+
+            console.error(error);
+
+            alert(
+                "Ocurrió un error al iniciar sesión."
+            );
+
+            return;
+
+        }
+
+
+        if(!data || data.length===0){
+
+            alert(
+                "Correo o contraseña incorrectos."
+            );
+
+            return;
+
+        }
+
+
+        usuarioActual=data[0];
+
+        tipoUsuario="tutor";
+
+
+        iniciarPanel();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "No fue posible conectarse con el sistema."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   INICIAR PANEL
+===================================================== */
+
+function iniciarPanel(){
+
+    document
+        .getElementById("selectorPortal")
+        .style.display="none";
+
+    document
+        .getElementById("loginAlumno")
+        .style.display="none";
+
+    document
+        .getElementById("loginTutor")
+        .style.display="none";
+
+    document
+        .getElementById("panel")
+        .style.display="block";
+
+    document
+        .getElementById("menuBtn")
+        .style.display="flex";
+
+
+    document
+        .getElementById("menuBoleta")
+        .style.display="block";
+
+
+    if(tipoUsuario==="alumno"){
+
+        document
+            .getElementById("tituloPortal")
+            .innerText="Portal Alumno";
+
+        document
+            .getElementById("menuTitulo")
+            .innerText="📚 MENÚ DEL ALUMNO";
+
+        document
+            .getElementById("studentIcon")
+            .innerText="🎓";
+
+
+        document
+            .getElementById("infoAlumno")
+            .innerText=
+
+                usuarioActual.nombre_completo
+
+                +" | Matrícula: "
+
+                +usuarioActual.matricula;
+
+    }
+
+
+    if(tipoUsuario==="tutor"){
+
+        document
+            .getElementById("tituloPortal")
+            .innerText=
+
+                "Bienvenid@ tutor(a) "
+
+                +(usuarioActual.tutor_nombre || "");
+
+
+        document
+            .getElementById("menuTitulo")
+            .innerText="👨‍👩‍👧 MENÚ DEL TUTOR";
+
+        document
+            .getElementById("studentIcon")
+            .innerText="👨‍👩‍👧";
+
+
+        document
+            .getElementById("infoAlumno")
+            .innerText=
+
+                usuarioActual.nombre_completo
+
+                +" | Matrícula: "
+
+                +usuarioActual.matricula;
+
+    }
+
+
+    cargarCalificaciones();
+
+}
+
+
+/* =====================================================
+   CALIFICACIONES
+   ALUMNO Y TUTOR
+===================================================== */
+
+async function cargarCalificaciones(){
+
+    if(!usuarioActual){
+
+        return;
+
+    }
+
+
+    const cont =
+        document
+        .getElementById("contenedor");
+
+
+    cont.innerHTML=`
+
+        <div class="boleta">
+
+            <div class="loading">
+
+                📊 Cargando calificaciones...
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    try{
+
+        /*
+         * AHORA AMBOS PORTALES UTILIZAN
+         * LA TABLA "evaluaciones"
+         */
+
+        const {data,error}=
+
+            await supabaseClient
+
+                .from("evaluaciones")
+
+                .select("*")
+
+                .eq(
+                    "alumno_id",
+                    usuarioActual.id
+                );
+
+
+        if(error){
+
+            console.error(error);
+
+            cont.innerHTML=`
+
+                <div class="mensaje">
+
+                    ❌ No fue posible cargar
+                    las calificaciones.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        if(!data || data.length===0){
+
+            cont.innerHTML=`
+
+                <div class="boleta">
+
+                    <h3>
+                        📊 Calificaciones
+                    </h3>
+
+                    <div class="mensaje">
+
+                        No hay calificaciones
+                        registradas.
+
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        let html=`
+
+            <div class="boleta">
+
+                <h3>
+                    📊 Calificaciones
+                </h3>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Materia
+                            </th>
+
+                            <th>
+                                E1
+                            </th>
+
+                            <th>
+                                E2
+                            </th>
+
+                            <th>
+                                E3
+                            </th>
+
+                            <th>
+                                Promedio
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+        `;
+
+
+        data.forEach(e=>{
+
+            const cls=
+                getColorClass(
+                    e.promedio_final
+                );
+
+
+            html+=`
+
+                <tr class="${cls}">
+
+                    <td>
+                        ${escaparHTML(e.materia)}
+                    </td>
+
+                    <td>
+                        ${escaparHTML(e.evaluacion1)}
+                    </td>
+
+                    <td>
+                        ${escaparHTML(e.evaluacion2)}
+                    </td>
+
+                    <td>
+                        ${escaparHTML(e.evaluacion3)}
+                    </td>
+
+                    <td>
+
+                        <b>
+                            ${escaparHTML(e.promedio_final)}
+                        </b>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        html+=`
+
+                    </tbody>
+
+                </table>
+
+
+                <button
+                    onclick="descargarBoleta()">
+
+                    📄 Descargar Boleta PDF
+
+                </button>
+
+
+            </div>
+
+        `;
+
+
+        cont.innerHTML=html;
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        cont.innerHTML=`
+
+            <div class="mensaje">
+
+                ❌ Error inesperado.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   COLOR
+===================================================== */
+
+function getColorClass(prom){
+
+    const numero=Number(prom);
+
+
+    if(isNaN(numero)){
+
+        return "row-alto";
+
+    }
+
+
+    if(numero<=4){
+
+        return "row-bajo";
+
+    }
+
+
+    if(numero===5){
+
+        return "row-medio";
+
+    }
+
+
+    return "row-alto";
+
+}
+
+
+/* =====================================================
+   HORA
+===================================================== */
+
+function hora(fecha){
+
+    if(!fecha){
+
+        return "-";
+
+    }
+
+
+    try{
+
+        return new Date(
+
+            new Date(fecha).getTime()
+
+            -6*3600000
+
+        )
+
+        .toLocaleTimeString(
+
+            "es-MX",
+
+            {
+
+                hour:"2-digit",
+
+                minute:"2-digit",
+
+                hour12:true
+
+            }
+
+        );
+
+    }
+
+    catch{
+
+        return "-";
+
+    }
+
+}
+
+
+/* =====================================================
+   ASISTENCIAS
+===================================================== */
+
+async function cargarAsistencias(){
+
+    if(!usuarioActual){
+
+        return;
+
+    }
+
+
+    const cont =
+        document
+        .getElementById("contenedor");
+
+
+    cont.innerHTML=`
+
+        <div class="boleta">
+
+            <div class="loading">
+
+                📅 Cargando asistencias...
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    try{
+
+        const {data,error}=
+
+            await supabaseClient
+
+                .from("asistencias")
+
+                .select("*")
+
+                .eq(
+                    "alumno_id",
+                    usuarioActual.id
+                )
+
+                .order(
+                    "fecha",
+                    {
+                        ascending:false
+                    }
+                );
+
+
+        if(error){
+
+            console.error(error);
+
+            cont.innerHTML=`
+
+                <div class="mensaje">
+
+                    ❌ No fue posible cargar
+                    las asistencias.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        if(!data || data.length===0){
+
+            cont.innerHTML=`
+
+                <div class="boleta">
+
+                    <h3>
+                        📅 Asistencias
+                    </h3>
+
+                    <div class="mensaje">
+
+                        No hay asistencias
+                        registradas.
+
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        let html=`
+
+            <div class="boleta">
+
+                <h3>
+                    📅 Asistencias
+                </h3>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Fecha
+                            </th>
+
+                            <th>
+                                Entrada
+                            </th>
+
+                            <th>
+                                Salida
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+        `;
+
+
+        data.forEach(a=>{
+
+            html+=`
+
+                <tr>
+
+                    <td>
+                        ${escaparHTML(a.fecha)}
+                    </td>
+
+                    <td>
+                        ${
+                            a.hora_entrada
+                            ? hora(a.hora_entrada)
+                            : "-"
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            a.hora_salida
+                            ? hora(a.hora_salida)
+                            : "-"
+                        }
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        html+=`
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+
+        cont.innerHTML=html;
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        cont.innerHTML=`
+
+            <div class="mensaje">
+
+                ❌ Error inesperado.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   REPORTES
+===================================================== */
+
+async function cargarReportes(){
+
+    if(!usuarioActual){
+
+        return;
+
+    }
+
+
+    const cont =
+        document
+        .getElementById("contenedor");
+
+
+    cont.innerHTML=`
+
+        <div class="boleta">
+
+            <div class="loading">
+
+                📋 Cargando reportes...
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    try{
+
+        const {data,error}=
+
+            await supabaseClient
+
+                .from("reportes")
+
+                .select("*")
+
+                .eq(
+                    "alumno_id",
+                    usuarioActual.id
+                )
+
+                .order(
+                    "fecha",
+                    {
+                        ascending:false
+                    }
+                );
+
+
+        if(error){
+
+            console.error(error);
+
+            cont.innerHTML=`
+
+                <div class="mensaje">
+
+                    ❌ No fue posible cargar
+                    los reportes.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        if(!data || data.length===0){
+
+            cont.innerHTML=`
+
+                <div class="boleta">
+
+                    <h3>
+                        📋 Reportes
+                    </h3>
+
+                    <div class="mensaje">
+
+                        No hay reportes
+                        registrados.
+
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        let html=`
+
+            <div class="boleta">
+
+                <h3>
+                    📋 Reportes
+                </h3>
+
+        `;
+
+
+        data.forEach(r=>{
+
+            let fecha="-";
+
+
+            if(r.fecha){
+
+                try{
+
+                    fecha=
+
+                        new Date(
+
+                            new Date(r.fecha)
+                            .getTime()
+
+                            -6*3600000
+
+                        )
+
+                        .toLocaleString(
+
+                            "es-MX",
+
+                            {
+
+                                dateStyle:"medium",
+
+                                timeStyle:"short",
+
+                                hour12:true
+
+                            }
+
+                        );
+
+                }
+
+                catch{
+
+                    fecha=r.fecha;
+
+                }
+
+            }
+
+
+            html+=`
+
+                <div class="reporte">
+
+                    <p>
+
+                        <b>
+                            📅 Fecha:
+                        </b>
+
+                        ${escaparHTML(fecha)}
+
+                    </p>
+
+                    <p>
+
+                        <b>
+                            📝 Motivo:
+                        </b>
+
+                    </p>
+
+                    <p>
+                        ${escaparHTML(r.motivo)}
+                    </p>
+
+                    <p>
+
+                        <b>
+                            ✅ Solución:
+                        </b>
+
+                    </p>
+
+                    <p>
+                        ${escaparHTML(r.solucion)}
+                    </p>
+
+                </div>
+
+            `;
+
+        });
+
+
+        html+=`
+
+            </div>
+
+        `;
+
+
+        cont.innerHTML=html;
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        cont.innerHTML=`
+
+            <div class="mensaje">
+
+                ❌ Error inesperado.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   BOLETA PDF
+   ALUMNO Y TUTOR
+===================================================== */
+
+async function descargarBoleta(){
+
+    if(!usuarioActual){
+
+        alert(
+            "Primero debes iniciar sesión."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const {data,error}=
+
+            await supabaseClient
+
+                .from("evaluaciones")
+
+                .select("*")
+
+                .eq(
+                    "alumno_id",
+                    usuarioActual.id
+                );
+
+
+        if(error){
+
+            console.error(error);
+
+            alert(
+                "No fue posible obtener las calificaciones."
+            );
+
+            return;
+
+        }
+
+
+        if(!data || data.length===0){
+
+            alert(
+                "No hay calificaciones para generar la boleta."
+            );
+
+            return;
+
+        }
+
+
+        document
+            .getElementById("pdfAlumno")
+            .innerText=
+
+                usuarioActual.nombre_completo
+
+                +" | Matrícula: "
+
+                +usuarioActual.matricula;
+
+
+        let ciclos={};
+
+
+        data.forEach(e=>{
+
+            const ciclo=
+                e.ciclo_escolar
+                ||"Ciclo escolar";
+
+
+            const grado=
+                e.grado
+                ||"";
+
+
+            const grupo=
+                e.grupo
+                ||"";
+
+
+            const key=
+
+                ciclo
+                +" - "
+                +grado
+                +" "
+                +grupo;
+
+
+            if(!ciclos[key]){
+
+                ciclos[key]=[];
+
+            }
+
+
+            ciclos[key].push(e);
+
+        });
+
+
+        let html="";
+
+
+        for(const c in ciclos){
+
+            html+=`
+
+                <h3>
+                    ${escaparHTML(c)}
+                </h3>
+
+                <table>
+
+                    <tr>
+
+                        <th>
+                            Materia
+                        </th>
+
+                        <th>
+                            E1
+                        </th>
+
+                        <th>
+                            E2
+                        </th>
+
+                        <th>
+                            E3
+                        </th>
+
+                        <th>
+                            Promedio
+                        </th>
+
+                    </tr>
+
+            `;
+
+
+            ciclos[c].forEach(e=>{
+
+                html+=`
+
+                    <tr>
+
+                        <td>
+                            ${escaparHTML(e.materia)}
+                        </td>
+
+                        <td>
+                            ${escaparHTML(e.evaluacion1)}
+                        </td>
+
+                        <td>
+                            ${escaparHTML(e.evaluacion2)}
+                        </td>
+
+                        <td>
+                            ${escaparHTML(e.evaluacion3)}
+                        </td>
+
+                        <td>
+                            ${escaparHTML(e.promedio_final)}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+
+            html+=`
+
+                </table>
+
+                <br>
+
+            `;
+
+        }
+
+
+        document
+            .getElementById("pdfContenido")
+            .innerHTML=html;
+
+
+        const elemento=
+            document.getElementById("boletaPDF");
+
+
+        const canvas=
+
+            await html2canvas(
+
+                elemento,
+
+                {
+
+                    scale:2,
+
+                    backgroundColor:"#ffffff"
+
+                }
+
+            );
+
+
+        const img=
+
+            canvas.toDataURL(
+                "image/png"
+            );
+
+
+        const {jsPDF}=window.jspdf;
+
+
+        const pdf=
+
+            new jsPDF(
+                "p",
+                "mm",
+                "a4"
+            );
+
+
+        const pageWidth=210;
+
+        const pageHeight=297;
+
+        const imgWidth=
+            pageWidth-20;
+
+
+        const imgHeight=
+
+            (canvas.height*imgWidth)
+            /canvas.width;
+
+
+        let heightLeft=imgHeight;
+
+        let position=10;
+
+
+        pdf.addImage(
+
+            img,
+            "PNG",
+            10,
+            position,
+            imgWidth,
+            imgHeight
+
+        );
+
+
+        heightLeft-=
+            pageHeight-20;
+
+
+        while(heightLeft>0){
+
+            position=
+
+                heightLeft
+                -imgHeight
+                +10;
+
+
+            pdf.addPage();
+
+
+            pdf.addImage(
+
+                img,
+                "PNG",
+                10,
+                position,
+                imgWidth,
+                imgHeight
+
+            );
+
+
+            heightLeft-=
+                pageHeight-20;
+
+        }
+
+
+        const nombreArchivo=
+
+            "Boleta_"
+            +usuarioActual.matricula
+            +".pdf";
+
+
+        pdf.save(
+            nombreArchivo
+        );
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert(
+            "Ocurrió un error al generar la boleta PDF."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CERRAR SESIÓN
+===================================================== */
+
+function cerrarSesion(){
+
+    cerrarMenu();
+
+
+    if(
+        !confirm(
+            "¿Deseas cerrar tu sesión?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    usuarioActual=null;
+
+    tipoUsuario=null;
+
+
+    document
+        .getElementById("panel")
+        .style.display="none";
+
+
+    document
+        .getElementById("menuBtn")
+        .style.display="none";
+
+
+    document
+        .getElementById("menuBoleta")
+        .style.display="none";
+
+
+    document
+        .getElementById("matricula")
+        .value="";
+
+
+    document
+        .getElementById("password")
+        .value="";
+
+
+    document
+        .getElementById("correo_tutor")
+        .value="";
+
+
+    document
+        .getElementById("password_tutor")
+        .value="";
+
+
+    document
+        .getElementById("contenedor")
+        .innerHTML="";
+
+
+    document
+        .getElementById("tituloPortal")
+        .innerText="Portal Escolar";
+
+
+    document
+        .getElementById("selectorPortal")
+        .style.display="block";
+
+}
+
+
+/* =====================================================
+   ENTER ALUMNO
+===================================================== */
+
+document
+    .getElementById("password")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(event.key==="Enter"){
+
+                loginAlumno();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   ENTER TUTOR
+===================================================== */
+
+document
+    .getElementById("password_tutor")
+    .addEventListener(
+        "keydown",
+        function(event){
+
+            if(event.key==="Enter"){
+
+                loginTutor();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   INICIO
+===================================================== */
+
+console.log(
+    "Portal Escolar iniciado correctamente."
+);
+
+</script>
+
+</body>
+
+</html>
