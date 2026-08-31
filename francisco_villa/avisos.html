@@ -1,159 +1,1245 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portal de Avisos | GRUPO GARCIA CORONA</title>
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Comunicados Oficiales | OFTV No. 0216 Francisco Villa</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Segoe UI",Arial,sans-serif;
+
+/* ============================================================
+   VARIABLES
+   ============================================================ */
+
+:root{
+
+    --verde:#0b5d3b;
+    --verde-oscuro:#073c28;
+    --verde-claro:#eaf5ef;
+
+    --dorado:#c9a227;
+    --dorado-claro:#f7f0d5;
+
+    --blanco:#ffffff;
+    --gris-fondo:#f4f6f5;
+    --gris:#68736e;
+    --negro:#1c2521;
+
+    --sombra:
+        0 15px 45px rgba(7,60,40,.10);
+
 }
+
+
+/* ============================================================
+   GENERAL
+   ============================================================ */
+
+*{
+    box-sizing:border-box;
+}
+
+
+html{
+    scroll-behavior:smooth;
+}
+
 
 body{
-    background:linear-gradient(135deg,#eef3f9,#dfe9f5);
-    display:flex;
-    justify-content:center;
-    align-items:center;
+
+    margin:0;
+
     min-height:100vh;
-    padding:20px;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f6f8f7 0%,
+            #edf3f0 100%
+        );
+
+    color:var(--negro);
+
 }
 
-.card{
-    background:#fff;
-    width:100%;
-    max-width:700px;
+
+/* ============================================================
+   BARRA SUPERIOR
+   ============================================================ */
+
+.barra-superior{
+
+    height:7px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--verde-oscuro),
+            var(--verde),
+            var(--dorado),
+            var(--verde)
+        );
+
+}
+
+
+/* ============================================================
+   CONTENEDOR
+   ============================================================ */
+
+.contenedor{
+
+    width:
+        min(
+            94%,
+            1050px
+        );
+
+    margin:auto;
+
+}
+
+
+/* ============================================================
+   ENCABEZADO
+   ============================================================ */
+
+.encabezado{
+
+    padding:35px 0 25px;
+
+}
+
+
+.identidad{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+
+/* ============================================================
+   LOGO CLICKEABLE
+   ============================================================ */
+
+.logo-enlace{
+
+    width:70px;
+
+    height:70px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-decoration:none;
+
     border-radius:18px;
-    padding:45px;
-    text-align:center;
-    box-shadow:0 15px 40px rgba(0,0,0,.15);
-    border-top:8px solid #0b2e59;
+
+    background:#ffffff;
+
+    padding:5px;
+
+    box-shadow:
+        0 8px 20px
+        rgba(7,60,40,.16);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+
 }
 
-.logo{
-    font-size:65px;
-    margin-bottom:15px;
+
+.logo-enlace:hover{
+
+    transform:
+        translateY(-2px)
+        scale(1.03);
+
+    box-shadow:
+        0 12px 28px
+        rgba(7,60,40,.22);
+
 }
 
-h1{
-    color:#0b2e59;
-    margin-bottom:8px;
-    font-size:30px;
+
+.logo-institucional{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:contain;
+
+    display:block;
+
 }
 
-h2{
-    color:#555;
-    font-size:20px;
-    margin-bottom:25px;
-    font-weight:normal;
+
+/* ============================================================
+   NOMBRE
+   ============================================================ */
+
+.nombre-institucion{
+
+    flex:1;
+
 }
+
+
+.nombre-institucion .dependencia{
+
+    margin:0;
+
+    color:var(--verde);
+
+    font-size:13px;
+
+    font-weight:800;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+
+}
+
+
+.nombre-institucion h1{
+
+    margin:5px 0 3px;
+
+    font-size:
+        clamp(
+            20px,
+            4vw,
+            29px
+        );
+
+    line-height:1.15;
+
+}
+
+
+.nombre-institucion .subtitulo{
+
+    margin:0;
+
+    color:var(--gris);
+
+    font-size:14px;
+
+}
+
+
+/* ============================================================
+   TITULO DE SECCIÓN
+   ============================================================ */
+
+.titulo-seccion{
+
+    margin:
+        20px 0 18px;
+
+}
+
+
+.etiqueta{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:7px 13px;
+
+    border-radius:30px;
+
+    background:var(--dorado-claro);
+
+    color:#725b0d;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    letter-spacing:.8px;
+
+    text-transform:uppercase;
+
+}
+
+
+.titulo-seccion h2{
+
+    margin:
+        14px 0 5px;
+
+    font-size:
+        clamp(
+            28px,
+            5vw,
+            42px
+        );
+
+    line-height:1.1;
+
+}
+
+
+.titulo-seccion p{
+
+    margin:0;
+
+    color:var(--gris);
+
+    font-size:15px;
+
+}
+
+
+/* ============================================================
+   TARJETA
+   ============================================================ */
+
+.comunicado{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:var(--blanco);
+
+    border-radius:24px;
+
+    box-shadow:var(--sombra);
+
+    border:
+        1px solid
+        rgba(11,93,59,.08);
+
+}
+
+
+.comunicado::before{
+
+    content:"";
+
+    display:block;
+
+    height:6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--verde-oscuro),
+            var(--verde),
+            var(--dorado)
+        );
+
+}
+
+
+/* ============================================================
+   CONTENIDO
+   ============================================================ */
+
+.comunicado-contenido{
+
+    padding:
+        clamp(
+            25px,
+            5vw,
+            48px
+        );
+
+}
+
+
+.sello{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    margin-bottom:20px;
+
+    padding:8px 13px;
+
+    border-radius:9px;
+
+    background:var(--verde-claro);
+
+    color:var(--verde);
+
+    font-size:12px;
+
+    font-weight:800;
+
+    letter-spacing:.7px;
+
+    text-transform:uppercase;
+
+}
+
+
+.punto{
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:var(--dorado);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(201,162,39,.15);
+
+}
+
+
+#titulo{
+
+    margin:0;
+
+    color:var(--verde-oscuro);
+
+    font-size:
+        clamp(
+            25px,
+            5vw,
+            38px
+        );
+
+    line-height:1.18;
+
+    letter-spacing:-.4px;
+
+}
+
+
+.separador{
+
+    width:70px;
+
+    height:3px;
+
+    margin:
+        22px 0;
+
+    border-radius:5px;
+
+    background:var(--dorado);
+
+}
+
+
+#contenido{
+
+    color:#37423d;
+
+    font-size:
+        clamp(
+            16px,
+            2vw,
+            18px
+        );
+
+    line-height:1.85;
+
+    word-wrap:break-word;
+
+}
+
+
+/* ============================================================
+   PIE
+   ============================================================ */
+
+.pie-comunicado{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    margin-top:35px;
+
+    padding-top:20px;
+
+    border-top:
+        1px solid
+        #e8ecea;
+
+}
+
+
+.oficial{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    color:var(--verde);
+
+    font-size:13px;
+
+    font-weight:700;
+
+}
+
+
+.icono-oficial{
+
+    width:32px;
+
+    height:32px;
+
+    border-radius:9px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:var(--verde-claro);
+
+}
+
 
 .estado{
-    display:inline-block;
-    background:#17a2b8;
-    color:#fff;
-    padding:10px 22px;
-    border-radius:30px;
-    font-weight:bold;
-    margin-bottom:30px;
-    letter-spacing:.5px;
-}
 
-.mensaje{
-    background:#f8f9fc;
-    border-left:6px solid #0b2e59;
-    border-radius:10px;
-    padding:25px;
-    text-align:left;
-    line-height:1.8;
-    color:#444;
-}
+    color:#929b97;
 
-footer{
-    margin-top:30px;
-    color:#777;
-    font-size:14px;
-}
+    font-size:12px;
 
-hr{
-    margin:30px 0;
-    border:none;
-    height:1px;
-    background:#ddd;
-}
-
-@media(max-width:700px){
-
-.card{
-padding:30px;
-}
-
-h1{
-font-size:25px;
-}
-
-.logo{
-font-size:55px;
-}
+    text-align:right;
 
 }
+
+
+/* ============================================================
+   SIN AVISO
+   ============================================================ */
+
+.sin-aviso{
+
+    text-align:center;
+
+    padding:
+        55px 25px;
+
+}
+
+
+.sin-aviso-icono{
+
+    width:72px;
+
+    height:72px;
+
+    margin:0 auto 18px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:var(--verde-claro);
+
+    color:var(--verde);
+
+    font-size:30px;
+
+}
+
+
+.sin-aviso h2{
+
+    margin:0 0 8px;
+
+    color:var(--verde-oscuro);
+
+    font-size:24px;
+
+}
+
+
+.sin-aviso p{
+
+    margin:0;
+
+    color:var(--gris);
+
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer{
+
+    padding:
+        30px 0 40px;
+
+    text-align:center;
+
+    color:#89938f;
+
+    font-size:12px;
+
+}
+
+
+.footer strong{
+
+    color:var(--verde);
+
+}
+
+
+/* ============================================================
+   CARGANDO
+   ============================================================ */
+
+.cargando{
+
+    text-align:center;
+
+    padding:55px 20px;
+
+    color:var(--gris);
+
+}
+
+
+.spinner{
+
+    width:34px;
+
+    height:34px;
+
+    margin:
+        0 auto 15px;
+
+    border:
+        3px solid
+        #dce6e1;
+
+    border-top-color:
+        var(--verde);
+
+    border-radius:50%;
+
+    animation:
+        girar .8s linear infinite;
+
+}
+
+
+@keyframes girar{
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media(max-width:600px){
+
+    .encabezado{
+        padding-top:25px;
+    }
+
+
+    .logo-enlace{
+
+        width:58px;
+
+        height:58px;
+
+        border-radius:15px;
+
+        padding:4px;
+
+    }
+
+
+    .identidad{
+
+        gap:12px;
+
+    }
+
+
+    .pie-comunicado{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+
+    .estado{
+
+        text-align:left;
+
+    }
+
+}
+
 </style>
 
 </head>
 
+
 <body>
 
-<div class="card">
 
-<div class="logo">📢</div>
+<div class="barra-superior"></div>
 
-<h1>GRUPO GARCIA CORONA</h1>
 
-<h2>Portal Oficial de Comunicados</h2>
+<div class="contenedor">
 
-<div class="estado">
-SIN COMUNICADOS DISPONIBLES
+
+    <header class="encabezado">
+
+        <div class="identidad">
+
+
+            <!-- LOGO CLICKEABLE -->
+
+            <a
+                href="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="logo-enlace"
+                title="Ver logotipo oficial"
+            >
+
+                <img
+                    src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
+                    alt="Logotipo oficial OFTV No. 0216 Francisco Villa"
+                    class="logo-institucional"
+                >
+
+            </a>
+
+
+            <div class="nombre-institucion">
+
+                <p class="dependencia">
+                    Comunicación institucional
+                </p>
+
+                <h1>
+                    OFTV No. 0216
+                    “FRANCISCO VILLA”
+                </h1>
+
+                <p class="subtitulo">
+                    Canal oficial de comunicados
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </header>
+
+
+    <section class="titulo-seccion">
+
+        <span class="etiqueta">
+            ● Información oficial
+        </span>
+
+        <h2>
+            Comunicados oficiales
+        </h2>
+
+        <p>
+            Consulta aquí los avisos y comunicados
+            emitidos por la institución.
+        </p>
+
+    </section>
+
+
+    <main
+        id="aviso"
+        class="comunicado"
+    >
+
+        <div class="comunicado-contenido">
+
+
+            <div
+                id="cargando"
+                class="cargando"
+            >
+
+                <div class="spinner"></div>
+
+                Consultando comunicados...
+
+            </div>
+
+
+            <div
+                id="contenidoAviso"
+                style="display:none;"
+            >
+
+
+                <div class="sello">
+
+                    <span class="punto"></span>
+
+                    Comunicado oficial
+
+                </div>
+
+
+                <h3 id="titulo"></h3>
+
+
+                <div class="separador"></div>
+
+
+                <div id="contenido"></div>
+
+
+                <div class="pie-comunicado">
+
+
+                    <div class="oficial">
+
+                        <div class="icono-oficial">
+                            ✓
+                        </div>
+
+                        <div>
+
+                            OFTV No. 0216
+                            “FRANCISCO VILLA”
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="estado"
+                        id="estado"
+                    >
+                        Actualización automática
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                id="sinAviso"
+                class="sin-aviso"
+                style="display:none;"
+            >
+
+                <div class="sin-aviso-icono">
+                    📢
+                </div>
+
+                <h2>
+                    No hay comunicados publicados
+                </h2>
+
+                <p>
+                    Por el momento no hay información
+                    disponible.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+    <footer class="footer">
+
+        <strong>
+            OFTV No. 0216 “FRANCISCO VILLA”
+        </strong>
+
+        <br><br>
+
+        Este espacio corresponde al canal
+        oficial de comunicados de la institución.
+
+    </footer>
+
+
 </div>
 
-<div class="mensaje">
 
-<p><strong>Estimado(a) usuario:</strong></p>
+<script>
 
-<br>
 
-<p>
-Actualmente no existen comunicados oficiales publicados en este portal.
-</p>
+const SUPABASE_URL =
+    "https://nlpdpvjtdxknhvgqbfls.supabase.co";
 
-<p>
-Este espacio será utilizado para informar oportunamente sobre avisos importantes, actualizaciones de servicios, mantenimientos programados, cambios administrativos y cualquier información relevante emitida por <strong>GRUPO GARCIA CORONA</strong>.
-</p>
 
-<p>
-Le recomendamos consultar este portal periódicamente para mantenerse informado sobre futuras publicaciones.
-</p>
+const SUPABASE_ANON_KEY =
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
 
-<p>
-Agradecemos su atención y confianza.
-</p>
 
-</div>
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
-<hr>
 
-<footer>
+const cargando =
+    document.getElementById(
+        "cargando"
+    );
 
-<strong>GRUPO GARCIA CORONA</strong><br>
-Portal Oficial de Avisos Corporativos<br><br>
 
-© 2026 Todos los derechos reservados.
+const contenidoAviso =
+    document.getElementById(
+        "contenidoAviso"
+    );
 
-</footer>
 
-</div>
+const sinAviso =
+    document.getElementById(
+        "sinAviso"
+    );
+
+
+const tituloElemento =
+    document.getElementById(
+        "titulo"
+    );
+
+
+const contenidoElemento =
+    document.getElementById(
+        "contenido"
+    );
+
+
+const estadoElemento =
+    document.getElementById(
+        "estado"
+    );
+
+
+let ultimaVersion = null;
+
+
+function escaparHTML(texto){
+
+    if(!texto){
+
+        return "";
+    }
+
+
+    return texto
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function convertirTexto(texto){
+
+    return escaparHTML(
+        texto
+    ).replace(
+        /\n/g,
+        "<br>"
+    );
+
+}
+
+
+function estaPublicado(aviso){
+
+    const ahora =
+        new Date();
+
+
+    if(aviso.publicar_desde){
+
+        const inicio =
+            new Date(
+                aviso.publicar_desde
+            );
+
+
+        if(ahora < inicio){
+
+            return false;
+        }
+
+    }
+
+
+    if(aviso.publicar_hasta){
+
+        const fin =
+            new Date(
+                aviso.publicar_hasta
+            );
+
+
+        if(ahora > fin){
+
+            return false;
+        }
+
+    }
+
+
+    if(
+        (!aviso.titulo ||
+        aviso.titulo.trim() === "")
+        &&
+        (!aviso.contenido ||
+        aviso.contenido.trim() === "")
+    ){
+
+        return false;
+    }
+
+
+    return true;
+
+}
+
+
+function mostrarSinAviso(){
+
+    if(
+        ultimaVersion ===
+        "SIN_AVISO"
+    ){
+
+        return;
+    }
+
+
+    ultimaVersion =
+        "SIN_AVISO";
+
+
+    cargando.style.display =
+        "none";
+
+
+    contenidoAviso.style.display =
+        "none";
+
+
+    sinAviso.style.display =
+        "block";
+
+}
+
+
+function mostrarAviso(aviso){
+
+    const version =
+        JSON.stringify({
+
+            titulo:
+                aviso.titulo,
+
+            contenido:
+                aviso.contenido,
+
+            publicar_desde:
+                aviso.publicar_desde,
+
+            publicar_hasta:
+                aviso.publicar_hasta
+
+        });
+
+
+    if(
+        ultimaVersion ===
+        version
+    ){
+
+        return;
+    }
+
+
+    ultimaVersion =
+        version;
+
+
+    cargando.style.display =
+        "none";
+
+
+    sinAviso.style.display =
+        "none";
+
+
+    tituloElemento.innerHTML =
+        convertirTexto(
+            aviso.titulo
+        );
+
+
+    contenidoElemento.innerHTML =
+        convertirTexto(
+            aviso.contenido
+        );
+
+
+    contenidoAviso.style.display =
+        "block";
+
+
+    estadoElemento.textContent =
+        "Actualizado automáticamente";
+
+}
+
+
+async function consultarAviso(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("avisos")
+                .select(`
+                    id,
+                    titulo,
+                    contenido,
+                    publicar_desde,
+                    publicar_hasta,
+                    actualizado_en
+                `)
+                .eq("id",1)
+                .maybeSingle();
+
+
+        if(error){
+
+            console.error(
+                "Error Supabase:",
+                error
+            );
+
+            return;
+        }
+
+
+        if(!data){
+
+            mostrarSinAviso();
+
+            return;
+        }
+
+
+        if(
+            !estaPublicado(data)
+        ){
+
+            mostrarSinAviso();
+
+            return;
+        }
+
+
+        mostrarAviso(data);
+
+
+    }catch(error){
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+consultarAviso();
+
+
+setInterval(
+    consultarAviso,
+    1000
+);
+
+</script>
+
 
 </body>
+
 </html>
