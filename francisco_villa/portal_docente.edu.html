@@ -1,0 +1,2167 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Portal Docente</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:linear-gradient(135deg,#1abc9c,#3498db,#9b59b6);
+    background-attachment:fixed;
+    color:white;
+}
+
+header{
+    background:rgba(0,0,0,.75);
+    padding:16px;
+    text-align:center;
+    font-size:23px;
+    font-weight:bold;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.card{
+    background:rgba(0,0,0,.75);
+    padding:25px;
+    border-radius:15px;
+    max-width:420px;
+    margin:70px auto;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+.card h2,
+.card h3{
+    text-align:center;
+}
+
+input,
+select,
+button{
+    width:100%;
+    padding:12px;
+    margin:7px 0;
+    border-radius:7px;
+    border:none;
+    font-size:15px;
+}
+
+input,
+select{
+    background:white;
+    color:#222;
+}
+
+button{
+    cursor:pointer;
+    background:#2ecc71;
+    color:white;
+    font-weight:bold;
+    transition:.2s;
+}
+
+button:hover{
+    transform:scale(1.02);
+    opacity:.9;
+}
+
+.btn-danger{
+    background:#e74c3c;
+}
+
+.btn-blue{
+    background:#3498db;
+}
+
+.hidden{
+    display:none !important;
+}
+
+/* ================= CONTRASEÑA ================= */
+
+.password-container{
+    position:relative;
+    width:100%;
+}
+
+.password-container input{
+    width:100%;
+    padding-right:90px;
+}
+
+.password-toggle{
+    position:absolute;
+    right:5px;
+    top:5px;
+    width:auto;
+    margin:0;
+    padding:7px 10px;
+    background:#34495e;
+    font-size:13px;
+}
+
+/* ================= RECORDAR ================= */
+
+.recordar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:8px 0 12px;
+    font-size:14px;
+}
+
+.recordar input{
+    width:auto;
+    margin:0;
+}
+
+/* ================= DOCENTE ================= */
+
+.docente-info{
+    background:rgba(0,0,0,.7);
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.2);
+}
+
+.docente-info h2{
+    margin-top:0;
+}
+
+/* ================= MENU ================= */
+
+.menu{
+    background:rgba(0,0,0,.75);
+    padding:10px;
+    border-radius:12px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.menu button{
+    width:auto;
+    flex:1;
+    min-width:150px;
+    margin:0;
+}
+
+/* ================= SECCIONES ================= */
+
+.section{
+    margin-top:20px;
+    background:rgba(0,0,0,.65);
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.2);
+}
+
+.section h2,
+.section h3{
+    margin-top:0;
+}
+
+/* ================= CAPTURA ================= */
+
+.captura-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.captura-grid .campo{
+    display:flex;
+    flex-direction:column;
+}
+
+.campo label{
+    font-weight:bold;
+    margin-bottom:4px;
+}
+
+.promedio{
+    background:rgba(255,255,255,.15);
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+/* ================= TABLAS ================= */
+
+.table-container{
+    width:100%;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+    background:rgba(0,0,0,.75);
+    min-width:500px;
+}
+
+th,
+td{
+    border:1px solid rgba(255,255,255,.25);
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:rgba(255,255,255,.15);
+}
+
+tr:hover{
+    background:rgba(255,255,255,.08);
+}
+
+/* ================= COLORES ================= */
+
+.nota-roja{
+    color:#ff6b6b;
+    font-weight:bold;
+}
+
+.nota-amarilla{
+    color:#f1c40f;
+    font-weight:bold;
+}
+
+.nota-verde{
+    color:#2ecc71;
+    font-weight:bold;
+}
+
+.mensaje{
+    padding:15px;
+    background:rgba(255,255,255,.1);
+    border-radius:10px;
+    margin-top:10px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:700px){
+
+    .captura-grid{
+        grid-template-columns:1fr;
+    }
+
+    .menu{
+        flex-direction:column;
+    }
+
+    .menu button{
+        width:100%;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    🎓 Portal Docente
+</header>
+
+<div class="container">
+
+<!-- ===================================================== -->
+<!-- LOGIN -->
+<!-- ===================================================== -->
+
+<div id="loginBox" class="card">
+
+    <h2>🎓 Portal Docente</h2>
+
+    <h3>Iniciar Sesión</h3>
+
+    <!-- NUMERO DE SERVIDOR -->
+
+    <input
+        id="servidor"
+        type="text"
+        placeholder="Número de servidor"
+        autocomplete="username"
+    >
+
+    <!-- CONTRASEÑA -->
+
+    <div class="password-container">
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Contraseña"
+            autocomplete="current-password"
+        >
+
+        <button
+            type="button"
+            class="password-toggle"
+            onclick="mostrarOcultarPassword()"
+            id="btnPassword"
+        >
+            👁️ Mostrar
+        </button>
+
+    </div>
+
+    <!-- RECORDAR DATOS -->
+
+    <label class="recordar">
+
+        <input
+            id="recordarDatos"
+            type="checkbox"
+        >
+
+        Recordar datos de acceso
+
+    </label>
+
+    <button onclick="login()">
+        🔐 Iniciar Sesión
+    </button>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- PANEL DOCENTE -->
+<!-- ===================================================== -->
+
+<div id="panel" class="hidden">
+
+    <div class="docente-info">
+
+        <h2 id="infoDocente">
+            Docente
+        </h2>
+
+        <p id="grupoInfo">
+            Grado y grupo
+        </p>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- MENU -->
+    <!-- ================================================= -->
+
+    <div class="menu">
+
+        <button onclick="mostrarSeccion('captura')">
+            📝 Captura de Evaluaciones
+        </button>
+
+        <button onclick="mostrarSeccion('completos')">
+            👨‍🎓 Alumnos Completos
+        </button>
+
+        <button onclick="mostrarSeccion('buenos')">
+            🟢 Alumnos Buenos
+        </button>
+
+        <button onclick="mostrarSeccion('regulares')">
+            🟡 Alumnos Regulares
+        </button>
+
+        <button onclick="mostrarSeccion('irregulares')">
+            🔴 Alumnos Irregulares
+        </button>
+
+        <button
+            class="btn-danger"
+            onclick="cerrarSesion()"
+        >
+            🚪 Cerrar Sesión
+        </button>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- CAPTURA -->
+    <!-- ================================================= -->
+
+    <div id="seccionCaptura" class="section">
+
+        <h2>📝 Captura de Evaluaciones</h2>
+
+        <div class="mensaje">
+
+            Selecciona un alumno y una materia.
+            Si ya existen calificaciones, se cargarán
+            automáticamente.
+
+            <br><br>
+
+            Puedes capturar una, dos o tres evaluaciones.
+            El promedio final se calculará automáticamente
+            con las evaluaciones disponibles.
+
+        </div>
+
+        <br>
+
+        <div class="captura-grid">
+
+            <div class="campo">
+
+                <label>Alumno</label>
+
+                <select id="alumnoSelect">
+
+                    <option value="">
+                        Seleccionar alumno
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Materia</label>
+
+                <select id="materiaSelect">
+
+                    <option value="">
+                        Seleccionar materia
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Evaluación 1</label>
+
+                <input
+                    id="eva1"
+                    type="number"
+                    min="0"
+                    max="10"
+                    step="0.1"
+                    placeholder="Evaluación 1"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Evaluación 2</label>
+
+                <input
+                    id="eva2"
+                    type="number"
+                    min="0"
+                    max="10"
+                    step="0.1"
+                    placeholder="Evaluación 2"
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label>Evaluación 3</label>
+
+                <input
+                    id="eva3"
+                    type="number"
+                    min="0"
+                    max="10"
+                    step="0.1"
+                    placeholder="Evaluación 3"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="promedioBox"
+            class="promedio"
+        >
+            Promedio final: —
+        </div>
+
+
+        <button onclick="guardarEvaluacion()">
+            💾 Guardar Evaluación
+        </button>
+
+
+        <button
+            class="btn-blue"
+            onclick="limpiarEvaluacion()"
+        >
+            🧹 Limpiar campos
+        </button>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- COMPLETOS -->
+    <!-- ================================================= -->
+
+    <div
+        id="seccionCompletos"
+        class="section hidden"
+    >
+
+        <h2>👨‍🎓 Alumnos Completos</h2>
+
+        <p>
+            Alumnos con promedio general de
+            <strong>8.0 a 10</strong>.
+        </p>
+
+        <div
+            id="tablaCompletos"
+            class="table-container"
+        ></div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- BUENOS -->
+    <!-- ================================================= -->
+
+    <div
+        id="seccionBuenos"
+        class="section hidden"
+    >
+
+        <h2>🟢 Alumnos Buenos</h2>
+
+        <p>
+            Alumnos con promedio general de
+            <strong>8.0 a 10</strong>.
+        </p>
+
+        <div
+            id="tablaBuenos"
+            class="table-container"
+        ></div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- REGULARES -->
+    <!-- ================================================= -->
+
+    <div
+        id="seccionRegulares"
+        class="section hidden"
+    >
+
+        <h2>🟡 Alumnos Regulares</h2>
+
+        <p>
+            Alumnos con promedio general de
+            <strong>6.0 a 7.9</strong>.
+        </p>
+
+        <div
+            id="tablaRegulares"
+            class="table-container"
+        ></div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- IRREGULARES -->
+    <!-- ================================================= -->
+
+    <div
+        id="seccionIrregulares"
+        class="section hidden"
+    >
+
+        <h2>🔴 Alumnos Irregulares</h2>
+
+        <p>
+            Alumnos con promedio general
+            menor a <strong>6.0</strong>.
+        </p>
+
+        <div
+            id="tablaIrregulares"
+            class="table-container"
+        ></div>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* ========================================================= */
+/* SUPABASE */
+/* ========================================================= */
+
+const supabaseClient = supabase.createClient(
+
+    "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+
+);
+
+
+/* ========================================================= */
+/* VARIABLES */
+/* ========================================================= */
+
+let docenteActual = null;
+
+let alumnosGlobal = [];
+
+let materiasGlobal = [];
+
+let evaluacionesGlobal = [];
+
+
+/* ========================================================= */
+/* RECORDAR DATOS */
+/* ========================================================= */
+
+window.addEventListener("DOMContentLoaded", function(){
+
+    const servidorGuardado =
+        localStorage.getItem(
+            "portal_docente_servidor"
+        );
+
+    const passwordGuardada =
+        localStorage.getItem(
+            "portal_docente_password"
+        );
+
+
+    if(servidorGuardado !== null){
+
+        document.getElementById("servidor").value =
+            servidorGuardado;
+
+        document.getElementById("recordarDatos").checked =
+            true;
+
+    }
+
+
+    if(passwordGuardada !== null){
+
+        document.getElementById("password").value =
+            passwordGuardada;
+
+    }
+
+});
+
+
+/* ========================================================= */
+/* MOSTRAR / OCULTAR CONTRASEÑA */
+/* ========================================================= */
+
+function mostrarOcultarPassword(){
+
+    const password =
+        document.getElementById("password");
+
+    const boton =
+        document.getElementById("btnPassword");
+
+
+    if(password.type === "password"){
+
+        password.type = "text";
+
+        boton.innerHTML = "🙈 Ocultar";
+
+    }else{
+
+        password.type = "password";
+
+        boton.innerHTML = "👁️ Mostrar";
+
+    }
+
+}
+
+
+/* ========================================================= */
+/* LOGIN */
+/* ========================================================= */
+
+async function login(){
+
+    const servidor =
+        document.getElementById("servidor").value.trim();
+
+    const password =
+        document.getElementById("password").value.trim();
+
+    const recordar =
+        document.getElementById("recordarDatos").checked;
+
+
+    if(!servidor || !password){
+
+        alert(
+            "Escribe el número de servidor y la contraseña."
+        );
+
+        return;
+
+    }
+
+
+    /* ================= RECORDAR ================= */
+
+    if(recordar){
+
+        localStorage.setItem(
+            "portal_docente_servidor",
+            servidor
+        );
+
+        localStorage.setItem(
+            "portal_docente_password",
+            password
+        );
+
+    }else{
+
+        localStorage.removeItem(
+            "portal_docente_servidor"
+        );
+
+        localStorage.removeItem(
+            "portal_docente_password"
+        );
+
+    }
+
+
+    /* ================= CONSULTA ================= */
+
+    const { data, error } =
+        await supabaseClient
+
+        .from("docentes")
+
+        .select("*")
+
+        .eq("numero_servidor", servidor)
+
+        .eq("password", password);
+
+
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "Error al iniciar sesión: " +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    if(!data || data.length === 0){
+
+        alert(
+            "Credenciales incorrectas."
+        );
+
+        return;
+
+    }
+
+
+    docenteActual = data[0];
+
+
+    document
+        .getElementById("loginBox")
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById("panel")
+        .classList
+        .remove("hidden");
+
+
+    document.getElementById("infoDocente").innerText =
+        docenteActual.nombre_completo;
+
+
+    document.getElementById("grupoInfo").innerText =
+        "Grado: " +
+        docenteActual.grado +
+        " | Grupo: " +
+        docenteActual.grupo;
+
+
+    await cargarDatos();
+
+}
+
+
+/* ========================================================= */
+/* CARGAR DATOS */
+/* ========================================================= */
+
+async function cargarDatos(){
+
+    await cargarAlumnos();
+
+    cargarMaterias();
+
+    await cargarEvaluaciones();
+
+    limpiarEvaluacion();
+
+}
+
+
+/* ========================================================= */
+/* CARGAR ALUMNOS */
+/* ========================================================= */
+
+async function cargarAlumnos(){
+
+    const { data, error } =
+        await supabaseClient
+
+        .from("alumnos")
+
+        .select(
+            "id,nombre_completo,grado,grupo"
+        )
+
+        .eq(
+            "grado",
+            docenteActual.grado
+        )
+
+        .eq(
+            "grupo",
+            docenteActual.grupo
+        )
+
+        .order(
+            "nombre_completo"
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "Error al cargar alumnos: " +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    alumnosGlobal = data || [];
+
+
+    const alumnoSel =
+        document.getElementById(
+            "alumnoSelect"
+        );
+
+
+    alumnoSel.innerHTML =
+        '<option value="">Seleccionar alumno</option>';
+
+
+    alumnosGlobal.forEach(alumno => {
+
+        alumnoSel.innerHTML += `
+
+            <option value="${alumno.id}">
+                ${escapeHTML(
+                    alumno.nombre_completo
+                )}
+            </option>
+
+        `;
+
+    });
+
+}
+
+
+/* ========================================================= */
+/* CARGAR MATERIAS */
+/* ========================================================= */
+
+function cargarMaterias(){
+
+    materiasGlobal = [];
+
+
+    for(let i = 1; i <= 10; i++){
+
+        const nombreMateria =
+            docenteActual[
+                "materia" + i
+            ];
+
+
+        if(
+            nombreMateria &&
+            typeof nombreMateria === "string" &&
+            nombreMateria.trim() !== ""
+        ){
+
+            materiasGlobal.push(
+                nombreMateria.trim()
+            );
+
+        }
+
+    }
+
+
+    const materiaSel =
+        document.getElementById(
+            "materiaSelect"
+        );
+
+
+    materiaSel.innerHTML =
+        '<option value="">Seleccionar materia</option>';
+
+
+    materiasGlobal.forEach(materia => {
+
+        materiaSel.innerHTML += `
+
+            <option value="${escapeHTML(materia)}">
+                ${escapeHTML(materia)}
+            </option>
+
+        `;
+
+    });
+
+}
+
+
+/* ========================================================= */
+/* CARGAR EVALUACIONES */
+/* ========================================================= */
+
+async function cargarEvaluaciones(){
+
+    const { data, error } =
+        await supabaseClient
+
+        .from("evaluaciones")
+
+        .select("*")
+
+        .eq(
+            "grado",
+            docenteActual.grado
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        alert(
+            "Error al cargar evaluaciones: " +
+            error.message
+        );
+
+        return;
+
+    }
+
+
+    evaluacionesGlobal =
+        data || [];
+
+
+    actualizarTablasAlumnos();
+
+}
+
+
+/* ========================================================= */
+/* CAMBIO DE ALUMNO */
+/* ========================================================= */
+
+document
+    .getElementById("alumnoSelect")
+    .addEventListener(
+        "change",
+        cargarEvaluacionSeleccionada
+    );
+
+
+/* ========================================================= */
+/* CAMBIO DE MATERIA */
+/* ========================================================= */
+
+document
+    .getElementById("materiaSelect")
+    .addEventListener(
+        "change",
+        cargarEvaluacionSeleccionada
+    );
+
+
+/* ========================================================= */
+/* CARGAR EVALUACIÓN */
+/* ========================================================= */
+
+function cargarEvaluacionSeleccionada(){
+
+    const alumnoId =
+        document.getElementById(
+            "alumnoSelect"
+        ).value;
+
+
+    const materia =
+        document.getElementById(
+            "materiaSelect"
+        ).value;
+
+
+    limpiarCampos(false);
+
+
+    if(!alumnoId || !materia){
+
+        actualizarPromedioVisual();
+
+        return;
+
+    }
+
+
+    /*
+        EL GRUPO NO SE USA PARA BUSCAR.
+
+        Por eso:
+
+        2 A → 2 B
+
+        conserva las calificaciones.
+    */
+
+
+    const evaluacion =
+        evaluacionesGlobal.find(e =>
+
+            String(e.alumno_id) ===
+            String(alumnoId)
+
+            &&
+
+            String(e.materia) ===
+            String(materia)
+
+            &&
+
+            String(e.grado) ===
+            String(docenteActual.grado)
+
+        );
+
+
+    if(!evaluacion){
+
+        actualizarPromedioVisual();
+
+        return;
+
+    }
+
+
+    document.getElementById("eva1").value =
+        evaluacion.evaluacion1 ?? "";
+
+
+    document.getElementById("eva2").value =
+        evaluacion.evaluacion2 ?? "";
+
+
+    document.getElementById("eva3").value =
+        evaluacion.evaluacion3 ?? "";
+
+
+    actualizarPromedioVisual();
+
+}
+
+
+/* ========================================================= */
+/* EVENTOS DE CALIFICACIONES */
+/* ========================================================= */
+
+document
+    .getElementById("eva1")
+    .addEventListener(
+        "input",
+        actualizarPromedioVisual
+    );
+
+
+document
+    .getElementById("eva2")
+    .addEventListener(
+        "input",
+        actualizarPromedioVisual
+    );
+
+
+document
+    .getElementById("eva3")
+    .addEventListener(
+        "input",
+        actualizarPromedioVisual
+    );
+
+
+/* ========================================================= */
+/* CALCULAR PROMEDIO */
+/* ========================================================= */
+
+function calcularPromedio(){
+
+    const valores = [
+
+        document.getElementById("eva1").value,
+
+        document.getElementById("eva2").value,
+
+        document.getElementById("eva3").value
+
+    ];
+
+
+    /*
+        SOLAMENTE TOMAMOS LOS CAMPOS
+        QUE TENGAN UNA CALIFICACIÓN.
+    */
+
+    const calificaciones =
+        valores
+
+        .filter(valor => valor !== "")
+
+        .map(valor => Number(valor))
+
+        .filter(valor =>
+            Number.isFinite(valor)
+        );
+
+
+    /*
+        SI NO HAY NINGUNA
+    */
+
+    if(calificaciones.length === 0){
+
+        return null;
+
+    }
+
+
+    const suma =
+        calificaciones.reduce(
+            (a,b) => a + b,
+            0
+        );
+
+
+    return Number(
+        (
+            suma /
+            calificaciones.length
+        ).toFixed(2)
+    );
+
+}
+
+
+/* ========================================================= */
+/* PROMEDIO EN VIVO */
+/* ========================================================= */
+
+function actualizarPromedioVisual(){
+
+    const promedio =
+        calcularPromedio();
+
+
+    const caja =
+        document.getElementById(
+            "promedioBox"
+        );
+
+
+    if(promedio === null){
+
+        caja.innerText =
+            "Promedio final: —";
+
+        return;
+
+    }
+
+
+    caja.innerText =
+        "Promedio final: " +
+        promedio.toFixed(2);
+
+}
+
+
+/* ========================================================= */
+/* GUARDAR */
+/* ========================================================= */
+
+async function guardarEvaluacion(){
+
+    const alumnoId =
+        document.getElementById(
+            "alumnoSelect"
+        ).value;
+
+
+    const materia =
+        document.getElementById(
+            "materiaSelect"
+        ).value;
+
+
+    if(!alumnoId || !materia){
+
+        alert(
+            "Selecciona primero un alumno y una materia."
+        );
+
+        return;
+
+    }
+
+
+    const valores = [
+
+        document.getElementById("eva1").value,
+
+        document.getElementById("eva2").value,
+
+        document.getElementById("eva3").value
+
+    ];
+
+
+    /*
+        AHORA NO ES OBLIGATORIO LLENAR LAS 3.
+    */
+
+
+    const hayAlMenosUna =
+        valores.some(
+            valor => valor !== ""
+        );
+
+
+    if(!hayAlMenosUna){
+
+        alert(
+            "Escribe al menos una calificación."
+        );
+
+        return;
+
+    }
+
+
+    const eva1 =
+        valores[0] === ""
+        ? null
+        : Number(valores[0]);
+
+
+    const eva2 =
+        valores[1] === ""
+        ? null
+        : Number(valores[1]);
+
+
+    const eva3 =
+        valores[2] === ""
+        ? null
+        : Number(valores[2]);
+
+
+    const calificaciones = [
+
+        eva1,
+        eva2,
+        eva3
+
+    ].filter(
+        valor =>
+            valor !== null &&
+            Number.isFinite(valor)
+    );
+
+
+    if(
+        eva1 !== null &&
+        (eva1 < 0 || eva1 > 10)
+    ){
+
+        alert(
+            "La Evaluación 1 debe estar entre 0 y 10."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        eva2 !== null &&
+        (eva2 < 0 || eva2 > 10)
+    ){
+
+        alert(
+            "La Evaluación 2 debe estar entre 0 y 10."
+        );
+
+        return;
+
+    }
+
+
+    if(
+        eva3 !== null &&
+        (eva3 < 0 || eva3 > 10)
+    ){
+
+        alert(
+            "La Evaluación 3 debe estar entre 0 y 10."
+        );
+
+        return;
+
+    }
+
+
+    const suma =
+        calificaciones.reduce(
+            (a,b) => a + b,
+            0
+        );
+
+
+    const promedioFinal =
+        Number(
+            (
+                suma /
+                calificaciones.length
+            ).toFixed(2)
+        );
+
+
+    /* ============================================== */
+    /* BUSCAR REGISTRO EXISTENTE */
+    /* ============================================== */
+
+    const { data: existente, error: errorBusqueda } =
+        await supabaseClient
+
+        .from("evaluaciones")
+
+        .select("id")
+
+        .eq(
+            "alumno_id",
+            alumnoId
+        )
+
+        .eq(
+            "materia",
+            materia
+        )
+
+        .eq(
+            "grado",
+            docenteActual.grado
+        )
+
+        .maybeSingle();
+
+
+    if(errorBusqueda){
+
+        console.error(errorBusqueda);
+
+        alert(
+            "Error al buscar la evaluación: " +
+            errorBusqueda.message
+        );
+
+        return;
+
+    }
+
+
+    const datos = {
+
+        alumno_id: alumnoId,
+
+        materia: materia,
+
+        evaluacion1: eva1,
+
+        evaluacion2: eva2,
+
+        evaluacion3: eva3,
+
+        promedio_final: promedioFinal,
+
+        grado: docenteActual.grado,
+
+        /*
+            El grupo se guarda solamente
+            como información del grupo actual.
+        */
+
+        grupo: docenteActual.grupo,
+
+        updated_at:
+            new Date().toISOString()
+
+    };
+
+
+    let resultado;
+
+
+    if(existente){
+
+        resultado =
+            await supabaseClient
+
+            .from("evaluaciones")
+
+            .update(datos)
+
+            .eq(
+                "id",
+                existente.id
+            );
+
+    }else{
+
+        resultado =
+            await supabaseClient
+
+            .from("evaluaciones")
+
+            .insert({
+
+                ...datos,
+
+                created_at:
+                    new Date().toISOString()
+
+            });
+
+    }
+
+
+    if(resultado.error){
+
+        console.error(
+            resultado.error
+        );
+
+        alert(
+            "Error al guardar: " +
+            resultado.error.message
+        );
+
+        return;
+
+    }
+
+
+    alert(
+
+        "✅ Evaluación guardada correctamente.\n\n" +
+
+        "Promedio final: " +
+
+        promedioFinal.toFixed(2)
+
+    );
+
+
+    /*
+        RECARGAMOS LOS DATOS PERO
+        NO CAMBIAMOS ALUMNO NI MATERIA.
+    */
+
+    await cargarEvaluaciones();
+
+
+    cargarEvaluacionSeleccionada();
+
+}
+
+
+/* ========================================================= */
+/* LIMPIAR CAMPOS */
+/* ========================================================= */
+
+function limpiarCampos(actualizar = true){
+
+    document.getElementById("eva1").value = "";
+
+    document.getElementById("eva2").value = "";
+
+    document.getElementById("eva3").value = "";
+
+
+    if(actualizar){
+
+        actualizarPromedioVisual();
+
+    }
+
+}
+
+
+/* ========================================================= */
+/* LIMPIAR EVALUACIÓN */
+/* ========================================================= */
+
+function limpiarEvaluacion(){
+
+    limpiarCampos(true);
+
+}
+
+
+/* ========================================================= */
+/* MENU */
+/* ========================================================= */
+
+function mostrarSeccion(seccion){
+
+    const secciones = [
+
+        "seccionCaptura",
+
+        "seccionCompletos",
+
+        "seccionBuenos",
+
+        "seccionRegulares",
+
+        "seccionIrregulares"
+
+    ];
+
+
+    secciones.forEach(id => {
+
+        document
+            .getElementById(id)
+            .classList
+            .add("hidden");
+
+    });
+
+
+    if(seccion === "captura"){
+
+        document
+            .getElementById(
+                "seccionCaptura"
+            )
+            .classList
+            .remove("hidden");
+
+    }
+
+
+    if(seccion === "completos"){
+
+        document
+            .getElementById(
+                "seccionCompletos"
+            )
+            .classList
+            .remove("hidden");
+
+        generarTabla("completos");
+
+    }
+
+
+    if(seccion === "buenos"){
+
+        document
+            .getElementById(
+                "seccionBuenos"
+            )
+            .classList
+            .remove("hidden");
+
+        generarTabla("buenos");
+
+    }
+
+
+    if(seccion === "regulares"){
+
+        document
+            .getElementById(
+                "seccionRegulares"
+            )
+            .classList
+            .remove("hidden");
+
+        generarTabla("regulares");
+
+    }
+
+
+    if(seccion === "irregulares"){
+
+        document
+            .getElementById(
+                "seccionIrregulares"
+            )
+            .classList
+            .remove("hidden");
+
+        generarTabla("irregulares");
+
+    }
+
+}
+
+
+/* ========================================================= */
+/* ACTUALIZAR TABLAS */
+/* ========================================================= */
+
+function actualizarTablasAlumnos(){
+
+    generarTabla("completos");
+
+    generarTabla("buenos");
+
+    generarTabla("regulares");
+
+    generarTabla("irregulares");
+
+}
+
+
+/* ========================================================= */
+/* GENERAR TABLAS */
+/* ========================================================= */
+
+function generarTabla(tipo){
+
+    let contenedor;
+
+
+    if(tipo === "completos"){
+
+        contenedor =
+            document.getElementById(
+                "tablaCompletos"
+            );
+
+    }
+
+
+    if(tipo === "buenos"){
+
+        contenedor =
+            document.getElementById(
+                "tablaBuenos"
+            );
+
+    }
+
+
+    if(tipo === "regulares"){
+
+        contenedor =
+            document.getElementById(
+                "tablaRegulares"
+            );
+
+    }
+
+
+    if(tipo === "irregulares"){
+
+        contenedor =
+            document.getElementById(
+                "tablaIrregulares"
+            );
+
+    }
+
+
+    if(!contenedor){
+
+        return;
+
+    }
+
+
+    const alumnosConPromedio =
+        alumnosGlobal.map(alumno => {
+
+            const evaluacionesAlumno =
+                evaluacionesGlobal.filter(e =>
+
+                    String(e.alumno_id) ===
+                    String(alumno.id)
+
+                    &&
+
+                    String(e.grado) ===
+                    String(docenteActual.grado)
+
+                );
+
+
+            const promedios =
+                evaluacionesAlumno
+
+                .map(
+                    e => Number(
+                        e.promedio_final
+                    )
+                )
+
+                .filter(
+                    n =>
+                        Number.isFinite(n)
+                );
+
+
+            let promedioGeneral = null;
+
+
+            if(promedios.length > 0){
+
+                const suma =
+                    promedios.reduce(
+                        (a,b) => a + b,
+                        0
+                    );
+
+
+                promedioGeneral =
+                    Number(
+                        (
+                            suma /
+                            promedios.length
+                        ).toFixed(2)
+                    );
+
+            }
+
+
+            return {
+
+                ...alumno,
+
+                promedioGeneral
+
+            };
+
+        });
+
+
+    let filtrados;
+
+
+    /*
+        BUENOS
+        8 A 10
+    */
+
+    if(tipo === "buenos"){
+
+        filtrados =
+            alumnosConPromedio.filter(
+                a =>
+                    a.promedioGeneral !== null &&
+                    a.promedioGeneral >= 8
+            );
+
+    }
+
+
+    /*
+        COMPLETOS
+
+        Aquí se muestran los alumnos
+        que tienen promedio registrado
+        en todas las materias del docente.
+    */
+
+    if(tipo === "completos"){
+
+        filtrados =
+            alumnosConPromedio.filter(alumno => {
+
+                const cantidad =
+                    evaluacionesGlobal.filter(e =>
+
+                        String(e.alumno_id) ===
+                        String(alumno.id)
+
+                        &&
+
+                        String(e.grado) ===
+                        String(docenteActual.grado)
+
+                        &&
+
+                        materiasGlobal.includes(
+                            e.materia
+                        )
+
+                    ).length;
+
+
+                return (
+                    materiasGlobal.length > 0 &&
+                    cantidad >= materiasGlobal.length
+                );
+
+            });
+
+    }
+
+
+    /*
+        REGULARES
+        6 A 7.99
+    */
+
+    if(tipo === "regulares"){
+
+        filtrados =
+            alumnosConPromedio.filter(
+                a =>
+                    a.promedioGeneral !== null &&
+                    a.promedioGeneral >= 6 &&
+                    a.promedioGeneral < 8
+            );
+
+    }
+
+
+    /*
+        IRREGULARES
+        MENOS DE 6
+    */
+
+    if(tipo === "irregulares"){
+
+        filtrados =
+            alumnosConPromedio.filter(
+                a =>
+                    a.promedioGeneral !== null &&
+                    a.promedioGeneral < 6
+            );
+
+    }
+
+
+    filtrados.sort(
+        (a,b) =>
+            (b.promedioGeneral || 0) -
+            (a.promedioGeneral || 0)
+    );
+
+
+    if(filtrados.length === 0){
+
+        contenedor.innerHTML = `
+
+            <div class="mensaje">
+
+                No hay alumnos en esta categoría.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>Nombre del alumno</th>
+
+                    <th>Calificación general</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+    `;
+
+
+    filtrados.forEach(
+        (alumno,index) => {
+
+            const promedio =
+                alumno.promedioGeneral;
+
+
+            let clase = "";
+
+
+            if(promedio < 6){
+
+                clase =
+                    "nota-roja";
+
+            }else if(promedio < 8){
+
+                clase =
+                    "nota-amarilla";
+
+            }else{
+
+                clase =
+                    "nota-verde";
+
+            }
+
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            alumno.nombre_completo
+                        )}
+                    </td>
+
+                    <td class="${clase}">
+
+                        ${
+                            promedio === null
+                            ? "Sin calificación"
+                            : promedio.toFixed(2)
+                        }
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+            </tbody>
+
+        </table>
+
+    `;
+
+
+    contenedor.innerHTML =
+        html;
+
+}
+
+
+/* ========================================================= */
+/* CERRAR SESIÓN */
+/* ========================================================= */
+
+function cerrarSesion(){
+
+    docenteActual = null;
+
+    alumnosGlobal = [];
+
+    materiasGlobal = [];
+
+    evaluacionesGlobal = [];
+
+
+    document
+        .getElementById("panel")
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById("loginBox")
+        .classList
+        .remove("hidden");
+
+
+    /*
+        IMPORTANTE:
+
+        NO BORRAMOS EL LOCALSTORAGE.
+
+        Así los datos siguen apareciendo
+        al volver a abrir el portal.
+    */
+
+    limpiarCampos(true);
+
+}
+
+
+/* ========================================================= */
+/* ESCAPE HTML */
+/* ========================================================= */
+
+function escapeHTML(text){
+
+    if(
+        text === null ||
+        text === undefined
+    ){
+
+        return "";
+
+    }
+
+
+    return String(text)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+</script>
+
+</body>
+</html>
+```
