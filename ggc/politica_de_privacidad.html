@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Política de Privacidad | GRUPO GARCIA CORONA</title>
+
+<meta name="description" content="Política de Privacidad de GRUPO GARCIA CORONA. Conoce cómo se recopila, utiliza, protege y administra la información de los usuarios.">
+
+<style>
+:root{
+    --bg:#050b14;
+    --bg2:#091525;
+    --card:#0d1b2d;
+    --primary:#1d73ff;
+    --cyan:#18d7ff;
+    --white:#fff;
+    --text:#dce7f5;
+    --muted:#91a4bb;
+    --border:rgba(255,255,255,.09);
+    --shadow:0 25px 70px rgba(0,0,0,.35);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%,rgba(29,115,255,.13),transparent 30%),
+        radial-gradient(circle at 90% 20%,rgba(24,215,255,.08),transparent 25%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+    color:var(--text);
+    line-height:1.7;
+    min-height:100vh;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    position:relative;
+    min-height:65vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:100px 24px 80px;
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    width:600px;
+    height:600px;
+    background:radial-gradient(
+        circle,
+        rgba(29,115,255,.20),
+        transparent 68%
+    );
+    top:-200px;
+    left:50%;
+    transform:translateX(-50%);
+    pointer-events:none;
+}
+
+.hero-content{
+    position:relative;
+    max-width:900px;
+    z-index:2;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    padding:8px 15px;
+    border:1px solid rgba(24,215,255,.22);
+    background:rgba(24,215,255,.06);
+    border-radius:50px;
+    color:var(--cyan);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-bottom:25px;
+}
+
+.eyebrow .dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 12px var(--cyan);
+}
+
+.hero h1{
+    font-size:clamp(40px,6vw,72px);
+    line-height:1.05;
+    margin-bottom:25px;
+    letter-spacing:-2px;
+    background:linear-gradient(
+        90deg,
+        #fff,
+        #d9e9ff 50%,
+        #7beaff
+    );
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    max-width:780px;
+    margin:auto;
+    color:var(--muted);
+    font-size:17px;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+section{
+    padding:80px 24px;
+}
+
+.container{
+    max-width:1050px;
+    margin:auto;
+}
+
+.section-label{
+    color:var(--cyan);
+    text-transform:uppercase;
+    letter-spacing:2px;
+    font-size:11px;
+    font-weight:800;
+    margin-bottom:12px;
+}
+
+.section-title{
+    font-size:38px;
+    line-height:1.15;
+    margin-bottom:15px;
+    color:var(--white);
+}
+
+.section-description{
+    color:var(--muted);
+    max-width:800px;
+    margin-bottom:45px;
+}
+
+/* =========================
+   NOTICE
+========================= */
+
+.notice{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(29,115,255,.12),
+            rgba(24,215,255,.04)
+        ),
+        var(--card);
+
+    border:1px solid rgba(29,115,255,.22);
+    border-radius:22px;
+    padding:28px;
+    margin-bottom:25px;
+    box-shadow:var(--shadow);
+}
+
+.notice strong{
+    color:var(--white);
+}
+
+.notice-icon{
+    width:45px;
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:rgba(29,115,255,.12);
+    color:var(--cyan);
+    font-size:22px;
+    margin-bottom:18px;
+}
+
+/* =========================
+   PRIVACY CARDS
+========================= */
+
+.privacy-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.privacy-card{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.035),
+            rgba(255,255,255,.015)
+        );
+
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:30px;
+    transition:.35s;
+    box-shadow:0 15px 45px rgba(0,0,0,.18);
+}
+
+.privacy-card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(24,215,255,.25);
+    box-shadow:0 20px 55px rgba(0,0,0,.30);
+}
+
+.card-number{
+    color:var(--cyan);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    margin-bottom:10px;
+}
+
+.privacy-card h3{
+    color:var(--white);
+    font-size:21px;
+    margin-bottom:15px;
+}
+
+.privacy-card p{
+    color:var(--muted);
+    font-size:15px;
+}
+
+.privacy-card ul{
+    margin-top:15px;
+    padding-left:20px;
+    color:var(--muted);
+}
+
+.privacy-card li{
+    margin-bottom:9px;
+}
+
+.privacy-card li::marker{
+    color:var(--cyan);
+}
+
+/* =========================
+   FULL CARD
+========================= */
+
+.full-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:35px;
+    margin-top:25px;
+    box-shadow:var(--shadow);
+}
+
+.full-card h3{
+    color:var(--white);
+    font-size:23px;
+    margin-bottom:15px;
+}
+
+.full-card p{
+    color:var(--muted);
+    margin-bottom:15px;
+}
+
+.full-card p:last-child{
+    margin-bottom:0;
+}
+
+.full-card ul{
+    margin:15px 0 0 20px;
+    color:var(--muted);
+}
+
+.full-card li{
+    margin-bottom:10px;
+}
+
+.full-card li::marker{
+    color:var(--cyan);
+}
+
+/* =========================
+   DATA TYPES
+========================= */
+
+.data-box{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-top:30px;
+}
+
+.data-item{
+    background:rgba(255,255,255,.025);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:24px;
+}
+
+.data-item h4{
+    color:var(--white);
+    margin-bottom:9px;
+    font-size:16px;
+}
+
+.data-item p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact-box{
+    position:relative;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(24,215,255,.12),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #0d1d32,
+            #0a1422
+        );
+
+    border:1px solid rgba(24,215,255,.16);
+    border-radius:25px;
+    padding:45px;
+    text-align:center;
+    box-shadow:var(--shadow);
+}
+
+.contact-box h2{
+    color:var(--white);
+    font-size:34px;
+    margin-bottom:15px;
+}
+
+.contact-box p{
+    color:var(--muted);
+    max-width:700px;
+    margin:0 auto 25px;
+}
+
+.contact-buttons{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:12px 20px;
+    border-radius:10px;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+    transition:.3s;
+}
+
+.btn-primary{
+    color:#fff;
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        #1256ca
+    );
+
+    box-shadow:0 10px 30px rgba(29,115,255,.25);
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+}
+
+.btn-secondary{
+    color:var(--text);
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.04);
+}
+
+.btn-secondary:hover{
+    background:rgba(255,255,255,.08);
+}
+
+/* =========================
+   DERECHOS RESERVADOS
+========================= */
+
+.rights{
+    text-align:center;
+    padding:35px 20px;
+    border-top:1px solid var(--border);
+    background:#040910;
+    color:#66788e;
+    font-size:11px;
+}
+
+/* =========================
+   REVEAL
+========================= */
+
+.reveal{
+    opacity:0;
+    transform:translateY(25px);
+    transition:
+        opacity .7s ease,
+        transform .7s ease;
+}
+
+.reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .privacy-grid{
+        grid-template-columns:1fr;
+    }
+
+    .data-box{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .hero{
+        min-height:60vh;
+        padding:90px 20px 65px;
+    }
+
+    .hero h1{
+        font-size:42px;
+        letter-spacing:-1.5px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    section{
+        padding:65px 20px;
+    }
+
+    .section-title{
+        font-size:30px;
+    }
+
+    .contact-box{
+        padding:32px 22px;
+    }
+
+    .contact-box h2{
+        font-size:28px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+<div class="hero-content reveal">
+
+<div class="eyebrow">
+<span class="dot"></span>
+Documento corporativo
+</div>
+
+<h1>
+Política de<br>
+Privacidad
+</h1>
+
+<p>
+En <strong>GRUPO GARCIA CORONA</strong> nos comprometemos
+a tratar la información de nuestros usuarios de manera
+responsable y conforme a las disposiciones aplicables.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     INTRODUCCIÓN
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+01 · Información general
+</div>
+
+<h2 class="section-title reveal">
+Nuestra política de privacidad
+</h2>
+
+<p class="section-description reveal">
+
+La presente Política de Privacidad explica de manera
+general cómo puede ser recopilada, utilizada, almacenada
+y protegida la información proporcionada por los usuarios
+al interactuar con el sitio web, plataformas y servicios
+de <strong>GRUPO GARCIA CORONA</strong>.
+
+</p>
+
+
+<div class="notice reveal">
+
+<div class="notice-icon">
+🔒
+</div>
+
+<p>
+<strong>Compromiso con la privacidad</strong><br><br>
+
+GRUPO GARCIA CORONA reconoce la importancia de proteger
+la información de sus usuarios y busca implementar medidas
+razonables para evitar el acceso, uso, modificación o
+divulgación no autorizada de la información.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     INFORMACIÓN RECOPILADA
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+02 · Información
+</div>
+
+<h2 class="section-title reveal">
+Información que podemos recopilar
+</h2>
+
+<p class="section-description reveal">
+
+Dependiendo del servicio o plataforma utilizada, podemos
+solicitar determinada información necesaria para brindar
+una atención, administrar una cuenta, procesar una solicitud
+o proporcionar un servicio.
+
+</p>
+
+
+<div class="privacy-grid">
+
+
+<div class="privacy-card reveal">
+
+<div class="card-number">
+01
+</div>
+
+<h3>
+Datos de contacto
+</h3>
+
+<p>
+Cuando el usuario se comunica con nosotros, puede
+proporcionar información como:
+</p>
+
+<ul>
+
+<li>
+Nombre.
+</li>
+
+<li>
+Correo electrónico.
+</li>
+
+<li>
+Número telefónico.
+</li>
+
+<li>
+Información incluida voluntariamente en un mensaje.
+</li>
+
+</ul>
+
+</div>
+
+
+<div class="privacy-card reveal">
+
+<div class="card-number">
+02
+</div>
+
+<h3>
+Datos de servicios
+</h3>
+
+<p>
+Dependiendo de la plataforma o servicio, pueden
+solicitarse datos necesarios para administrar
+correctamente la relación con el usuario.
+</p>
+
+<ul>
+
+<li>
+Información de cuenta.
+</li>
+
+<li>
+Información necesaria para prestar el servicio.
+</li>
+
+<li>
+Datos relacionados con solicitudes realizadas.
+</li>
+
+<li>
+Información proporcionada voluntariamente.
+</li>
+
+</ul>
+
+</div>
+
+
+<div class="privacy-card reveal">
+
+<div class="card-number">
+03
+</div>
+
+<h3>
+Información técnica
+</h3>
+
+<p>
+Al utilizar determinados sitios o plataformas,
+pueden generarse datos técnicos relacionados con
+la navegación y funcionamiento del servicio.
+</p>
+
+<ul>
+
+<li>
+Tipo de dispositivo.
+</li>
+
+<li>
+Navegador utilizado.
+</li>
+
+<li>
+Información técnica de conexión.
+</li>
+
+<li>
+Datos necesarios para seguridad y funcionamiento.
+</li>
+
+</ul>
+
+</div>
+
+
+<div class="privacy-card reveal">
+
+<div class="card-number">
+04
+</div>
+
+<h3>
+Información proporcionada voluntariamente
+</h3>
+
+<p>
+El usuario puede proporcionar información mediante
+formularios, mensajes, solicitudes de contacto,
+registros o cualquier otro medio habilitado.
+</p>
+
+<p style="margin-top:12px;">
+El usuario deberá procurar que la información
+proporcionada sea correcta y actualizada cuando
+sea necesario.
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     FINALIDAD
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+03 · Uso de la información
+</div>
+
+<h2 class="section-title reveal">
+¿Para qué utilizamos la información?
+</h2>
+
+<p class="section-description reveal">
+
+La información podrá utilizarse únicamente para
+finalidades relacionadas con la operación de nuestros
+servicios, atención al usuario, administración de
+plataformas y desarrollo de nuestras actividades.
+
+</p>
+
+
+<div class="full-card reveal">
+
+<h3>
+Finalidades principales
+</h3>
+
+<ul>
+
+<li>
+Atender solicitudes, preguntas y comunicaciones de los usuarios.
+</li>
+
+<li>
+Proporcionar y administrar los servicios solicitados.
+</li>
+
+<li>
+Crear y administrar cuentas cuando un servicio lo requiera.
+</li>
+
+<li>
+Mejorar nuestras plataformas, productos y servicios.
+</li>
+
+<li>
+Mantener la seguridad y funcionamiento de nuestros sistemas.
+</li>
+
+<li>
+Detectar y prevenir usos indebidos o actividades no autorizadas.
+</li>
+
+<li>
+Mantener comunicación relacionada con servicios contratados
+o solicitudes realizadas.
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     COOKIES
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+04 · Tecnologías
+</div>
+
+<h2 class="section-title reveal">
+Cookies y tecnologías similares
+</h2>
+
+<div class="full-card reveal">
+
+<h3>
+Uso de cookies
+</h3>
+
+<p>
+Nuestro sitio web o determinadas plataformas pueden
+utilizar cookies, almacenamiento local u otras tecnologías
+similares para mejorar la experiencia del usuario,
+mantener determinadas funciones y obtener información
+técnica relacionada con el funcionamiento del sitio.
+</p>
+
+<p>
+El usuario puede configurar determinadas opciones de su
+navegador para administrar o limitar el uso de cookies.
+Sin embargo, deshabilitar algunas tecnologías puede
+afectar ciertas funciones del sitio.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     PROTECCIÓN
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+05 · Protección
+</div>
+
+<h2 class="section-title reveal">
+Protección de la información
+</h2>
+
+<div class="full-card reveal">
+
+<h3>
+Medidas de seguridad
+</h3>
+
+<p>
+GRUPO GARCIA CORONA busca implementar medidas técnicas,
+administrativas y organizativas razonables para proteger
+la información bajo nuestra gestión.
+</p>
+
+<p>
+Estas medidas pueden incluir controles de acceso,
+protección de sistemas, administración de permisos,
+procedimientos internos y otras medidas de seguridad
+acordes con las características de cada servicio.
+</p>
+
+<p>
+No obstante, ningún sistema conectado a Internet puede
+garantizar seguridad absoluta frente a todos los riesgos
+existentes.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     COMPARTIR INFORMACIÓN
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+06 · Divulgación
+</div>
+
+<h2 class="section-title reveal">
+Compartición de información
+</h2>
+
+<p class="section-description reveal">
+
+La información no deberá utilizarse para finalidades
+distintas de aquellas relacionadas con los servicios
+correspondientes, salvo cuando exista autorización,
+obligación legal o una razón legítima aplicable.
+
+</p>
+
+
+<div class="privacy-grid">
+
+
+<div class="privacy-card reveal">
+
+<div class="card-number">
+01
+</div>
+
+<h3>
+Proveedores de servicios
+</h3>
+
+<p>
+En determinados casos pueden intervenir proveedores
+tecnológicos, de infraestructura, comunicación,
+procesamiento o servicios necesarios para operar
+determinadas plataformas.
+</p>
+
+</div>
+
+
+<div class="privacy-card reveal">
+
+<div class="card-number">
+02
+</div>
+
+<h3>
+Requerimientos legales
+</h3>
+
+<p>
+La información podrá ser proporcionada cuando exista
+una obligación legal, requerimiento de una autoridad
+competente o cuando resulte necesario para proteger
+derechos, seguridad o integridad.
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     DERECHOS
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+07 · Derechos del usuario
+</div>
+
+<h2 class="section-title reveal">
+Control sobre tu información
+</h2>
+
+<p class="section-description reveal">
+
+Dependiendo del servicio, legislación aplicable y tipo
+de información, el usuario podrá solicitar información
+sobre el tratamiento de sus datos o realizar solicitudes
+relacionadas con ellos.
+
+</p>
+
+
+<div class="full-card reveal">
+
+<h3>
+Solicitudes relacionadas con datos personales
+</h3>
+
+<p>
+Si deseas realizar una solicitud relacionada con la
+información personal que hayas proporcionado a
+GRUPO GARCIA CORONA, puedes comunicarte mediante
+nuestros canales oficiales.
+</p>
+
+<p>
+Las solicitudes serán revisadas de acuerdo con la
+naturaleza del servicio, la información involucrada
+y las disposiciones legales aplicables.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     MENORES
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+08 · Protección adicional
+</div>
+
+<h2 class="section-title reveal">
+Información de menores
+</h2>
+
+<div class="notice reveal">
+
+<div class="notice-icon">
+🛡
+</div>
+
+<p>
+Nuestros servicios no deberán utilizarse para recopilar
+información personal de menores de edad de manera
+indebida o sin las autorizaciones que correspondan.
+Cuando un servicio esté dirigido a menores o pueda
+involucrarlos, podrán establecerse condiciones y
+mecanismos adicionales de protección.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     ACTUALIZACIONES
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+09 · Actualizaciones
+</div>
+
+<h2 class="section-title reveal">
+Cambios a esta política
+</h2>
+
+<div class="full-card reveal">
+
+<h3>
+Actualización de la Política de Privacidad
+</h3>
+
+<p>
+GRUPO GARCIA CORONA podrá actualizar esta Política de
+Privacidad cuando resulte necesario debido a cambios
+en nuestros servicios, plataformas, procesos, tecnologías
+o requisitos legales aplicables.
+</p>
+
+<p>
+La versión actualizada podrá publicarse en este mismo
+sitio web. Recomendamos revisar periódicamente esta
+página para conocer cualquier modificación.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     CONTACTO
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="contact-box reveal">
+
+<h2>
+¿Tienes dudas sobre tu privacidad?
+</h2>
+
+<p>
+Si deseas realizar una consulta relacionada con esta
+Política de Privacidad o con el tratamiento de información
+en nuestros servicios, puedes comunicarte con
+GRUPO GARCIA CORONA.
+</p>
+
+<div class="contact-buttons">
+
+<a
+href="https://companygarciacorona.com.mx/contactos.html"
+class="btn btn-primary"
+>
+Contactar al grupo
+</a>
+
+<a
+href="mailto:fgc@gmail.com"
+class="btn btn-secondary"
+>
+Enviar correo
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     DERECHOS RESERVADOS
+========================= -->
+
+<div class="rights">
+
+© 2026 GRUPO GARCIA CORONA. Todos los derechos reservados.
+
+</div>
+
+
+<script>
+
+/* =========================
+   ANIMACIONES
+========================= */
+
+const observer = new IntersectionObserver(
+(entries)=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            entry.target.classList.add("visible");
+        }
+    });
+},
+{
+    threshold:.12
+}
+);
+
+document
+.querySelectorAll(".reveal")
+.forEach(element=>{
+    observer.observe(element);
+});
+
+
+/* =========================
+   ANIMACIÓN HERO
+========================= */
+
+window.addEventListener("load",()=>{
+
+    document
+    .querySelectorAll(".hero .reveal")
+    .forEach(element=>{
+
+        setTimeout(()=>{
+            element.classList.add("visible");
+        },150);
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
