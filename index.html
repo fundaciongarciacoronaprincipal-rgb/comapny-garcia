@@ -1,375 +1,2617 @@
-<!--SISTEMA GENERADO POR COMPANY GARCIA CORONA QUEDA PROHIBBIDO COPIAR EL CODIGO-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Company García Corona</title>
-    <!-- ICONOS REDES SOCIALES -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        header {
-            background-color: #0a3d62;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        nav {
-            background-color: #1e3799;
-            padding: 10px;
-            text-align: center;
-        }
-        nav a {
-            color: white;
-            margin: 0 15px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        section {
-            padding: 40px 20px;
-        }
-        .about, .services, .inicio-sesion {
-            max-width: 1000px;
-            margin: auto;
-        }
-        .services ul {
-            list-style: none;
-            padding: 0;
-        }
-        .services ul li {
-            background: #f1f2f6;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 5px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* BOTONES GRANDES */
-        .botones {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        .botones a {
-            display: block;
-            text-align: center;
-            padding: 25px 15px;
-            background: linear-gradient(135deg, #1e3799, #0a3d62);
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 15px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-        }
-        .botones a:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.3);
-        }
+<title>GRUPO GARCIA CORONA | Grupo Empresarial</title>
 
-        /* BOTONES APAGADOS (NO VISIBLES) */
-        .apagado {
-            display: none;
-        }
+<meta name="description" content="GRUPO GARCIA CORONA - Empresa matriz y administradora de un grupo empresarial en crecimiento.">
+<meta name="theme-color" content="#07111f">
 
-        /* CONTACTO */
-.contacto {
-    max-width: 700px;
-    margin: auto;
+<style>
+:root{
+    --bg:#07111f;
+    --bg2:#0b1728;
+    --card:#101f33;
+    --primary:#1d73ff;
+    --cyan:#18d7ff;
+    --white:#fff;
+    --text:#dce7f5;
+    --muted:#91a4bb;
+    --green:#24d17e;
+    --yellow:#ffc857;
+    --border:rgba(255,255,255,.10);
+    --shadow:0 20px 60px rgba(0,0,0,.30);
+    --radius:22px;
 }
 
-.form-contacto {
-    background: #f1f2f6;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-.form-contacto .campo {
-    margin-bottom: 20px;
+html{
+    scroll-behavior:smooth;
 }
 
-.form-contacto label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 6px;
+body{
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+    background:
+        radial-gradient(circle at 10% 0%,rgba(29,115,255,.16),transparent 30%),
+        radial-gradient(circle at 90% 10%,rgba(24,215,255,.10),transparent 25%),
+        var(--bg);
+    color:var(--text);
+    line-height:1.6;
+    overflow-x:hidden;
 }
 
-.form-contacto input,
-.form-contacto textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 15px;
+body.modal-open{
+    overflow:hidden;
 }
 
-.form-contacto button {
-    background: linear-gradient(135deg, #1e3799, #0a3d62);
-    color: white;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
+a{
+    color:inherit;
+    text-decoration:none;
 }
 
-.form-contacto button:hover {
-    opacity: 0.9;
+button{
+    font-family:inherit;
 }
 
-footer {
-    background-color: #0a3d62;
-    color: white;
-    padding: 40px 20px 20px;
+header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:78px;
+    z-index:1000;
+    background:rgba(7,17,31,.82);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,.07);
 }
 
-.footer-contenido {
-    max-width: 1100px;
-    margin: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 30px;
+.navbar{
+    max-width:1250px;
+    height:100%;
+    margin:auto;
+    padding:0 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:30px;
 }
 
-.footer-col h4 {
-    margin-bottom: 15px;
-    font-size: 18px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    min-width:220px;
 }
 
-.footer-col ul {
-    list-style: none;
-    padding: 0;
+.brand img{
+    width:48px;
+    height:48px;
+    object-fit:contain;
+    border-radius:12px;
+    background:#fff;
+    padding:4px;
 }
 
-.footer-col ul li {
-    margin-bottom: 8px;
+.brand-text{
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
 }
 
-.footer-col ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.brand-text strong{
+    color:#fff;
+    font-size:16px;
+    letter-spacing:.7px;
 }
 
-.footer-col ul li a i {
-    font-size: 16px;
+.brand-text span{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:4px;
+    letter-spacing:1.2px;
 }
 
-.footer-col ul li a:hover {
-    text-decoration: underline;
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:5px;
 }
 
-.footer-copy {
-    text-align: center;
-    margin-top: 30px;
-    font-size: 14px;
-    border-top: 1px solid rgba(255,255,255,0.3);
-    padding-top: 15px;
+.nav-links a{
+    padding:10px 12px;
+    color:#c9d6e6;
+    font-size:13px;
+    border-radius:10px;
+    transition:.25s;
 }
-    </style>
+
+.nav-links a:hover{
+    color:#fff;
+    background:rgba(255,255,255,.07);
+}
+
+.nav-button{
+    background:linear-gradient(135deg,var(--primary),#1553c9)!important;
+    color:#fff!important;
+    padding:11px 17px!important;
+    box-shadow:0 8px 25px rgba(29,115,255,.25);
+}
+
+.menu-btn{
+    display:none;
+    width:45px;
+    height:45px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.05);
+    color:#fff;
+    border-radius:12px;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.hero{
+    min-height:100vh;
+    padding:145px 24px 90px;
+    display:flex;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    width:600px;
+    height:600px;
+    border-radius:50%;
+    background:rgba(29,115,255,.10);
+    filter:blur(90px);
+    top:-250px;
+    left:-180px;
+}
+
+.hero::after{
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    background:rgba(24,215,255,.08);
+    filter:blur(90px);
+    right:-180px;
+    bottom:-200px;
+}
+
+.hero-container{
+    width:100%;
+    max-width:1250px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    align-items:center;
+    gap:70px;
+    position:relative;
+    z-index:2;
+}
+
+.hero-content{
+    animation:fadeUp .8s ease;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    border:1px solid rgba(76,163,255,.25);
+    background:rgba(29,115,255,.08);
+    color:#7bbcff;
+    border-radius:100px;
+    padding:8px 14px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-bottom:23px;
+}
+
+.dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 12px var(--green);
+}
+
+.hero h1{
+    font-size:clamp(42px,6vw,78px);
+    line-height:1.02;
+    color:#fff;
+    letter-spacing:-2.5px;
+    margin-bottom:22px;
+}
+
+.hero h1 span{
+    background:linear-gradient(90deg,#fff,#72b9ff,#19d8ff);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    max-width:700px;
+    color:#9db0c7;
+    font-size:18px;
+    margin-bottom:32px;
+}
+
+.hero-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:13px;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    padding:14px 20px;
+    border-radius:13px;
+    font-weight:700;
+    font-size:14px;
+    transition:.25s;
+    cursor:pointer;
+    border:1px solid transparent;
+}
+
+.btn-primary{
+    background:linear-gradient(135deg,var(--primary),#1759ce);
+    color:#fff;
+    box-shadow:0 12px 30px rgba(29,115,255,.25);
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+}
+
+.btn-secondary{
+    border-color:var(--border);
+    background:rgba(255,255,255,.04);
+    color:#fff;
+}
+
+.btn-secondary:hover{
+    background:rgba(255,255,255,.08);
+    transform:translateY(-2px);
+}
+
+.hero-panel{
+    position:relative;
+    animation:fadeUp 1s ease;
+}
+
+.dashboard-card{
+    position:relative;
+    background:
+        linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025)),
+        #0d1c2e;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:28px;
+    padding:25px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+
+.dashboard-card::before{
+    content:"";
+    position:absolute;
+    width:200px;
+    height:200px;
+    background:rgba(29,115,255,.18);
+    border-radius:50%;
+    filter:blur(50px);
+    top:-80px;
+    right:-70px;
+}
+
+.panel-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.panel-title{
+    color:#fff;
+    font-weight:800;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:11px;
+    color:#72e9ad;
+    background:rgba(36,209,126,.08);
+    padding:7px 10px;
+    border-radius:100px;
+}
+
+.status i{
+    width:6px;
+    height:6px;
+    background:var(--green);
+    border-radius:50%;
+}
+
+.panel-main{
+    padding:22px;
+    border-radius:20px;
+    background:rgba(255,255,255,.045);
+    border:1px solid var(--border);
+    margin-bottom:14px;
+}
+
+.panel-main small{
+    color:var(--muted);
+}
+
+.panel-main h3{
+    color:#fff;
+    font-size:27px;
+    margin-top:5px;
+}
+
+.service-mini{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:15px;
+    border-radius:15px;
+    background:rgba(255,255,255,.035);
+    border:1px solid var(--border);
+    margin-top:10px;
+}
+
+.service-mini-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.mini-icon{
+    width:40px;
+    height:40px;
+    display:grid;
+    place-items:center;
+    border-radius:11px;
+    background:rgba(29,115,255,.12);
+    font-size:19px;
+}
+
+.service-mini strong{
+    color:#fff;
+    font-size:13px;
+    display:block;
+}
+
+.service-mini span{
+    color:var(--muted);
+    font-size:11px;
+}
+
+section{
+    padding:100px 24px;
+}
+
+.section-container{
+    max-width:1250px;
+    margin:auto;
+}
+
+.section-heading{
+    max-width:780px;
+    margin-bottom:45px;
+}
+
+.section-label{
+    color:#5baaff;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    font-size:11px;
+    font-weight:800;
+    margin-bottom:9px;
+}
+
+.section-heading h2{
+    color:#fff;
+    font-size:clamp(30px,4vw,47px);
+    line-height:1.1;
+    letter-spacing:-1px;
+    margin-bottom:14px;
+}
+
+.section-heading p{
+    color:var(--muted);
+    font-size:16px;
+}
+
+.services-section{
+    background:linear-gradient(180deg,rgba(255,255,255,.015),transparent);
+}
+
+.service-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.service-card{
+    position:relative;
+    background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:26px;
+    min-height:250px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.service-card:hover{
+    transform:translateY(-6px);
+}
+
+.service-link{
+    display:block;
+    cursor:pointer;
+}
+
+.service-link:hover{
+    border-color:rgba(76,163,255,.35);
+    box-shadow:0 20px 50px rgba(0,0,0,.22);
+}
+
+.service-disabled{
+    cursor:pointer;
+    opacity:.82;
+}
+
+.service-disabled:hover{
+    border-color:rgba(255,200,87,.35);
+    opacity:1;
+}
+
+.icon{
+    width:52px;
+    height:52px;
+    display:grid;
+    place-items:center;
+    border-radius:15px;
+    background:linear-gradient(145deg,rgba(29,115,255,.20),rgba(24,215,255,.08));
+    border:1px solid rgba(76,163,255,.18);
+    font-size:23px;
+    margin-bottom:20px;
+}
+
+.service-card h3{
+    color:#fff;
+    font-size:19px;
+    margin-bottom:9px;
+}
+
+.service-card p{
+    color:#91a4bb;
+    font-size:13px;
+}
+
+.badge{
+    display:inline-flex;
+    margin-top:17px;
+    padding:6px 10px;
+    border-radius:100px;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.badge.available{
+    color:#6ff0ac;
+    background:rgba(36,209,126,.09);
+    border:1px solid rgba(36,209,126,.15);
+}
+
+.badge.creation{
+    color:#ffd66d;
+    background:rgba(255,200,87,.08);
+    border:1px solid rgba(255,200,87,.17);
+}
+
+.badge.group{
+    color:#76c4ff;
+    background:rgba(29,115,255,.09);
+    border:1px solid rgba(29,115,255,.16);
+}
+
+.group-grid{
+    display:grid;
+    grid-template-columns:.9fr 1.1fr;
+    gap:30px;
+}
+
+.group-card{
+    background:linear-gradient(145deg,#0e1e32,#0b1829);
+    border:1px solid var(--border);
+    border-radius:26px;
+    padding:34px;
+}
+
+.group-card h3{
+    color:#fff;
+    font-size:26px;
+    margin-bottom:15px;
+}
+
+.group-card p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+.group-list{
+    margin-top:25px;
+    display:grid;
+    gap:12px;
+}
+
+.group-item{
+    display:flex;
+    gap:13px;
+    align-items:flex-start;
+    padding:13px;
+    border-radius:14px;
+    background:rgba(255,255,255,.035);
+}
+
+.group-item-icon{
+    width:35px;
+    height:35px;
+    display:grid;
+    place-items:center;
+    border-radius:10px;
+    background:rgba(29,115,255,.12);
+    flex-shrink:0;
+}
+
+.group-item strong{
+    color:#fff;
+    font-size:13px;
+}
+
+.group-item span{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.companies-section{
+    background:rgba(255,255,255,.018);
+}
+
+.company-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.company-card{
+    position:relative;
+    border-radius:24px;
+    padding:28px;
+    border:1px solid var(--border);
+    background:#0c1a2b;
+    transition:.3s;
+}
+
+.company-card:hover{
+    transform:translateY(-4px);
+}
+
+.company-card.current{
+    border-color:rgba(36,209,126,.22);
+}
+
+.company-card.future{
+    border-color:rgba(255,200,87,.15);
+}
+
+.company-head{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    align-items:flex-start;
+    margin-bottom:20px;
+}
+
+.company-icon{
+    width:58px;
+    height:58px;
+    display:grid;
+    place-items:center;
+    border-radius:16px;
+    background:rgba(29,115,255,.10);
+    font-size:25px;
+}
+
+.company-card h3{
+    color:#fff;
+    font-size:21px;
+    margin-bottom:5px;
+}
+
+.company-card .type{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.company-status{
+    white-space:nowrap;
+    padding:7px 10px;
+    border-radius:100px;
+    font-size:9px;
+    font-weight:900;
+}
+
+.current .company-status{
+    color:#6ff0ac;
+    background:rgba(36,209,126,.08);
+}
+
+.future .company-status{
+    color:#ffd66d;
+    background:rgba(255,200,87,.08);
+}
+
+.company-card p{
+    color:#94a8bf;
+    font-size:13px;
+}
+
+.company-actions{
+    display:flex;
+    gap:10px;
+    margin-top:22px;
+    flex-wrap:wrap;
+}
+
+.company-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 14px;
+    border-radius:11px;
+    font-size:11px;
+    font-weight:800;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--border);
+    color:#fff;
+    cursor:pointer;
+}
+
+.company-btn.primary{
+    background:linear-gradient(135deg,var(--primary),#1553c9);
+    border-color:transparent;
+}
+
+.company-btn.disabled{
+    color:#ffd66d;
+    background:rgba(255,200,87,.06);
+    border-color:rgba(255,200,87,.15);
+}
+
+.payment-section{
+    padding-top:80px;
+}
+
+.payment-box{
+    position:relative;
+    background:
+        linear-gradient(135deg,rgba(29,115,255,.16),rgba(24,215,255,.05)),
+        #0b192b;
+    border:1px solid rgba(76,163,255,.18);
+    border-radius:30px;
+    padding:45px;
+    overflow:hidden;
+}
+
+.payment-content{
+    position:relative;
+    z-index:2;
+    max-width:780px;
+}
+
+.payment-content h2{
+    color:#fff;
+    font-size:38px;
+    margin-bottom:12px;
+}
+
+.payment-content p{
+    color:#9eb0c5;
+    margin-bottom:24px;
+}
+
+.payment-methods{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.payment-method{
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.04);
+    color:#d8e4f3;
+    border-radius:11px;
+    padding:10px 13px;
+    font-size:12px;
+    transition:.2s;
+}
+
+.payment-method:hover{
+    background:rgba(255,255,255,.09);
+    transform:translateY(-2px);
+}
+
+.contact-section{
+    padding-bottom:110px;
+}
+
+.contact-grid{
+    display:grid;
+    grid-template-columns:.8fr 1.2fr;
+    gap:22px;
+}
+
+.contact-card{
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.035);
+    border-radius:24px;
+    padding:30px;
+}
+
+.contact-card h3{
+    color:#fff;
+    margin-bottom:18px;
+    font-size:23px;
+}
+
+.contact-item{
+    display:flex;
+    gap:13px;
+    padding:15px 0;
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.contact-item:last-child{
+    border-bottom:0;
+}
+
+.contact-icon{
+    width:40px;
+    height:40px;
+    flex-shrink:0;
+    display:grid;
+    place-items:center;
+    background:rgba(29,115,255,.10);
+    border-radius:11px;
+}
+
+.contact-item small{
+    color:var(--muted);
+    display:block;
+    font-size:10px;
+}
+
+.contact-item a,
+.contact-item button{
+    color:#fff;
+    font-size:14px;
+    background:none;
+    border:0;
+    cursor:pointer;
+    text-align:left;
+}
+
+.contact-item a:hover,
+.contact-item button:hover{
+    color:#65b5ff;
+}
+
+.contact-form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    color:#a7b8ca;
+    font-size:11px;
+    font-weight:700;
+}
+
+.form-group input,
+.form-group textarea{
+    width:100%;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.035);
+    border-radius:12px;
+    padding:13px 14px;
+    color:#fff;
+    outline:none;
+    font-family:inherit;
+}
+
+.form-group textarea{
+    min-height:135px;
+    resize:vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus{
+    border-color:rgba(76,163,255,.45);
+}
+
+.form-submit{
+    grid-column:1/-1;
+}
+
+footer{
+    border-top:1px solid rgba(255,255,255,.07);
+    background:#050d18;
+    padding:45px 24px 25px;
+}
+
+.footer-container{
+    max-width:1250px;
+    margin:auto;
+}
+
+.footer-top{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr 1fr 1fr 1fr;
+    gap:32px;
+    padding-bottom:35px;
+}
+
+.footer-brand p{
+    color:#788ca4;
+    font-size:12px;
+    max-width:330px;
+    margin-top:15px;
+}
+
+.footer-column h4{
+    color:#fff;
+    font-size:12px;
+    margin-bottom:14px;
+}
+
+.footer-column a{
+    display:block;
+    color:#7f93aa;
+    font-size:11px;
+    margin-bottom:9px;
+    transition:.2s;
+}
+
+.footer-column a:hover{
+    color:#fff;
+}
+
+.footer-bottom{
+    border-top:1px solid rgba(255,255,255,.06);
+    padding-top:20px;
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    color:#63778e;
+    font-size:10px;
+}
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.70);
+    backdrop-filter:blur(8px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:5000;
+    padding:20px;
+}
+
+.modal-overlay.active{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:430px;
+    background:#0c1b2e;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:24px;
+    padding:30px;
+    box-shadow:0 30px 100px rgba(0,0,0,.5);
+    position:relative;
+}
+
+.close-modal{
+    position:absolute;
+    right:15px;
+    top:15px;
+    width:34px;
+    height:34px;
+    border-radius:9px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.05);
+    color:#fff;
+    cursor:pointer;
+    font-size:17px;
+}
+
+.modal-icon{
+    width:58px;
+    height:58px;
+    border-radius:17px;
+    display:grid;
+    place-items:center;
+    background:rgba(29,115,255,.12);
+    font-size:26px;
+    margin-bottom:17px;
+}
+
+.modal-box h3{
+    color:#fff;
+    font-size:24px;
+    margin-bottom:6px;
+}
+
+.modal-box p{
+    color:#8498af;
+    font-size:13px;
+    margin-bottom:22px;
+}
+
+.modal-highlight{
+    color:#65b5ff;
+    font-weight:800;
+}
+
+.modal-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.modal-action{
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.045);
+    color:#fff;
+    padding:14px;
+    border-radius:13px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.modal-action.call{
+    background:linear-gradient(135deg,#1d73ff,#1553c9);
+    border-color:transparent;
+}
+
+.modal-action.whatsapp{
+    background:linear-gradient(135deg,#159b61,#0e7b4d);
+    border-color:transparent;
+}
+
+.modal-single{
+    display:block;
+    width:100%;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@media(max-width:1100px){
+
+    .footer-top{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+@media(max-width:1000px){
+
+    .nav-links{
+        display:none;
+        position:absolute;
+        top:78px;
+        left:15px;
+        right:15px;
+        padding:12px;
+        background:#0b1829;
+        border:1px solid var(--border);
+        border-radius:16px;
+        box-shadow:var(--shadow);
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .hero-container{
+        grid-template-columns:1fr;
+    }
+
+    .service-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .group-grid,
+    .contact-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:650px){
+
+    header{
+        height:70px;
+    }
+
+    .navbar{
+        padding:0 15px;
+    }
+
+    .brand{
+        min-width:0;
+    }
+
+    .brand img{
+        width:42px;
+        height:42px;
+    }
+
+    .brand-text strong{
+        font-size:13px;
+    }
+
+    .brand-text span{
+        font-size:8px;
+    }
+
+    .hero{
+        padding:120px 18px 70px;
+    }
+
+    .hero h1{
+        font-size:42px;
+        letter-spacing:-1.5px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    section{
+        padding:75px 18px;
+    }
+
+    .service-grid,
+    .company-grid{
+        grid-template-columns:1fr;
+    }
+
+    .payment-box{
+        padding:28px;
+    }
+
+    .payment-content h2{
+        font-size:29px;
+    }
+
+    .contact-form{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full,
+    .form-submit{
+        grid-column:auto;
+    }
+
+    .footer-top{
+        grid-template-columns:1fr;
+        gap:27px;
+    }
+
+    .footer-bottom{
+        flex-direction:column;
+    }
+
+    .modal-actions{
+        grid-template-columns:1fr;
+    }
+}
+</style>
 </head>
+
 <body>
 
 <header>
-    <img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png"
-         alt="Grupo García Corona"
-         style="width:100%; max-width:300px; height:auto; display:block; margin:auto;">
-         <h3>Antes: Company Garcia Corona</h3>
-         <p>Calidad, Confianza y Servicio</p>
-</header>
 
-<nav>
-    <a href="https://companygarciacorona.com.mx/ggc/nosotros.html">Nosotros</a>
-    <a href="#services">Servicios</a>
-    <a href="https://companygarciacorona.com.mx/empresas-disponibles.html">Empresas</a>
-    <a href="#inicio">Accesos y Opciones</a>
-    <a href="#contacto">Contáctanos</a>
-    <a href="https://companygarciacorona.com.mx/AVISOS.HTML">Comunicados</a>
+<nav class="navbar">
+
+<a href="#inicio" class="brand">
+
+<img
+src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png"
+alt="GRUPO GARCIA CORONA">
+
+<div class="brand-text">
+
+<strong>GRUPO GARCIA CORONA</strong>
+
+<span>GRUPO EMPRESARIAL</span>
+
+</div>
+
+</a>
+
+<button
+class="menu-btn"
+id="menuBtn"
+aria-label="Abrir menú">
+☰
+</button>
+
+<div class="nav-links" id="navLinks">
+
+<a href="#inicio">Inicio</a>
+
+<a href="#servicios">Servicios</a>
+
+<a href="#grupo">Nuestro grupo</a>
+
+<a href="#empresas">Empresas</a>
+
+<a href="#pagos">Pagos</a>
+
+<a href="#contacto">Contacto</a>
+
+<a
+href="https://companygarciacorona.com.mx/AVISOS.HTML"
+class="nav-button">
+Comunicados
+</a>
+
+</div>
+
 </nav>
 
-<!--<section id="nosotros" class="services">
-    <h2> Sobre Nosotros</h2>
-    <p>Conoce nuestra empresa y sus especialidades:</p>
+</header>
 
-    <div class="botones">
-        <a href="https://companygarciacorona.com.mx/nosotros.html"> Sobre Nosotros</a>
-        <a href="https://companygarciacorona.com.mx/mision_y_vision.html"> Misión Y  Visión</a>
-        <a href="https://companygarciacorona.com.mx/AVISOS.HTML">Avisos</a>
-        <a href="https://companygarciacorona.com.mx/AVISOS.HTML">Pos punto de venta</a>
-      
-        </div>
-</section>-->
 
-    <section id="services" class="services">
-    <h2>Servicios</h2>
-    <p>Conoce nuestros servicios:</p>
+<main>
 
-    <div class="botones">
-        <a href="https://companygarciacorona.com.mx/Servicios.html">Contratar servicio</a>
-        <a href="https://companygarciacorona.com.mx/gc_digital_scan.html">GC Digital Scan</a>
-        <a href="https://companygarciacorona.com.mx/NEXUS-WALLET-2323665984421322654922587.HTML">NEXUS WALLET</a>
-    <!--    <a href="SERVICIOS DISPONIBLES/my_market_online.html">Comprar en my market en linea</a>
-        <a href="SERVICIOS DISPONIBLES/POS-PUNTO-DE-VENTA.HTML">Pos punto de venta</a>-->
-       <!--aqui agrega mas opciones aqui-->
-        </div>
+<section class="hero" id="inicio">
+
+<div class="hero-container">
+
+<div class="hero-content">
+
+<div class="eyebrow">
+
+<span class="dot"></span>
+
+Grupo empresarial en crecimiento
+
+</div>
+
+<h1>
+
+Construimos y administramos
+
+<span>empresas para el futuro.</span>
+
+</h1>
+
+<p>
+
+GRUPO GARCIA CORONA es la empresa matriz encargada
+de administrar, organizar y proyectar el crecimiento
+de nuestro grupo empresarial y sus diferentes unidades
+de negocio.
+
+</p>
+
+<div class="hero-actions">
+
+<a
+href="#empresas"
+class="btn btn-primary">
+Ver nuestras empresas →
+</a>
+
+<a
+href="#contacto"
+class="btn btn-secondary">
+Contacto corporativo
+</a>
+
+</div>
+
+</div>
+
+
+<div class="hero-panel">
+
+<div class="dashboard-card">
+
+<div class="panel-top">
+
+<div class="panel-title">
+Estructura corporativa
+</div>
+
+<div class="status">
+
+<i></i>
+
+Activa
+
+</div>
+
+</div>
+
+
+<div class="panel-main">
+
+<small>Empresa matriz</small>
+
+<h3>
+GRUPO GARCIA CORONA
+</h3>
+
+</div>
+
+
+<div class="service-mini">
+
+<div class="service-mini-left">
+
+<div class="mini-icon">🏢</div>
+
+<div>
+
+<strong>Administración</strong>
+
+<span>
+Gestión del grupo empresarial
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="service-mini">
+
+<div class="service-mini-left">
+
+<div class="mini-icon">💻</div>
+
+<div>
+
+<strong>
+Corporativo Nexel Digital
+</strong>
+
+<span>
+Empresa actualmente en funcionamiento
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="service-mini">
+
+<div class="service-mini-left">
+
+<div class="mini-icon">🚀</div>
+
+<div>
+
+<strong>Nuevas empresas</strong>
+
+<span>
+Proyectos en creación y desarrollo
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </section>
 
-<!--
-<section id="login-empresas" class="services">
-    <h2>Inicio de sesion empleados</h2>
-    <p>Si trabajas en alguna de nuestras empresas selecciona <strong>"INICIAR SESION"</strong> y ingresa tus datos a continuacion.</p>
 
-    <div class="botones">
-        <a href="empleados.html">INICIAR SESION</a>
-        <a href="INICIO DE SESION EMPRESAS/PANEL DE ACCESO A SDTEI .HTML">SDTEI</a>
-        <a href="INICIO DE SESION EMPRESAS/PANEL DE ACCESO A MY MARKET .HTML">My market</a>
-        </div>
+<section class="services-section" id="servicios">
+
+<div class="section-container">
+
+<div class="section-heading">
+
+<div class="section-label">
+Ecosistema empresarial
+</div>
+
+<h2>
+Principales servicios y soluciones de nuestras empresas
+</h2>
+
+<p>
+Conoce algunos de los servicios, productos y proyectos
+que forman parte del ecosistema de empresas de
+GRUPO GARCIA CORONA.
+</p>
+
+</div>
+
+
+<div class="service-grid">
+
+
+<a
+href="https://companygarciacorona.com.mx/NEXUS-WALLET-2323665984421322654922587.HTML"
+class="service-card service-link">
+
+<div class="icon">💳</div>
+
+<h3>NEXUS WALLET</h3>
+
+<p>
+Plataforma digital orientada a la gestión de
+operaciones y servicios financieros dentro del
+ecosistema de nuestras empresas.
+</p>
+
+<span class="badge available">
+DISPONIBLE · ABRIR →
+</span>
+
+</a>
+
+
+<a
+href="https://companygarciacorona.com.mx/gc_digital_scan.html"
+class="service-card service-link">
+
+<div class="icon">📱</div>
+
+<h3>GC Digital Scan</h3>
+
+<p>
+Solución digital desarrollada dentro del área
+tecnológica para herramientas de escaneo,
+identificación y procesos digitales.
+</p>
+
+<span class="badge available">
+DISPONIBLE · ABRIR →
+</span>
+
+</a>
+
+
+<a
+href="#pagos"
+class="service-card service-link">
+
+<div class="icon">💰</div>
+
+<h3>Pagos y servicios</h3>
+
+<p>
+Administración de pagos y cobros corporativos
+gestionados directamente por GRUPO GARCIA CORONA.
+</p>
+
+<span class="badge group">
+PAGAR SERVICIOS →
+</span>
+
+</a>
+
+
+<div
+class="service-card service-disabled"
+onclick="showUnavailable('SDTEI')">
+
+<div class="icon">📡</div>
+
+<h3>SDTEI</h3>
+
+<p>
+Servicio de Telefonía e Internet proyectado para
+formar parte de las futuras operaciones del grupo.
+</p>
+
+<span class="badge creation">
+🔒 NO DISPONIBLE · EMPRESA EN CREACIÓN
+</span>
+
+</div>
+
+
+<div
+class="service-card service-disabled"
+onclick="showUnavailable('MY MARKET GARCIA CORONA')">
+
+<div class="icon">🛒</div>
+
+<h3>MY MARKET GARCIA CORONA</h3>
+
+<p>
+Proyecto de mercado general orientado a ofrecer
+productos y servicios para consumidores.
+</p>
+
+<span class="badge creation">
+🔒 NO DISPONIBLE · EMPRESA EN CREACIÓN
+</span>
+
+</div>
+
+
+<div
+class="service-card service-disabled"
+onclick="showUnavailable('Fábricas de diversas áreas')">
+
+<div class="icon">🏭</div>
+
+<h3>Fábricas de diversas áreas</h3>
+
+<p>
+Proyectos industriales futuros que podrán abarcar
+fabricación de muebles, chocolate, tecnología
+y diferentes áreas productivas.
+</p>
+
+<span class="badge creation">
+🔒 NO DISPONIBLE · PROYECTO FUTURO
+</span>
+
+</div>
+
+
+</div>
+
+</div>
+
 </section>
--->
 
-<!-- SECCIÓN INICIO DE SESIÓN -->
-<section id="inicio" class="inicio-sesion">
-    <h2>Accesos y/o Opciones</h2>
-    <p>Selecciona una opción para continuar:</p>
 
-    <div class="botones">
-        <a href="https://companygarciacorona.com.mx/mi_turno.html">Bolsa De Trabajo</a>
-        <a href="">Conoce Nuestras Empresas</a>
-        <a href="https://companygarciacorona.com.mx/consulta.html">Consultar Saldo</a>
-        <!--<a href="login-gerentes.html">Inicio de Sesión Gerentes</a>-->
-        <!--<a href="login-empresas.html">Inicio de Sesión Empresas</a>-->
-        <!--<a href="contratos.html">Contratos</a>
-        <a href="diplomas y reconocimientos.html">Diplomas y Reconocimientos</a>-->
-        <!--<a href="mas.html">Más Opciones</a>-->
+<section id="grupo">
 
-        </div>
+<div class="section-container">
+
+<div class="section-heading">
+
+<div class="section-label">
+Nuestra estructura
+</div>
+
+<h2>Nuestro grupo</h2>
+
+<p>
+Una estructura pensada para administrar diferentes
+empresas y desarrollar nuevas oportunidades de negocio.
+</p>
+
+</div>
+
+
+<div class="group-grid">
+
+
+<div class="group-card">
+
+<h3>
+GRUPO GARCIA CORONA
+</h3>
+
+<p>
+Nuestra organización funciona como empresa matriz
+y administradora del grupo empresarial. Desde aquí
+se coordinan diferentes proyectos, empresas,
+servicios y planes de crecimiento.
+</p>
+
+
+<div class="group-list">
+
+<div class="group-item">
+
+<div class="group-item-icon">🏢</div>
+
+<div>
+
+<strong>Administración</strong>
+
+<span>
+Organización y gestión corporativa.
+</span>
+
+</div>
+
+</div>
+
+
+<div class="group-item">
+
+<div class="group-item-icon">📊</div>
+
+<div>
+
+<strong>Planeación</strong>
+
+<span>
+Desarrollo y crecimiento de nuevas empresas.
+</span>
+
+</div>
+
+</div>
+
+
+<div class="group-item">
+
+<div class="group-item-icon">💰</div>
+
+<div>
+
+<strong>Administración de pagos</strong>
+
+<span>
+Gestión de pagos y servicios corporativos.
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="group-card">
+
+<h3>
+Una visión empresarial
+</h3>
+
+<p>
+Nuestro objetivo es construir una estructura
+empresarial diversificada, donde cada empresa
+pueda especializarse en un área determinada y
+contribuir al crecimiento general del grupo.
+</p>
+
+
+<div class="group-list">
+
+<div class="group-item">
+
+<div class="group-item-icon">01</div>
+
+<div>
+
+<strong>Empresas especializadas</strong>
+
+<span>
+Cada unidad desarrolla su propio mercado
+y servicios.
+</span>
+
+</div>
+
+</div>
+
+
+<div class="group-item">
+
+<div class="group-item-icon">02</div>
+
+<div>
+
+<strong>Innovación</strong>
+
+<span>
+Desarrollo constante de nuevos productos
+y soluciones.
+</span>
+
+</div>
+
+</div>
+
+
+<div class="group-item">
+
+<div class="group-item-icon">03</div>
+
+<div>
+
+<strong>Crecimiento</strong>
+
+<span>
+Creación progresiva de nuevas empresas
+y áreas de negocio.
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </section>
 
-<!-- SECCIÓN CONTACTO -->
-<section id="contacto" class="contacto">
-    <h2>Contáctanos</h2>
-    <p>Déjanos tus datos y mensaje, pronto nos pondremos en contacto contigo.</p>
 
-    <form action="https://formspree.io/f/xojprqnv" method="POST" class="form-contacto">
-        <div class="campo">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" required>
-        </div>
+<section class="companies-section" id="empresas">
 
-        <div class="campo">
-            <label for="correo">Correo electrónico</label>
-            <input type="email" id="correo" name="correo" required>
-        </div>
+<div class="section-container">
 
-        <div class="campo">
-            <label for="mensaje">Mensaje</label>
-            <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
-        </div>
+<div class="section-heading">
 
-        <button type="submit">Enviar mensaje</button>
-    </form>
+<div class="section-label">
+Empresas del grupo
+</div>
+
+<h2>
+Nuestras empresas
+</h2>
+
+<p>
+Actualmente contamos con una empresa en funcionamiento
+y diferentes proyectos de futuras empresas ya registrados
+y en proceso de creación.
+</p>
+
+</div>
+
+
+<div class="company-grid">
+
+
+<article class="company-card current">
+
+<div class="company-head">
+
+<div class="company-icon">💻</div>
+
+<span class="company-status">
+EN FUNCIONAMIENTO
+</span>
+
+</div>
+
+<h3>
+CORPORATIVO NEXEL DIGITAL
+</h3>
+
+<div class="type">
+Empresa tecnológica y digital
+</div>
+
+<p style="margin-top:15px;">
+Empresa actualmente operativa dentro del grupo,
+enfocada en soluciones tecnológicas, plataformas
+digitales, sistemas y herramientas para diferentes
+necesidades.
+</p>
+
+<div class="company-actions">
+
+<a
+href="https://companygarciacorona.com.mx/Servicios.html"
+class="company-btn primary">
+Visitar empresa →
+</a>
+
+</div>
+
+</article>
+
+
+<article class="company-card future">
+
+<div class="company-head">
+
+<div class="company-icon">📡</div>
+
+<span class="company-status">
+EMPRESA EN CREACIÓN
+</span>
+
+</div>
+
+<h3>SDTEI</h3>
+
+<div class="type">
+Servicio de Telefonía e Internet
+</div>
+
+<p style="margin-top:15px;">
+Proyecto de futura empresa enfocado en servicios
+de telecomunicaciones, telefonía y conectividad.
+Actualmente no disponible para contratación.
+</p>
+
+<div class="company-actions">
+
+<button
+class="company-btn disabled"
+onclick="showUnavailable('SDTEI')">
+🔒 Próximamente
+</button>
+
+</div>
+
+</article>
+
+
+<article class="company-card future">
+
+<div class="company-head">
+
+<div class="company-icon">🛒</div>
+
+<span class="company-status">
+EMPRESA EN CREACIÓN
+</span>
+
+</div>
+
+<h3>
+MY MARKET GARCIA CORONA
+</h3>
+
+<div class="type">
+Mercado general
+</div>
+
+<p style="margin-top:15px;">
+Futura empresa comercial proyectada para operar
+un mercado general con diferentes categorías
+de productos y servicios.
+</p>
+
+<div class="company-actions">
+
+<button
+class="company-btn disabled"
+onclick="showUnavailable('MY MARKET GARCIA CORONA')">
+🔒 Próximamente
+</button>
+
+</div>
+
+</article>
+
+
+<article class="company-card future">
+
+<div class="company-head">
+
+<div class="company-icon">🏭</div>
+
+<span class="company-status">
+PROYECTO FUTURO
+</span>
+
+</div>
+
+<h3>
+Fábricas de diversas áreas
+</h3>
+
+<div class="type">
+Proyectos industriales
+</div>
+
+<p style="margin-top:15px;">
+Desarrollo futuro de diferentes áreas de fabricación,
+incluyendo muebles, chocolate, tecnología y otras
+líneas productivas.
+</p>
+
+<div class="company-actions">
+
+<button
+class="company-btn disabled"
+onclick="showUnavailable('Fábricas de diversas áreas')">
+🔒 Proyecto futuro
+</button>
+
+</div>
+
+</article>
+
+
+</div>
+
+</div>
+
 </section>
+
+
+<section class="payment-section" id="pagos">
+
+<div class="section-container">
+
+<div class="payment-box">
+
+<div class="payment-content">
+
+<div class="section-label">
+Administración corporativa
+</div>
+
+<h2>
+Paga tus servicios
+</h2>
+
+<p>
+GRUPO GARCIA CORONA administra directamente los
+pagos y cobros correspondientes a nuestros servicios.
+Selecciona la plataforma disponible para realizar
+tu pago.
+</p>
+
+
+<div class="payment-methods">
+
+<a
+class="payment-method"
+href="https://linkdenegocio.mx/@Company_Garcia_Corona/pagar"
+target="_blank"
+rel="noopener noreferrer">
+💳 Clip
+</a>
+
+
+<a
+class="payment-method"
+href="https://www.paypal.com/"
+target="_blank"
+rel="noopener noreferrer">
+🅿️ PayPal
+</a>
+
+
+<a
+class="payment-method"
+href="https://link.mercadopago.com.mx/mymatket"
+target="_blank"
+rel="noopener noreferrer">
+💙 Mercado Pago
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="contact-section" id="contacto">
+
+<div class="section-container">
+
+<div class="section-heading">
+
+<div class="section-label">
+Comunicación
+</div>
+
+<h2>
+Contacto corporativo
+</h2>
+
+<p>
+Ponte en contacto con GRUPO GARCIA CORONA para
+consultas generales, información empresarial
+o asuntos relacionados con nuestros servicios.
+</p>
+
+</div>
+
+
+<div class="contact-grid">
+
+
+<div class="contact-card">
+
+<h3>
+Información de contacto
+</h3>
+
+
+<div class="contact-item">
+
+<div class="contact-icon">✉️</div>
+
+<div>
+
+<small>
+Correo electrónico
+</small>
+
+<a href="mailto:fgc@gmail.com">
+fgc@gmail.com
+</a>
+
+</div>
+
+</div>
+
+
+<div class="contact-item">
+
+<div class="contact-icon">📞</div>
+
+<div>
+
+<small>
+Teléfono
+</small>
+
+<button onclick="openPhoneModal()">
+5512345678
+</button>
+
+</div>
+
+</div>
+
+
+<div class="contact-item">
+
+<div class="contact-icon">🌐</div>
+
+<div>
+
+<small>
+Sitio web
+</small>
+
+<a
+href="https://companygarciacorona.com.mx"
+target="_blank"
+rel="noopener noreferrer">
+companygarciacorona.com.mx
+</a>
+
+</div>
+
+</div>
+
+
+<div class="contact-item">
+
+<div class="contact-icon">🇲🇽</div>
+
+<div>
+
+<small>
+Operación
+</small>
+
+<span style="color:#fff;font-size:14px;">
+México
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="contact-card">
+
+<h3>
+Envíanos un mensaje
+</h3>
+
+
+<form
+class="contact-form"
+action="https://formspree.io/f/xojprqnv"
+method="POST">
+
+
+<div class="form-group">
+
+<label>
+Nombre
+</label>
+
+<input
+type="text"
+name="nombre"
+placeholder="Tu nombre"
+required>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Correo
+</label>
+
+<input
+type="email"
+name="email"
+placeholder="correo@ejemplo.com"
+required>
+
+</div>
+
+
+<div class="form-group full">
+
+<label>
+Asunto
+</label>
+
+<input
+type="text"
+name="asunto"
+placeholder="¿En qué podemos ayudarte?"
+required>
+
+</div>
+
+
+<div class="form-group full">
+
+<label>
+Mensaje
+</label>
+
+<textarea
+name="mensaje"
+placeholder="Escribe tu mensaje..."
+required></textarea>
+
+</div>
+
+
+<div class="form-submit">
+
+<button
+type="submit"
+class="btn btn-primary">
+Enviar mensaje →
+</button>
+
+</div>
+
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
 
 <footer>
-    <div class="footer-contenido">
-        <div class="footer-col">
-            <h4>Grupo García Corona</h4>
-            <p>En GRUPO GARCIA CORONA Creemos que cada gran idea puede convertirse en una oportunidad para construir un mejor futuro.</p>
-        </div>
 
-        <div class="footer-col">
-            <h4>Nosotros</h4>
-            <ul>
-                <li><a href="https://companygarciacorona.com.mx/ggc/nosotros.html">¿Quienes somos?</a></li>
-                <li><a href="https://companygarciacorona.com.mx/ggc/linea_del_tiempo_grupo_garcia_corona.html">Nuestra linea del tiempo</a></li>
-                <li><a href="https://companygarciacorona.com.mx/AVISOS.HTML">Avisos & Comunicados</a></li>
-                <!--agrega mas opciones aqui-->
-            </ul>
-        </div>
+<div class="footer-container">
 
-        <div class="footer-col">
-            <h4>Soluciones & Servicios</h4>
-            <ul>
-                <!--<li><a href="login-cliente.html">Contratar Servicios</a></li>-->
-                <li><a href="login-empleado.html">GC Digital Scan</a></li>
-                <li><a href="login-gerentes.html">NEXUS WALLET</a></li>
-                <!--<li><a href="login-empresas.html">Empresas</a></li>-->
-            </ul>
-        </div>
+<div class="footer-top">
 
-        <div class="footer-col">
-            <h4>Contacto</h4>
-            <ul>
-                <li><a href="#contacto">Formulario de contacto</a></li>
-                <li><a href="mailto:fgc@gmail.com">fgc@gmail.com</a></li>
-                <li><a href="https://companygarciacorona.com.mx/contactos.html">Contactos</a></li>
-            </ul>
-        </div>
 
-        <div class="footer-col">
-            <h4>Síguenos en redes sociales</h4>
-            <ul>
-                <li><a href="https://www.facebook.com/profile.php?id=61589604804694" target="_blank"><i class="fa-brands fa-facebook-f"></i> Facebook</a></li>
-                <li><a href="https://www.instagram.com/companygarciacorona/" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a></li>
-                <!--<li><a href="https://www.twitter.com/TU_USUARIO" target="_blank"><i class="fa-brands fa-x-twitter"></i> X (Twitter)</a></li>
-                <li><a href="https://www.linkedin.com/company/TU_EMPRESA" target="_blank"><i class="fa-brands fa-linkedin-in"></i> LinkedIn</a></li>
-                <li><a href="https://www.youtube.com/@TU_CANAL" target="_blank"><i class="fa-brands fa-youtube"></i> YouTube</a></li>-->
-            </ul>
-        </div>
+<div class="footer-brand">
 
-        <div class="footer-col">
-            <h4>Descarga nuestra app</h4>
-            <ul>
-                <li><a href="https://companygarciacorona.com.mx/ggc/redirecciones_grupogarciacorona/apps_moviles.html" target="_blank"><i class="fa-brands fa-google-play"></i> Google Play</a></li>
-                <li><a href="https://companygarciacorona.com.mx/ggc/redirecciones_grupogarciacorona/apps_moviles.html" target="_blank"><i class="fa-brands fa-apple"></i> App Store</a></li>
-                <li><a href="https://companygarciacorona.com.mx/ggc/redirecciones_grupogarciacorona/apps_moviles.html" target="_blank"><i class="fa-solid fa-store"></i> AppGallery</a></li>
+<a href="#inicio" class="brand">
 
-                <!--<li><a href="https://play.google.com/store/apps/details?id=TU_APP" target="_blank"><i class="fa-brands fa-google-play"></i> Google Play</a></li>
-                <li><a href="https://apps.apple.com/app/idTU_APP" target="_blank"><i class="fa-brands fa-apple"></i> App Store</a></li>
-                <li><a href="https://appgallery.huawei.com/app/TU_APP" target="_blank"><i class="fa-solid fa-store"></i> AppGallery</a></li>-->
-            </ul>
-        </div>
+<img
+src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png"
+alt="GRUPO GARCIA CORONA">
 
-        <div class="footer-col">
-            <h4>Paga aquí tus servicios</h4>
-            <ul>
-                <!--<li><a href="#" target="_blank"><i class="fa-solid fa-credit-card"></i> Pago con Tarjeta</a></li>
-                <li><a href="SISTEMA-DE-TRANSFERENCIA.HTML" target="_blank"><i class="fa-solid fa-credit-card"></i> Pago con transferencia</a></li>-->
-                <li><a href="https://linkdenegocio.mx/@Company_Garcia_Corona/pagar" target="_blank"><i class="fa-solid fa-money-bill-wave"></i> Clip</a></li>
-                <li><a href="#" target="_blank"><i class="fa-brands fa-paypal"></i> PayPal</a></li>
-                <li><a href="https://link.mercadopago.com.mx/mymatket" target="_blank"><i class="fa-solid fa-qrcode"></i> Mercado Pago</a></li>
-            </ul>
-        </div>
+<div class="brand-text">
 
-        <div class="footer-col">
-            <h4>Más...</h4>
-            <ul>
-                <li><a href="https://companygarciacorona.com.mx/terminos_y_condiciones.html"><i class="fa-solid fa-file-contract"></i> Términos y condiciones</a></li>
-                <li><a href="https://companygarciacorona.com.mx/politicas_de_privacidad.html"><i class="fa-solid fa-user-shield"></i> Políticas de privacidad</a></li>
-                <li><a href="https://companygarciacorona.com.mx/Declaracion%20de%20accesibiidad.html"><i class="fa-solid fa-universal-access"></i> Accesibilidad</a></li>
-                <li><a href="mas.html"><i class="fa-solid fa-ellipsis"></i> Más secciones</a></li>
-            </ul>
-        </div>
-    </div>
+<strong>
+GRUPO GARCIA CORONA
+</strong>
 
-    <div class="footer-copy">
-        &copy; 2026 Grupo
-         García Corona — Todos los derechos reservados<a href="https://companygarciacorona.com.mx/mis_empresas.html" style="color: #f1f2f6;">..</a>
-    </div>
+<span>
+GRUPO EMPRESARIAL
+</span>
+
+</div>
+
+</a>
+
+<p>
+Empresa matriz y administradora de un grupo
+empresarial en crecimiento.
+</p>
+
+</div>
+
+
+<div class="footer-column">
+
+<h4>Empresa</h4>
+
+<a href="#grupo">
+Nuestro grupo
+</a>
+
+<a href="#empresas">
+Nuestras empresas
+</a>
+
+<a href="#servicios">
+Servicios
+</a>
+
+<a href="#pagos">
+Pagos
+</a>
+
+</div>
+
+
+<div class="footer-column">
+
+<h4>Información</h4>
+
+<a
+href="https://companygarciacorona.com.mx/ggc/nosotros.html">
+Sobre nosotros
+</a>
+
+<a
+href="https://companygarciacorona.com.mx/ggc/linea_del_tiempo_grupo_garcia_corona.html">
+Línea del tiempo
+</a>
+
+<a
+href="https://companygarciacorona.com.mx/AVISOS.HTML">
+Avisos
+</a>
+
+<a
+href="https://companygarciacorona.com.mx/contactos.html">
+Contactos
+</a>
+
+</div>
+
+
+<div class="footer-column">
+
+<h4>Aplicaciones</h4>
+
+<a
+href="https://companygarciacorona.com.mx/ggc/redirecciones_grupogarciacorona/apps_moviles.html">
+Aplicaciones móviles →
+</a>
+
+</div>
+
+
+<div class="footer-column">
+
+<h4>Redes sociales</h4>
+
+<a
+href="https://www.facebook.com/profile.php?id=61589604804694"
+target="_blank"
+rel="noopener noreferrer">
+Facebook
+</a>
+
+<a
+href="https://www.instagram.com/companygarciacorona/"
+target="_blank"
+rel="noopener noreferrer">
+Instagram
+</a>
+
+</div>
+
+
+<div class="footer-column">
+
+<h4>Legal</h4>
+
+<a
+href="https://companygarciacorona.com.mx/terminos_y_condiciones.html">
+Términos y condiciones
+</a>
+
+<a
+href="https://companygarciacorona.com.mx/politicas_de_privacidad.html">
+Privacidad
+</a>
+
+<a
+href="https://companygarciacorona.com.mx/Declaracion%20de%20accesibiidad.html">
+Accesibilidad
+</a>
+
+</div>
+
+
+</div>
+
+
+<div class="footer-bottom">
+
+<span>
+© 2026 GRUPO GARCIA CORONA. Todos los derechos reservados.
+</span>
+
+<span>
+Estructura empresarial · México
+</span>
+
+</div>
+
+</div>
+
 </footer>
+
+
+<!-- MODAL TELEFONO -->
+
+<div
+class="modal-overlay"
+id="phoneModal"
+onclick="closePhoneModalOutside(event)">
+
+<div class="modal-box">
+
+<button
+class="close-modal"
+onclick="closePhoneModal()"
+aria-label="Cerrar">
+×
+</button>
+
+<div class="modal-icon">
+📞
+</div>
+
+<h3>
+¿Qué deseas hacer?
+</h3>
+
+<p>
+
+Selecciona una opción para comunicarte al número
+
+<span
+class="modal-highlight"
+id="modalPhone">
+5512345678
+</span>.
+
+</p>
+
+<div class="modal-actions">
+
+<button
+class="modal-action call"
+onclick="makeCall()">
+📞 Llamada
+</button>
+
+<button
+class="modal-action whatsapp"
+onclick="openWhatsApp()">
+💬 WhatsApp
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- MODAL NO DISPONIBLE -->
+
+<div
+class="modal-overlay"
+id="unavailableModal"
+onclick="closeUnavailableOutside(event)">
+
+<div class="modal-box">
+
+<button
+class="close-modal"
+onclick="closeUnavailable()"
+aria-label="Cerrar">
+×
+</button>
+
+<div class="modal-icon">
+🚧
+</div>
+
+<h3>
+No disponible
+</h3>
+
+<p id="unavailableText">
+Este proyecto se encuentra actualmente
+en proceso de creación.
+</p>
+
+<button
+class="btn btn-primary modal-single"
+onclick="closeUnavailable()">
+Entendido
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+const PHONE_NUMBER = "5512345678";
+
+const menuBtn =
+document.getElementById("menuBtn");
+
+const navLinks =
+document.getElementById("navLinks");
+
+
+menuBtn.addEventListener("click", () => {
+
+navLinks.classList.toggle("active");
+
+});
+
+
+document
+.querySelectorAll(".nav-links a")
+.forEach(link => {
+
+link.addEventListener("click", () => {
+
+navLinks.classList.remove("active");
+
+});
+
+});
+
+
+function openPhoneModal(){
+
+document
+.getElementById("modalPhone")
+.textContent = PHONE_NUMBER;
+
+document
+.getElementById("phoneModal")
+.classList.add("active");
+
+document.body.classList.add("modal-open");
+
+}
+
+
+function closePhoneModal(){
+
+document
+.getElementById("phoneModal")
+.classList.remove("active");
+
+document.body.classList.remove("modal-open");
+
+}
+
+
+function closePhoneModalOutside(event){
+
+if(event.target.id === "phoneModal"){
+
+closePhoneModal();
+
+}
+
+}
+
+
+function makeCall(){
+
+window.location.href =
+"tel:" + PHONE_NUMBER;
+
+}
+
+
+function openWhatsApp(){
+
+const cleanNumber =
+PHONE_NUMBER.replace(/\D/g,"");
+
+const whatsappNumber =
+"52" + cleanNumber;
+
+window.location.href =
+"https://wa.me/" + whatsappNumber;
+
+}
+
+
+function showUnavailable(nombre){
+
+const modal =
+document.getElementById(
+"unavailableModal"
+);
+
+const text =
+document.getElementById(
+"unavailableText"
+);
+
+text.innerHTML =
+"<strong>" +
+nombre +
+"</strong> todavía no está disponible. " +
+"La empresa o proyecto se encuentra actualmente " +
+"en proceso de creación y desarrollo.";
+
+modal.classList.add("active");
+
+document.body.classList.add("modal-open");
+
+}
+
+
+function closeUnavailable(){
+
+document
+.getElementById("unavailableModal")
+.classList.remove("active");
+
+document.body.classList.remove("modal-open");
+
+}
+
+
+function closeUnavailableOutside(event){
+
+if(
+event.target.id ===
+"unavailableModal"
+){
+
+closeUnavailable();
+
+}
+
+}
+
+
+document.addEventListener(
+"keydown",
+function(event){
+
+if(event.key === "Escape"){
+
+closePhoneModal();
+
+closeUnavailable();
+
+}
+
+});
+
+
+document.addEventListener(
+"click",
+function(event){
+
+if(
+navLinks.classList.contains("active") &&
+!navLinks.contains(event.target) &&
+!menuBtn.contains(event.target)
+){
+
+navLinks.classList.remove("active");
+
+}
+
+});
+
+</script>
 
 </body>
 </html>
