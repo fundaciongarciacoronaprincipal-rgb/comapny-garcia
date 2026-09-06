@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang=es>
+
+<head>
+
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1.0">
+
+<title>Áreas | GRUPO GARCIA CORONA</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    font-family:Segoe UI,Arial,sans-serif;
+    color:#fff;
+    background:
+    radial-gradient(circle at top left,rgba(0,119,255,.30),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(126,34,206,.25),transparent 35%),
+    linear-gradient(135deg,#07111f,#0c1b30 50%,#101a2d);
+    overflow-x:hidden;
+}
+
+/* HEADER */
+
+header{
+    text-align:center;
+    padding:55px 20px 35px;
+}
+
+.etiqueta{
+    display:inline-block;
+    padding:8px 16px;
+    border-radius:30px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.12);
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:#b9d9ff;
+    margin-bottom:18px;
+}
+
+header h1{
+    font-size:clamp(32px,5vw,52px);
+    margin-bottom:12px;
+}
+
+header h1 span{
+    background:linear-gradient(90deg,#fff,#9ecbff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+header p{
+    max-width:700px;
+    margin:auto;
+    color:#b9c7d8;
+    font-size:16px;
+    line-height:1.7;
+}
+
+/* CONTENIDO */
+
+.contenido{
+    width:min(1180px,calc(100% - 40px));
+    margin:20px auto 50px;
+}
+
+.titulo-seccion{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.titulo-seccion h2{
+    font-size:24px;
+}
+
+.contador{
+    color:#91a5bb;
+    font-size:14px;
+}
+
+/* TARJETAS */
+
+.contenedor{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:22px;
+}
+
+.boton{
+    position:relative;
+    min-height:270px;
+    padding:35px 25px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    color:#fff;
+    text-decoration:none;
+
+    background:rgba(255,255,255,.065);
+    border:1px solid rgba(255,255,255,.11);
+    border-radius:24px;
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    box-shadow:
+    0 15px 45px rgba(0,0,0,.20),
+    inset 0 1px 0 rgba(255,255,255,.05);
+
+    cursor:pointer;
+
+    transition:.3s ease;
+}
+
+.boton:hover{
+    transform:translateY(-8px);
+    background:rgba(255,255,255,.10);
+    border-color:rgba(126,190,255,.45);
+    box-shadow:
+    0 25px 60px rgba(0,0,0,.35),
+    0 0 35px rgba(0,130,255,.10);
+}
+
+.icono{
+    width:105px;
+    height:105px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:48px;
+
+    background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.10);
+
+    border-radius:22px;
+
+    margin-bottom:22px;
+}
+
+.nombre-empresa{
+    font-size:20px;
+    font-weight:750;
+    text-align:center;
+    margin-bottom:8px;
+}
+
+.descripcion{
+    color:#9fb0c4;
+    font-size:13px;
+    text-align:center;
+    line-height:1.5;
+    max-width:240px;
+}
+
+.flecha{
+    position:absolute;
+    bottom:18px;
+    right:20px;
+
+    width:32px;
+    height:32px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+    background:rgba(255,255,255,.07);
+
+    color:#b9d9ff;
+}
+
+/* AVISO */
+
+.aviso{
+    margin-top:28px;
+    padding:18px 20px;
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.08);
+
+    color:#aebdce;
+    font-size:13px;
+    line-height:1.6;
+}
+
+/* ============================= */
+/* MODAL */
+/* ============================= */
+
+.modal{
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:100vw;
+    height:100vh;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(0,0,0,.78);
+
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+
+    z-index:999999;
+}
+
+.modal.activo{
+    display:flex;
+}
+
+.modal-contenido{
+    width:min(440px,calc(100% - 40px));
+
+    padding:38px 30px;
+
+    text-align:center;
+
+    background:
+    linear-gradient(
+        145deg,
+        rgba(20,35,58,.99),
+        rgba(8,20,36,.99)
+    );
+
+    border:1px solid rgba(255,255,255,.16);
+
+    border-radius:26px;
+
+    box-shadow:
+    0 30px 100px rgba(0,0,0,.70),
+    0 0 50px rgba(0,120,255,.12);
+
+    animation:aparecerModal .25s ease;
+}
+
+.modal-icono{
+    width:80px;
+    height:80px;
+
+    margin:0 auto 20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:22px;
+
+    background:rgba(255,170,0,.10);
+    border:1px solid rgba(255,255,255,.10);
+
+    font-size:38px;
+}
+
+.modal-contenido h2{
+    font-size:26px;
+    margin-bottom:15px;
+}
+
+.modal-contenido p{
+    color:#b7c5d5;
+    font-size:15px;
+    line-height:1.7;
+    margin-bottom:28px;
+}
+
+.modal-boton{
+    border:0;
+
+    padding:13px 30px;
+
+    border-radius:13px;
+
+    color:#fff;
+
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s ease;
+}
+
+.modal-boton:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(37,99,235,.35);
+}
+
+@keyframes aparecerModal{
+
+    from{
+        opacity:0;
+        transform:scale(.90) translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    padding:30px 20px 35px;
+
+    color:#75869a;
+
+    font-size:12px;
+
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+footer strong{
+    color:#a8b7c8;
+}
+
+/* MOVIL */
+
+@media(max-width:650px){
+
+    header{
+        padding:40px 18px 25px;
+    }
+
+    header h1{
+        font-size:34px;
+    }
+
+    header p{
+        font-size:14px;
+    }
+
+    .contenido{
+        width:calc(100% - 28px);
+    }
+
+    .titulo-seccion{
+        align-items:flex-start;
+        flex-direction:column;
+        gap:6px;
+    }
+
+    .contenedor{
+        grid-template-columns:1fr;
+    }
+
+    .boton{
+        min-height:245px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class=etiqueta>Portal Interno</div>
+
+<h1>
+<span>GRUPO GARCIA CORONA</span>
+</h1>
+
+<p>
+Bienvenido al portal interno.
+Selecciona el área donde trabajas para acceder a sus servicios,
+herramientas y sistemas.
+</p>
+
+</header>
+
+
+<main class=contenido>
+
+<div class=titulo-seccion>
+
+<h2>Áreas</h2>
+
+<div class=contador>
+9 áreas disponibles
+</div>
+
+</div>
+
+
+<section class=contenedor>
+
+
+<!-- 1 -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+>
+
+<div class=icono>🏢</div>
+
+<div class=nombre-empresa>
+Dirección General
+</div>
+
+<div class=descripcion>
+Dirección estratégica y máxima autoridad administrativa del grupo
+</div>
+
+<div class=flecha>→</div>
+
+</a>
+
+
+<!-- 2 -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+>
+
+<div class=icono>🏛️</div>
+
+<div class=nombre-empresa>
+Dirección Corporativa
+</div>
+
+<div class=descripcion>
+Coordinación y gestión corporativa del grupo
+</div>
+
+<div class=flecha>→</div>
+
+</a>
+
+
+<!-- 3 -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+>
+
+<div class=icono>💰</div>
+
+<div class=nombre-empresa>
+Finanzas
+<br>
+<span style=font-size:15px;color:#9fb0c4>
+Tesorería
+</span>
+</div>
+
+<div class=descripcion>
+Administración financiera, pagos, ingresos y tesorería
+</div>
+
+<div class=flecha>→</div>
+
+</a>
+
+
+<!-- 4 -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+>
+
+<div class=icono>⚖️</div>
+
+<div class=nombre-empresa>
+Jurídico y Cumplimiento
+</div>
+
+<div class=descripcion>
+Asuntos legales, contratos, normativas y cumplimiento
+</div>
+
+<div class=flecha>→</div>
+
+</a>
+
+
+<!-- 5 -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+>
+
+<div class=icono>👥</div>
+
+<div class=nombre-empresa>
+Recursos Humanos
+</div>
+
+<div class=descripcion>
+Gestión del personal, colaboradores y desarrollo humano
+</div>
+
+<div class=flecha>→</div>
+
+</a>
+
+
+<!-- 6 -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+>
+
+<div class=icono>📢</div>
+
+<div class=nombre-empresa>
+Marketing
+</div>
+
+<div class=descripcion>
+Comunicación, publicidad, marca y presencia digital
+</div>
+
+<div class=flecha>→</div>
+
+</a>
+
+
+<!-- 7 -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+>
+
+<div class=icono>📈</div>
+
+<div class=nombre-empresa>
+Desarrollo de Negocios
+</div>
+
+<div class=descripcion>
+Nuevos proyectos, alianzas, crecimiento y oportunidades
+</div>
+
+<div class=flecha>→</div>
+
+</a>
+
+
+<!-- 8 -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+>
+
+<div class=icono>📋</div>
+
+<div class=nombre-empresa>
+Administración
+</div>
+
+<div class=descripcion>
+Gestión administrativa, procesos internos y operaciones
+</div>
+
+<div class=flecha>→</div>
+
+</a>
+
+
+<!-- 9 -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+>
+
+<div class=icono>👔</div>
+
+<div class=nombre-empresa>
+Directores Empresariales y Secretari@s
+</div>
+
+<div class=descripcion>
+Acceso para Directores Generales de las subempresas y responsables de áreas internas
+</div>
+
+<div class=flecha>→</div>
+
+</a>
+
+
+</section>
+
+
+<div class=aviso>
+
+<div class=aviso-icono>
+🔒
+</div>
+
+<div>
+
+<strong>Acceso protegido.</strong>
+
+Este portal está destinado exclusivamente para personal autorizado de
+GRUPO GARCIA CORONA.
+
+</div>
+
+</div>
+
+</main>
+
+
+<!-- ============================= -->
+<!-- VENTANA CENTRADA -->
+<!-- ============================= -->
+
+<div
+id=modalAcceso
+class=modal
+onclick=cerrarSiFueraDeLaCaja(event)
+>
+
+<div
+class=modal-contenido
+>
+
+<div class=modal-icono>
+🚧
+</div>
+
+<h2>
+Acceso no disponible
+</h2>
+
+<p>
+Continuamos trabajando para que puedas acceder a tu área
+lo más pronto posible.
+</p>
+
+<button
+class=modal-boton
+onclick=cerrarModal()
+>
+Entendido
+</button>
+
+</div>
+
+</div>
+
+
+<footer>
+
+© 2026
+<strong>GRUPO GARCIA CORONA</strong>.
+Todos los derechos reservados.
+
+</footer>
+
+
+<script>
+
+/* CONTRASEÑA PRINCIPAL */
+
+const contraseñaCorrecta="CGC-0100";
+
+let intento=prompt("Ingrese la contraseña para acceder:");
+
+if(intento!==contraseñaCorrecta){
+
+    alert("Contraseña incorrecta.");
+
+    window.location.href="about:blank";
+
+}
+
+
+/* ============================= */
+/* CONTROL DE LAS ÁREAS */
+/* ============================= */
+
+function controlarAcceso(event){
+
+    const enlace=event.currentTarget.getAttribute("href");
+
+    /*
+    SI EL ENLACE ES #
+    NO NAVEGA Y MUESTRA EL MODAL
+    */
+
+    if(enlace==="#"){
+
+        event.preventDefault();
+
+        document
+        .getElementById("modalAcceso")
+        .classList
+        .add("activo");
+
+    }
+
+    /*
+    SI CAMBIAS # POR UN LINK REAL
+    EL NAVEGADOR LO ABRIRÁ NORMALMENTE
+    */
+
+}
+
+
+/* CERRAR MODAL */
+
+function cerrarModal(){
+
+    document
+    .getElementById("modalAcceso")
+    .classList
+    .remove("activo");
+
+}
+
+
+/* CERRAR AL HACER CLICK FUERA */
+
+function cerrarSiFueraDeLaCaja(event){
+
+    if(event.target===event.currentTarget){
+
+        cerrarModal();
+
+    }
+
+}
+
+
+/* CERRAR CON ESC */
+
+document.addEventListener(
+"keydown",
+function(event){
+
+    if(event.key==="Escape"){
+
+        cerrarModal();
+
+    }
+
+}
+);
+
+</script>
+
+</body>
+
+</html>
