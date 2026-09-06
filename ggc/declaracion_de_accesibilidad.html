@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Declaración de Accesibilidad | GRUPO GARCIA CORONA</title>
+
+<meta name="description" content="Declaración de Accesibilidad de GRUPO GARCIA CORONA. Nuestro compromiso con una experiencia digital accesible, inclusiva y fácil de utilizar.">
+
+<style>
+
+:root{
+    --bg:#050b14;
+    --bg2:#091525;
+    --card:#0d1b2d;
+    --primary:#1d73ff;
+    --cyan:#18d7ff;
+    --white:#ffffff;
+    --text:#dce7f5;
+    --muted:#91a4bb;
+    --border:rgba(255,255,255,.09);
+    --shadow:0 25px 70px rgba(0,0,0,.35);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(29,115,255,.13),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(24,215,255,.08),
+            transparent 25%
+        ),
+        linear-gradient(
+            180deg,
+            var(--bg),
+            var(--bg2)
+        );
+
+    color:var(--text);
+    line-height:1.7;
+    min-height:100vh;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    position:relative;
+    min-height:65vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:100px 24px 80px;
+
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+
+    width:600px;
+    height:600px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(29,115,255,.20),
+            transparent 68%
+        );
+
+    top:-200px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    pointer-events:none;
+}
+
+.hero-content{
+    position:relative;
+    max-width:900px;
+    z-index:2;
+}
+
+.eyebrow{
+    display:inline-flex;
+
+    align-items:center;
+    gap:9px;
+
+    padding:8px 15px;
+
+    border:1px solid rgba(24,215,255,.22);
+
+    background:rgba(24,215,255,.06);
+
+    border-radius:50px;
+
+    color:var(--cyan);
+
+    font-size:11px;
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+
+    margin-bottom:25px;
+}
+
+.eyebrow .dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--cyan);
+
+    box-shadow:0 0 12px var(--cyan);
+}
+
+.hero h1{
+    font-size:clamp(40px,6vw,72px);
+
+    line-height:1.05;
+
+    margin-bottom:25px;
+
+    letter-spacing:-2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #d9e9ff 50%,
+            #7beaff
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+}
+
+.hero p{
+    max-width:800px;
+
+    margin:auto;
+
+    color:var(--muted);
+
+    font-size:17px;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+section{
+    padding:80px 24px;
+}
+
+.container{
+    max-width:1050px;
+    margin:auto;
+}
+
+.section-label{
+    color:var(--cyan);
+
+    text-transform:uppercase;
+
+    letter-spacing:2px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    margin-bottom:12px;
+}
+
+.section-title{
+    font-size:38px;
+
+    line-height:1.15;
+
+    margin-bottom:15px;
+
+    color:var(--white);
+}
+
+.section-description{
+    color:var(--muted);
+
+    max-width:800px;
+
+    margin-bottom:45px;
+}
+
+/* =========================
+   NOTICE
+========================= */
+
+.notice{
+    background:
+        linear-gradient(
+            135deg,
+            rgba(29,115,255,.12),
+            rgba(24,215,255,.04)
+        ),
+        var(--card);
+
+    border:1px solid rgba(29,115,255,.22);
+
+    border-radius:22px;
+
+    padding:28px;
+
+    margin-bottom:25px;
+
+    box-shadow:var(--shadow);
+}
+
+.notice strong{
+    color:var(--white);
+}
+
+.notice-icon{
+    width:45px;
+    height:45px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:rgba(29,115,255,.12);
+
+    color:var(--cyan);
+
+    font-size:22px;
+
+    margin-bottom:18px;
+}
+
+/* =========================
+   ACCESSIBILITY CARDS
+========================= */
+
+.accessibility-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:20px;
+}
+
+.accessibility-card{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.035),
+            rgba(255,255,255,.015)
+        );
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    transition:.35s;
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.18);
+}
+
+.accessibility-card:hover{
+    transform:translateY(-5px);
+
+    border-color:
+        rgba(24,215,255,.25);
+
+    box-shadow:
+        0 20px 55px rgba(0,0,0,.30);
+}
+
+.card-number{
+    color:var(--cyan);
+
+    font-size:12px;
+
+    font-weight:800;
+
+    letter-spacing:1.5px;
+
+    margin-bottom:10px;
+}
+
+.accessibility-card h3{
+    color:var(--white);
+
+    font-size:21px;
+
+    margin-bottom:15px;
+}
+
+.accessibility-card p{
+    color:var(--muted);
+
+    font-size:15px;
+}
+
+.accessibility-card ul{
+    margin-top:15px;
+
+    padding-left:20px;
+
+    color:var(--muted);
+}
+
+.accessibility-card li{
+    margin-bottom:9px;
+}
+
+.accessibility-card li::marker{
+    color:var(--cyan);
+}
+
+/* =========================
+   FULL CARD
+========================= */
+
+.full-card{
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:22px;
+
+    padding:35px;
+
+    margin-top:25px;
+
+    box-shadow:var(--shadow);
+}
+
+.full-card h3{
+    color:var(--white);
+
+    font-size:23px;
+
+    margin-bottom:15px;
+}
+
+.full-card p{
+    color:var(--muted);
+
+    margin-bottom:15px;
+}
+
+.full-card p:last-child{
+    margin-bottom:0;
+}
+
+.full-card ul{
+    margin:15px 0 0 20px;
+
+    color:var(--muted);
+}
+
+.full-card li{
+    margin-bottom:10px;
+}
+
+.full-card li::marker{
+    color:var(--cyan);
+}
+
+/* =========================
+   PRINCIPLES
+========================= */
+
+.principles{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:18px;
+
+    margin-top:30px;
+}
+
+.principle{
+    background:
+        rgba(255,255,255,.025);
+
+    border:1px solid var(--border);
+
+    border-radius:18px;
+
+    padding:24px;
+}
+
+.principle-icon{
+    width:42px;
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:11px;
+
+    background:
+        rgba(24,215,255,.07);
+
+    color:var(--cyan);
+
+    font-size:19px;
+
+    margin-bottom:15px;
+}
+
+.principle h4{
+    color:var(--white);
+
+    margin-bottom:8px;
+
+    font-size:16px;
+}
+
+.principle p{
+    color:var(--muted);
+
+    font-size:14px;
+}
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact-box{
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(24,215,255,.12),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #0d1d32,
+            #0a1422
+        );
+
+    border:1px solid
+        rgba(24,215,255,.16);
+
+    border-radius:25px;
+
+    padding:45px;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+}
+
+.contact-box h2{
+    color:var(--white);
+
+    font-size:34px;
+
+    margin-bottom:15px;
+}
+
+.contact-box p{
+    color:var(--muted);
+
+    max-width:700px;
+
+    margin:0 auto 25px;
+}
+
+.contact-buttons{
+    display:flex;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+}
+
+.btn{
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:12px 20px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.btn-primary{
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #1256ca
+        );
+
+    box-shadow:
+        0 10px 30px
+        rgba(29,115,255,.25);
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+}
+
+.btn-secondary{
+    color:var(--text);
+
+    border:1px solid var(--border);
+
+    background:
+        rgba(255,255,255,.04);
+}
+
+.btn-secondary:hover{
+    background:
+        rgba(255,255,255,.08);
+}
+
+/* =========================
+   DERECHOS RESERVADOS
+========================= */
+
+.rights{
+    text-align:center;
+
+    padding:35px 20px;
+
+    border-top:1px solid var(--border);
+
+    background:#040910;
+
+    color:#66788e;
+
+    font-size:11px;
+}
+
+/* =========================
+   ANIMACIONES
+========================= */
+
+.reveal{
+    opacity:0;
+
+    transform:translateY(25px);
+
+    transition:
+        opacity .7s ease,
+        transform .7s ease;
+}
+
+.reveal.visible{
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .accessibility-grid{
+        grid-template-columns:1fr;
+    }
+
+    .principles{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .hero{
+        min-height:60vh;
+
+        padding:
+            90px 20px 65px;
+    }
+
+    .hero h1{
+        font-size:42px;
+
+        letter-spacing:-1.5px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    section{
+        padding:65px 20px;
+    }
+
+    .section-title{
+        font-size:30px;
+    }
+
+    .contact-box{
+        padding:32px 22px;
+    }
+
+    .contact-box h2{
+        font-size:28px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+<div class="hero-content reveal">
+
+<div class="eyebrow">
+
+<span class="dot"></span>
+
+Compromiso digital
+
+</div>
+
+<h1>
+Declaración de<br>
+Accesibilidad
+</h1>
+
+<p>
+
+En <strong>GRUPO GARCIA CORONA</strong> trabajamos para
+que nuestros sitios web, plataformas y recursos digitales
+sean cada vez más accesibles, comprensibles y fáciles
+de utilizar para todas las personas.
+
+</p>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     INTRODUCCIÓN
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+01 · Nuestro compromiso
+</div>
+
+<h2 class="section-title reveal">
+Accesibilidad para todas las personas
+</h2>
+
+<p class="section-description reveal">
+
+GRUPO GARCIA CORONA reconoce la importancia de construir
+experiencias digitales que puedan ser utilizadas por
+personas con diferentes capacidades, dispositivos,
+formas de navegación y necesidades de acceso.
+
+</p>
+
+
+<div class="notice reveal">
+
+<div class="notice-icon">
+♿
+</div>
+
+<p>
+
+<strong>Nuestro compromiso</strong><br><br>
+
+Buscamos mejorar continuamente la accesibilidad de
+nuestros sitios, plataformas y servicios digitales,
+procurando que la información y las funciones principales
+sean claras, perceptibles y utilizables.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     PRINCIPIOS
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+02 · Principios
+</div>
+
+<h2 class="section-title reveal">
+Una experiencia digital más accesible
+</h2>
+
+<p class="section-description reveal">
+
+Nuestro enfoque considera diferentes aspectos de la
+experiencia digital para facilitar el acceso a la
+información y a las funciones disponibles.
+
+</p>
+
+
+<div class="principles">
+
+
+<div class="principle reveal">
+
+<div class="principle-icon">
+👁
+</div>
+
+<h4>
+Perceptible
+</h4>
+
+<p>
+Procuramos presentar la información de manera que pueda
+ser identificada y comprendida mediante diferentes
+formas de interacción.
+</p>
+
+</div>
+
+
+<div class="principle reveal">
+
+<div class="principle-icon">
+⌨
+</div>
+
+<h4>
+Utilizable
+</h4>
+
+<p>
+Buscamos facilitar la navegación y utilización de
+las funciones principales mediante diferentes métodos
+de interacción.
+</p>
+
+</div>
+
+
+<div class="principle reveal">
+
+<div class="principle-icon">
+◎
+</div>
+
+<h4>
+Comprensible
+</h4>
+
+<p>
+Procuramos utilizar estructuras, textos y elementos
+de navegación claros y consistentes.
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     MEDIDAS
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+03 · Accesibilidad digital
+</div>
+
+<h2 class="section-title reveal">
+Características que procuramos implementar
+</h2>
+
+<p class="section-description reveal">
+
+Dependiendo del sitio, plataforma o servicio,
+podemos implementar diferentes prácticas destinadas
+a mejorar la accesibilidad.
+
+</p>
+
+
+<div class="accessibility-grid">
+
+
+<div class="accessibility-card reveal">
+
+<div class="card-number">
+01
+</div>
+
+<h3>
+Contraste y legibilidad
+</h3>
+
+<p>
+Procuramos mantener combinaciones visuales que faciliten
+la lectura de textos, botones, controles y elementos
+importantes de nuestras interfaces.
+</p>
+
+</div>
+
+
+<div class="accessibility-card reveal">
+
+<div class="card-number">
+02
+</div>
+
+<h3>
+Navegación clara
+</h3>
+
+<p>
+Buscamos organizar los contenidos de manera lógica,
+facilitando que las personas puedan identificar
+las diferentes secciones y funciones.
+</p>
+
+</div>
+
+
+<div class="accessibility-card reveal">
+
+<div class="card-number">
+03
+</div>
+
+<h3>
+Textos comprensibles
+</h3>
+
+<p>
+Procuramos utilizar textos claros, estructurados y
+directos para facilitar la comprensión de la información.
+</p>
+
+</div>
+
+
+<div class="accessibility-card reveal">
+
+<div class="card-number">
+04
+</div>
+
+<h3>
+Elementos interactivos
+</h3>
+
+<p>
+Los botones, enlaces y controles principales buscan
+contar con una presentación suficientemente clara para
+identificar su función.
+</p>
+
+</div>
+
+
+<div class="accessibility-card reveal">
+
+<div class="card-number">
+05
+</div>
+
+<h3>
+Diseño adaptable
+</h3>
+
+<p>
+Nuestros sitios buscan adaptarse a diferentes tamaños
+de pantalla, incluyendo computadoras, tabletas y
+dispositivos móviles.
+</p>
+
+</div>
+
+
+<div class="accessibility-card reveal">
+
+<div class="card-number">
+06
+</div>
+
+<h3>
+Compatibilidad
+</h3>
+
+<p>
+Buscamos mantener nuestros recursos compatibles con
+los navegadores y tecnologías utilizadas habitualmente
+para acceder a contenido digital.
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     TECNOLOGÍAS DE ASISTENCIA
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+04 · Tecnologías de asistencia
+</div>
+
+<h2 class="section-title reveal">
+Compatibilidad y navegación asistida
+</h2>
+
+<div class="full-card reveal">
+
+<h3>
+Nuestro objetivo
+</h3>
+
+<p>
+
+Buscamos que nuestros contenidos digitales puedan ser
+consultados mediante diferentes herramientas y métodos
+de navegación disponibles para los usuarios.
+
+</p>
+
+<p>
+
+Dependiendo de las características de cada plataforma,
+esto puede incluir compatibilidad con navegación mediante
+teclado, ampliación de contenido, lectores de pantalla,
+controles de accesibilidad del sistema operativo y
+otras tecnologías de asistencia.
+
+</p>
+
+<p>
+
+La disponibilidad de estas características puede variar
+entre diferentes plataformas, navegadores, dispositivos
+y versiones del servicio.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     MEJORA CONTINUA
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+05 · Mejora continua
+</div>
+
+<h2 class="section-title reveal">
+Seguimos mejorando
+</h2>
+
+<div class="accessibility-grid">
+
+
+<div class="accessibility-card reveal">
+
+<div class="card-number">
+01
+</div>
+
+<h3>
+Evaluación
+</h3>
+
+<p>
+
+Buscamos identificar posibles dificultades de acceso
+o navegación que puedan presentarse en nuestros sitios
+y plataformas.
+
+</p>
+
+</div>
+
+
+<div class="accessibility-card reveal">
+
+<div class="card-number">
+02
+</div>
+
+<h3>
+Actualización
+</h3>
+
+<p>
+
+Nuestros recursos digitales pueden recibir cambios,
+actualizaciones y mejoras destinadas a ofrecer una
+mejor experiencia.
+
+</p>
+
+</div>
+
+
+<div class="accessibility-card reveal">
+
+<div class="card-number">
+03
+</div>
+
+<h3>
+Retroalimentación
+</h3>
+
+<p>
+
+Las observaciones de los usuarios pueden ayudarnos a
+identificar oportunidades para mejorar la accesibilidad
+de nuestros servicios digitales.
+
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     LIMITACIONES
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+06 · Alcance
+</div>
+
+<h2 class="section-title reveal">
+Limitaciones y disponibilidad
+</h2>
+
+<div class="full-card reveal">
+
+<h3>
+Accesibilidad en evolución
+</h3>
+
+<p>
+
+Trabajamos continuamente para mejorar la accesibilidad.
+Sin embargo, determinadas páginas, contenidos, servicios
+o herramientas de terceros pueden presentar limitaciones
+que no dependan directamente de GRUPO GARCIA CORONA.
+
+</p>
+
+<p>
+
+Asimismo, las características de accesibilidad pueden
+variar dependiendo del dispositivo, navegador, sistema
+operativo, versión de la plataforma o tecnología de
+asistencia utilizada.
+
+</p>
+
+<p>
+
+Nuestro compromiso es continuar identificando y atendiendo
+las oportunidades de mejora que estén dentro de nuestro
+alcance.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     REPORTE DE PROBLEMAS
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="section-label reveal">
+07 · Ayúdanos a mejorar
+</div>
+
+<h2 class="section-title reveal">
+¿Encontraste una dificultad?
+</h2>
+
+<p class="section-description reveal">
+
+Si encuentras alguna dificultad para acceder a un contenido,
+navegar por nuestro sitio o utilizar alguna de nuestras
+funciones, puedes informarnos para que podamos analizar
+la situación.
+
+</p>
+
+
+<div class="notice reveal">
+
+<div class="notice-icon">
+✓
+</div>
+
+<p>
+
+<strong>Tu opinión es importante.</strong><br><br>
+
+Al reportar una dificultad, si es posible, incluye la
+dirección de la página, una descripción del problema y
+el dispositivo o navegador utilizado. Esta información
+puede ayudarnos a investigar y mejorar la experiencia.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     CONTACTO
+========================= -->
+
+<section>
+
+<div class="container">
+
+<div class="contact-box reveal">
+
+<h2>
+¿Necesitas asistencia?
+</h2>
+
+<p>
+
+Si tienes algún problema relacionado con la accesibilidad
+de nuestros recursos digitales o necesitas comunicarte
+con GRUPO GARCIA CORONA, ponemos a tu disposición nuestros
+canales oficiales.
+
+</p>
+
+<div class="contact-buttons">
+
+<a
+href="https://companygarciacorona.com.mx/contactos.html"
+class="btn btn-primary"
+>
+Contactar al grupo
+</a>
+
+<a
+href="mailto:fgc@gmail.com"
+class="btn btn-secondary"
+>
+Enviar correo
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     DERECHOS RESERVADOS
+========================= -->
+
+<div class="rights">
+
+© 2026 GRUPO GARCIA CORONA. Todos los derechos reservados.
+
+</div>
+
+
+<script>
+
+/* =========================
+   ANIMACIONES
+========================= */
+
+const observer = new IntersectionObserver(
+
+(entries)=>{
+
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
+
+            entry.target.classList.add("visible");
+
+        }
+
+    });
+
+},
+
+{
+    threshold:.12
+}
+
+);
+
+
+document
+.querySelectorAll(".reveal")
+.forEach(element=>{
+
+    observer.observe(element);
+
+});
+
+
+/* =========================
+   HERO
+========================= */
+
+window.addEventListener("load",()=>{
+
+    document
+    .querySelectorAll(".hero .reveal")
+    .forEach(element=>{
+
+        setTimeout(()=>{
+
+            element.classList.add("visible");
+
+        },150);
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
