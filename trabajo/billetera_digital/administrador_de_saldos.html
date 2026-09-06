@@ -1,0 +1,2313 @@
+<!DOCTYPE html>
+<html lang=es>
+
+<head>
+
+<meta charset=UTF-8>
+
+<meta name=viewport content=width=device-width, initial-scale=1.0>
+
+<title>Panel | GRUPO GARCIA CORONA</title>
+
+<script src=https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2></script>
+
+<style>
+
+:root{
+    --primary:#163b65;
+    --primary-dark:#0d2948;
+    --secondary:#1f5f96;
+    --accent:#00a8e8;
+    --success:#16a34a;
+    --danger:#dc2626;
+    --warning:#f59e0b;
+    --background:#f3f6fa;
+    --white:#ffffff;
+    --text:#172033;
+    --muted:#64748b;
+    --border:#e2e8f0;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    font-family:Inter,"Segoe UI",Arial,Helvetica,sans-serif;
+    background:var(--background);
+    color:var(--text);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:270px;
+    height:100vh;
+    background:linear-gradient(180deg,#0b223b 0%,#123b61 55%,#0b223b 100%);
+    color:white;
+    z-index:1000;
+    box-shadow:8px 0 30px rgba(15,23,42,.12);
+    transition:.3s ease;
+    display:flex;
+    flex-direction:column;
+}
+
+.logo-area{
+    padding:28px 22px;
+    border-bottom:1px solid rgba(255,255,255,.09);
+}
+
+.logo-icon{
+    width:50px;
+    height:50px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#00a8e8,#2563eb);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    font-weight:900;
+    margin-bottom:15px;
+    box-shadow:0 8px 25px rgba(0,168,232,.25);
+}
+
+.logo-area h2{
+    margin:0;
+    font-size:17px;
+    letter-spacing:.4px;
+}
+
+.logo-area p{
+    margin:6px 0 0;
+    color:#9db3c8;
+    font-size:11px;
+}
+
+.menu-title{
+    padding:23px 22px 9px;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    color:#7891a9;
+    font-weight:800;
+}
+
+.sidebar a{
+    margin:4px 14px;
+    padding:14px 16px;
+    border-radius:12px;
+    color:#d8e4ef;
+    text-decoration:none;
+    font-size:13px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:.2s;
+}
+
+.sidebar a:hover{
+    background:rgba(255,255,255,.08);
+    color:white;
+}
+
+.sidebar a.active{
+    background:linear-gradient(135deg,#1478b8,#15549a);
+    color:white;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.menu-icon{
+    width:25px;
+    text-align:center;
+    font-size:17px;
+}
+
+.sidebar-bottom{
+    margin-top:auto;
+    padding:18px;
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+.worker-box{
+    background:rgba(255,255,255,.06);
+    border-radius:14px;
+    padding:13px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.worker-avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:#e2e8f0;
+    color:#173b62;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    font-size:11px;
+}
+
+.worker-info strong{
+    display:block;
+    font-size:12px;
+}
+
+.worker-info span{
+    display:block;
+    color:#91a7bc;
+    font-size:10px;
+    margin-top:3px;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:270px;
+    min-height:100vh;
+}
+
+/* TOPBAR */
+
+.topbar{
+    height:78px;
+    background:white;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 35px;
+    position:sticky;
+    top:0;
+    z-index:500;
+}
+
+.topbar-left h1{
+    margin:0;
+    font-size:20px;
+    color:#122b47;
+}
+
+.topbar-left p{
+    margin:4px 0 0;
+    font-size:11px;
+    color:var(--muted);
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    color:#475569;
+}
+
+.status-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 0 4px rgba(34,197,94,.12);
+}
+
+/* CONTENT */
+
+.content{
+    padding:32px 35px 50px;
+    max-width:1500px;
+    margin:auto;
+}
+
+.seccion{
+    display:none;
+    animation:fadeIn .25s ease;
+}
+
+.seccion.active{
+    display:block;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* HEADER */
+
+.page-header{
+    margin-bottom:25px;
+}
+
+.page-header h2{
+    margin:0;
+    font-size:27px;
+    color:#122b47;
+}
+
+.page-header p{
+    margin:7px 0 0;
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* CARDS */
+
+.card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:0 8px 30px rgba(15,23,42,.05);
+    overflow:hidden;
+}
+
+.card-header{
+    padding:22px 24px;
+    border-bottom:1px solid var(--border);
+}
+
+.card-header h3{
+    margin:0;
+    color:#122b47;
+    font-size:17px;
+}
+
+.card-header p{
+    margin:5px 0 0;
+    color:var(--muted);
+    font-size:12px;
+}
+
+.card-body{
+    padding:25px;
+}
+
+/* RESUMEN */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:20px;
+}
+
+.stat-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:24px;
+    display:flex;
+    align-items:center;
+    gap:17px;
+    box-shadow:0 7px 25px rgba(15,23,42,.04);
+    transition:.2s;
+}
+
+.stat-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 30px rgba(15,23,42,.08);
+}
+
+.stat-icon{
+    width:54px;
+    height:54px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    background:#eaf4fb;
+    color:#12649a;
+}
+
+.stat-card strong{
+    display:block;
+    font-size:23px;
+    color:#122b47;
+}
+
+.stat-card span{
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* SISTEMA */
+
+.system-card{
+    margin-top:22px;
+    background:linear-gradient(135deg,#0f3152,#174e7a);
+    color:white;
+    border-radius:20px;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    box-shadow:0 12px 30px rgba(15,49,82,.15);
+}
+
+.system-card h3{
+    margin:0 0 7px;
+    font-size:20px;
+}
+
+.system-card p{
+    margin:0;
+    color:#c9d9e7;
+    font-size:13px;
+}
+
+.system-status{
+    padding:11px 17px;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:12px;
+    font-size:12px;
+    white-space:nowrap;
+}
+
+.system-status span{
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#22c55e;
+    margin-right:7px;
+}
+
+/* FORMULARIO */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.form-group.full{
+    grid-column:1 / -1;
+}
+
+.form-group label{
+    font-size:12px;
+    font-weight:800;
+    color:#334155;
+}
+
+input{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid #d7dee8;
+    border-radius:11px;
+    outline:none;
+    font-size:14px;
+    background:white;
+    color:#172033;
+    transition:.2s;
+}
+
+input:focus{
+    border-color:#2c82bb;
+    box-shadow:0 0 0 4px rgba(44,130,187,.10);
+}
+
+input::placeholder{
+    color:#94a3b8;
+}
+
+/* BOTONES */
+
+button{
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+    transition:.2s;
+}
+
+.btn{
+    padding:12px 18px;
+    border-radius:11px;
+    font-size:13px;
+    font-weight:800;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+
+.btn-primary{
+    background:linear-gradient(135deg,#155b8e,#163b65);
+    color:white;
+}
+
+.btn-primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 7px 18px rgba(22,59,101,.22);
+}
+
+/* TABLA */
+
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:850px;
+}
+
+thead{
+    background:#f8fafc;
+}
+
+th{
+    text-align:left;
+    padding:15px 16px;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+    color:#64748b;
+    border-bottom:1px solid var(--border);
+}
+
+td{
+    padding:15px 16px;
+    border-bottom:1px solid #eef2f7;
+    font-size:13px;
+    color:#334155;
+}
+
+tbody tr:hover{
+    background:#f8fbfd;
+}
+
+.id-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:34px;
+    height:28px;
+    padding:0 8px;
+    border-radius:8px;
+    background:#eef4f8;
+    color:#315a7d;
+    font-weight:800;
+    font-size:11px;
+}
+
+.service-number{
+    font-weight:800;
+    color:#153b60;
+}
+
+.reference{
+    color:#64748b;
+}
+
+.balance{
+    font-weight:900;
+    color:#123f68;
+}
+
+.initials{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#e8f2f9;
+    color:#155b8e;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    font-size:10px;
+}
+
+.action-box{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.amount-input{
+    width:105px !important;
+    padding:9px !important;
+}
+
+.action-btn{
+    width:35px;
+    height:35px;
+    border-radius:9px;
+    font-size:18px;
+    font-weight:900;
+}
+
+.btn-success{
+    background:#e9f8ee;
+    color:#15803d;
+}
+
+.btn-success:hover{
+    background:#d5f3df;
+}
+
+.btn-danger{
+    background:#feecec;
+    color:#b91c1c;
+}
+
+.btn-danger:hover{
+    background:#fbdada;
+}
+
+.empty-state{
+    text-align:center;
+    padding:45px 20px;
+    color:#94a3b8;
+}
+
+.empty-state-icon{
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+/* GENERADOR */
+
+.generator-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:25px;
+}
+
+.generator-info{
+    background:linear-gradient(135deg,#0f3152,#174e7a);
+    color:white;
+    border-radius:18px;
+    padding:30px;
+    min-height:350px;
+    position:relative;
+    overflow:hidden;
+}
+
+.generator-info:after{
+    content:"";
+    position:absolute;
+    width:200px;
+    height:200px;
+    border-radius:50%;
+    background:rgba(255,255,255,.06);
+    right:-70px;
+    bottom:-80px;
+}
+
+.generator-info h3{
+    font-size:25px;
+    margin:0 0 10px;
+}
+
+.generator-info p{
+    color:#c5d7e7;
+    line-height:1.6;
+    font-size:14px;
+    max-width:450px;
+}
+
+.feature-list{
+    list-style:none;
+    padding:0;
+    margin:25px 0 0;
+}
+
+.feature-list li{
+    margin:13px 0;
+    color:#dce9f4;
+    font-size:13px;
+}
+
+.feature-list span{
+    margin-right:8px;
+    color:#48c2f2;
+}
+
+.generator-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:30px;
+}
+
+.generator-card h3{
+    margin:0 0 8px;
+    font-size:18px;
+    color:#122b47;
+}
+
+.generator-card p{
+    margin:0 0 20px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.btn-generate{
+    width:100%;
+    margin-top:15px;
+}
+
+.code-result{
+    margin-top:25px;
+    border:2px dashed #cbd8e5;
+    border-radius:15px;
+    padding:22px;
+    text-align:center;
+    background:#f8fafc;
+}
+
+.code-label{
+    font-size:10px;
+    color:#64748b;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+#codigoGenerado{
+    margin-top:8px;
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:2px;
+    color:#123f68;
+    word-break:break-word;
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    min-width:280px;
+    max-width:400px;
+    padding:15px 18px;
+    background:#122b47;
+    color:white;
+    border-radius:13px;
+    box-shadow:0 12px 35px rgba(0,0,0,.2);
+    transform:translateY(120px);
+    opacity:0;
+    transition:.3s;
+    z-index:3000;
+    font-size:13px;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+.toast.success{
+    border-left:4px solid #22c55e;
+}
+
+.toast.error{
+    border-left:4px solid #ef4444;
+}
+
+/* MOBILE */
+
+.mobile-menu{
+    display:none;
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:#edf4f8;
+    color:#173b62;
+    font-size:21px;
+}
+
+.overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.45);
+    z-index:900;
+}
+
+.overlay.active{
+    display:block;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1000px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .generator-layout{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:800px){
+
+    .sidebar{
+        left:-280px;
+    }
+
+    .sidebar.active{
+        left:0;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .mobile-menu{
+        display:block;
+    }
+
+    .topbar{
+        padding:0 18px;
+    }
+
+    .status{
+        display:none;
+    }
+
+    .content{
+        padding:22px 16px 40px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+    .system-card{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .topbar-left h1{
+        font-size:16px;
+    }
+
+    .topbar-left p{
+        font-size:10px;
+    }
+
+    .page-header h2{
+        font-size:23px;
+    }
+
+    .card-body{
+        padding:18px;
+    }
+
+    .generator-info,
+    .generator-card{
+        padding:22px;
+    }
+
+}
+
+/* PRINT */
+
+@media print{
+
+    .sidebar,
+    .topbar,
+    .mobile-menu,
+    .btn,
+    .action-box{
+        display:none !important;
+    }
+
+    .main{
+        margin:0;
+    }
+
+    .content{
+        padding:0;
+    }
+
+    .card{
+        box-shadow:none;
+        border:none;
+    }
+
+}
+
+</style>
+
+<script>
+
+const contraseñaCorrecta="CGC-0001";
+
+let intento=prompt("Ingrese la contraseña de acceso:");
+
+if(intento!==contraseñaCorrecta){
+
+    alert("Contraseña incorrecta.");
+
+    window.location.href="about:blank";
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="logo-area">
+
+        <div class="logo-icon">
+            GC
+        </div>
+
+        <h2>
+            GRUPO GARCIA CORONA
+        </h2>
+
+        <p>
+            Panel interno de trabajadores
+        </p>
+
+    </div>
+
+    <div class="menu-title">
+        Menú principal
+    </div>
+
+    <a href="#"
+       id="menuResumen"
+       class="active"
+       onclick="mostrarSeccion('resumen');return false;">
+
+        <span class="menu-icon">
+            ◈
+        </span>
+
+        Resumen
+
+    </a>
+
+    <a href="#"
+       id="menuNuevo"
+       onclick="mostrarSeccion('nuevoServicio');return false;">
+
+        <span class="menu-icon">
+            ＋
+        </span>
+
+        Nuevo servicio
+
+    </a>
+
+    <a href="#"
+       id="menuServicios"
+       onclick="mostrarSeccion('servicios');return false;">
+
+        <span class="menu-icon">
+            ▣
+        </span>
+
+        Servicios registrados
+
+    </a>
+
+    <a href="#"
+       id="menuCodigos"
+       onclick="mostrarSeccion('codigos');return false;">
+
+        <span class="menu-icon">
+            ◇
+        </span>
+
+        Generador de códigos
+
+    </a>
+
+    <div class="sidebar-bottom">
+
+        <div class="worker-box">
+
+            <div class="worker-avatar">
+                GC
+            </div>
+
+            <div class="worker-info">
+
+                <strong>
+                    Personal autorizado
+                </strong>
+
+                <span>
+                    Acceso interno
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</aside>
+
+<div class="overlay"
+     id="overlay"
+     onclick="cerrarMenu()">
+</div>
+
+<main class="main">
+
+    <header class="topbar">
+
+        <div style="display:flex;align-items:center;gap:13px;">
+
+            <button
+                class="mobile-menu"
+                onclick="toggleMenu()">
+
+                ☰
+
+            </button>
+
+            <div class="topbar-left">
+
+                <h1>
+                    Panel Administrativo
+                </h1>
+
+                <p>
+                    GRUPO GARCIA CORONA
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="status">
+
+            <span class="status-dot"></span>
+
+            Sistema conectado
+
+        </div>
+
+    </header>
+
+    <div class="content">
+
+        <!-- RESUMEN -->
+
+        <section id="resumen"
+                 class="seccion active">
+
+            <div class="page-header">
+
+                <h2>
+                    Resumen general
+                </h2>
+
+                <p>
+                    Consulta rápidamente el estado general del sistema.
+                </p>
+
+            </div>
+
+            <div class="stats">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ▣
+                    </div>
+
+                    <div>
+
+                        <strong id="totalServicios">
+                            0
+                        </strong>
+
+                        <span>
+                            Servicios registrados
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        $
+                    </div>
+
+                    <div>
+
+                        <strong id="saldoTotal">
+                            $0.00
+                        </strong>
+
+                        <span>
+                            Saldo total registrado
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            ACTIVO
+                        </strong>
+
+                        <span>
+                            Estado del sistema
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="system-card">
+
+                <div>
+
+                    <h3>
+                        Sistema operativo
+                    </h3>
+
+                    <p>
+                        El panel administrativo se encuentra disponible y conectado con la base de datos.
+                    </p>
+
+                </div>
+
+                <div class="system-status">
+
+                    <span></span>
+
+                    Sistema funcionando
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- NUEVO SERVICIO -->
+
+        <section id="nuevoServicio"
+                 class="seccion">
+
+            <div class="page-header">
+
+                <h2>
+                    Nuevo servicio
+                </h2>
+
+                <p>
+                    Registra un nuevo servicio dentro del sistema.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>
+                        Registrar servicio
+                    </h3>
+
+                    <p>
+                        Completa los datos solicitados para crear el registro.
+                    </p>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form id="registroForm">
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+
+                                <label>
+                                    Número de servicio
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="servicio"
+                                    placeholder="Ej. 001258963"
+                                    required>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>
+                                    Número de referencia
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="referencia"
+                                    placeholder="Ej. REF-45821"
+                                    required>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>
+                                    Saldo inicial
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="saldo"
+                                    placeholder="0.00"
+                                    min="0"
+                                    step="0.01"
+                                    required>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label>
+                                    Iniciales del trabajador
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="iniciales"
+                                    placeholder="Ej. JGC"
+                                    maxlength="10"
+                                    required>
+
+                            </div>
+
+                            <div class="form-group full">
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary">
+
+                                    ＋ Registrar servicio
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SERVICIOS REGISTRADOS -->
+
+        <section id="servicios"
+                 class="seccion">
+
+            <div class="page-header">
+
+                <h2>
+                    Servicios registrados
+                </h2>
+
+                <p>
+                    Consulta los servicios y administra sus saldos.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3>
+                        Lista de servicios
+                    </h3>
+
+                    <p>
+                        Utiliza los botones + y − para modificar el saldo.
+                    </p>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ID
+                                </th>
+
+                                <th>
+                                    Servicio
+                                </th>
+
+                                <th>
+                                    Referencia
+                                </th>
+
+                                <th>
+                                    Saldo
+                                </th>
+
+                                <th>
+                                    Ajustar saldo
+                                </th>
+
+                                <th>
+                                    Trabajador
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="tablaDatos"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- GENERADOR -->
+
+        <section id="codigos"
+                 class="seccion">
+
+            <div class="page-header">
+
+                <h2>
+                    Generador de códigos
+                </h2>
+
+                <p>
+                    Genera códigos únicos asociados a un saldo.
+                </p>
+
+            </div>
+
+            <div class="generator-layout">
+
+                <div class="generator-info">
+
+                    <h3>
+                        Código de saldo
+                    </h3>
+
+                    <p>
+                        Genera códigos únicos para asociarlos con un saldo determinado dentro del sistema.
+                    </p>
+
+                    <ul class="feature-list">
+
+                        <li>
+                            <span>✓</span>
+                            Código único automáticamente
+                        </li>
+
+                        <li>
+                            <span>✓</span>
+                            Saldo asociado al código
+                        </li>
+
+                        <li>
+                            <span>✓</span>
+                            Registro directo en Supabase
+                        </li>
+
+                        <li>
+                            <span>✓</span>
+                            Identificador con formato CGC
+                        </li>
+
+                    </ul>
+
+                </div>
+
+                <div class="generator-card">
+
+                    <h3>
+                        Crear nuevo código
+                    </h3>
+
+                    <p>
+                        Ingresa el saldo que deseas asignar.
+                    </p>
+
+                    <div class="form-group">
+
+                        <label>
+                            Saldo del código
+                        </label>
+
+                        <input
+                            type="number"
+                            id="saldoCodigo"
+                            placeholder="Ej. 500.00"
+                            min="0.01"
+                            step="0.01">
+
+                    </div>
+
+                    <button
+                        class="btn btn-primary btn-generate"
+                        onclick="generarCodigo()">
+
+                        Generar código
+
+                    </button>
+
+                    <div class="code-result">
+
+                        <div class="code-label">
+                            Código generado
+                        </div>
+
+                        <div id="codigoGenerado">
+                            Sin generar
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<div id="toast"
+     class="toast">
+
+    Mensaje
+
+</div>
+
+
+<script>
+
+/* SUPABASE */
+
+const SUPABASE_URL="https://ieaielptonscbsimbtyx.supabase.co";
+
+const SUPABASE_KEY="sb_publishable_pmJ3fN_2FUKM1AskoReusA_0vaZz7f_";
+
+const supabaseClient=supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* MENU */
+
+function toggleMenu(){
+
+    document
+        .getElementById("sidebar")
+        .classList
+        .toggle("active");
+
+    document
+        .getElementById("overlay")
+        .classList
+        .toggle("active");
+
+}
+
+
+function cerrarMenu(){
+
+    document
+        .getElementById("sidebar")
+        .classList
+        .remove("active");
+
+    document
+        .getElementById("overlay")
+        .classList
+        .remove("active");
+
+}
+
+
+/* SECCIONES */
+
+function mostrarSeccion(id){
+
+    document
+        .querySelectorAll(".seccion")
+        .forEach(sec=>{
+            sec.classList.remove("active");
+        });
+
+
+    document
+        .getElementById(id)
+        .classList
+        .add("active");
+
+
+    document
+        .querySelectorAll(".sidebar a")
+        .forEach(link=>{
+            link.classList.remove("active");
+        });
+
+
+    if(id==="resumen"){
+
+        document
+            .getElementById("menuResumen")
+            .classList
+            .add("active");
+
+    }
+
+
+    if(id==="nuevoServicio"){
+
+        document
+            .getElementById("menuNuevo")
+            .classList
+            .add("active");
+
+    }
+
+
+    if(id==="servicios"){
+
+        document
+            .getElementById("menuServicios")
+            .classList
+            .add("active");
+
+    }
+
+
+    if(id==="codigos"){
+
+        document
+            .getElementById("menuCodigos")
+            .classList
+            .add("active");
+
+    }
+
+
+    cerrarMenu();
+
+}
+
+
+/* MENSAJES */
+
+function mostrarMensaje(
+    mensaje,
+    tipo="success"
+){
+
+    const toast=
+        document.getElementById("toast");
+
+
+    toast.textContent=
+        mensaje;
+
+
+    toast.className=
+        "toast show "+tipo;
+
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },3000);
+
+}
+
+
+/* FORMULARIO */
+
+const form=
+    document.getElementById(
+        "registroForm"
+    );
+
+
+form.addEventListener(
+    "submit",
+    async function(e){
+
+        e.preventDefault();
+
+
+        const numero_servicio=
+            document
+            .getElementById("servicio")
+            .value
+            .trim();
+
+
+        const numero_referencia=
+            document
+            .getElementById("referencia")
+            .value
+            .trim();
+
+
+        const saldo=
+            Number(
+                document
+                .getElementById("saldo")
+                .value
+            );
+
+
+        const iniciales=
+            document
+            .getElementById("iniciales")
+            .value
+            .trim()
+            .toUpperCase();
+
+
+        if(
+            !numero_servicio ||
+            !numero_referencia ||
+            !iniciales
+        ){
+
+            mostrarMensaje(
+                "Completa todos los campos.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if(
+            !Number.isFinite(saldo) ||
+            saldo<0
+        ){
+
+            mostrarMensaje(
+                "Ingresa un saldo válido.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const {error}=
+            await supabaseClient
+            .from("clientes_servicio")
+            .insert([
+                {
+                    numero_servicio,
+                    numero_referencia,
+                    saldo,
+                    iniciales
+                }
+            ]);
+
+
+        if(error){
+
+            console.error(error);
+
+            mostrarMensaje(
+                "No se pudo guardar el registro.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        mostrarMensaje(
+            "Servicio registrado correctamente."
+        );
+
+
+        form.reset();
+
+
+        await cargarDatos();
+
+
+        mostrarSeccion(
+            "servicios"
+        );
+
+    }
+);
+
+
+/* CARGAR DATOS */
+
+async function cargarDatos(){
+
+    const {data,error}=
+        await supabaseClient
+        .from("clientes_servicio")
+        .select("*")
+        .order(
+            "id",
+            {
+                ascending:false
+            }
+        );
+
+
+    const tabla=
+        document.getElementById(
+            "tablaDatos"
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+
+        tabla.innerHTML=`
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty-state">
+
+                    No se pudieron cargar los registros.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tabla.innerHTML="";
+
+
+    if(
+        !data ||
+        data.length===0
+    ){
+
+        tabla.innerHTML=`
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty-state">
+
+                    <div class="empty-state-icon">
+                        ▣
+                    </div>
+
+                    No existen servicios registrados.
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        actualizarEstadisticas([]);
+
+        return;
+
+    }
+
+
+    data.forEach(cliente=>{
+
+        const saldo=
+            Number(cliente.saldo)||0;
+
+
+        tabla.innerHTML+=`
+
+            <tr>
+
+                <td>
+
+                    <span class="id-badge">
+
+                        ${cliente.id}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span class="service-number">
+
+                        ${escaparHTML(
+                            cliente.numero_servicio
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span class="reference">
+
+                        ${escaparHTML(
+                            cliente.numero_referencia
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span class="balance">
+
+                        $${formatearMoneda(saldo)}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <div class="action-box">
+
+                        <input
+                            type="number"
+                            class="amount-input"
+                            id="monto-${cliente.id}"
+                            placeholder="Cantidad"
+                            min="0.01"
+                            step="0.01">
+
+
+                        <button
+                            class="action-btn btn-success"
+                            title="Agregar saldo"
+                            onclick="
+                                agregarSaldo(
+                                    ${cliente.id},
+                                    ${saldo}
+                                )
+                            ">
+
+                            +
+
+                        </button>
+
+
+                        <button
+                            class="action-btn btn-danger"
+                            title="Quitar saldo"
+                            onclick="
+                                quitarSaldo(
+                                    ${cliente.id},
+                                    ${saldo}
+                                )
+                            ">
+
+                            −
+
+                        </button>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <span class="initials">
+
+                        ${escaparHTML(
+                            cliente.iniciales||"—"
+                        )}
+
+                    </span>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+
+    actualizarEstadisticas(
+        data
+    );
+
+}
+
+
+/* ESTADISTICAS */
+
+function actualizarEstadisticas(
+    data
+){
+
+    const total=
+        data.length;
+
+
+    const saldoTotal=
+        data.reduce(
+            (total,cliente)=>{
+
+                return total+
+                    (
+                        Number(
+                            cliente.saldo
+                        )||0
+                    );
+
+            },
+            0
+        );
+
+
+    document
+        .getElementById(
+            "totalServicios"
+        )
+        .textContent=
+            total;
+
+
+    document
+        .getElementById(
+            "saldoTotal"
+        )
+        .textContent=
+            "$"+
+            formatearMoneda(
+                saldoTotal
+            );
+
+}
+
+
+/* AGREGAR SALDO */
+
+async function agregarSaldo(
+    id,
+    saldoActual
+){
+
+    const input=
+        document.getElementById(
+            `monto-${id}`
+        );
+
+
+    const cantidad=
+        Number(input.value);
+
+
+    if(
+        !Number.isFinite(cantidad) ||
+        cantidad<=0
+    ){
+
+        mostrarMensaje(
+            "Ingresa una cantidad válida.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const nuevoSaldo=
+        Number(saldoActual)+cantidad;
+
+
+    const {error}=
+        await supabaseClient
+        .from("clientes_servicio")
+        .update({
+            saldo:nuevoSaldo
+        })
+        .eq(
+            "id",
+            id
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        mostrarMensaje(
+            "No se pudo actualizar el saldo.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    mostrarMensaje(
+        "Saldo agregado correctamente."
+    );
+
+
+    cargarDatos();
+
+}
+
+
+/* QUITAR SALDO */
+
+async function quitarSaldo(
+    id,
+    saldoActual
+){
+
+    const input=
+        document.getElementById(
+            `monto-${id}`
+        );
+
+
+    const cantidad=
+        Number(input.value);
+
+
+    if(
+        !Number.isFinite(cantidad) ||
+        cantidad<=0
+    ){
+
+        mostrarMensaje(
+            "Ingresa una cantidad válida.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const nuevoSaldo=
+        Number(saldoActual)-cantidad;
+
+
+    if(nuevoSaldo<0){
+
+        mostrarMensaje(
+            "El saldo no puede quedar negativo.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const {error}=
+        await supabaseClient
+        .from("clientes_servicio")
+        .update({
+            saldo:nuevoSaldo
+        })
+        .eq(
+            "id",
+            id
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        mostrarMensaje(
+            "No se pudo actualizar el saldo.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    mostrarMensaje(
+        "Saldo retirado correctamente."
+    );
+
+
+    cargarDatos();
+
+}
+
+
+/* GENERADOR */
+
+function generarTextoAleatorio(
+    longitud
+){
+
+    const caracteres=
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+
+    let resultado="";
+
+
+    for(
+        let i=0;
+        i<longitud;
+        i++
+    ){
+
+        resultado+=
+            caracteres.charAt(
+                Math.floor(
+                    Math.random()*
+                    caracteres.length
+                )
+            );
+
+    }
+
+
+    return resultado;
+
+}
+
+
+async function generarCodigo(){
+
+    const input=
+        document.getElementById(
+            "saldoCodigo"
+        );
+
+
+    const saldo=
+        Number(input.value);
+
+
+    if(
+        !Number.isFinite(saldo) ||
+        saldo<=0
+    ){
+
+        mostrarMensaje(
+            "Ingresa un saldo válido.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const codigo=
+        "CGC-"+
+        generarTextoAleatorio(8);
+
+
+    const {error}=
+        await supabaseClient
+        .from("codigos_saldo")
+        .insert([
+            {
+                codigo,
+                saldo
+            }
+        ]);
+
+
+    if(error){
+
+        console.error(error);
+
+        mostrarMensaje(
+            "No se pudo guardar el código.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    document
+        .getElementById(
+            "codigoGenerado"
+        )
+        .textContent=
+            codigo;
+
+
+    mostrarMensaje(
+        "Código generado correctamente."
+    );
+
+
+    input.value="";
+
+}
+
+
+/* MONEDA */
+
+function formatearMoneda(
+    cantidad
+){
+
+    return Number(
+        cantidad||0
+    ).toLocaleString(
+        "es-MX",
+        {
+            minimumFractionDigits:2,
+            maximumFractionDigits:2
+        }
+    );
+
+}
+
+
+/* SEGURIDAD HTML */
+
+function escaparHTML(
+    valor
+){
+
+    return String(
+        valor??""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* INICIO */
+
+cargarDatos();
+
+</script>
+
+</body>
+
+</html>
