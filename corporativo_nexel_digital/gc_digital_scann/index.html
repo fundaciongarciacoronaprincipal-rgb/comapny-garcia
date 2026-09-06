@@ -1,0 +1,4084 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GC Digital Scann</title>
+
+<script src="https://unpkg.com/@zxing/library@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+<style>
+
+:root{
+    --primary:#0047ab;
+    --secondary:#0b6cff;
+    --accent:#00aaff;
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#718096;
+    --border:#e2e8f0;
+    --danger:#e53935;
+    --success:#16a34a;
+    --shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    transition:.3s;
+}
+
+body.dark{
+    --bg:#0c1220;
+    --card:#151e2d;
+    --text:#f3f6fb;
+    --muted:#a7b0c0;
+    --border:#293548;
+    --shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar{
+    height:70px;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:1000;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    box-shadow:0 5px 25px rgba(0,0,0,.15);
+}
+
+.menu-btn{
+    width:45px;
+    height:45px;
+    border:0;
+    background:rgba(255,255,255,.14);
+    color:white;
+    border-radius:13px;
+    font-size:23px;
+    cursor:pointer;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-left:15px;
+}
+
+.brand-icon{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    background:white;
+    color:var(--primary);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+    font-weight:bold;
+}
+
+.brand-title{
+    font-weight:bold;
+    font-size:18px;
+}
+
+.brand-subtitle{
+    font-size:11px;
+    opacity:.75;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.menu{
+    position:fixed;
+    top:0;
+    left:-290px;
+    width:280px;
+    height:100vh;
+    background:var(--card);
+    z-index:1200;
+    box-shadow:10px 0 40px rgba(0,0,0,.15);
+    transition:.3s;
+    padding:20px;
+    overflow-y:auto;
+}
+
+.menu.active{
+    left:0;
+}
+
+.menu-header{
+    padding:10px 5px 25px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:15px;
+}
+
+.menu-logo{
+    width:55px;
+    height:55px;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    border-radius:17px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    margin-bottom:12px;
+}
+
+.menu-title{
+    font-weight:bold;
+    font-size:18px;
+}
+
+.menu-description{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:5px;
+}
+
+.menu a{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:14px;
+    margin:5px 0;
+    border-radius:13px;
+    color:var(--text);
+    text-decoration:none;
+    cursor:pointer;
+    font-weight:600;
+    transition:.2s;
+}
+
+.menu a:hover{
+    background:rgba(0,71,171,.1);
+    color:var(--primary);
+}
+
+.menu a.active{
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+}
+
+.menu-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:1100;
+    background:rgba(0,0,0,.5);
+}
+
+.menu-overlay.active{
+    display:block;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{
+    max-width:1100px;
+    margin:auto;
+    padding:100px 20px 40px;
+}
+
+.section{
+    display:none;
+    animation:fadeIn .25s ease;
+}
+
+.section.active{
+    display:block;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.page-title{
+    font-size:30px;
+    margin:0;
+}
+
+.page-description{
+    color:var(--muted);
+    margin:8px 0 25px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:24px;
+    box-shadow:var(--shadow);
+    margin-bottom:20px;
+}
+
+.card-title{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.card-description{
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* =========================
+   SCANNER
+========================= */
+
+.scanner-card{
+    max-width:560px;
+    margin:auto;
+}
+
+.scanner-box{
+    width:min(100%,390px);
+    aspect-ratio:1/1;
+    margin:20px auto;
+    border:5px solid var(--primary);
+    border-radius:25px;
+    overflow:hidden;
+    position:relative;
+    background:#000;
+    box-shadow:0 15px 35px rgba(0,0,0,.18);
+}
+
+video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.scan-line{
+    position:absolute;
+    left:8%;
+    width:84%;
+    height:3px;
+    background:var(--accent);
+    box-shadow:0 0 12px var(--accent);
+    animation:scan 2s linear infinite;
+}
+
+@keyframes scan{
+    0%{top:8%;}
+    50%{top:90%;}
+    100%{top:8%;}
+}
+
+.scanner-corners{
+    position:absolute;
+    inset:20px;
+    border:2px solid rgba(255,255,255,.25);
+    border-radius:15px;
+    pointer-events:none;
+}
+
+.scanner-status{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.result-box{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:20px;
+    margin-top:20px;
+    text-align:left;
+    display:none;
+    box-shadow:var(--shadow);
+    word-break:break-word;
+}
+
+.result-box.show{
+    display:block;
+}
+
+.result-content{
+    padding:15px;
+    background:rgba(0,71,171,.06);
+    border-radius:14px;
+    margin-bottom:15px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+button{
+    border:0;
+    cursor:pointer;
+    font-family:inherit;
+}
+
+.btn{
+    padding:12px 18px;
+    border-radius:13px;
+    font-weight:bold;
+    transition:.2s;
+    margin:4px;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn-primary{
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+}
+
+.btn-secondary{
+    background:rgba(0,71,171,.1);
+    color:var(--primary);
+}
+
+.btn-danger{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+.btn-success{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.btn-dark{
+    background:#111827;
+    color:white;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.form-group{
+    text-align:left;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:13px 14px;
+    border-radius:13px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    outline:none;
+    font-family:inherit;
+    transition:.2s;
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(0,71,171,.1);
+}
+
+.color-input{
+    height:48px;
+    padding:4px;
+}
+
+/* =========================
+   SWITCH
+========================= */
+
+.switch-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.switch-row:last-child{
+    border-bottom:0;
+}
+
+.switch-info{
+    text-align:left;
+}
+
+.switch-title{
+    font-weight:bold;
+}
+
+.switch-description{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:4px;
+}
+
+.switch{
+    position:relative;
+    width:52px;
+    height:29px;
+    flex-shrink:0;
+}
+
+.switch input{
+    display:none;
+}
+
+.slider{
+    position:absolute;
+    inset:0;
+    background:#cbd5e1;
+    border-radius:30px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.slider:before{
+    content:"";
+    position:absolute;
+    width:21px;
+    height:21px;
+    left:4px;
+    top:4px;
+    background:white;
+    border-radius:50%;
+    transition:.25s;
+    box-shadow:0 2px 5px rgba(0,0,0,.2);
+}
+
+.switch input:checked + .slider{
+    background:var(--primary);
+}
+
+.switch input:checked + .slider:before{
+    transform:translateX(23px);
+}
+
+/* =========================
+   TYPE SELECTOR
+========================= */
+
+.type-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin:15px 0 25px;
+}
+
+.type-option{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:15px;
+    padding:15px 8px;
+    cursor:pointer;
+    text-align:center;
+    transition:.2s;
+}
+
+.type-option:hover{
+    border-color:var(--primary);
+}
+
+.type-option.selected{
+    background:rgba(0,71,171,.1);
+    border:2px solid var(--primary);
+    color:var(--primary);
+}
+
+.type-icon{
+    font-size:24px;
+    display:block;
+    margin-bottom:6px;
+}
+
+.type-name{
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* =========================
+   GENERATOR
+========================= */
+
+.generator-layout{
+    max-width:800px;
+    margin:auto;
+}
+
+.generator-result{
+    display:none;
+    text-align:center;
+}
+
+.generator-result.active{
+    display:block;
+    animation:fadeIn .3s ease;
+}
+
+.generator-form.hidden{
+    display:none;
+}
+
+.code-frame{
+    background:rgba(255,255,255,.12);
+    border:1px solid var(--border);
+    border-radius:25px;
+    padding:30px;
+    max-width:480px;
+    margin:20px auto;
+    backdrop-filter:blur(15px);
+}
+
+body.dark .code-frame{
+    background:rgba(255,255,255,.04);
+}
+
+.code-title{
+    font-weight:bold;
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.qr-display{
+    background:white;
+    display:inline-flex;
+    padding:18px;
+    border-radius:18px;
+    position:relative;
+    min-width:250px;
+    min-height:250px;
+    align-items:center;
+    justify-content:center;
+}
+
+.qr-display img,
+.qr-display canvas{
+    max-width:100%;
+}
+
+.logo-overlay{
+    position:absolute;
+    width:55px;
+    height:55px;
+    object-fit:contain;
+    background:white;
+    border-radius:10px;
+    padding:5px;
+}
+
+.barcode-display{
+    background:white;
+    padding:25px;
+    border-radius:18px;
+    display:inline-block;
+    max-width:100%;
+    overflow:auto;
+}
+
+.barcode-display svg{
+    max-width:100%;
+    height:auto;
+}
+
+/* =========================
+   HISTORIAL
+========================= */
+
+.history-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.history-tab{
+    flex:1;
+    padding:12px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.history-tab.active{
+    background:var(--primary);
+    color:white;
+}
+
+.history-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.history-item{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:15px;
+    text-align:left;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.history-item:hover{
+    border-color:var(--primary);
+    transform:translateY(-1px);
+}
+
+.history-item-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.history-icon{
+    font-size:22px;
+}
+
+.history-name{
+    font-weight:bold;
+}
+
+.history-date{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+}
+
+.history-preview{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:8px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.empty{
+    padding:35px;
+    color:var(--muted);
+    text-align:center;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:3000;
+    background:rgba(0,0,0,.6);
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-card{
+    width:min(100%,480px);
+    background:var(--card);
+    color:var(--text);
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 30px 80px rgba(0,0,0,.35);
+    max-height:90vh;
+    overflow:auto;
+}
+
+.modal-title{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.modal-description{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:20px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    transform:translate(-50%,120px);
+    background:#111827;
+    color:white;
+    padding:13px 20px;
+    border-radius:30px;
+    z-index:5000;
+    transition:.3s;
+    opacity:0;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.toast.show{
+    transform:translate(-50%,0);
+    opacity:1;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:700px){
+
+    .content{
+        padding:90px 12px 30px;
+    }
+
+    .page-title{
+        font-size:25px;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+    .type-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .brand-subtitle{
+        display:none;
+    }
+
+    .scanner-box{
+        width:min(100%,330px);
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     MENU
+========================= -->
+
+<div class="menu-overlay" id="menuOverlay" onclick="cerrarMenu()"></div>
+
+<aside class="menu" id="menu">
+
+    <div class="menu-header">
+        <div class="menu-logo">▣</div>
+        <div class="menu-title">GC Digital Scann</div>
+        <div class="menu-description">
+            Escanea y crea códigos QR y códigos de barras.
+        </div>
+    </div>
+
+    <a onclick="mostrar('scan')" id="menuScan" class="active">
+        📷
+        <span>Escanear</span>
+    </a>
+
+    <a onclick="mostrar('crearQR')" id="menuCrearQR">
+        ▣
+        <span>Crear código QR</span>
+    </a>
+
+    <a onclick="mostrar('crearBarra')" id="menuCrearBarra">
+        ▥
+        <span>Crear código de barras</span>
+    </a>
+
+    <a onclick="mostrar('miqr')" id="menuMiQR">
+        👤
+        <span>Mi código QR</span>
+    </a>
+
+    <a onclick="mostrar('historial')" id="menuHistorial">
+        🕘
+        <span>Historial</span>
+    </a>
+
+    <a onclick="mostrar('config')" id="menuConfig">
+        ⚙️
+        <span>Configuración</span>
+    </a>
+
+</aside>
+
+<!-- =========================
+     TOPBAR
+========================= -->
+
+<header class="topbar">
+
+    <button class="menu-btn" onclick="abrirMenu()">
+        ☰
+    </button>
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            GC
+        </div>
+
+        <div>
+            <div class="brand-title">
+                GC Digital Scann
+            </div>
+
+            <div class="brand-subtitle">
+                QR & Barcode
+            </div>
+        </div>
+
+    </div>
+
+</header>
+
+<!-- =========================
+     CONTENT
+========================= -->
+
+<main class="content">
+
+<!-- =========================
+     ESCANEAR
+========================= -->
+
+<section id="scan" class="section active">
+
+    <div class="scanner-card">
+
+        <h1 class="page-title">
+            Escáner
+        </h1>
+
+        <p class="page-description">
+            Escanea códigos QR y códigos de barras rápidamente.
+        </p>
+
+        <div class="card">
+
+            <div class="scanner-box" id="scannerBox">
+
+                <video id="video" autoplay muted playsinline></video>
+
+                <div class="scanner-corners"></div>
+
+                <div class="scan-line" id="scanLine"></div>
+
+            </div>
+
+            <div class="scanner-status" id="scannerStatus">
+                Preparando cámara...
+            </div>
+
+            <div style="text-align:center;margin-top:15px;">
+
+                <button class="btn btn-secondary" onclick="reiniciarScanner()">
+                    🔄 Escanear nuevamente
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="result-box" id="resultBox">
+
+            <div class="card-title">
+                Código detectado
+            </div>
+
+            <div class="result-content" id="resultContent"></div>
+
+            <div id="resultActions"></div>
+
+            <button class="btn btn-primary" onclick="reiniciarScanner()">
+                📷 Escanear otro
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CREAR QR
+========================= -->
+
+<section id="crearQR" class="section">
+
+    <div class="generator-layout">
+
+        <h1 class="page-title">
+            Crear código QR
+        </h1>
+
+        <p class="page-description">
+            Selecciona el tipo de información que quieres convertir en QR.
+        </p>
+
+        <div class="card generator-form" id="qrForm">
+
+            <div class="card-title">
+                Tipo de código
+            </div>
+
+            <div class="type-grid">
+
+                <div class="type-option selected" data-type="texto" onclick="seleccionarTipoQR(this)">
+                    <span class="type-icon">📝</span>
+                    <span class="type-name">Texto</span>
+                </div>
+
+                <div class="type-option" data-type="url" onclick="seleccionarTipoQR(this)">
+                    <span class="type-icon">🌐</span>
+                    <span class="type-name">URL</span>
+                </div>
+
+                <div class="type-option" data-type="wifi" onclick="seleccionarTipoQR(this)">
+                    <span class="type-icon">📶</span>
+                    <span class="type-name">WiFi</span>
+                </div>
+
+                <div class="type-option" data-type="mensaje" onclick="seleccionarTipoQR(this)">
+                    <span class="type-icon">💬</span>
+                    <span class="type-name">Mensaje</span>
+                </div>
+
+                <div class="type-option" data-type="telefono" onclick="seleccionarTipoQR(this)">
+                    <span class="type-icon">📞</span>
+                    <span class="type-name">Teléfono</span>
+                </div>
+
+                <div class="type-option" data-type="correo" onclick="seleccionarTipoQR(this)">
+                    <span class="type-icon">✉️</span>
+                    <span class="type-name">Correo</span>
+                </div>
+
+                <div class="type-option" data-type="direccion" onclick="seleccionarTipoQR(this)">
+                    <span class="type-icon">📍</span>
+                    <span class="type-name">Dirección</span>
+                </div>
+
+                <div class="type-option" data-type="contacto" onclick="seleccionarTipoQR(this)">
+                    <span class="type-icon">👤</span>
+                    <span class="type-name">Contacto</span>
+                </div>
+
+                <div class="type-option" data-type="evento" onclick="seleccionarTipoQR(this)">
+                    <span class="type-icon">📅</span>
+                    <span class="type-name">Evento</span>
+                </div>
+
+            </div>
+
+            <div id="qrFields"></div>
+
+            <hr style="border:0;border-top:1px solid var(--border);margin:25px 0;">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        Color del QR
+                    </label>
+
+                    <input
+                        type="color"
+                        id="qrColor"
+                        class="color-input"
+                        value="#000000"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Fondo
+                    </label>
+
+                    <input
+                        type="color"
+                        id="qrBackground"
+                        class="color-input"
+                        value="#ffffff"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="switch-row">
+
+                <div class="switch-info">
+
+                    <div class="switch-title">
+                        🔐 Protección con contraseña
+                    </div>
+
+                    <div class="switch-description">
+                        Protege el contenido del QR mediante cifrado.
+                    </div>
+
+                </div>
+
+                <label class="switch">
+
+                    <input type="checkbox" id="qrSecurity">
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+            <div class="switch-row">
+
+                <div class="switch-info">
+
+                    <div class="switch-title">
+                        🖼️ Agregar logo
+                    </div>
+
+                    <div class="switch-description">
+                        Coloca una imagen en el centro del QR.
+                    </div>
+
+                </div>
+
+                <label class="switch">
+
+                    <input type="checkbox" id="qrLogoEnabled" onchange="toggleLogoInput()">
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+            <div id="logoInputBox" style="display:none;margin-top:15px;">
+
+                <div class="form-group">
+
+                    <label>
+                        Seleccionar logo
+                    </label>
+
+                    <input
+                        type="file"
+                        id="qrLogo"
+                        accept="image/*"
+                    >
+
+                </div>
+
+            </div>
+
+            <div style="text-align:center;margin-top:20px;">
+
+                <button class="btn btn-primary" onclick="generarQR()">
+                    ✨ Crear código QR
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESULTADO QR -->
+
+        <div class="generator-result" id="qrResult">
+
+            <div class="card">
+
+                <div class="code-title">
+                    Código QR creado
+                </div>
+
+                <div class="code-frame">
+
+                    <div class="qr-display" id="qrDisplay"></div>
+
+                </div>
+
+                <div>
+
+                    <button class="btn btn-secondary" onclick="copiarCodigoActual()">
+                        📋 Copiar contenido
+                    </button>
+
+                    <button class="btn btn-secondary" onclick="compartirCodigo()">
+                        📤 Compartir
+                    </button>
+
+                    <button class="btn btn-primary" onclick="descargarCodigo()">
+                        ⬇️ Descargar imagen
+                    </button>
+
+                    <button class="btn btn-dark" onclick="volverQR()">
+                        ← Crear otro
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CREAR BARCODE
+========================= -->
+
+<section id="crearBarra" class="section">
+
+    <div class="generator-layout">
+
+        <h1 class="page-title">
+            Crear código de barras
+        </h1>
+
+        <p class="page-description">
+            Crea códigos de barras personalizados.
+        </p>
+
+        <div class="card generator-form" id="barcodeForm">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+
+                    <label>
+                        Tipo de código
+                    </label>
+
+                    <select id="barcodeType">
+
+                        <option value="CODE128">
+                            CODE128
+                        </option>
+
+                        <option value="CODE39">
+                            CODE39
+                        </option>
+
+                        <option value="EAN13">
+                            EAN-13
+                        </option>
+
+                        <option value="EAN8">
+                            EAN-8
+                        </option>
+
+                        <option value="UPC">
+                            UPC
+                        </option>
+
+                        <option value="ITF14">
+                            ITF-14
+                        </option>
+
+                        <option value="MSI">
+                            MSI
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>
+                        Información
+                    </label>
+
+                    <input
+                        type="text"
+                        id="barcodeText"
+                        placeholder="Escribe el código"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Color del código
+                    </label>
+
+                    <input
+                        type="color"
+                        id="barcodeColor"
+                        class="color-input"
+                        value="#000000"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Color del fondo
+                    </label>
+
+                    <input
+                        type="color"
+                        id="barcodeBackground"
+                        class="color-input"
+                        value="#ffffff"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="switch-row">
+
+                <div class="switch-info">
+
+                    <div class="switch-title">
+                        🔐 Protección con contraseña
+                    </div>
+
+                    <div class="switch-description">
+                        Protege la información del código.
+                    </div>
+
+                </div>
+
+                <label class="switch">
+
+                    <input type="checkbox" id="barcodeSecurity">
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+            <div style="text-align:center;margin-top:20px;">
+
+                <button class="btn btn-primary" onclick="generarBarcode()">
+                    ✨ Crear código de barras
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="generator-result" id="barcodeResult">
+
+            <div class="card">
+
+                <div class="code-title">
+                    Código de barras creado
+                </div>
+
+                <div class="code-frame">
+
+                    <div class="barcode-display" id="barcodeDisplay">
+
+                        <svg id="barcodeSVG"></svg>
+
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <button class="btn btn-secondary" onclick="copiarCodigoActual()">
+                        📋 Copiar contenido
+                    </button>
+
+                    <button class="btn btn-secondary" onclick="compartirCodigo()">
+                        📤 Compartir
+                    </button>
+
+                    <button class="btn btn-primary" onclick="descargarCodigo()">
+                        ⬇️ Descargar imagen
+                    </button>
+
+                    <button class="btn btn-dark" onclick="volverBarcode()">
+                        ← Crear otro
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     MI QR
+========================= -->
+
+<section id="miqr" class="section">
+
+    <div class="generator-layout">
+
+        <h1 class="page-title">
+            Mi código QR
+        </h1>
+
+        <p class="page-description">
+            Crea un código QR con tus datos de contacto.
+        </p>
+
+        <div class="card generator-form" id="miQRForm">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+
+                    <label>
+                        Nombre completo
+                    </label>
+
+                    <input id="nombre" placeholder="Nombre completo">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Teléfono
+                    </label>
+
+                    <input id="telefono" placeholder="Teléfono">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+                        Correo electrónico
+                    </label>
+
+                    <input id="correo" type="email" placeholder="correo@ejemplo.com">
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>
+                        Dirección
+                    </label>
+
+                    <textarea id="direccion" placeholder="Dirección"></textarea>
+
+                </div>
+
+            </div>
+
+            <div style="text-align:center;margin-top:15px;">
+
+                <button class="btn btn-primary" onclick="crearMiQR()">
+                    ✨ Crear mi código
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="generator-result" id="miQRResult">
+
+            <div class="card">
+
+                <div class="code-title">
+                    Mi código QR
+                </div>
+
+                <div class="code-frame">
+
+                    <div class="qr-display" id="miQRDisplay"></div>
+
+                </div>
+
+                <button class="btn btn-primary" onclick="descargarCodigo('mi')">
+                    ⬇️ Descargar
+                </button>
+
+                <button class="btn btn-secondary" onclick="compartirMiQR()">
+                    📤 Compartir
+                </button>
+
+                <button class="btn btn-dark" onclick="volverMiQR()">
+                    ← Editar datos
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     HISTORIAL
+========================= -->
+
+<section id="historial" class="section">
+
+    <h1 class="page-title">
+        Historial
+    </h1>
+
+    <p class="page-description">
+        Consulta tus códigos creados y los códigos que has escaneado.
+    </p>
+
+    <div class="card">
+
+        <div class="history-tabs">
+
+            <button
+                class="history-tab active"
+                id="tabCreated"
+                onclick="mostrarHistorialTipo('creados')"
+            >
+                🧾 Creados
+            </button>
+
+            <button
+                class="history-tab"
+                id="tabScanned"
+                onclick="mostrarHistorialTipo('escaneados')"
+            >
+                📷 Escaneados
+            </button>
+
+        </div>
+
+        <div id="historyCreated" class="history-list"></div>
+
+        <div id="historyScanned" class="history-list" style="display:none;"></div>
+
+        <div style="text-align:center;margin-top:20px;">
+
+            <button class="btn btn-danger" onclick="borrarHistorialActual()">
+                🗑️ Borrar historial
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CONFIG
+========================= -->
+
+<section id="config" class="section">
+
+    <h1 class="page-title">
+        Configuración
+    </h1>
+
+    <p class="page-description">
+        Personaliza el funcionamiento y apariencia de GC Digital Scann.
+    </p>
+
+    <div class="card">
+
+        <div class="card-title">
+            Apariencia
+        </div>
+
+        <div class="switch-row">
+
+            <div class="switch-info">
+
+                <div class="switch-title">
+                    🌙 Modo oscuro
+                </div>
+
+                <div class="switch-description">
+                    Cambia entre modo claro y oscuro.
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input type="checkbox" id="darkMode">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+        <div class="switch-row">
+
+            <div class="switch-info">
+
+                <div class="switch-title">
+                    📷 Color del escáner
+                </div>
+
+                <div class="switch-description">
+                    Personaliza el color del borde y línea de escaneo.
+                </div>
+
+            </div>
+
+            <input
+                type="color"
+                id="scannerColor"
+                class="color-input"
+                style="width:65px;"
+                value="#0047AB"
+            >
+
+        </div>
+
+        <div class="switch-row">
+
+            <div class="switch-info">
+
+                <div class="switch-title">
+                    🎨 Color de interfaz
+                </div>
+
+                <div class="switch-description">
+                    Cambia el color principal de GC Digital Scann.
+                </div>
+
+            </div>
+
+            <input
+                type="color"
+                id="interfaceColor"
+                class="color-input"
+                style="width:65px;"
+                value="#0047AB"
+            >
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            Escáner
+        </div>
+
+        <div class="switch-row">
+
+            <div class="switch-info">
+
+                <div class="switch-title">
+                    📳 Vibración
+                </div>
+
+                <div class="switch-description">
+                    Vibra cuando detecta un código.
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input type="checkbox" id="vibracion">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+        <div class="switch-row">
+
+            <div class="switch-info">
+
+                <div class="switch-title">
+                    🔊 Sonido
+                </div>
+
+                <div class="switch-description">
+                    Reproduce un sonido al detectar un código.
+                </div>
+
+            </div>
+
+            <label class="switch">
+
+                <input type="checkbox" id="sonido">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================
+     PASSWORD MODAL
+========================= -->
+
+<div class="modal" id="passwordModal">
+
+    <div class="modal-card">
+
+        <div class="modal-title">
+            🔐 Proteger código
+        </div>
+
+        <div class="modal-description">
+            Introduce una contraseña. El contenido será cifrado antes de crear el código.
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                Contraseña
+            </label>
+
+            <input
+                type="password"
+                id="passwordInput"
+                placeholder="Contraseña"
+            >
+
+        </div>
+
+        <div class="form-group" style="margin-top:12px;">
+
+            <label>
+                Confirmar contraseña
+            </label>
+
+            <input
+                type="password"
+                id="passwordConfirm"
+                placeholder="Repite la contraseña"
+            >
+
+        </div>
+
+        <div style="text-align:right;margin-top:20px;">
+
+            <button class="btn btn-secondary" onclick="cerrarPassword()">
+                Cancelar
+            </button>
+
+            <button class="btn btn-primary" onclick="confirmarPassword()">
+                Continuar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     UNLOCK MODAL
+========================= -->
+
+<div class="modal" id="unlockModal">
+
+    <div class="modal-card">
+
+        <div class="modal-title">
+            🔐 Código protegido
+        </div>
+
+        <div class="modal-description">
+            Este código está protegido. Introduce la contraseña para ver su contenido.
+        </div>
+
+        <div class="form-group">
+
+            <input
+                type="password"
+                id="unlockPassword"
+                placeholder="Contraseña"
+            >
+
+        </div>
+
+        <div style="text-align:right;margin-top:20px;">
+
+            <button class="btn btn-secondary" onclick="cerrarUnlock()">
+                Cancelar
+            </button>
+
+            <button class="btn btn-primary" onclick="desbloquearCodigo()">
+                🔓 Desbloquear
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURACIÓN
+========================================================= */
+
+let config = JSON.parse(localStorage.getItem("gcDigitalConfig")) || {
+
+    vibracion:true,
+    sonido:true,
+    darkMode:false,
+    scannerColor:"#0047AB",
+    interfaceColor:"#0047AB"
+
+};
+
+function guardarConfig(){
+
+    localStorage.setItem(
+        "gcDigitalConfig",
+        JSON.stringify(config)
+    );
+
+}
+
+
+/* =========================================================
+   INICIAR CONFIG
+========================================================= */
+
+document.getElementById("vibracion").checked = config.vibracion;
+document.getElementById("sonido").checked = config.sonido;
+document.getElementById("darkMode").checked = config.darkMode;
+document.getElementById("scannerColor").value = config.scannerColor;
+document.getElementById("interfaceColor").value = config.interfaceColor;
+
+if(config.darkMode){
+    document.body.classList.add("dark");
+}
+
+document.documentElement.style.setProperty(
+    "--primary",
+    config.interfaceColor
+);
+
+document.documentElement.style.setProperty(
+    "--secondary",
+    config.interfaceColor
+);
+
+document.documentElement.style.setProperty(
+    "--accent",
+    config.scannerColor
+);
+
+
+/* =========================================================
+   EVENTOS CONFIG
+========================================================= */
+
+document.getElementById("vibracion").onchange = function(){
+
+    config.vibracion = this.checked;
+
+    guardarConfig();
+
+};
+
+document.getElementById("sonido").onchange = function(){
+
+    config.sonido = this.checked;
+
+    guardarConfig();
+
+};
+
+document.getElementById("darkMode").onchange = function(){
+
+    config.darkMode = this.checked;
+
+    document.body.classList.toggle(
+        "dark",
+        config.darkMode
+    );
+
+    guardarConfig();
+
+};
+
+document.getElementById("scannerColor").oninput = function(){
+
+    config.scannerColor = this.value;
+
+    document.documentElement.style.setProperty(
+        "--accent",
+        this.value
+    );
+
+    actualizarScannerColor();
+
+    guardarConfig();
+
+};
+
+document.getElementById("interfaceColor").oninput = function(){
+
+    config.interfaceColor = this.value;
+
+    document.documentElement.style.setProperty(
+        "--primary",
+        this.value
+    );
+
+    document.documentElement.style.setProperty(
+        "--secondary",
+        this.value
+    );
+
+    guardarConfig();
+
+};
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function abrirMenu(){
+
+    document.getElementById("menu").classList.add("active");
+
+    document.getElementById("menuOverlay").classList.add("active");
+
+}
+
+function cerrarMenu(){
+
+    document.getElementById("menu").classList.remove("active");
+
+    document.getElementById("menuOverlay").classList.remove("active");
+
+}
+
+function mostrar(id){
+
+    document.querySelectorAll(".section").forEach(
+        section => section.classList.remove("active")
+    );
+
+    document.getElementById(id).classList.add("active");
+
+    document.querySelectorAll(".menu a").forEach(
+        item => item.classList.remove("active")
+    );
+
+    const menuItem = document.getElementById(
+        "menu" + id.charAt(0).toUpperCase() + id.slice(1)
+    );
+
+    if(menuItem){
+        menuItem.classList.add("active");
+    }
+
+    cerrarMenu();
+
+    if(id === "historial"){
+        cargarHistorial();
+    }
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function toast(mensaje){
+
+    const t = document.getElementById("toast");
+
+    t.textContent = mensaje;
+
+    t.classList.add("show");
+
+    setTimeout(()=>{
+        t.classList.remove("show");
+    },2500);
+
+}
+
+
+/* =========================================================
+   SCANNER
+========================================================= */
+
+let reader = null;
+let scannerActivo = false;
+let ultimoCodigo = "";
+let ultimoTiempo = 0;
+
+async function iniciarScanner(){
+
+    if(scannerActivo) return;
+
+    try{
+
+        reader = new ZXing.BrowserMultiFormatReader();
+
+        scannerActivo = true;
+
+        document.getElementById("scannerStatus").textContent =
+            "Apunta la cámara hacia un código...";
+
+        reader.decodeFromVideoDevice(
+            null,
+            "video",
+            function(result){
+
+                if(!result) return;
+
+                const texto = result.text;
+
+                const ahora = Date.now();
+
+                if(
+                    texto === ultimoCodigo &&
+                    ahora - ultimoTiempo < 3000
+                ){
+                    return;
+                }
+
+                ultimoCodigo = texto;
+                ultimoTiempo = ahora;
+
+                procesarEscaneo(texto);
+
+            }
+        );
+
+    }catch(error){
+
+        scannerActivo = false;
+
+        document.getElementById("scannerStatus").textContent =
+            "No se pudo acceder a la cámara.";
+
+        toast("No se pudo iniciar la cámara.");
+
+    }
+
+}
+
+function detenerScanner(){
+
+    try{
+
+        if(reader){
+
+            reader.reset();
+
+        }
+
+    }catch(e){}
+
+    scannerActivo = false;
+
+}
+
+function reiniciarScanner(){
+
+    detenerScanner();
+
+    document.getElementById("resultBox")
+        .classList.remove("show");
+
+    document.getElementById("scannerBox")
+        .style.display = "block";
+
+    document.getElementById("scanLine")
+        .style.display = "block";
+
+    setTimeout(
+        iniciarScanner,
+        300
+    );
+
+}
+
+
+/* =========================================================
+   COLOR SCANNER
+========================================================= */
+
+function actualizarScannerColor(){
+
+    document.documentElement.style.setProperty(
+        "--accent",
+        config.scannerColor
+    );
+
+}
+
+
+/* =========================================================
+   PROCESAR ESCANEO
+========================================================= */
+
+function procesarEscaneo(texto){
+
+    detenerScanner();
+
+    document.getElementById("scannerBox")
+        .style.display = "none";
+
+    document.getElementById("scanLine")
+        .style.display = "none";
+
+    document.getElementById("scannerStatus").textContent =
+        "Código detectado";
+
+    guardarEscaneo(texto);
+
+    if(config.vibracion){
+
+        if(navigator.vibrate){
+            navigator.vibrate(120);
+        }
+
+    }
+
+    if(config.sonido){
+
+        try{
+
+            const beep = new Audio(
+                "https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"
+            );
+
+            beep.play().catch(()=>{});
+
+        }catch(e){}
+
+    }
+
+    if(texto.startsWith("GCDS1|")){
+
+        abrirCodigoProtegido(texto);
+
+        return;
+
+    }
+
+    mostrarResultado(texto);
+
+}
+
+
+/* =========================================================
+   RESULTADO ESCANEO
+========================================================= */
+
+function mostrarResultado(texto){
+
+    const resultBox =
+        document.getElementById("resultBox");
+
+    const resultContent =
+        document.getElementById("resultContent");
+
+    const resultActions =
+        document.getElementById("resultActions");
+
+    resultContent.textContent = texto;
+
+    resultActions.innerHTML = "";
+
+    const copiarBtn =
+        crearBoton(
+            "📋 Copiar",
+            "btn-secondary",
+            ()=>copiarTexto(texto)
+        );
+
+    resultActions.appendChild(copiarBtn);
+
+
+    if(/^https?:\/\//i.test(texto)){
+
+        resultActions.appendChild(
+            crearBoton(
+                "🌐 Abrir enlace",
+                "btn-primary",
+                ()=>{
+                    window.open(
+                        texto,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+                }
+            )
+        );
+
+    }
+
+
+    if(/^tel:/i.test(texto)){
+
+        resultActions.appendChild(
+            crearBoton(
+                "📞 Llamar",
+                "btn-success",
+                ()=>{
+                    location.href = texto;
+                }
+            )
+        );
+
+    }
+
+
+    if(/^mailto:/i.test(texto)){
+
+        resultActions.appendChild(
+            crearBoton(
+                "✉️ Enviar correo",
+                "btn-primary",
+                ()=>{
+                    location.href = texto;
+                }
+            )
+        );
+
+    }
+
+
+    if(/^WIFI:/i.test(texto)){
+
+        const ssidMatch =
+            texto.match(/S:([^;]*)/);
+
+        const ssid =
+            ssidMatch ? ssidMatch[1] : "";
+
+        resultActions.appendChild(
+            crearBoton(
+                "📶 Ver WiFi",
+                "btn-success",
+                ()=>{
+                    alert(
+                        "Red WiFi: " + ssid
+                    );
+                }
+            )
+        );
+
+    }
+
+
+    resultBox.classList.add("show");
+
+}
+
+function crearBoton(texto, clase, accion){
+
+    const button =
+        document.createElement("button");
+
+    button.className =
+        "btn " + clase;
+
+    button.textContent =
+        texto;
+
+    button.onclick =
+        accion;
+
+    return button;
+
+}
+
+
+/* =========================================================
+   QR TYPES
+========================================================= */
+
+let tipoQR = "texto";
+
+function seleccionarTipoQR(element){
+
+    document.querySelectorAll(
+        ".type-option"
+    ).forEach(
+        option => option.classList.remove("selected")
+    );
+
+    element.classList.add("selected");
+
+    tipoQR = element.dataset.type;
+
+    mostrarCamposQR();
+
+}
+
+function mostrarCamposQR(){
+
+    const box =
+        document.getElementById("qrFields");
+
+    let html = "";
+
+    if(tipoQR === "texto"){
+
+        html = `
+            <div class="form-group">
+                <label>Texto</label>
+                <textarea id="qrData" placeholder="Escribe el texto que contendrá el QR"></textarea>
+            </div>
+        `;
+
+    }
+
+    if(tipoQR === "url"){
+
+        html = `
+            <div class="form-group">
+                <label>URL</label>
+                <input id="qrData" type="url" placeholder="https://ejemplo.com">
+            </div>
+        `;
+
+    }
+
+    if(tipoQR === "wifi"){
+
+        html = `
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Nombre de red WiFi</label>
+                    <input id="wifiSSID" placeholder="Nombre de la red">
+                </div>
+
+                <div class="form-group">
+                    <label>Contraseña WiFi</label>
+                    <input id="wifiPassword" type="password" placeholder="Contraseña">
+                </div>
+
+                <div class="form-group">
+                    <label>Seguridad</label>
+
+                    <select id="wifiSecurity">
+                        <option value="WPA">WPA/WPA2</option>
+                        <option value="WEP">WEP</option>
+                        <option value="nopass">Sin contraseña</option>
+                    </select>
+
+                </div>
+
+            </div>
+        `;
+
+    }
+
+    if(tipoQR === "mensaje"){
+
+        html = `
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Número</label>
+                    <input id="msgPhone" placeholder="+52 000 000 0000">
+                </div>
+
+                <div class="form-group">
+                    <label>Mensaje</label>
+                    <input id="msgText" placeholder="Mensaje">
+                </div>
+
+            </div>
+        `;
+
+    }
+
+    if(tipoQR === "telefono"){
+
+        html = `
+            <div class="form-group">
+                <label>Número telefónico</label>
+                <input id="qrData" type="tel" placeholder="+52 000 000 0000">
+            </div>
+        `;
+
+    }
+
+    if(tipoQR === "correo"){
+
+        html = `
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input id="emailAddress" type="email" placeholder="correo@ejemplo.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Asunto</label>
+                    <input id="emailSubject" placeholder="Asunto">
+                </div>
+
+                <div class="form-group full">
+                    <label>Mensaje</label>
+                    <textarea id="emailBody" placeholder="Mensaje"></textarea>
+                </div>
+
+            </div>
+        `;
+
+    }
+
+    if(tipoQR === "direccion"){
+
+        html = `
+            <div class="form-group">
+                <label>Dirección</label>
+                <textarea id="qrData" placeholder="Escribe la dirección"></textarea>
+            </div>
+        `;
+
+    }
+
+    if(tipoQR === "contacto"){
+
+        html = `
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Nombre completo</label>
+                    <input id="contactName" placeholder="Nombre completo">
+                </div>
+
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input id="contactPhone" placeholder="Teléfono">
+                </div>
+
+                <div class="form-group">
+                    <label>Correo</label>
+                    <input id="contactEmail" placeholder="Correo">
+                </div>
+
+                <div class="form-group full">
+                    <label>Dirección</label>
+                    <textarea id="contactAddress" placeholder="Dirección"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Empresa</label>
+                    <input id="contactCompany" placeholder="Empresa">
+                </div>
+
+                <div class="form-group">
+                    <label>Puesto</label>
+                    <input id="contactJob" placeholder="Puesto">
+                </div>
+
+            </div>
+        `;
+
+    }
+
+    if(tipoQR === "evento"){
+
+        html = `
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Nombre del evento</label>
+                    <input id="eventName" placeholder="Nombre del evento">
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input id="eventDate" type="date">
+                </div>
+
+                <div class="form-group">
+                    <label>Hora</label>
+                    <input id="eventTime" type="time">
+                </div>
+
+                <div class="form-group full">
+                    <label>Ubicación</label>
+                    <input id="eventLocation" placeholder="Ubicación">
+                </div>
+
+            </div>
+        `;
+
+    }
+
+    box.innerHTML = html;
+
+}
+
+mostrarCamposQR();
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+function toggleLogoInput(){
+
+    const enabled =
+        document.getElementById("qrLogoEnabled").checked;
+
+    document.getElementById("logoInputBox")
+        .style.display =
+        enabled ? "block" : "none";
+
+}
+
+
+/* =========================================================
+   GENERAR CONTENIDO QR
+========================================================= */
+
+function obtenerContenidoQR(){
+
+    if(tipoQR === "texto"){
+
+        return document.getElementById("qrData").value.trim();
+
+    }
+
+    if(tipoQR === "url"){
+
+        return document.getElementById("qrData").value.trim();
+
+    }
+
+    if(tipoQR === "wifi"){
+
+        const ssid =
+            document.getElementById("wifiSSID").value;
+
+        const pass =
+            document.getElementById("wifiPassword").value;
+
+        const security =
+            document.getElementById("wifiSecurity").value;
+
+        return `WIFI:T:${security};S:${ssid};P:${pass};;`;
+
+    }
+
+    if(tipoQR === "mensaje"){
+
+        const phone =
+            document.getElementById("msgPhone").value;
+
+        const msg =
+            document.getElementById("msgText").value;
+
+        return `SMSTO:${phone}:${msg}`;
+
+    }
+
+    if(tipoQR === "telefono"){
+
+        return "tel:" +
+            document.getElementById("qrData").value.trim();
+
+    }
+
+    if(tipoQR === "correo"){
+
+        const address =
+            document.getElementById("emailAddress").value;
+
+        const subject =
+            document.getElementById("emailSubject").value;
+
+        const body =
+            document.getElementById("emailBody").value;
+
+        return `mailto:${address}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    }
+
+    if(tipoQR === "direccion"){
+
+        return document.getElementById("qrData").value.trim();
+
+    }
+
+    if(tipoQR === "contacto"){
+
+        const name =
+            document.getElementById("contactName").value;
+
+        const phone =
+            document.getElementById("contactPhone").value;
+
+        const email =
+            document.getElementById("contactEmail").value;
+
+        const address =
+            document.getElementById("contactAddress").value;
+
+        const company =
+            document.getElementById("contactCompany").value;
+
+        const job =
+            document.getElementById("contactJob").value;
+
+        return `BEGIN:VCARD
+VERSION:3.0
+FN:${name}
+TEL:${phone}
+EMAIL:${email}
+ADR:${address}
+ORG:${company}
+TITLE:${job}
+END:VCARD`;
+
+    }
+
+    if(tipoQR === "evento"){
+
+        const name =
+            document.getElementById("eventName").value;
+
+        const date =
+            document.getElementById("eventDate").value;
+
+        const time =
+            document.getElementById("eventTime").value;
+
+        const location =
+            document.getElementById("eventLocation").value;
+
+        return `BEGIN:VEVENT
+SUMMARY:${name}
+DTSTART:${date.replaceAll("-","")}T${time.replace(":","")}00
+LOCATION:${location}
+END:VEVENT`;
+
+    }
+
+    return "";
+
+}
+
+
+/* =========================================================
+   PASSWORD CREATION
+========================================================= */
+
+let pendingGeneration = null;
+let pendingPasswordAction = null;
+
+function solicitarPassword(action){
+
+    pendingPasswordAction = action;
+
+    document.getElementById("passwordInput").value = "";
+    document.getElementById("passwordConfirm").value = "";
+
+    document.getElementById("passwordModal")
+        .classList.add("active");
+
+}
+
+function cerrarPassword(){
+
+    document.getElementById("passwordModal")
+        .classList.remove("active");
+
+    pendingPasswordAction = null;
+
+}
+
+async function confirmarPassword(){
+
+    const password =
+        document.getElementById("passwordInput").value;
+
+    const confirm =
+        document.getElementById("passwordConfirm").value;
+
+    if(password.length < 4){
+
+        toast("La contraseña debe tener al menos 4 caracteres.");
+
+        return;
+
+    }
+
+    if(password !== confirm){
+
+        toast("Las contraseñas no coinciden.");
+
+        return;
+
+    }
+
+    const action =
+        pendingPasswordAction;
+
+    cerrarPassword();
+
+    if(action === "qr"){
+
+        await crearQRProtegido(password);
+
+    }
+
+    if(action === "barcode"){
+
+        await crearBarcodeProtegido(password);
+
+    }
+
+}
+
+
+/* =========================================================
+   CRYPTO
+========================================================= */
+
+function bytesToBase64(bytes){
+
+    let binary = "";
+
+    bytes.forEach(
+        byte => binary += String.fromCharCode(byte)
+    );
+
+    return btoa(binary);
+
+}
+
+function base64ToBytes(base64){
+
+    const binary =
+        atob(base64);
+
+    return Uint8Array.from(
+        binary,
+        char => char.charCodeAt(0)
+    );
+
+}
+
+async function encryptText(text,password){
+
+    const encoder =
+        new TextEncoder();
+
+    const data =
+        encoder.encode(text);
+
+    const passwordData =
+        encoder.encode(password);
+
+    const hash =
+        await crypto.subtle.digest(
+            "SHA-256",
+            passwordData
+        );
+
+    const key =
+        await crypto.subtle.importKey(
+            "raw",
+            hash,
+            "AES-GCM",
+            false,
+            ["encrypt"]
+        );
+
+    const iv =
+        crypto.getRandomValues(
+            new Uint8Array(12)
+        );
+
+    const encrypted =
+        await crypto.subtle.encrypt(
+            {
+                name:"AES-GCM",
+                iv:iv
+            },
+            key,
+            data
+        );
+
+    return (
+        "GCDS1|" +
+        bytesToBase64(iv) +
+        "|" +
+        bytesToBase64(
+            new Uint8Array(encrypted)
+        )
+    );
+
+}
+
+async function decryptText(payload,password){
+
+    const parts =
+        payload.split("|");
+
+    if(parts.length !== 3){
+        throw new Error("Código inválido");
+    }
+
+    const iv =
+        base64ToBytes(parts[1]);
+
+    const encrypted =
+        base64ToBytes(parts[2]);
+
+    const encoder =
+        new TextEncoder();
+
+    const passwordData =
+        encoder.encode(password);
+
+    const hash =
+        await crypto.subtle.digest(
+            "SHA-256",
+            passwordData
+        );
+
+    const key =
+        await crypto.subtle.importKey(
+            "raw",
+            hash,
+            "AES-GCM",
+            false,
+            ["decrypt"]
+        );
+
+    const decrypted =
+        await crypto.subtle.decrypt(
+            {
+                name:"AES-GCM",
+                iv:iv
+            },
+            key,
+            encrypted
+        );
+
+    return new TextDecoder().decode(
+        decrypted
+    );
+
+}
+
+
+/* =========================================================
+   GENERAR QR
+========================================================= */
+
+async function generarQR(){
+
+    const contenido =
+        obtenerContenidoQR();
+
+    if(!contenido){
+
+        toast("Completa la información.");
+
+        return;
+
+    }
+
+    if(
+        document.getElementById("qrSecurity").checked
+    ){
+
+        solicitarPassword("qr");
+
+        pendingGeneration = contenido;
+
+        return;
+
+    }
+
+    await crearQRFinal(
+        contenido,
+        false
+    );
+
+}
+
+async function crearQRProtegido(password){
+
+    const contenido =
+        pendingGeneration;
+
+    const encrypted =
+        await encryptText(
+            contenido,
+            password
+        );
+
+    await crearQRFinal(
+        encrypted,
+        true
+    );
+
+    pendingGeneration = null;
+
+}
+
+async function crearQRFinal(contenido, protegido){
+
+    const display =
+        document.getElementById("qrDisplay");
+
+    display.innerHTML = "";
+
+    const color =
+        document.getElementById("qrColor").value;
+
+    const background =
+        document.getElementById("qrBackground").value;
+
+    new QRCode(
+        display,
+        {
+            text:contenido,
+            width:250,
+            height:250,
+            colorDark:color,
+            colorLight:background,
+            correctLevel:QRCode.CorrectLevel.H
+        }
+    );
+
+    await esperar(300);
+
+    const logoEnabled =
+        document.getElementById("qrLogoEnabled").checked;
+
+    if(logoEnabled){
+
+        const file =
+            document.getElementById("qrLogo").files[0];
+
+        if(file){
+
+            const img =
+                document.createElement("img");
+
+            img.className =
+                "logo-overlay";
+
+            img.src =
+                URL.createObjectURL(file);
+
+            display.appendChild(img);
+
+        }
+
+    }
+
+    codigoActual = contenido;
+    tipoCodigoActual = "qr";
+
+    guardarCodigoCreado({
+
+        tipo:"qr",
+        contenido:contenido,
+        protegido:protegido,
+        color:color,
+        background:background,
+        logo:logoEnabled
+
+    });
+
+    document.getElementById("qrForm")
+        .classList.add("hidden");
+
+    document.getElementById("qrResult")
+        .classList.add("active");
+
+    toast(
+        protegido
+        ? "QR protegido creado."
+        : "Código QR creado."
+    );
+
+}
+
+
+/* =========================================================
+   BARCODE
+========================================================= */
+
+let codigoActual = "";
+let tipoCodigoActual = "";
+
+async function generarBarcode(){
+
+    const texto =
+        document.getElementById("barcodeText").value.trim();
+
+    if(!texto){
+
+        toast("Escribe el contenido del código.");
+
+        return;
+
+    }
+
+    if(
+        document.getElementById("barcodeSecurity").checked
+    ){
+
+        pendingGeneration = texto;
+
+        solicitarPassword("barcode");
+
+        return;
+
+    }
+
+    await crearBarcodeFinal(
+        texto,
+        false
+    );
+
+}
+
+async function crearBarcodeProtegido(password){
+
+    const contenido =
+        pendingGeneration;
+
+    const encrypted =
+        await encryptText(
+            contenido,
+            password
+        );
+
+    await crearBarcodeFinal(
+        encrypted,
+        true
+    );
+
+    pendingGeneration = null;
+
+}
+
+async function crearBarcodeFinal(contenido, protegido){
+
+    const svg =
+        document.getElementById("barcodeSVG");
+
+    svg.innerHTML = "";
+
+    const type =
+        document.getElementById("barcodeType").value;
+
+    const color =
+        document.getElementById("barcodeColor").value;
+
+    const background =
+        document.getElementById("barcodeBackground").value;
+
+    try{
+
+        JsBarcode(
+            svg,
+            contenido,
+            {
+                format:type,
+                lineColor:color,
+                background:background,
+                width:2,
+                height:100,
+                displayValue:true,
+                margin:15
+            }
+        );
+
+    }catch(error){
+
+        toast(
+            "El contenido no es válido para este formato."
+        );
+
+        return;
+
+    }
+
+    codigoActual = contenido;
+    tipoCodigoActual = "barcode";
+
+    guardarCodigoCreado({
+
+        tipo:"barcode",
+        contenido:contenido,
+        protegido:protegido,
+        barcodeType:type,
+        color:color,
+        background:background
+
+    });
+
+    document.getElementById("barcodeForm")
+        .classList.add("hidden");
+
+    document.getElementById("barcodeResult")
+        .classList.add("active");
+
+    toast(
+        protegido
+        ? "Código de barras protegido creado."
+        : "Código de barras creado."
+    );
+
+}
+
+
+/* =========================================================
+   MI QR
+========================================================= */
+
+let miQRContenido = "";
+
+function crearMiQR(){
+
+    const nombre =
+        document.getElementById("nombre").value.trim();
+
+    if(!nombre){
+
+        toast("Escribe al menos tu nombre.");
+
+        return;
+
+    }
+
+    miQRContenido =
+`BEGIN:VCARD
+VERSION:3.0
+FN:${nombre}
+TEL:${document.getElementById("telefono").value}
+EMAIL:${document.getElementById("correo").value}
+ADR:${document.getElementById("direccion").value}
+END:VCARD`;
+
+    const display =
+        document.getElementById("miQRDisplay");
+
+    display.innerHTML = "";
+
+    new QRCode(
+        display,
+        {
+            text:miQRContenido,
+            width:250,
+            height:250,
+            colorDark:"#000000",
+            colorLight:"#ffffff",
+            correctLevel:QRCode.CorrectLevel.H
+        }
+    );
+
+    document.getElementById("miQRForm")
+        .classList.add("hidden");
+
+    document.getElementById("miQRResult")
+        .classList.add("active");
+
+    miQRActual = miQRContenido;
+
+    toast("Tu código QR fue creado.");
+
+}
+
+let miQRActual = "";
+
+
+/* =========================================================
+   ESPERAR
+========================================================= */
+
+function esperar(ms){
+
+    return new Promise(
+        resolve => setTimeout(resolve,ms)
+    );
+
+}
+
+
+/* =========================================================
+   DESCARGAR CÓDIGO
+========================================================= */
+
+async function descargarCodigo(tipo){
+
+    if(tipo === "mi"){
+
+        const container =
+            document.getElementById("miQRDisplay");
+
+        const canvas =
+            await elementoACanvas(container);
+
+        descargarCanvas(
+            canvas,
+            "mi-codigo-qr.png"
+        );
+
+        return;
+
+    }
+
+    if(tipoCodigoActual === "qr"){
+
+        const container =
+            document.getElementById("qrDisplay");
+
+        const canvas =
+            await elementoACanvas(container);
+
+        descargarCanvas(
+            canvas,
+            "gc-digital-scann-qr.png"
+        );
+
+        return;
+
+    }
+
+    if(tipoCodigoActual === "barcode"){
+
+        const svg =
+            document.getElementById("barcodeSVG");
+
+        const serializer =
+            new XMLSerializer();
+
+        const svgData =
+            serializer.serializeToString(svg);
+
+        const blob =
+            new Blob(
+                [svgData],
+                {
+                    type:"image/svg+xml"
+                }
+            );
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download =
+            "gc-digital-scann-barcode.svg";
+
+        link.click();
+
+        URL.revokeObjectURL(url);
+
+    }
+
+}
+
+
+/* =========================================================
+   CONVERTIR QR A CANVAS
+========================================================= */
+
+async function elementoACanvas(container){
+
+    const canvas =
+        document.createElement("canvas");
+
+    const size = 320;
+
+    canvas.width = size;
+    canvas.height = size;
+
+    const ctx =
+        canvas.getContext("2d");
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.fillRect(
+        0,
+        0,
+        size,
+        size
+    );
+
+    const qrCanvas =
+        container.querySelector("canvas");
+
+    const qrImg =
+        container.querySelector("img:not(.logo-overlay)");
+
+    if(qrCanvas){
+
+        ctx.drawImage(
+            qrCanvas,
+            35,
+            35,
+            250,
+            250
+        );
+
+    }else if(qrImg){
+
+        await cargarImagen(qrImg);
+
+        ctx.drawImage(
+            qrImg,
+            35,
+            35,
+            250,
+            250
+        );
+
+    }
+
+    const logo =
+        container.querySelector(".logo-overlay");
+
+    if(logo){
+
+        await cargarImagen(logo);
+
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.fillRect(
+            132,
+            132,
+            56,
+            56
+        );
+
+        ctx.drawImage(
+            logo,
+            136,
+            136,
+            48,
+            48
+        );
+
+    }
+
+    return canvas;
+
+}
+
+function cargarImagen(img){
+
+    return new Promise(resolve=>{
+
+        if(img.complete){
+            resolve();
+            return;
+        }
+
+        img.onload =
+            ()=>resolve();
+
+        img.onerror =
+            ()=>resolve();
+
+    });
+
+}
+
+function descargarCanvas(canvas,nombre){
+
+    canvas.toBlob(blob=>{
+
+        const url =
+            URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+
+        link.download = nombre;
+
+        link.click();
+
+        URL.revokeObjectURL(url);
+
+    },"image/png");
+
+}
+
+
+/* =========================================================
+   COPIAR
+========================================================= */
+
+function copiarTexto(texto){
+
+    navigator.clipboard.writeText(texto)
+        .then(
+            ()=>toast("Contenido copiado.")
+        )
+        .catch(
+            ()=>toast("No se pudo copiar.")
+        );
+
+}
+
+function copiarCodigoActual(){
+
+    copiarTexto(
+        codigoActual
+    );
+
+}
+
+
+/* =========================================================
+   COMPARTIR
+========================================================= */
+
+async function compartirCodigo(){
+
+    try{
+
+        if(navigator.share){
+
+            await navigator.share({
+
+                title:"GC Digital Scann",
+
+                text:codigoActual
+
+            });
+
+        }else{
+
+            copiarCodigoActual();
+
+        }
+
+    }catch(e){}
+
+}
+
+async function compartirMiQR(){
+
+    if(navigator.share){
+
+        try{
+
+            await navigator.share({
+
+                title:"Mi código QR",
+
+                text:miQRActual
+
+            });
+
+        }catch(e){}
+
+    }else{
+
+        copiarTexto(miQRActual);
+
+    }
+
+}
+
+
+/* =========================================================
+   VOLVER A FORMULARIOS
+========================================================= */
+
+function volverQR(){
+
+    document.getElementById("qrResult")
+        .classList.remove("active");
+
+    document.getElementById("qrForm")
+        .classList.remove("hidden");
+
+}
+
+function volverBarcode(){
+
+    document.getElementById("barcodeResult")
+        .classList.remove("active");
+
+    document.getElementById("barcodeForm")
+        .classList.remove("hidden");
+
+}
+
+function volverMiQR(){
+
+    document.getElementById("miQRResult")
+        .classList.remove("active");
+
+    document.getElementById("miQRForm")
+        .classList.remove("hidden");
+
+}
+
+
+/* =========================================================
+   HISTORIAL DE CÓDIGOS CREADOS
+========================================================= */
+
+function obtenerCreados(){
+
+    return JSON.parse(
+        localStorage.getItem("gcDigitalCreados")
+    ) || [];
+
+}
+
+function guardarCodigoCreado(codigo){
+
+    const historial =
+        obtenerCreados();
+
+    historial.unshift({
+
+        id:Date.now(),
+
+        ...codigo,
+
+        fecha:new Date().toLocaleString(
+            "es-MX"
+        )
+
+    });
+
+    localStorage.setItem(
+        "gcDigitalCreados",
+        JSON.stringify(
+            historial.slice(0,100)
+        )
+    );
+
+}
+
+
+/* =========================================================
+   HISTORIAL DE ESCANEOS
+========================================================= */
+
+function obtenerEscaneados(){
+
+    return JSON.parse(
+        localStorage.getItem("gcDigitalEscaneados")
+    ) || [];
+
+}
+
+function guardarEscaneo(texto){
+
+    const historial =
+        obtenerEscaneados();
+
+    historial.unshift({
+
+        id:Date.now(),
+
+        contenido:texto,
+
+        fecha:new Date().toLocaleString(
+            "es-MX"
+        )
+
+    });
+
+    localStorage.setItem(
+        "gcDigitalEscaneados",
+        JSON.stringify(
+            historial.slice(0,100)
+        )
+    );
+
+}
+
+
+/* =========================================================
+   CARGAR HISTORIAL
+========================================================= */
+
+function cargarHistorial(){
+
+    const creados =
+        obtenerCreados();
+
+    const escaneados =
+        obtenerEscaneados();
+
+    const createdBox =
+        document.getElementById(
+            "historyCreated"
+        );
+
+    const scannedBox =
+        document.getElementById(
+            "historyScanned"
+        );
+
+    if(!creados.length){
+
+        createdBox.innerHTML = `
+            <div class="empty">
+                🧾<br><br>
+                Todavía no has creado códigos.
+            </div>
+        `;
+
+    }else{
+
+        createdBox.innerHTML =
+            creados.map(
+                item => `
+                <div class="history-item"
+                     onclick="abrirHistorialCreado(${item.id})">
+
+                    <div class="history-item-top">
+
+                        <div>
+                            <div class="history-name">
+                                ${item.tipo === "qr" ? "▣ Código QR" : "▥ Código de barras"}
+                            </div>
+
+                            <div class="history-date">
+                                ${item.fecha}
+                            </div>
+                        </div>
+
+                        <div class="history-icon">
+                            ${item.protegido ? "🔐" : "✓"}
+                        </div>
+
+                    </div>
+
+                    <div class="history-preview">
+                        ${item.protegido ? "Contenido protegido" : escapar(item.contenido)}
+                    </div>
+
+                </div>
+            `
+            ).join("");
+
+    }
+
+
+    if(!escaneados.length){
+
+        scannedBox.innerHTML = `
+            <div class="empty">
+                📷<br><br>
+                Todavía no has escaneado códigos.
+            </div>
+        `;
+
+    }else{
+
+        scannedBox.innerHTML =
+            escaneados.map(
+                item => `
+                <div class="history-item"
+                     onclick="abrirHistorialEscaneo(${item.id})">
+
+                    <div class="history-item-top">
+
+                        <div>
+
+                            <div class="history-name">
+                                📷 Escaneo
+                            </div>
+
+                            <div class="history-date">
+                                ${item.fecha}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="history-preview">
+                        ${escapar(item.contenido)}
+                    </div>
+
+                </div>
+            `
+            ).join("");
+
+    }
+
+}
+
+
+/* =========================================================
+   HISTORIAL TABS
+========================================================= */
+
+function mostrarHistorialTipo(tipo){
+
+    const created =
+        document.getElementById("historyCreated");
+
+    const scanned =
+        document.getElementById("historyScanned");
+
+    const tabCreated =
+        document.getElementById("tabCreated");
+
+    const tabScanned =
+        document.getElementById("tabScanned");
+
+    if(tipo === "creados"){
+
+        created.style.display = "flex";
+        scanned.style.display = "none";
+
+        tabCreated.classList.add("active");
+        tabScanned.classList.remove("active");
+
+    }else{
+
+        created.style.display = "none";
+        scanned.style.display = "flex";
+
+        tabCreated.classList.remove("active");
+        tabScanned.classList.add("active");
+
+    }
+
+}
+
+
+/* =========================================================
+   ABRIR HISTORIAL CREADO
+========================================================= */
+
+function abrirHistorialCreado(id){
+
+    const item =
+        obtenerCreados().find(
+            x => x.id === id
+        );
+
+    if(!item) return;
+
+    if(item.protegido){
+
+        pendingProtectedHistory =
+            item;
+
+        document.getElementById(
+            "unlockPassword"
+        ).value = "";
+
+        document.getElementById(
+            "unlockModal"
+        ).classList.add("active");
+
+        return;
+
+    }
+
+    mostrarCodigoHistorial(item);
+
+}
+
+let pendingProtectedHistory = null;
+
+function mostrarCodigoHistorial(item){
+
+    if(item.tipo === "qr"){
+
+        mostrar("crearQR");
+
+        document.getElementById("qrForm")
+            .classList.add("hidden");
+
+        document.getElementById("qrResult")
+            .classList.add("active");
+
+        const display =
+            document.getElementById("qrDisplay");
+
+        display.innerHTML = "";
+
+        new QRCode(
+            display,
+            {
+                text:item.contenido,
+                width:250,
+                height:250,
+                colorDark:item.color || "#000000",
+                colorLight:item.background || "#ffffff",
+                correctLevel:QRCode.CorrectLevel.H
+            }
+        );
+
+        codigoActual =
+            item.contenido;
+
+        tipoCodigoActual =
+            "qr";
+
+    }
+
+    if(item.tipo === "barcode"){
+
+        mostrar("crearBarra");
+
+        document.getElementById("barcodeForm")
+            .classList.add("hidden");
+
+        document.getElementById("barcodeResult")
+            .classList.add("active");
+
+        JsBarcode(
+            "#barcodeSVG",
+            item.contenido,
+            {
+                format:item.barcodeType || "CODE128",
+                lineColor:item.color || "#000000",
+                background:item.background || "#ffffff",
+                width:2,
+                height:100,
+                displayValue:true,
+                margin:15
+            }
+        );
+
+        codigoActual =
+            item.contenido;
+
+        tipoCodigoActual =
+            "barcode";
+
+    }
+
+}
+
+
+/* =========================================================
+   DESBLOQUEAR HISTORIAL
+========================================================= */
+
+function cerrarUnlock(){
+
+    document.getElementById(
+        "unlockModal"
+    ).classList.remove("active");
+
+    pendingProtectedHistory = null;
+
+}
+
+async function desbloquearCodigo(){
+
+    const password =
+        document.getElementById(
+            "unlockPassword"
+        ).value;
+
+    if(!password){
+
+        toast("Escribe la contraseña.");
+
+        return;
+
+    }
+
+    try{
+
+        const contenido =
+            await decryptText(
+                pendingProtectedHistory.contenido,
+                password
+            );
+
+        const item = {
+            ...pendingProtectedHistory,
+            contenido:contenido,
+            protegido:false
+        };
+
+        cerrarUnlock();
+
+        mostrarCodigoHistorial(item);
+
+        toast("Código desbloqueado.");
+
+    }catch(error){
+
+        toast("Contraseña incorrecta.");
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCANEAR CÓDIGO PROTEGIDO
+========================================================= */
+
+let codigoProtegidoPendiente = "";
+
+function abrirCodigoProtegido(texto){
+
+    codigoProtegidoPendiente =
+        texto;
+
+    document.getElementById(
+        "unlockPassword"
+    ).value = "";
+
+    document.getElementById(
+        "unlockModal"
+    ).classList.add("active");
+
+}
+
+async function desbloquearCodigoEscaneado(){
+
+    const password =
+        document.getElementById(
+            "unlockPassword"
+        ).value;
+
+    try{
+
+        const contenido =
+            await decryptText(
+                codigoProtegidoPendiente,
+                password
+            );
+
+        cerrarUnlock();
+
+        mostrarResultado(
+            contenido
+        );
+
+        toast(
+            "Contenido desbloqueado."
+        );
+
+    }catch(e){
+
+        toast(
+            "Contraseña incorrecta."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPAR HTML
+========================================================= */
+
+function escapar(texto){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        texto;
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   BORRAR HISTORIAL
+========================================================= */
+
+function borrarHistorialActual(){
+
+    const creadosVisible =
+        document.getElementById(
+            "historyCreated"
+        ).style.display !== "none";
+
+    if(creadosVisible){
+
+        localStorage.removeItem(
+            "gcDigitalCreados"
+        );
+
+    }else{
+
+        localStorage.removeItem(
+            "gcDigitalEscaneados"
+        );
+
+    }
+
+    cargarHistorial();
+
+    toast("Historial eliminado.");
+
+}
+
+
+/* =========================================================
+   MODIFICAR DESBLOQUEO PARA ESCANEADOS
+========================================================= */
+
+document.getElementById(
+    "unlockModal"
+).querySelector(".btn-primary")
+.onclick = async function(){
+
+    if(pendingProtectedHistory){
+
+        await desbloquearCodigo();
+
+    }else{
+
+        await desbloquearCodigoEscaneado();
+
+    }
+
+};
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+iniciarScanner();
+
+</script>
+
+</body>
+</html>
