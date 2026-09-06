@@ -1,0 +1,6251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>NexusPOS | Punto de Venta</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+--blue:#2563eb;
+--blue2:#1d4ed8;
+--dark:#020617;
+--dark2:#0f172a;
+--bg:#f1f5f9;
+--card:#fff;
+--border:#e2e8f0;
+--text:#0f172a;
+--muted:#64748b;
+--green:#16a34a;
+--red:#dc2626;
+--orange:#d97706;
+--purple:#7c3aed;
+}
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:var(--bg);
+color:var(--text);
+min-height:100vh
+}
+
+button,input,select,textarea{font-family:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+#loginScreen{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:
+radial-gradient(circle at top left,#2563eb 0,transparent 35%),
+radial-gradient(circle at bottom right,#7c3aed 0,transparent 35%),
+#020617
+}
+
+.login{
+background:white;
+width:100%;
+max-width:430px;
+padding:35px;
+border-radius:24px;
+box-shadow:0 30px 80px #0008
+}
+
+.logo{
+width:70px;
+height:70px;
+border-radius:20px;
+background:linear-gradient(135deg,#2563eb,#7c3aed);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px;
+font-weight:900;
+margin:auto auto 20px
+}
+
+.login h1{text-align:center;font-size:28px}
+.login p{text-align:center;color:var(--muted);margin:8px 0 25px}
+
+.demo{
+margin-top:18px;
+padding:13px;
+border-radius:12px;
+background:#eff6ff;
+color:#1e40af;
+font-size:13px
+}
+
+#app{min-height:100vh;display:flex}
+
+.sidebar{
+position:fixed;
+top:0;
+bottom:0;
+left:0;
+width:260px;
+background:var(--dark);
+color:white;
+overflow-y:auto;
+z-index:50;
+transition:.25s
+}
+
+.brand{
+padding:25px 20px;
+border-bottom:1px solid #ffffff12
+}
+
+.brand h2{font-size:22px}
+.brand span{color:#60a5fa}
+.brand small{display:block;color:#94a3b8;margin-top:5px}
+
+.user{
+margin:15px;
+padding:14px;
+background:#ffffff0d;
+border-radius:13px
+}
+
+.user strong{display:block}
+.user small{color:#94a3b8}
+
+.user-change{
+margin-top:10px;
+width:100%;
+padding:8px 10px;
+border:0;
+border-radius:8px;
+background:#ffffff12;
+color:#cbd5e1;
+font-size:12px
+}
+
+.user-change:hover{background:#ffffff20;color:white}
+
+.menu{padding:10px}
+
+.menu button{
+width:100%;
+border:0;
+background:transparent;
+color:#cbd5e1;
+text-align:left;
+padding:13px 15px;
+margin:3px 0;
+border-radius:10px;
+font-size:14px
+}
+
+.menu button:hover,.menu button.active{
+background:var(--blue);
+color:white
+}
+
+.logout{
+margin:15px;
+width:calc(100% - 30px);
+padding:12px;
+border:0;
+border-radius:10px;
+background:#7f1d1d;
+color:white
+}
+
+.main{
+margin-left:260px;
+width:calc(100% - 260px);
+min-height:100vh
+}
+
+.topbar{
+height:70px;
+background:white;
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 25px;
+position:sticky;
+top:0;
+z-index:30
+}
+
+.mobile{
+display:none;
+border:0;
+background:#eff6ff;
+color:var(--blue);
+width:42px;
+height:42px;
+border-radius:10px;
+font-size:20px
+}
+
+.content{padding:25px}
+
+.page{display:none}
+.page.active{display:block}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:25px
+}
+
+.header h1{font-size:27px}
+.header p{color:var(--muted);margin-top:5px}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+margin-bottom:22px
+}
+
+.card{
+background:white;
+border:1px solid var(--border);
+border-radius:18px;
+padding:20px;
+box-shadow:0 8px 25px #0f172a0a
+}
+
+.stat{
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.stat-icon{
+width:48px;
+height:48px;
+border-radius:14px;
+background:#eff6ff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:21px
+}
+
+.stat p{color:var(--muted);font-size:13px}
+.stat h3{font-size:25px;margin-top:7px}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px
+}
+
+.grid3{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px
+}
+
+.field{
+display:flex;
+flex-direction:column;
+gap:7px
+}
+
+.field.full{grid-column:1/-1}
+
+label{font-size:13px;font-weight:bold;color:#334155}
+
+input,select,textarea{
+width:100%;
+padding:12px;
+border:1px solid #cbd5e1;
+border-radius:10px;
+outline:none;
+background:white
+}
+
+input:focus,select:focus,textarea:focus{
+border-color:var(--blue);
+box-shadow:0 0 0 3px #2563eb18
+}
+
+textarea{min-height:90px;resize:vertical}
+
+.btn{
+border:0;
+padding:11px 15px;
+border-radius:10px;
+font-weight:bold
+}
+
+.btn-primary{background:var(--blue);color:white}
+.btn-primary:hover{background:var(--blue2)}
+.btn-success{background:#dcfce7;color:#166534}
+.btn-danger{background:#fee2e2;color:#991b1b}
+.btn-warning{background:#fef3c7;color:#92400e}
+.btn-secondary{background:#e2e8f0;color:#334155}
+.btn-purple{background:#ede9fe;color:#6d28d9}
+
+.actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap
+}
+
+.mt{margin-top:18px}
+
+.table-wrap{overflow-x:auto}
+
+table{
+width:100%;
+border-collapse:collapse
+}
+
+th,td{
+padding:12px 10px;
+border-bottom:1px solid var(--border);
+font-size:13px;
+text-align:left
+}
+
+th{background:#f8fafc;color:#475569}
+
+.empty{
+padding:35px;
+text-align:center;
+color:var(--muted)
+}
+
+.badge{
+display:inline-flex;
+padding:5px 9px;
+border-radius:999px;
+font-size:11px;
+font-weight:bold
+}
+
+.green{background:#dcfce7;color:#166534}
+.red{background:#fee2e2;color:#991b1b}
+.orange{background:#fef3c7;color:#92400e}
+.blue{background:#dbeafe;color:#1e40af}
+.purple{background:#ede9fe;color:#6d28d9}
+
+.pos{
+display:grid;
+grid-template-columns:1.5fr .8fr;
+gap:20px
+}
+
+.search{
+display:flex;
+gap:10px
+}
+
+.search input{flex:1}
+
+.total{
+border-top:1px solid var(--border);
+margin-top:20px;
+padding-top:18px
+}
+
+.line{
+display:flex;
+justify-content:space-between;
+margin:8px 0
+}
+
+.final{
+font-size:25px;
+font-weight:900
+}
+
+.credit-info{
+background:#eff6ff;
+border:1px solid #bfdbfe;
+border-radius:14px;
+padding:15px;
+margin-top:15px
+}
+
+.credit-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px
+}
+
+.credit-item{
+background:white;
+padding:12px;
+border-radius:10px
+}
+
+.credit-item small{
+color:var(--muted)
+}
+
+.credit-item strong{
+display:block;
+font-size:18px;
+margin-top:5px
+}
+
+.switchrow{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+padding:15px 0;
+border-bottom:1px solid var(--border)
+}
+
+.switch{
+position:relative;
+width:48px;
+height:26px
+}
+
+.switch input{display:none}
+
+.slider{
+position:absolute;
+inset:0;
+background:#cbd5e1;
+border-radius:30px
+}
+
+.slider:before{
+content:"";
+position:absolute;
+width:20px;
+height:20px;
+left:3px;
+top:3px;
+background:white;
+border-radius:50%;
+transition:.2s
+}
+
+.switch input:checked+.slider{background:var(--blue)}
+.switch input:checked+.slider:before{transform:translateX(22px)}
+
+.modal{
+position:fixed;
+inset:0;
+background:#020617aa;
+display:none;
+align-items:center;
+justify-content:center;
+padding:20px;
+z-index:100
+}
+
+.modal.show{display:flex}
+
+.modalbox{
+background:white;
+width:100%;
+max-width:700px;
+max-height:92vh;
+overflow-y:auto;
+border-radius:20px;
+padding:25px
+}
+
+.modalhead{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px
+}
+
+.close{
+border:0;
+background:#f1f5f9;
+width:36px;
+height:36px;
+border-radius:9px;
+font-size:20px
+}
+
+#toast{
+position:fixed;
+right:25px;
+bottom:25px;
+background:#0f172a;
+color:white;
+padding:14px 18px;
+border-radius:12px;
+z-index:300;
+transform:translateY(100px);
+opacity:0;
+transition:.3s
+}
+
+#toast.show{
+transform:translateY(0);
+opacity:1
+}
+
+.ticket-preview{
+background:#f8fafc;
+padding:15px;
+border-radius:12px;
+display:flex;
+justify-content:center;
+overflow:auto
+}
+
+#ticketCanvas{
+max-width:100%;
+height:auto;
+background:white
+}
+
+.clienthero{
+background:linear-gradient(135deg,#1d4ed8,#7c3aed);
+color:white;
+padding:30px;
+border-radius:20px;
+margin-bottom:20px
+}
+
+.clientboxes{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-top:20px
+}
+
+.clientbox{
+background:#ffffff22;
+padding:18px;
+border-radius:14px
+}
+
+.clientbox small{opacity:.8}
+.clientbox strong{display:block;font-size:24px;margin-top:6px}
+
+@media(max-width:1100px){
+.cards{grid-template-columns:repeat(2,1fr)}
+.pos{grid-template-columns:1fr}
+}
+
+@media(max-width:800px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.open{transform:translateX(0)}
+.main{margin-left:0;width:100%}
+.mobile{display:block}
+.content{padding:15px}
+.cards,.grid,.grid3,.credit-grid,.clientboxes{grid-template-columns:1fr}
+.topbar{padding:0 15px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="loginScreen">
+<div class="login">
+
+<div class="logo">N</div>
+
+<h1>NexusPOS</h1>
+
+<p>Punto de venta y administración</p>
+
+<form id="loginForm">
+
+<div class="field">
+<label>Usuario</label>
+<input id="loginUser" required autocomplete="username">
+</div>
+
+<br>
+
+<div class="field">
+<label>Contraseña</label>
+<input id="loginPassword" type="password" required autocomplete="current-password">
+</div>
+
+<br>
+
+<button class="btn btn-primary" style="width:100%;padding:14px">
+Iniciar sesión
+</button>
+
+</form>
+
+<div class="demo">
+<strong>Cuenta inicial</strong><br>
+Usuario: gerente<br>
+Contraseña: 1234
+</div>
+
+</div>
+</div>
+
+
+<div id="app" class="hidden">
+
+<aside class="sidebar" id="sidebar">
+
+<div class="brand">
+<h2>Nexus<span>POS</span></h2>
+<small>Sistema de punto de venta</small>
+</div>
+
+<div class="user">
+<strong id="sideUser"></strong>
+<small id="sideRole"></small>
+<button class="user-change" onclick="openChangePasswordModal()">🔑 Cambiar mi clave</button>
+</div>
+
+<div class="menu" id="menu"></div>
+
+<button class="logout" onclick="logout()">
+Cerrar sesión
+</button>
+
+</aside>
+
+
+<main class="main">
+
+<header class="topbar">
+
+<button class="mobile" onclick="toggleSidebar()">☰</button>
+
+<strong id="topTitle">Dashboard</strong>
+
+<span id="clock"></span>
+
+</header>
+
+
+<div class="content">
+
+
+<section class="page" id="page-dashboard">
+
+<div class="header">
+<div>
+<h1>Dashboard</h1>
+<p>Resumen general del punto de venta.</p>
+</div>
+</div>
+
+<div class="cards">
+
+<div class="card stat">
+<div>
+<p>Ventas de hoy</p>
+<h3 id="dashSales">$0.00</h3>
+</div>
+<div class="stat-icon">💰</div>
+</div>
+
+<div class="card stat">
+<div>
+<p>Productos</p>
+<h3 id="dashProducts">0</h3>
+</div>
+<div class="stat-icon">📦</div>
+</div>
+
+<div class="card stat">
+<div>
+<p>Clientes</p>
+<h3 id="dashCustomers">0</h3>
+</div>
+<div class="stat-icon">👥</div>
+</div>
+
+<div class="card stat">
+<div>
+<p>Deuda activa</p>
+<h3 id="dashDebt">$0.00</h3>
+</div>
+<div class="stat-icon">💳</div>
+</div>
+
+</div>
+
+<div class="card">
+<h2>Estado de caja</h2>
+<div id="dashboardCashStatus" class="mt"></div>
+</div>
+
+<div class="card mt">
+<h2>Movimientos recientes</h2>
+
+<div class="table-wrap mt">
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Detalle</th>
+<th>Importe</th>
+<th>Usuario</th>
+</tr>
+</thead>
+<tbody id="dashboardActivity"></tbody>
+</table>
+</div>
+
+</div>
+
+</section>
+
+
+<section class="page" id="page-caja">
+
+<div class="header">
+<div>
+<h1>Caja</h1>
+<p>Apertura, movimientos y cierre de caja.</p>
+</div>
+</div>
+
+<div id="cashOpenPanel" class="card">
+
+<h2>Abrir caja</h2>
+
+<p style="color:#64748b;margin-top:6px">
+Indica cuánto dinero tienes al iniciar tu jornada.
+</p>
+
+<div class="field mt">
+<label>Dinero inicial</label>
+<input id="openingAmount" type="number" min="0" step=".01" placeholder="0.00">
+</div>
+
+<button class="btn btn-primary mt" onclick="openCash()">
+Abrir caja
+</button>
+
+</div>
+
+
+<div id="cashActivePanel" class="hidden">
+
+<div class="cards">
+
+<div class="card stat">
+<div>
+<p>Fondo inicial</p>
+<h3 id="cashOpening">$0.00</h3>
+</div>
+<div class="stat-icon">🏦</div>
+</div>
+
+<div class="card stat">
+<div>
+<p>Ventas efectivo</p>
+<h3 id="cashCashSales">$0.00</h3>
+</div>
+<div class="stat-icon">💵</div>
+</div>
+
+<div class="card stat">
+<div>
+<p>Entradas</p>
+<h3 id="cashIn">$0.00</h3>
+</div>
+<div class="stat-icon">➕</div>
+</div>
+
+<div class="card stat">
+<div>
+<p>Salidas/devoluciones</p>
+<h3 id="cashOut">$0.00</h3>
+</div>
+<div class="stat-icon">➖</div>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Corte de caja</h2>
+
+<div id="cashExpected" class="credit-info"></div>
+
+<div class="field mt">
+<label>Dinero contado al cerrar</label>
+<input id="closingAmount" type="number" min="0" step=".01">
+</div>
+
+<button class="btn btn-danger mt" onclick="closeCash()">
+Hacer corte y cerrar caja
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="page" id="page-ventas">
+
+<div class="header">
+<div>
+<h1>Ventas</h1>
+<p>Realiza ventas y cobra.</p>
+</div>
+</div>
+
+<div class="pos">
+
+<div class="card">
+
+<h2>Agregar productos</h2>
+
+<div class="search mt">
+<input id="productSearch" placeholder="Código o nombre" oninput="searchProductsPOS()">
+
+<button class="btn btn-primary" onclick="addProductBySearch()">
+Agregar
+</button>
+</div>
+
+<div id="posResults" class="mt"></div>
+
+<div class="table-wrap mt">
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Precio</th>
+<th>Cantidad</th>
+<th>Total</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="cartTable"></tbody>
+</table>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Cobro</h2>
+
+<div class="total">
+
+<div class="line">
+<span>Subtotal</span>
+<strong id="saleSubtotal">$0.00</strong>
+</div>
+
+<div class="line final">
+<span>Total</span>
+<strong id="saleTotal">$0.00</strong>
+</div>
+
+</div>
+
+<div class="field mt">
+
+<label>Método de pago</label>
+
+<select id="paymentMethod" onchange="paymentChanged()">
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="tarjeta">Tarjeta</option>
+<option value="credito">Usar crédito</option>
+</select>
+
+</div>
+
+
+<div id="cashPaymentBox" class="credit-info">
+
+<div class="field">
+<label>¿Con cuánto te pagaron?</label>
+<input id="cashReceived" type="number" min="0" step=".01" oninput="calculateChange()">
+</div>
+
+<div class="line final mt">
+<span>Cambio</span>
+<strong id="cashChange">$0.00</strong>
+</div>
+
+</div>
+
+
+<div id="creditBox" class="credit-info hidden">
+
+<h3>Usar crédito</h3>
+
+<div class="field mt">
+<label>Cliente</label>
+<select id="saleCustomer" onchange="showSaleCustomer()"></select>
+</div>
+
+<div class="field mt">
+<label>NIP de 4 dígitos</label>
+<input id="saleNip" type="password" maxlength="4" inputmode="numeric">
+</div>
+
+<div id="saleCustomerInfo"></div>
+
+<div class="field mt">
+<label>¿A cuántas semanas?</label>
+<select id="saleWeeks" onchange="calculateCredit()"></select>
+</div>
+
+<div id="creditCalculation"></div>
+
+</div>
+
+
+<button class="btn btn-primary mt" style="width:100%;padding:14px" onclick="chargeSale()">
+Cobrar
+</button>
+
+<button class="btn btn-secondary mt" style="width:100%" onclick="clearCart()">
+Vaciar carrito
+</button>
+
+</div>
+</div>
+
+</section>
+
+
+<section class="page" id="page-inventario">
+
+<div class="header">
+<div>
+<h1>Inventario</h1>
+<p>Productos disponibles.</p>
+</div>
+
+<button class="btn btn-primary" onclick="openProductModal()">
++ Producto
+</button>
+</div>
+
+<div class="card">
+
+<div class="search">
+<input id="inventorySearch" placeholder="Buscar..." oninput="renderProducts()">
+</div>
+
+<div class="table-wrap mt">
+
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Producto</th>
+<th>Unidad</th>
+<th>Precio</th>
+<th>Stock</th>
+<th>Estado</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="productsTable"></tbody>
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<section class="page" id="page-clientes">
+
+<div class="header">
+
+<div>
+<h1>Clientes</h1>
+<p>Clientes y líneas de crédito.</p>
+</div>
+
+<button class="btn btn-primary" onclick="openCustomerModal()">
++ Cliente
+</button>
+
+</div>
+
+<div class="card">
+
+<div class="search">
+<input id="customerSearch" placeholder="Buscar cliente..." oninput="renderCustomers()">
+</div>
+
+<div class="table-wrap mt">
+
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>CURP</th>
+<th>RFC</th>
+<th>Línea</th>
+<th>Adeudo</th>
+<th>Crédito</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="customersTable"></tbody>
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<section class="page" id="page-creditos">
+
+<div class="header">
+<div>
+<h1>Créditos activos</h1>
+<p>Control de adeudos y pagos.</p>
+</div>
+</div>
+
+<div class="cards">
+
+<div class="card stat">
+<div>
+<p>Clientes con deuda</p>
+<h3 id="activeCredits">0</h3>
+</div>
+<div class="stat-icon">💳</div>
+</div>
+
+<div class="card stat">
+<div>
+<p>Deuda total</p>
+<h3 id="totalCreditDebt">$0.00</h3>
+</div>
+<div class="stat-icon">💰</div>
+</div>
+
+<div class="card stat">
+<div>
+<p>Líneas</p>
+<h3 id="totalCreditLimits">$0.00</h3>
+</div>
+<div class="stat-icon">📊</div>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+<thead>
+<tr>
+<th>Cliente</th>
+<th>Línea</th>
+<th>Adeudo</th>
+<th>Disponible</th>
+<th>Próximo vencimiento</th>
+<th>Estado</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="creditsTable"></tbody>
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<section class="page" id="page-devoluciones">
+
+<div class="header">
+<div>
+<h1>Devoluciones</h1>
+<p>Realiza devoluciones de ventas registradas.</p>
+</div>
+</div>
+
+<div class="card">
+
+<div class="search">
+<input id="returnSearch" placeholder="Buscar por folio..." oninput="renderReturnSales()">
+</div>
+
+<div class="table-wrap mt">
+
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Folio</th>
+<th>Cliente</th>
+<th>Total</th>
+<th>Pago</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="returnSalesTable"></tbody>
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<section class="page" id="page-historial">
+
+<div class="header">
+<div>
+<h1>Historial de ventas</h1>
+<p>Consulta tickets y movimientos.</p>
+</div>
+</div>
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Folio</th>
+<th>Cliente</th>
+<th>Subtotal</th>
+<th>Interés</th>
+<th>Total</th>
+<th>Pago</th>
+<th>Estado</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="salesHistoryTable"></tbody>
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<section class="page" id="page-historial-caja">
+
+<div class="header">
+<div>
+<h1>Historial de caja</h1>
+<p>Aperturas y cortes realizados.</p>
+</div>
+</div>
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Cajero</th>
+<th>Inicio</th>
+<th>Ventas efectivo</th>
+<th>Esperado</th>
+<th>Contado</th>
+<th>Diferencia</th>
+<th>Estado</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="cashHistoryTable"></tbody>
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<section class="page" id="page-usuarios">
+
+<div class="header">
+<div>
+<h1>Usuarios</h1>
+<p>Gerentes, cajeros y clientes.</p>
+</div>
+
+<button class="btn btn-primary" onclick="openUserModal()">
++ Usuario
+</button>
+</div>
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+<thead>
+<tr>
+<th>Usuario</th>
+<th>Rol</th>
+<th>Cliente</th>
+<th>Estado</th>
+<th></th>
+</tr>
+</thead>
+<tbody id="usersTable"></tbody>
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<section class="page" id="page-configuracion">
+
+<div class="header">
+<div>
+<h1>Configuración</h1>
+<p>Parámetros generales del sistema.</p>
+</div>
+</div>
+
+
+<div class="card">
+
+<h2>Datos del negocio</h2>
+
+<p style="color:#64748b;margin-top:5px">
+Estos datos aparecerán en los tickets de venta.
+</p>
+
+<div class="grid mt">
+
+<div class="field">
+<label>Nombre del negocio</label>
+<input id="businessName">
+</div>
+
+<div class="field">
+<label>RFC</label>
+<input id="businessRFC">
+</div>
+
+<div class="field full">
+<label>Domicilio</label>
+<textarea id="businessAddress"></textarea>
+</div>
+
+<div class="field">
+<label>Teléfono</label>
+<input id="businessPhone">
+</div>
+
+<div class="field">
+<label>Correo electrónico</label>
+<input id="businessEmail" type="email">
+</div>
+
+</div>
+
+<button class="btn btn-primary mt" onclick="saveBusinessSettings()">
+Guardar datos del negocio
+</button>
+
+</div>
+
+
+<div class="card mt">
+
+<h2>Crédito</h2>
+
+<p style="color:#64748b;margin-top:5px">
+Configura el interés para cada plazo de crédito.
+</p>
+
+<div id="interestFields" class="grid3 mt"></div>
+
+<button class="btn btn-primary mt" onclick="saveCreditSettings()">
+Guardar intereses
+</button>
+
+</div>
+
+
+<div class="card mt">
+
+<h2>Opciones de crédito</h2>
+
+<div class="switchrow">
+
+<div>
+<strong>Permitir ventas a crédito</strong>
+<p style="font-size:13px;color:#64748b">
+Activa o desactiva el crédito en todo el punto de venta.
+</p>
+</div>
+
+<label class="switch">
+<input type="checkbox" id="creditEnabled">
+<span class="slider"></span>
+</label>
+
+</div>
+
+
+<div class="switchrow">
+
+<div>
+<strong>Permitir aumentos de línea</strong>
+<p style="font-size:13px;color:#64748b">
+Evaluación automática disponible para gerente.
+</p>
+</div>
+
+<label class="switch">
+<input type="checkbox" id="increaseEnabled">
+<span class="slider"></span>
+</label>
+
+</div>
+
+<button class="btn btn-primary mt" onclick="saveGeneralSettings()">
+Guardar
+</button>
+
+</div>
+
+
+<div class="card mt">
+
+<h2>Respaldo</h2>
+
+<p style="color:#64748b;margin-top:5px">
+Guarda o restaura toda la información del sistema.
+</p>
+
+<div class="actions mt">
+
+<button class="btn btn-primary" onclick="exportBackup()">
+Descargar respaldo
+</button>
+
+<button class="btn btn-secondary" onclick="document.getElementById('backup').click()">
+Restaurar
+</button>
+
+<input id="backup" type="file" accept=".json" class="hidden" onchange="importBackup(event)">
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="page" id="page-cliente">
+
+<div class="clienthero">
+
+<h1>Hola, <span id="clientName"></span></h1>
+
+<p>Consulta tu línea y movimientos.</p>
+
+<div class="clientboxes">
+
+<div class="clientbox">
+<small>Línea</small>
+<strong id="clientLimit">$0.00</strong>
+</div>
+
+<div class="clientbox">
+<small>Adeudo</small>
+<strong id="clientDebt">$0.00</strong>
+</div>
+
+<div class="clientbox">
+<small>Disponible</small>
+<strong id="clientAvailable">$0.00</strong>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Movimientos</h2>
+
+<div class="table-wrap mt">
+
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Tipo</th>
+<th>Importe</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody id="clientMovements"></tbody>
+</table>
+
+</div>
+</div>
+
+</section>
+
+</div>
+</main>
+</div>
+
+
+<!-- PRODUCT MODAL -->
+
+<div class="modal" id="productModal">
+<div class="modalbox">
+
+<div class="modalhead">
+<h2>Producto</h2>
+<button class="close" onclick="closeModal('productModal')">×</button>
+</div>
+
+<input id="productId" type="hidden">
+
+<div class="grid">
+
+<div class="field">
+<label>Nombre</label>
+<input id="productName">
+</div>
+
+<div class="field">
+<label>Código</label>
+<input id="productCode">
+</div>
+
+<div class="field">
+<label>Precio</label>
+<input id="productPrice" type="number" min="0" step=".01">
+</div>
+
+<div class="field">
+<label>Stock</label>
+<input id="productStock" type="number" min="0" step=".01">
+</div>
+
+<div class="field">
+<label>Unidad</label>
+<select id="productUnit">
+<option>PZA</option>
+<option>KILOGRAMO</option>
+<option>METRO</option>
+<option>LITRO</option>
+<option>CAJA</option>
+<option>PAQUETE</option>
+</select>
+</div>
+
+</div>
+
+<button class="btn btn-primary mt" style="width:100%" onclick="saveProduct()">
+Guardar producto
+</button>
+
+</div>
+</div>
+
+
+<!-- CUSTOMER MODAL -->
+
+<div class="modal" id="customerModal">
+<div class="modalbox">
+
+<div class="modalhead">
+<h2>Cliente</h2>
+<button class="close" onclick="closeModal('customerModal')">×</button>
+</div>
+
+<input id="customerId" type="hidden">
+
+<div class="grid">
+
+<div class="field full">
+<label>Nombre completo</label>
+<input id="customerName">
+</div>
+
+<div class="field">
+<label>CURP</label>
+<input id="customerCurp" maxlength="18">
+</div>
+
+<div class="field">
+<label>RFC</label>
+<input id="customerRfc">
+</div>
+
+<div class="field full">
+<label>Domicilio</label>
+<textarea id="customerAddress"></textarea>
+</div>
+
+<div class="field">
+<label>NIP de 4 dígitos</label>
+<input id="customerNip" type="password" maxlength="4" inputmode="numeric">
+</div>
+
+<div class="field">
+<label>Confirmar NIP</label>
+<input id="customerNip2" type="password" maxlength="4" inputmode="numeric">
+</div>
+
+</div>
+
+<div class="switchrow mt">
+
+<div>
+<strong>¿Desea sacar a crédito?</strong>
+<p style="font-size:13px;color:#64748b">
+El cliente solamente podrá usar crédito si está habilitado.
+</p>
+</div>
+
+<label class="switch">
+<input id="customerCanCredit" type="checkbox">
+<span class="slider"></span>
+</label>
+
+</div>
+
+<div class="credit-info">
+<strong>Línea inicial: $200.00</strong>
+<p style="font-size:13px;color:#475569;margin-top:5px">
+La línea no aumenta por cada compra. El gerente puede evaluarla después de 75 días.
+</p>
+</div>
+
+<button class="btn btn-primary mt" style="width:100%" onclick="saveCustomer()">
+Guardar cliente
+</button>
+
+</div>
+</div>
+
+
+<!-- USER MODAL -->
+
+<div class="modal" id="userModal">
+<div class="modalbox">
+
+<div class="modalhead">
+<h2>Crear usuario</h2>
+<button class="close" onclick="closeModal('userModal')">×</button>
+</div>
+
+<div class="grid">
+
+<div class="field">
+<label>Usuario</label>
+<input id="newUsername">
+</div>
+
+<div class="field">
+<label>Contraseña</label>
+<input id="newPassword" type="password">
+</div>
+
+<div class="field">
+<label>Rol</label>
+
+<select id="newRole" onchange="roleChanged()">
+<option value="cajero">Cajero</option>
+<option value="gerente">Gerente</option>
+<option value="cliente">Cliente</option>
+</select>
+
+</div>
+
+<div class="field" id="userCustomerField">
+<label>Cliente asociado</label>
+<select id="newCustomer"></select>
+</div>
+
+</div>
+
+<button class="btn btn-primary mt" style="width:100%" onclick="saveUser()">
+Crear usuario
+</button>
+
+</div>
+</div>
+
+
+<!-- CHANGE PASSWORD MODAL -->
+
+<div class="modal" id="changePasswordModal">
+<div class="modalbox" style="max-width:500px">
+
+<div class="modalhead">
+<h2>Cambiar mi clave</h2>
+<button class="close" onclick="closeModal('changePasswordModal')">×</button>
+</div>
+
+<p style="color:#64748b">
+Primero confirma tu clave actual y después establece la nueva.
+</p>
+
+<div class="field mt">
+<label>Clave actual</label>
+<input id="currentPassword" type="password" autocomplete="current-password">
+</div>
+
+<div class="field mt">
+<label>Nueva clave</label>
+<input id="newOwnPassword" type="password" autocomplete="new-password">
+</div>
+
+<div class="field mt">
+<label>Confirmar nueva clave</label>
+<input id="newOwnPassword2" type="password" autocomplete="new-password">
+</div>
+
+<button class="btn btn-primary mt" style="width:100%" onclick="changeOwnPassword()">
+Cambiar clave
+</button>
+
+</div>
+</div>
+
+
+<!-- PAYMENT MODAL -->
+
+<div class="modal" id="paymentModal">
+<div class="modalbox">
+
+<div class="modalhead">
+<h2>Registrar pago</h2>
+<button class="close" onclick="closeModal('paymentModal')">×</button>
+</div>
+
+<input id="paymentCustomerId" type="hidden">
+
+<div id="paymentInfo"></div>
+
+<div class="field mt">
+<label>¿Cuánto va a pagar?</label>
+<input id="paymentAmount" type="number" min="0" step=".01" oninput="paymentPreview()">
+</div>
+
+<div class="field mt">
+<label>Método de pago</label>
+<select id="paymentMethodCredit" onchange="paymentPreview()">
+<option value="efectivo">Efectivo</option>
+<option value="transferencia">Transferencia</option>
+<option value="tarjeta">Tarjeta</option>
+</select>
+</div>
+
+<div id="paymentPreview" class="credit-info"></div>
+
+<button class="btn btn-success mt" style="width:100%" onclick="registerPayment()">
+Registrar pago
+</button>
+
+</div>
+</div>
+
+
+<!-- TICKET MODAL -->
+
+<div class="modal" id="ticketModal">
+<div class="modalbox" style="max-width:470px">
+
+<div class="modalhead">
+<h2>Ticket</h2>
+<button class="close" onclick="closeModal('ticketModal')">×</button>
+</div>
+
+<div class="ticket-preview">
+<canvas id="ticketCanvas"></canvas>
+</div>
+
+<div class="actions mt">
+
+<button class="btn btn-primary" onclick="downloadTicket()">
+Descargar imagen
+</button>
+
+<button class="btn btn-success" onclick="openShareModal()">
+Enviar
+</button>
+
+<button class="btn btn-secondary" onclick="shareTicket()">
+Compartir imagen
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- SHARE MODAL -->
+
+<div class="modal" id="shareModal">
+<div class="modalbox" style="max-width:500px">
+
+<div class="modalhead">
+<h2>Enviar ticket</h2>
+<button class="close" onclick="closeModal('shareModal')">×</button>
+</div>
+
+<p style="color:#64748b">
+Escribe el número de WhatsApp o correo electrónico.
+</p>
+
+<div class="field mt">
+
+<label>Forma de envío</label>
+
+<select id="shareType" onchange="shareTypeChanged()">
+<option value="whatsapp">WhatsApp</option>
+<option value="email">Correo electrónico</option>
+</select>
+
+</div>
+
+<div class="field mt">
+
+<label id="shareLabel">Número de WhatsApp</label>
+<input id="shareDestination">
+
+</div>
+
+<div class="credit-info">
+<strong>Mensaje</strong>
+<p id="shareMessage" style="margin-top:7px;font-size:13px"></p>
+</div>
+
+<button class="btn btn-primary mt" style="width:100%" onclick="prepareExternalShare()">
+Compartir
+</button>
+
+</div>
+</div>
+
+
+<!-- RETURN MODAL -->
+
+<div class="modal" id="returnModal">
+<div class="modalbox">
+
+<div class="modalhead">
+<h2>Devolución</h2>
+<button class="close" onclick="closeModal('returnModal')">×</button>
+</div>
+
+<div id="returnInfo"></div>
+<div id="returnItems"></div>
+
+<div class="field mt">
+<label>Motivo</label>
+<textarea id="returnReason" placeholder="Motivo de la devolución"></textarea>
+</div>
+
+<button class="btn btn-danger mt" style="width:100%" onclick="processReturn()">
+Confirmar devolución
+</button>
+
+</div>
+</div>
+
+
+<!-- CLOSING TICKET -->
+
+<div class="modal" id="closingTicketModal">
+<div class="modalbox" style="max-width:470px">
+
+<div class="modalhead">
+<h2>Corte de caja</h2>
+<button class="close" onclick="closeModal('closingTicketModal')">×</button>
+</div>
+
+<div class="ticket-preview">
+<canvas id="closingCanvas"></canvas>
+</div>
+
+<div class="actions mt">
+
+<button class="btn btn-primary" onclick="downloadClosingTicket()">
+Descargar imagen
+</button>
+
+<button class="btn btn-success" onclick="shareClosingTicket()">
+Compartir
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<div id="toast"></div>
+
+
+<script>
+
+const KEY={
+users:"nexuspos_users",
+products:"nexuspos_products",
+customers:"nexuspos_customers",
+sales:"nexuspos_sales",
+payments:"nexuspos_payments",
+returns:"nexuspos_returns",
+cash:"nexuspos_cash",
+cashHistory:"nexuspos_cash_history",
+settings:"nexuspos_settings",
+session:"nexuspos_session"
+};
+
+const REVIEW_DAYS=75;
+
+let currentUser=null;
+let cart=[];
+let currentTicket=null;
+let currentReturnSale=null;
+let currentClosing=null;
+
+
+function data(key,fallback=[]){
+try{
+const value=localStorage.getItem(key);
+return value?JSON.parse(value):fallback;
+}catch(e){
+return fallback;
+}
+}
+
+function save(key,value){
+localStorage.setItem(key,JSON.stringify(value));
+}
+
+function id(prefix){
+return prefix+"-"+Date.now()+"-"+Math.random().toString(36).slice(2,8);
+}
+
+function now(){
+return new Date().toISOString();
+}
+
+function money(v){
+return new Intl.NumberFormat("es-MX",{
+style:"currency",
+currency:"MXN"
+}).format(Number(v)||0);
+}
+
+function date(v){
+if(!v)return"—";
+return new Date(v).toLocaleDateString("es-MX",{
+day:"2-digit",
+month:"2-digit",
+year:"numeric"
+});
+}
+
+function dateTime(v){
+if(!v)return"—";
+return new Date(v).toLocaleString("es-MX");
+}
+
+function esc(v){
+return String(v??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+function toast(text){
+const t=document.getElementById("toast");
+t.textContent=text;
+t.classList.add("show");
+setTimeout(()=>t.classList.remove("show"),3000);
+}
+
+function openModal(id){
+document.getElementById(id).classList.add("show");
+}
+
+function closeModal(id){
+document.getElementById(id).classList.remove("show");
+}
+
+
+function defaultSettings(){
+
+const interestRates={};
+
+for(let i=1;i<=30;i++){
+interestRates[i]=
+i===1?10:
+i===2?15:
+i===3?20:
+i===4?25:
+i===5?30:
+i===6?35:
+i===7?40:
+i===8?45:
+45+(i-8)*5;
+}
+
+return{
+creditEnabled:true,
+increaseEnabled:true,
+initialCredit:200,
+businessName:"NexusPOS",
+businessRFC:"",
+businessAddress:"",
+businessPhone:"",
+businessEmail:"",
+interestRates
+};
+
+}
+
+
+function settings(){
+
+let s=data(KEY.settings,null);
+
+if(!s){
+s=defaultSettings();
+save(KEY.settings,s);
+}
+
+const defaults=defaultSettings();
+
+if(!s.interestRates)s.interestRates={};
+
+for(let i=1;i<=30;i++){
+if(s.interestRates[i]===undefined){
+s.interestRates[i]=defaults.interestRates[i];
+}
+}
+
+if(s.businessName===undefined)s.businessName=defaults.businessName;
+if(s.businessRFC===undefined)s.businessRFC="";
+if(s.businessAddress===undefined)s.businessAddress="";
+if(s.businessPhone===undefined)s.businessPhone="";
+if(s.businessEmail===undefined)s.businessEmail="";
+if(s.initialCredit===undefined)s.initialCredit=200;
+if(s.creditEnabled===undefined)s.creditEnabled=true;
+if(s.increaseEnabled===undefined)s.increaseEnabled=true;
+
+save(KEY.settings,s);
+
+return s;
+}
+
+
+function init(){
+
+if(!localStorage.getItem(KEY.users)){
+save(KEY.users,[{
+id:id("USR"),
+username:"gerente",
+password:"1234",
+role:"gerente",
+customerId:null,
+active:true,
+createdAt:now()
+}]);
+}
+
+if(!localStorage.getItem(KEY.products))save(KEY.products,[]);
+if(!localStorage.getItem(KEY.customers))save(KEY.customers,[]);
+if(!localStorage.getItem(KEY.sales))save(KEY.sales,[]);
+if(!localStorage.getItem(KEY.payments))save(KEY.payments,[]);
+if(!localStorage.getItem(KEY.returns))save(KEY.returns,[]);
+if(!localStorage.getItem(KEY.cashHistory))save(KEY.cashHistory,[]);
+
+settings();
+}
+
+init();
+
+
+document.getElementById("loginForm").addEventListener("submit",e=>{
+
+e.preventDefault();
+
+const username=document.getElementById("loginUser").value.trim();
+const password=document.getElementById("loginPassword").value;
+
+const users=data(KEY.users);
+
+const user=users.find(u=>
+u.username.toLowerCase()===username.toLowerCase() &&
+u.password===password &&
+u.active
+);
+
+if(!user){
+toast("Usuario o contraseña incorrectos.");
+return;
+}
+
+currentUser=user;
+save(KEY.session,{userId:user.id});
+showApp();
+
+});
+
+
+function showApp(){
+
+document.getElementById("loginScreen").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+
+document.getElementById("sideUser").textContent=currentUser.username;
+document.getElementById("sideRole").textContent=currentUser.role.toUpperCase();
+
+buildMenu();
+
+if(currentUser.role==="cliente"){
+showPage("cliente");
+}else{
+showPage("dashboard");
+}
+
+}
+
+
+function logout(){
+
+localStorage.removeItem(KEY.session);
+
+currentUser=null;
+cart=[];
+
+document.getElementById("app").classList.add("hidden");
+document.getElementById("loginScreen").classList.remove("hidden");
+
+document.getElementById("loginUser").value="";
+document.getElementById("loginPassword").value="";
+
+}
+
+
+function restoreSession(){
+
+const session=data(KEY.session,null);
+
+if(!session)return;
+
+const users=data(KEY.users);
+
+const user=users.find(u=>u.id===session.userId&&u.active);
+
+if(user){
+currentUser=user;
+showApp();
+}
+
+}
+
+
+function isManager(){
+return currentUser&&currentUser.role==="gerente";
+}
+
+function canOperate(){
+return currentUser&&(
+currentUser.role==="gerente"||
+currentUser.role==="cajero"
+);
+}
+
+
+function buildMenu(){
+
+const menu=document.getElementById("menu");
+
+menu.innerHTML="";
+
+if(currentUser.role==="cliente"){
+menuItem("cliente","👤","Mi cuenta");
+return;
+}
+
+/*
+El cajero conserva Caja porque necesita abrir y cerrar
+su caja para poder cobrar y realizar cortes.
+No tiene acceso a Dashboard, Inventario, Usuarios
+ni Configuración.
+*/
+
+if(currentUser.role==="gerente"){
+menuItem("dashboard","📊","Dashboard");
+}
+
+menuItem("caja","🏦","Caja");
+menuItem("ventas","🛒","Ventas");
+menuItem("clientes","👥","Clientes");
+menuItem("creditos","💳","Créditos activos");
+menuItem("devoluciones","↩️","Devoluciones");
+menuItem("historial","📋","Historial de ventas");
+menuItem("historial-caja","🧾","Historial de caja");
+
+if(currentUser.role==="gerente"){
+menuItem("inventario","📦","Inventario");
+menuItem("usuarios","👤","Usuarios");
+menuItem("configuracion","⚙️","Configuración");
+}
+
+}
+
+
+function menuItem(page,icon,text){
+
+const b=document.createElement("button");
+
+b.innerHTML=icon+" &nbsp; "+text;
+b.dataset.page=page;
+
+b.onclick=()=>{
+showPage(page);
+document.getElementById("sidebar").classList.remove("open");
+};
+
+document.getElementById("menu").appendChild(b);
+}
+
+
+function showPage(page){
+
+if(currentUser?.role==="cajero" &&
+["dashboard","inventario","usuarios","configuracion"].includes(page)){
+toast("No tienes permiso para acceder a esta sección.");
+return;
+}
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+
+const target=document.getElementById("page-"+page);
+
+if(!target)return;
+
+target.classList.add("active");
+
+document.querySelectorAll(".menu button").forEach(b=>{
+b.classList.toggle("active",b.dataset.page===page);
+});
+
+const titles={
+dashboard:"Dashboard",
+caja:"Caja",
+ventas:"Ventas",
+inventario:"Inventario",
+clientes:"Clientes",
+creditos:"Créditos activos",
+devoluciones:"Devoluciones",
+historial:"Historial de ventas",
+"historial-caja":"Historial de caja",
+usuarios:"Usuarios",
+configuracion:"Configuración",
+cliente:"Mi cuenta"
+};
+
+document.getElementById("topTitle").textContent=titles[page]||"NexusPOS";
+
+refreshEverything();
+
+}
+
+
+function toggleSidebar(){
+document.getElementById("sidebar").classList.toggle("open");
+}
+
+
+function refreshEverything(){
+
+renderDashboard();
+renderCash();
+renderProducts();
+renderCustomers();
+renderCredits();
+renderSalesHistory();
+renderReturnSales();
+renderCashHistory();
+renderUsers();
+loadSettingsUI();
+prepareCreditCustomers();
+renderClient();
+
+}
+
+
+function getSaleReturns(saleId){
+
+return data(KEY.returns).filter(r=>r.saleId===saleId);
+}
+
+
+function getSaleReturnedAmount(saleId){
+
+return getSaleReturns(saleId)
+.reduce((a,r)=>a+Number(r.amount||0),0);
+}
+
+
+function getSaleNetTotal(sale){
+
+return Math.max(
+0,
+Number(sale.total||0)-getSaleReturnedAmount(sale.id)
+);
+}
+
+
+function getReturnedQuantity(saleId,productId){
+
+return getSaleReturns(saleId).reduce((total,r)=>{
+
+return total+(r.items||[])
+.filter(i=>i.productId===productId)
+.reduce((a,i)=>a+Number(i.quantity||0),0);
+
+},0);
+}
+
+
+function saleStatus(sale){
+
+const returned=getSaleReturnedAmount(sale.id);
+
+if(returned<=0)return"completada";
+
+if(returned>=Number(sale.total||0)-0.01)return"devuelta";
+
+return"parcialmente_devuelta";
+}
+
+
+function renderDashboard(){
+
+const products=data(KEY.products);
+const customers=data(KEY.customers);
+const sales=data(KEY.sales);
+
+const today=new Date().toLocaleDateString("es-MX");
+
+const salesToday=sales
+.filter(s=>new Date(s.createdAt).toLocaleDateString("es-MX")===today)
+.reduce((a,s)=>a+getSaleNetTotal(s),0);
+
+const debt=customers.reduce((a,c)=>a+Number(c.debt||0),0);
+
+document.getElementById("dashSales").textContent=money(salesToday);
+document.getElementById("dashProducts").textContent=products.length;
+document.getElementById("dashCustomers").textContent=customers.length;
+document.getElementById("dashDebt").textContent=money(debt);
+
+const cash=getOpenCash();
+const cashBox=document.getElementById("dashboardCashStatus");
+
+if(cash){
+
+const expected=getExpectedCash(cash);
+
+cashBox.innerHTML=`
+
+<div class="credit-grid">
+
+<div class="credit-item">
+<small>Cajero</small>
+<strong>${esc(cash.username)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Abierta</small>
+<strong>${dateTime(cash.openedAt)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Dinero esperado</small>
+<strong>${money(expected)}</strong>
+</div>
+
+</div>
+
+<span class="badge green mt">Caja abierta</span>
+`;
+
+}else{
+
+cashBox.innerHTML=`
+<span class="badge orange">Caja cerrada</span>
+`;
+
+}
+
+
+const tbody=document.getElementById("dashboardActivity");
+
+const activity=[];
+
+sales.slice(-20).forEach(s=>{
+activity.push({
+date:s.createdAt,
+type:"Venta",
+detail:s.folio,
+amount:getSaleNetTotal(s),
+user:s.username
+});
+});
+
+data(KEY.payments).slice(-20).forEach(p=>{
+
+const customer=data(KEY.customers).find(c=>c.id===p.customerId);
+
+activity.push({
+date:p.createdAt,
+type:"Pago crédito",
+detail:(customer?.name||"Cliente")+" • "+paymentName(p.paymentMethod),
+amount:p.amount,
+user:p.username
+});
+
+});
+
+data(KEY.returns).slice(-20).forEach(r=>{
+activity.push({
+date:r.createdAt,
+type:"Devolución",
+detail:r.folio,
+amount:-Number(r.amount||0),
+user:r.username
+});
+});
+
+activity.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+tbody.innerHTML=activity.slice(0,10).map(a=>`
+
+<tr>
+<td>${dateTime(a.date)}</td>
+<td>${esc(a.type)}</td>
+<td>${esc(a.detail)}</td>
+<td>${money(a.amount)}</td>
+<td>${esc(a.user)}</td>
+</tr>
+
+`).join("")||`
+
+<tr>
+<td colspan="5" class="empty">Sin movimientos.</td>
+</tr>
+
+`;
+
+}
+
+
+function openProductModal(){
+
+if(!isManager()){
+toast("Solo el gerente puede administrar el inventario.");
+return;
+}
+
+document.getElementById("productId").value="";
+document.getElementById("productName").value="";
+document.getElementById("productCode").value="";
+document.getElementById("productPrice").value="";
+document.getElementById("productStock").value="";
+document.getElementById("productUnit").value="PZA";
+
+openModal("productModal");
+
+}
+
+
+function saveProduct(){
+
+if(!isManager()){
+toast("Solo el gerente puede administrar el inventario.");
+return;
+}
+
+const idv=document.getElementById("productId").value;
+const name=document.getElementById("productName").value.trim();
+const code=document.getElementById("productCode").value.trim();
+const price=Number(document.getElementById("productPrice").value);
+const stock=Number(document.getElementById("productStock").value);
+const unit=document.getElementById("productUnit").value;
+
+if(!name||!code||price<0||stock<0){
+toast("Completa correctamente el producto.");
+return;
+}
+
+const products=data(KEY.products);
+
+if(products.some(p=>
+p.code.toLowerCase()===code.toLowerCase()&&p.id!==idv
+)){
+toast("El código ya existe.");
+return;
+}
+
+if(idv){
+
+const p=products.find(p=>p.id===idv);
+
+if(p){
+p.name=name;
+p.code=code;
+p.price=price;
+p.stock=stock;
+p.unit=unit;
+p.updatedAt=now();
+}
+
+}else{
+
+products.push({
+id:id("PRO"),
+name,
+code,
+price,
+stock,
+unit,
+createdAt:now()
+});
+
+}
+
+save(KEY.products,products);
+
+closeModal("productModal");
+refreshEverything();
+
+toast("Producto guardado.");
+
+}
+
+
+function renderProducts(){
+
+const tbody=document.getElementById("productsTable");
+
+if(!tbody)return;
+
+const products=data(KEY.products);
+
+const q=(document.getElementById("inventorySearch")?.value||"").toLowerCase();
+
+const list=products.filter(p=>
+p.name.toLowerCase().includes(q)||
+p.code.toLowerCase().includes(q)
+);
+
+if(!list.length){
+tbody.innerHTML=`
+<tr><td colspan="7" class="empty">No hay productos.</td></tr>
+`;
+return;
+}
+
+tbody.innerHTML=list.map(p=>{
+
+const stock=Number(p.stock);
+
+let state="Disponible";
+let cls="green";
+
+if(stock<=0){
+state="Agotado";
+cls="red";
+}else if(stock<=5){
+state="Stock bajo";
+cls="orange";
+}
+
+return`
+
+<tr>
+
+<td>${esc(p.code)}</td>
+<td>${esc(p.name)}</td>
+<td>${esc(p.unit)}</td>
+<td>${money(p.price)}</td>
+<td>${stock}</td>
+
+<td>
+<span class="badge ${cls}">${state}</span>
+</td>
+
+<td>
+
+<div class="actions">
+
+${
+isManager()
+?
+`<button class="btn btn-secondary" onclick="editProduct('${p.id}')">Editar</button>`
+:""
+}
+
+${
+isManager()
+?
+`<button class="btn btn-danger" onclick="deleteProduct('${p.id}')">Eliminar</button>`
+:""
+}
+
+</div>
+
+</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+function editProduct(productId){
+
+if(!isManager()){
+toast("Solo el gerente puede editar productos.");
+return;
+}
+
+const p=data(KEY.products).find(x=>x.id===productId);
+
+if(!p)return;
+
+document.getElementById("productId").value=p.id;
+document.getElementById("productName").value=p.name;
+document.getElementById("productCode").value=p.code;
+document.getElementById("productPrice").value=p.price;
+document.getElementById("productStock").value=p.stock;
+document.getElementById("productUnit").value=p.unit;
+
+openModal("productModal");
+
+}
+
+
+function deleteProduct(productId){
+
+if(!isManager()){
+toast("Solo el gerente puede eliminar productos.");
+return;
+}
+
+if(!confirm("¿Eliminar producto?"))return;
+
+save(
+KEY.products,
+data(KEY.products).filter(p=>p.id!==productId)
+);
+
+refreshEverything();
+toast("Producto eliminado.");
+
+}
+
+
+function searchProductsPOS(){
+
+const q=document.getElementById("productSearch").value.trim().toLowerCase();
+const box=document.getElementById("posResults");
+
+if(!q){
+box.innerHTML="";
+return;
+}
+
+const products=data(KEY.products);
+
+const results=products.filter(p=>
+p.name.toLowerCase().includes(q)||
+p.code.toLowerCase().includes(q)
+).slice(0,8);
+
+box.innerHTML=results.map(p=>`
+
+<div class="card"
+style="padding:13px;margin-bottom:8px;cursor:pointer"
+onclick="addCart('${p.id}')">
+
+<strong>${esc(p.name)}</strong>
+
+<div style="display:flex;justify-content:space-between;color:#64748b;margin-top:5px">
+<span>${esc(p.code)}</span>
+<span>${money(p.price)}</span>
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function addProductBySearch(){
+
+const q=document.getElementById("productSearch").value.trim().toLowerCase();
+
+const products=data(KEY.products);
+
+const p=products.find(x=>x.code.toLowerCase()===q)||
+products.find(x=>x.name.toLowerCase()===q);
+
+if(!p){
+toast("Producto no encontrado.");
+return;
+}
+
+addCart(p.id);
+
+}
+
+
+function addCart(productId){
+
+const p=data(KEY.products).find(x=>x.id===productId);
+
+if(!p)return;
+
+if(Number(p.stock)<=0){
+toast("Producto agotado.");
+return;
+}
+
+const item=cart.find(x=>x.productId===productId);
+
+if(item){
+
+if(item.quantity+1>Number(p.stock)){
+toast("Stock insuficiente.");
+return;
+}
+
+item.quantity++;
+
+}else{
+
+cart.push({
+productId,
+quantity:1
+});
+
+}
+
+document.getElementById("productSearch").value="";
+document.getElementById("posResults").innerHTML="";
+
+renderCart();
+
+}
+
+
+function renderCart(){
+
+const tbody=document.getElementById("cartTable");
+const products=data(KEY.products);
+
+if(!cart.length){
+
+tbody.innerHTML=`
+<tr><td colspan="5" class="empty">Carrito vacío.</td></tr>
+`;
+
+updateTotals();
+return;
+
+}
+
+tbody.innerHTML=cart.map(item=>{
+
+const p=products.find(x=>x.id===item.productId);
+
+if(!p)return"";
+
+return`
+
+<tr>
+
+<td>${esc(p.name)}</td>
+<td>${money(p.price)}</td>
+
+<td>
+<input
+style="width:80px"
+type="number"
+min="1"
+max="${p.stock}"
+value="${item.quantity}"
+onchange="changeQuantity('${p.id}',this.value)"
+>
+</td>
+
+<td>${money(p.price*item.quantity)}</td>
+
+<td>
+<button class="btn btn-danger" onclick="removeCart('${p.id}')">×</button>
+</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+updateTotals();
+
+}
+
+
+function changeQuantity(idv,value){
+
+const q=Number(value);
+const p=data(KEY.products).find(x=>x.id===idv);
+
+if(!p||q<1||q>Number(p.stock)){
+toast("Cantidad inválida.");
+renderCart();
+return;
+}
+
+const item=cart.find(x=>x.productId===idv);
+
+if(item)item.quantity=q;
+
+renderCart();
+
+}
+
+
+function removeCart(idv){
+cart=cart.filter(x=>x.productId!==idv);
+renderCart();
+}
+
+
+function clearCart(){
+cart=[];
+renderCart();
+}
+
+
+function subtotal(){
+
+const products=data(KEY.products);
+
+return cart.reduce((sum,item)=>{
+
+const p=products.find(x=>x.id===item.productId);
+
+return sum+Number(p?.price||0)*item.quantity;
+
+},0);
+
+}
+
+
+function updateTotals(){
+
+const s=subtotal();
+
+document.getElementById("saleSubtotal").textContent=money(s);
+
+const method=document.getElementById("paymentMethod").value;
+
+if(method!=="credito"){
+document.getElementById("saleTotal").textContent=money(s);
+}
+
+calculateChange();
+calculateCredit();
+
+}
+
+
+function paymentChanged(){
+
+const method=document.getElementById("paymentMethod").value;
+
+const cash=document.getElementById("cashPaymentBox");
+const credit=document.getElementById("creditBox");
+
+cash.classList.toggle("hidden",method!=="efectivo");
+credit.classList.toggle("hidden",method!=="credito");
+
+if(method==="credito"){
+
+if(!settings().creditEnabled){
+
+toast("El crédito está desactivado.");
+
+document.getElementById("paymentMethod").value="efectivo";
+
+cash.classList.remove("hidden");
+credit.classList.add("hidden");
+
+return;
+}
+
+prepareCreditCustomers();
+
+}
+
+if(method!=="credito"){
+document.getElementById("saleTotal").textContent=money(subtotal());
+}
+
+calculateChange();
+calculateCredit();
+
+}
+
+
+function calculateChange(){
+
+const total=subtotal();
+
+const received=Number(
+document.getElementById("cashReceived").value
+);
+
+const change=Math.max(0,received-total);
+
+document.getElementById("cashChange").textContent=money(change);
+
+}
+
+
+function prepareCreditCustomers(){
+
+const select=document.getElementById("saleCustomer");
+
+if(!select)return;
+
+const oldCustomer=select.value;
+
+const customers=data(KEY.customers)
+.filter(c=>c.canCredit);
+
+select.innerHTML=`<option value="">Seleccionar cliente...</option>`;
+
+customers.forEach(c=>{
+select.innerHTML+=`
+<option value="${c.id}">${esc(c.name)}</option>
+`;
+});
+
+if(customers.some(c=>c.id===oldCustomer)){
+select.value=oldCustomer;
+}
+
+const weeks=document.getElementById("saleWeeks");
+
+if(weeks){
+
+const oldWeeks=weeks.value;
+
+weeks.innerHTML="";
+
+const rates=settings().interestRates;
+
+for(let i=1;i<=30;i++){
+
+weeks.innerHTML+=`
+<option value="${i}">
+${i} ${i===1?"semana":"semanas"} — ${Number(rates[i]||0)}%
+</option>
+`;
+
+}
+
+if(oldWeeks>=1&&oldWeeks<=30){
+weeks.value=oldWeeks;
+}
+
+}
+
+}
+
+
+function showSaleCustomer(){
+
+const idv=document.getElementById("saleCustomer").value;
+const box=document.getElementById("saleCustomerInfo");
+
+const c=data(KEY.customers).find(x=>x.id===idv);
+
+if(!c){
+box.innerHTML="";
+calculateCredit();
+return;
+}
+
+const limit=Number(c.creditLimit||200);
+const debt=Number(c.debt||0);
+const available=Math.max(0,limit-debt);
+
+box.innerHTML=`
+
+<div class="credit-grid mt">
+
+<div class="credit-item">
+<small>Línea</small>
+<strong>${money(limit)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Adeudo</small>
+<strong>${money(debt)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Disponible</small>
+<strong>${money(available)}</strong>
+</div>
+
+</div>
+
+`;
+
+calculateCredit();
+
+}
+
+
+function calculateCredit(){
+
+const box=document.getElementById("creditCalculation");
+
+if(!box)return;
+
+const customerId=document.getElementById("saleCustomer").value;
+const weeks=Number(document.getElementById("saleWeeks").value);
+
+if(!customerId||!weeks){
+box.innerHTML="";
+document.getElementById("saleTotal").textContent=money(subtotal());
+return;
+}
+
+const c=data(KEY.customers).find(x=>x.id===customerId);
+
+if(!c)return;
+
+const base=subtotal();
+const percent=Number(settings().interestRates[weeks]||0);
+const interest=base*percent/100;
+const total=base+interest;
+
+document.getElementById("saleTotal").textContent=money(total);
+
+const available=Math.max(
+0,
+Number(c.creditLimit||200)-Number(c.debt||0)
+);
+
+box.innerHTML=`
+
+<div class="credit-info">
+
+<div class="line">
+<span>Compra</span>
+<strong>${money(base)}</strong>
+</div>
+
+<div class="line">
+<span>Interés (${percent}%)</span>
+<strong>${money(interest)}</strong>
+</div>
+
+<div class="line final">
+<span>Total</span>
+<strong>${money(total)}</strong>
+</div>
+
+<div class="line">
+<span>Crédito disponible</span>
+<strong>${money(available)}</strong>
+</div>
+
+${
+total>available
+?
+`<p style="color:#991b1b;font-weight:bold">Crédito insuficiente.</p>`
+:
+`<p style="color:#166534">Crédito suficiente.</p>`
+}
+
+</div>
+
+`;
+
+}
+
+
+function chargeSale(){
+
+if(!canOperate()){
+toast("No tienes permiso para realizar ventas.");
+return;
+}
+
+if(!cart.length){
+toast("El carrito está vacío.");
+return;
+}
+
+const method=document.getElementById("paymentMethod").value;
+const totalBase=subtotal();
+const products=data(KEY.products);
+
+for(const item of cart){
+
+const p=products.find(x=>x.id===item.productId);
+
+if(!p||Number(p.stock)<item.quantity){
+toast("Stock insuficiente.");
+return;
+}
+
+}
+
+
+if(method==="efectivo"){
+
+const received=Number(document.getElementById("cashReceived").value);
+
+if(received<totalBase){
+toast("El dinero recibido es insuficiente.");
+return;
+}
+
+if(!getOpenCash()){
+toast("Debes abrir caja antes de cobrar.");
+showPage("caja");
+return;
+}
+
+}
+
+
+let customerId=null;
+let interest=0;
+let total=totalBase;
+let credit=null;
+
+
+if(method==="credito"){
+
+if(!settings().creditEnabled){
+toast("El crédito está desactivado.");
+return;
+}
+
+const customerIdValue=document.getElementById("saleCustomer").value;
+const nip=document.getElementById("saleNip").value;
+const weeks=Number(document.getElementById("saleWeeks").value);
+
+if(!customerIdValue){
+toast("Selecciona un cliente.");
+return;
+}
+
+if(!/^\d{4}$/.test(nip)){
+toast("El NIP debe tener 4 dígitos.");
+return;
+}
+
+if(weeks<1||weeks>30){
+toast("Selecciona un plazo de 1 a 30 semanas.");
+return;
+}
+
+const customers=data(KEY.customers);
+const customer=customers.find(c=>c.id===customerIdValue);
+
+if(!customer){
+toast("Cliente no encontrado.");
+return;
+}
+
+if(!customer.canCredit){
+toast("Este cliente no tiene crédito habilitado.");
+return;
+}
+
+if(customer.nip!==nip){
+toast("NIP incorrecto.");
+return;
+}
+
+const percent=Number(settings().interestRates[weeks]||0);
+
+interest=totalBase*percent/100;
+total=totalBase+interest;
+
+const available=Math.max(
+0,
+Number(customer.creditLimit||200)-Number(customer.debt||0)
+);
+
+if(total>available){
+toast("El crédito disponible es insuficiente.");
+return;
+}
+
+const due=new Date();
+due.setDate(due.getDate()+weeks*7);
+
+credit={
+weeks,
+interestRate:percent,
+interest,
+originalAmount:totalBase,
+totalCredit:total,
+remaining:total,
+dueDate:due.toISOString(),
+createdAt:now(),
+paidAt:null
+};
+
+customerId=customer.id;
+
+}
+
+
+const cashReceived=
+method==="efectivo"
+?
+Number(document.getElementById("cashReceived").value)
+:
+0;
+
+const change=
+method==="efectivo"
+?
+Math.max(0,cashReceived-total)
+:
+0;
+
+
+const sale={
+
+id:id("SAL"),
+folio:"NEX-"+Date.now().toString().slice(-8),
+createdAt:now(),
+username:currentUser.username,
+customerId,
+
+items:cart.map(item=>{
+
+const p=products.find(x=>x.id===item.productId);
+
+return{
+productId:p.id,
+name:p.name,
+code:p.code,
+price:Number(p.price),
+quantity:item.quantity,
+total:Number(p.price)*item.quantity
+};
+
+}),
+
+subtotal:totalBase,
+interest,
+total,
+paymentMethod:method,
+cashReceived,
+change,
+status:"completada",
+credit
+
+};
+
+
+cart.forEach(item=>{
+
+const p=products.find(x=>x.id===item.productId);
+
+p.stock=Number(p.stock)-item.quantity;
+
+});
+
+save(KEY.products,products);
+
+
+if(method==="credito"){
+
+const customers=data(KEY.customers);
+const c=customers.find(x=>x.id===customerId);
+
+c.debt=Number(c.debt||0)+total;
+c.creditAccounts=c.creditAccounts||[];
+
+c.creditAccounts.push({
+
+saleId:sale.id,
+originalAmount:total,
+baseAmount:totalBase,
+interest:interest,
+interestRate:credit.interestRate,
+weeks:credit.weeks,
+remaining:total,
+dueDate:credit.dueDate,
+createdAt:now(),
+paidAt:null
+
+});
+
+save(KEY.customers,customers);
+
+}
+
+
+const sales=data(KEY.sales);
+sales.push(sale);
+save(KEY.sales,sales);
+
+
+if(method==="efectivo"){
+
+const cash=getOpenCash();
+
+cash.cashSales=Number(cash.cashSales||0)+total;
+
+cash.movements=cash.movements||[];
+
+cash.movements.push({
+
+type:"venta",
+amount:total,
+folio:sale.folio,
+createdAt:now(),
+username:currentUser.username
+
+});
+
+save(KEY.cash,cash);
+
+}
+
+
+cart=[];
+
+document.getElementById("cashReceived").value="";
+document.getElementById("saleNip").value="";
+document.getElementById("saleCustomer").value="";
+document.getElementById("paymentMethod").value="efectivo";
+
+document.getElementById("creditBox").classList.add("hidden");
+document.getElementById("cashPaymentBox").classList.remove("hidden");
+
+renderCart();
+refreshEverything();
+
+showTicket(sale);
+
+toast("Venta realizada correctamente.");
+
+}
+
+
+function customerName(customerId){
+
+if(!customerId)return"Público general";
+
+const c=data(KEY.customers).find(x=>x.id===customerId);
+
+return c?.name||"Público general";
+
+}
+
+
+function showTicket(sale){
+
+currentTicket=sale;
+drawTicket(sale);
+openModal("ticketModal");
+
+}
+
+
+function wrapText(ctx,text,maxWidth){
+
+const words=String(text||"").split(/\s+/);
+const lines=[];
+let line="";
+
+for(const word of words){
+
+const test=line?line+" "+word:word;
+
+if(ctx.measureText(test).width>maxWidth&&line){
+
+lines.push(line);
+line=word;
+
+}else{
+
+line=test;
+
+}
+
+}
+
+if(line)lines.push(line);
+
+return lines;
+
+}
+
+
+function drawTicket(sale){
+
+const canvas=document.getElementById("ticketCanvas");
+
+const width=430;
+const left=20;
+const right=width-20;
+const maxWidth=width-40;
+
+let height=350;
+
+height+=sale.items.length*58;
+
+if(sale.credit)height+=125;
+
+if(sale.paymentMethod==="efectivo")height+=40;
+
+const business=settings();
+
+const addressLines=wrapText(
+null,
+business.businessAddress||"",
+maxWidth
+);
+
+canvas.width=width;
+canvas.height=height;
+
+const ctx=canvas.getContext("2d");
+
+ctx.fillStyle="#fff";
+ctx.fillRect(0,0,width,height);
+
+ctx.fillStyle="#111827";
+ctx.textAlign="center";
+
+let y=35;
+
+ctx.font="bold 26px Arial";
+ctx.fillText("NEXUSPOS",width/2,y);
+
+y+=22;
+
+ctx.font="13px Arial";
+ctx.fillText("TICKET DE COMPRA",width/2,y);
+
+y+=21;
+
+ctx.font="12px Arial";
+ctx.fillText(sale.folio,width/2,y);
+
+y+=18;
+ctx.fillText(dateTime(sale.createdAt),width/2,y);
+
+ctx.textAlign="left";
+y+=28;
+
+ctx.font="bold 13px Arial";
+ctx.fillText("NEGOCIO",left,y);
+
+y+=19;
+
+ctx.font="bold 13px Arial";
+ctx.fillText(business.businessName||"NexusPOS",left,y);
+
+if(business.businessRFC){
+y+=18;
+ctx.font="12px Arial";
+ctx.fillText("RFC: "+business.businessRFC,left,y);
+}
+
+if(business.businessAddress){
+
+const lines=wrapText(ctx,business.businessAddress,maxWidth);
+
+lines.forEach(line=>{
+y+=17;
+ctx.fillText(line,left,y);
+});
+
+}
+
+if(business.businessPhone){
+y+=18;
+ctx.fillText("Tel: "+business.businessPhone,left,y);
+}
+
+if(business.businessEmail){
+y+=17;
+ctx.fillText("Correo: "+business.businessEmail,left,y);
+}
+
+y+=25;
+
+ctx.font="bold 13px Arial";
+ctx.fillText("CLIENTE",left,y);
+
+y+=19;
+
+ctx.font="12px Arial";
+ctx.fillText(customerName(sale.customerId),left,y);
+
+y+=25;
+
+ctx.font="bold 13px Arial";
+ctx.fillText("PRODUCTOS",left,y);
+
+y+=22;
+
+sale.items.forEach(item=>{
+
+ctx.font="12px Arial";
+
+let nameLines=wrapText(
+ctx,
+item.quantity+" x "+item.name,
+width-115
+);
+
+nameLines.forEach((line,index)=>{
+
+ctx.textAlign="left";
+ctx.fillText(line,left,y+(index*16));
+
+if(index===0){
+
+ctx.textAlign="right";
+ctx.fillText(
+money(item.total),
+right,
+y
+);
+
+ctx.textAlign="left";
+
+}
+
+});
+
+y+=18*nameLines.length;
+
+ctx.fillStyle="#64748b";
+
+ctx.font="11px Arial";
+
+ctx.fillText(
+item.code+" • "+money(item.price),
+left+15,
+y
+);
+
+ctx.fillStyle="#111827";
+
+y+=28;
+
+});
+
+
+ctx.strokeStyle="#cbd5e1";
+
+ctx.beginPath();
+ctx.moveTo(left,y);
+ctx.lineTo(right,y);
+ctx.stroke();
+
+y+=25;
+
+ctx.font="13px Arial";
+ctx.textAlign="left";
+
+ctx.fillText("Subtotal",left,y);
+
+ctx.textAlign="right";
+ctx.fillText(money(sale.subtotal),right,y);
+
+ctx.textAlign="left";
+y+=22;
+
+if(sale.interest>0){
+
+ctx.fillText("Interés",left,y);
+
+ctx.textAlign="right";
+ctx.fillText(money(sale.interest),right,y);
+
+ctx.textAlign="left";
+y+=22;
+
+}
+
+ctx.font="bold 20px Arial";
+
+ctx.fillText("TOTAL",left,y);
+
+ctx.textAlign="right";
+ctx.fillText(money(sale.total),right,y);
+
+ctx.textAlign="left";
+
+y+=30;
+
+ctx.font="12px Arial";
+
+ctx.fillText(
+"Forma de pago: "+paymentName(sale.paymentMethod),
+left,
+y
+);
+
+if(sale.paymentMethod==="efectivo"){
+
+y+=20;
+
+ctx.fillText(
+"Recibido: "+money(sale.cashReceived),
+left,
+y
+);
+
+y+=19;
+
+ctx.fillText(
+"Cambio: "+money(sale.change),
+left,
+y
+);
+
+}
+
+if(sale.credit){
+
+y+=25;
+
+ctx.fillStyle="#1d4ed8";
+ctx.font="bold 13px Arial";
+
+ctx.fillText("VENTA A CRÉDITO",left,y);
+
+y+=20;
+
+ctx.fillStyle="#111827";
+ctx.font="12px Arial";
+
+ctx.fillText(
+"Plazo: "+sale.credit.weeks+" semanas",
+left,
+y
+);
+
+y+=19;
+
+ctx.fillText(
+"Interés: "+sale.credit.interestRate+"%",
+left,
+y
+);
+
+y+=19;
+
+ctx.fillText(
+"Total financiado: "+money(sale.credit.totalCredit),
+left,
+y
+);
+
+y+=19;
+
+ctx.fillText(
+"Vencimiento: "+date(sale.credit.dueDate),
+left,
+y
+);
+
+}
+
+y+=30;
+
+ctx.textAlign="center";
+ctx.fillStyle="#64748b";
+ctx.font="12px Arial";
+
+ctx.fillText(
+"¡Gracias por su compra!",
+width/2,
+y
+);
+
+}
+
+
+function getBusinessName(){
+return settings().businessName||"NexusPOS";
+}
+
+
+function paymentName(method){
+
+return{
+efectivo:"Efectivo",
+transferencia:"Transferencia",
+tarjeta:"Tarjeta",
+credito:"Crédito"
+}[method]||method;
+
+}
+
+
+function ticketBlob(){
+
+return new Promise(resolve=>{
+document.getElementById("ticketCanvas").toBlob(resolve,"image/png");
+});
+
+}
+
+
+async function downloadTicket(){
+
+if(!currentTicket)return;
+
+const blob=await ticketBlob();
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+a.download="ticket-"+currentTicket.folio+".png";
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+setTimeout(()=>URL.revokeObjectURL(url),500);
+
+}
+
+
+async function shareTicket(){
+
+if(!currentTicket)return;
+
+const blob=await ticketBlob();
+
+const file=new File(
+[blob],
+"ticket-"+currentTicket.folio+".png",
+{type:"image/png"}
+);
+
+if(navigator.share){
+
+try{
+
+if(!navigator.canShare||navigator.canShare({files:[file]})){
+
+await navigator.share({
+title:"Ticket "+currentTicket.folio,
+text:"Recibo de compra",
+files:[file]
+});
+
+return;
+
+}
+
+}catch(e){
+
+if(e.name==="AbortError")return;
+
+}
+
+}
+
+await downloadTicket();
+
+toast("La imagen del ticket fue descargada.");
+
+}
+
+
+function openShareModal(){
+
+shareTypeChanged();
+
+document.getElementById("shareDestination").value="";
+
+openModal("shareModal");
+
+}
+
+
+function shareTypeChanged(){
+
+const type=document.getElementById("shareType").value;
+const label=document.getElementById("shareLabel");
+
+if(type==="whatsapp"){
+label.textContent="Número de WhatsApp";
+document.getElementById("shareDestination").type="tel";
+}else{
+label.textContent="Correo electrónico";
+document.getElementById("shareDestination").type="email";
+}
+
+if(currentTicket){
+
+document.getElementById("shareMessage").textContent=
+"¡Hola! buen día, te compartimos el recibo de tu compra realizada el "+
+dateTime(currentTicket.createdAt)+".";
+
+}
+
+}
+
+
+async function prepareExternalShare(){
+
+if(!currentTicket)return;
+
+const type=document.getElementById("shareType").value;
+const destination=document.getElementById("shareDestination").value.trim();
+
+if(!destination){
+toast("Escribe el número o correo.");
+return;
+}
+
+const message=
+"¡Hola! buen día, te compartimos el recibo de tu compra realizada el "+
+dateTime(currentTicket.createdAt)+".";
+
+const blob=await ticketBlob();
+
+const file=new File(
+[blob],
+"ticket-"+currentTicket.folio+".png",
+{type:"image/png"}
+);
+
+if(type==="whatsapp"){
+
+const number=destination.replace(/\D/g,"");
+
+if(number.length<10){
+toast("Escribe un número válido.");
+return;
+}
+
+/*
+WhatsApp no permite adjuntar automáticamente una imagen
+desde wa.me. Primero intentamos Web Share cuando el
+dispositivo lo permite.
+*/
+
+if(navigator.share){
+
+try{
+
+if(!navigator.canShare||navigator.canShare({files:[file]})){
+
+await navigator.share({
+title:"Ticket "+currentTicket.folio,
+text:message,
+files:[file]
+});
+
+closeModal("shareModal");
+return;
+
+}
+
+}catch(e){
+
+if(e.name==="AbortError")return;
+
+}
+
+}
+
+const url=
+"https://wa.me/"+number+
+"?text="+encodeURIComponent(
+message+" Folio: "+currentTicket.folio+
+". La imagen del recibo fue preparada para compartir."
+);
+
+await downloadTicket();
+
+window.open(url,"_blank");
+
+closeModal("shareModal");
+
+toast("Ticket descargado y WhatsApp preparado.");
+
+}else{
+
+if(!destination.includes("@")){
+
+toast("Escribe un correo válido.");
+return;
+
+}
+
+/*
+mailto no puede adjuntar un archivo generado por JavaScript.
+Se descarga la imagen y se abre el correo con el mensaje.
+*/
+
+await downloadTicket();
+
+const url=
+"mailto:"+encodeURIComponent(destination)+
+"?subject="+encodeURIComponent(
+"Recibo de compra "+currentTicket.folio
+)+
+"&body="+encodeURIComponent(
+message+
+"\n\nFolio: "+currentTicket.folio+
+"\n\nLa imagen del ticket fue descargada para adjuntarla al correo."
+);
+
+window.location.href=url;
+
+closeModal("shareModal");
+
+}
+
+}
+
+
+function openCustomerModal(){
+
+document.getElementById("customerId").value="";
+document.getElementById("customerName").value="";
+document.getElementById("customerCurp").value="";
+document.getElementById("customerRfc").value="";
+document.getElementById("customerAddress").value="";
+document.getElementById("customerNip").value="";
+document.getElementById("customerNip2").value="";
+document.getElementById("customerCanCredit").checked=false;
+
+openModal("customerModal");
+
+}
+
+
+function saveCustomer(){
+
+if(!canOperate()){
+toast("No tienes permiso para administrar clientes.");
+return;
+}
+
+const idv=document.getElementById("customerId").value;
+
+const name=document.getElementById("customerName").value.trim();
+const curp=document.getElementById("customerCurp").value.trim().toUpperCase();
+const rfc=document.getElementById("customerRfc").value.trim().toUpperCase();
+const address=document.getElementById("customerAddress").value.trim();
+
+const nip=document.getElementById("customerNip").value;
+const nip2=document.getElementById("customerNip2").value;
+
+const canCredit=document.getElementById("customerCanCredit").checked;
+
+if(!name){
+toast("Escribe el nombre.");
+return;
+}
+
+if(!/^\d{4}$/.test(nip)){
+toast("El NIP debe tener 4 dígitos.");
+return;
+}
+
+if(nip!==nip2){
+toast("Los NIP no coinciden.");
+return;
+}
+
+const customers=data(KEY.customers);
+
+if(idv){
+
+const c=customers.find(x=>x.id===idv);
+
+if(c){
+
+c.name=name;
+c.curp=curp;
+c.rfc=rfc;
+c.address=address;
+c.nip=nip;
+c.canCredit=canCredit;
+c.updatedAt=now();
+
+}
+
+}else{
+
+customers.push({
+
+id:id("CLI"),
+name,
+curp,
+rfc,
+address,
+nip,
+canCredit,
+creditLimit:Number(settings().initialCredit||200),
+debt:0,
+creditAccounts:[],
+creditReviews:[],
+lastCreditIncreaseAt:null,
+createdAt:now()
+
+});
+
+}
+
+save(KEY.customers,customers);
+
+closeModal("customerModal");
+refreshEverything();
+
+toast("Cliente guardado.");
+
+}
+
+
+function renderCustomers(){
+
+const customers=data(KEY.customers);
+
+const q=(document.getElementById("customerSearch")?.value||"").toLowerCase();
+
+const list=customers.filter(c=>
+c.name.toLowerCase().includes(q)||
+(c.curp||"").toLowerCase().includes(q)||
+(c.rfc||"").toLowerCase().includes(q)
+);
+
+const tbody=document.getElementById("customersTable");
+
+if(!list.length){
+
+tbody.innerHTML=`
+<tr><td colspan="7" class="empty">No hay clientes.</td></tr>
+`;
+
+return;
+}
+
+tbody.innerHTML=list.map(c=>`
+
+<tr>
+
+<td><strong>${esc(c.name)}</strong></td>
+<td>${esc(c.curp||"—")}</td>
+<td>${esc(c.rfc||"—")}</td>
+<td>${money(c.creditLimit||200)}</td>
+<td>${money(c.debt||0)}</td>
+
+<td>
+${
+c.canCredit
+?
+'<span class="badge green">Habilitado</span>'
+:
+'<span class="badge red">No autorizado</span>'
+}
+</td>
+
+<td>
+
+<div class="actions">
+
+<button class="btn btn-secondary"
+onclick="editCustomer('${c.id}')">
+Editar
+</button>
+
+${
+isManager()
+?
+`<button class="btn btn-purple"
+onclick="evaluateCredit('${c.id}')">
+Evaluar
+</button>`
+:""
+}
+
+</div>
+
+</td>
+
+</tr>
+
+`).join("");
+
+}
+
+
+function editCustomer(idv){
+
+const c=data(KEY.customers).find(x=>x.id===idv);
+
+if(!c)return;
+
+document.getElementById("customerId").value=c.id;
+document.getElementById("customerName").value=c.name;
+document.getElementById("customerCurp").value=c.curp||"";
+document.getElementById("customerRfc").value=c.rfc||"";
+document.getElementById("customerAddress").value=c.address||"";
+document.getElementById("customerNip").value=c.nip||"";
+document.getElementById("customerNip2").value=c.nip||"";
+document.getElementById("customerCanCredit").checked=!!c.canCredit;
+
+openModal("customerModal");
+
+}
+
+
+function evaluateCredit(customerId){
+
+if(!isManager()){
+toast("Solo el gerente puede evaluar líneas de crédito.");
+return;
+}
+
+const s=settings();
+
+if(!s.increaseEnabled){
+toast("Los aumentos están desactivados.");
+return;
+}
+
+const customers=data(KEY.customers);
+const c=customers.find(x=>x.id===customerId);
+
+if(!c)return;
+
+const age=Math.floor(
+(Date.now()-new Date(c.createdAt).getTime())/
+86400000
+);
+
+if(age<REVIEW_DAYS){
+toast("El cliente todavía no cumple los 75 días.");
+return;
+}
+
+if(
+c.lastCreditIncreaseAt &&
+Date.now()-new Date(c.lastCreditIncreaseAt).getTime()<
+REVIEW_DAYS*86400000
+){
+toast("Todavía no corresponde una nueva evaluación.");
+return;
+}
+
+const accounts=c.creditAccounts||[];
+
+const limitDate=new Date();
+limitDate.setDate(limitDate.getDate()-REVIEW_DAYS);
+
+let good=true;
+
+accounts
+.filter(a=>new Date(a.createdAt)>=limitDate)
+.forEach(a=>{
+
+if(
+Number(a.remaining||0)>0 &&
+new Date(a.dueDate)<new Date()
+){
+good=false;
+}
+
+if(
+a.paidAt &&
+new Date(a.paidAt)>new Date(a.dueDate)
+){
+good=false;
+}
+
+});
+
+if(!good){
+toast("La evaluación no fue aprobada debido a pagos vencidos o tardíos.");
+return;
+}
+
+if(!confirm(
+"El cliente cumple con el comportamiento requerido.\n\n"+
+"¿Aumentar la línea en $200?"
+))return;
+
+c.creditLimit=Number(c.creditLimit||200)+200;
+c.lastCreditIncreaseAt=now();
+
+c.creditReviews=c.creditReviews||[];
+
+c.creditReviews.push({
+date:now(),
+period:75,
+increase:200,
+result:"aprobado"
+});
+
+save(KEY.customers,customers);
+
+refreshEverything();
+
+toast("Línea aumentada a "+money(c.creditLimit));
+
+}
+
+
+function renderCredits(){
+
+const customers=data(KEY.customers);
+
+const active=customers.filter(c=>Number(c.debt||0)>0);
+
+const debt=active.reduce(
+(a,c)=>a+Number(c.debt||0),0
+);
+
+const limits=customers.reduce(
+(a,c)=>a+Number(c.creditLimit||200),0
+);
+
+document.getElementById("activeCredits").textContent=active.length;
+document.getElementById("totalCreditDebt").textContent=money(debt);
+document.getElementById("totalCreditLimits").textContent=money(limits);
+
+const tbody=document.getElementById("creditsTable");
+
+if(!active.length){
+
+tbody.innerHTML=`
+<tr><td colspan="7" class="empty">No hay créditos activos.</td></tr>
+`;
+
+return;
+}
+
+tbody.innerHTML=active.map(c=>{
+
+const accounts=(c.creditAccounts||[])
+.filter(a=>Number(a.remaining||0)>0)
+.sort((a,b)=>new Date(a.dueDate)-new Date(b.dueDate));
+
+const next=accounts[0];
+
+const overdue=next&&new Date(next.dueDate)<new Date();
+
+return`
+
+<tr>
+
+<td>${esc(c.name)}</td>
+<td>${money(c.creditLimit||200)}</td>
+<td>${money(c.debt)}</td>
+<td>${money(Math.max(0,(c.creditLimit||200)-c.debt))}</td>
+<td>${next?date(next.dueDate):"—"}</td>
+
+<td>
+${
+overdue
+?
+'<span class="badge red">Vencido</span>'
+:
+'<span class="badge green">Al corriente</span>'
+}
+</td>
+
+<td>
+
+<div class="actions">
+
+<button class="btn btn-success" onclick="openPayment('${c.id}')">
+Pagar
+</button>
+
+${
+isManager()
+?
+`<button class="btn btn-purple" onclick="evaluateCredit('${c.id}')">Evaluar</button>`
+:""
+}
+
+</div>
+
+</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+function openPayment(customerId){
+
+if(!canOperate()){
+toast("No tienes permiso para registrar pagos.");
+return;
+}
+
+const c=data(KEY.customers).find(x=>x.id===customerId);
+
+if(!c)return;
+
+document.getElementById("paymentCustomerId").value=customerId;
+document.getElementById("paymentAmount").value="";
+document.getElementById("paymentMethodCredit").value="efectivo";
+
+document.getElementById("paymentInfo").innerHTML=`
+
+<div class="credit-info">
+
+<div class="credit-grid">
+
+<div class="credit-item">
+<small>Cliente</small>
+<strong>${esc(c.name)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Adeudo</small>
+<strong>${money(c.debt)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Disponible</small>
+<strong>${money(Math.max(0,c.creditLimit-c.debt))}</strong>
+</div>
+
+</div>
+
+</div>
+
+`;
+
+paymentPreview();
+openModal("paymentModal");
+
+}
+
+
+function paymentPreview(){
+
+const idv=document.getElementById("paymentCustomerId").value;
+const amount=Number(document.getElementById("paymentAmount").value);
+const method=document.getElementById("paymentMethodCredit").value;
+
+const c=data(KEY.customers).find(x=>x.id===idv);
+
+if(!c)return;
+
+const remaining=Math.max(
+0,
+Number(c.debt||0)-amount
+);
+
+let warning="";
+
+if(amount>Number(c.debt||0)){
+warning='<p style="color:#991b1b;font-weight:bold">No puedes pagar más de lo adeudado.</p>';
+}
+
+if(method==="efectivo"&&!getOpenCash()){
+warning+='<p style="color:#991b1b;font-weight:bold;margin-top:7px">Para registrar este pago en efectivo debes tener una caja abierta.</p>';
+}
+
+document.getElementById("paymentPreview").innerHTML=`
+
+<div class="line">
+<span>Adeudo actual</span>
+<strong>${money(c.debt)}</strong>
+</div>
+
+<div class="line">
+<span>Pago</span>
+<strong>${money(amount)}</strong>
+</div>
+
+<div class="line">
+<span>Método</span>
+<strong>${paymentName(method)}</strong>
+</div>
+
+<div class="line final">
+<span>Restante</span>
+<strong>${money(remaining)}</strong>
+</div>
+
+${warning}
+
+`;
+
+}
+
+
+function registerPayment(){
+
+if(!canOperate()){
+toast("No tienes permiso para registrar pagos.");
+return;
+}
+
+const customerId=document.getElementById("paymentCustomerId").value;
+const amount=Number(document.getElementById("paymentAmount").value);
+const method=document.getElementById("paymentMethodCredit").value;
+
+const customers=data(KEY.customers);
+const c=customers.find(x=>x.id===customerId);
+
+if(!c)return;
+
+if(amount<=0){
+toast("Escribe un pago válido.");
+return;
+}
+
+if(amount>Number(c.debt||0)){
+toast("No puedes pagar más de lo adeudado.");
+return;
+}
+
+if(method==="efectivo"&&!getOpenCash()){
+toast("Debes abrir caja antes de registrar un pago en efectivo.");
+return;
+}
+
+let remainingPayment=amount;
+
+c.creditAccounts=(c.creditAccounts||[])
+.filter(a=>Number(a.remaining||0)>0)
+.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+
+for(const account of c.creditAccounts){
+
+if(remainingPayment<=0)break;
+
+const apply=Math.min(
+Number(account.remaining),
+remainingPayment
+);
+
+account.remaining=
+Number((Number(account.remaining)-apply).toFixed(2));
+
+remainingPayment=
+Number((remainingPayment-apply).toFixed(2));
+
+if(account.remaining<=.009){
+
+account.remaining=0;
+account.paidAt=now();
+
+}
+
+}
+
+c.debt=
+Number((Number(c.debt)-amount).toFixed(2));
+
+save(KEY.customers,customers);
+
+const payments=data(KEY.payments);
+
+payments.push({
+
+id:id("PAY"),
+customerId,
+amount,
+paymentMethod:method,
+createdAt:now(),
+username:currentUser.username
+
+});
+
+save(KEY.payments,payments);
+
+
+if(method==="efectivo"){
+
+const cash=getOpenCash();
+
+cash.cashIn=Number(cash.cashIn||0)+amount;
+
+cash.movements=cash.movements||[];
+
+cash.movements.push({
+
+type:"pago_credito",
+amount:amount,
+customerId,
+createdAt:now(),
+username:currentUser.username
+
+});
+
+save(KEY.cash,cash);
+
+}
+
+closeModal("paymentModal");
+
+refreshEverything();
+
+toast("Pago registrado. Restante: "+money(c.debt));
+
+}
+
+
+function renderReturnSales(){
+
+const sales=data(KEY.sales);
+
+const q=(document.getElementById("returnSearch")?.value||"").toLowerCase();
+
+const list=sales.filter(s=>
+saleStatus(s)!=="devuelta" &&
+s.folio.toLowerCase().includes(q)
+);
+
+const tbody=document.getElementById("returnSalesTable");
+
+if(!list.length){
+
+tbody.innerHTML=`
+<tr><td colspan="6" class="empty">No hay ventas.</td></tr>
+`;
+
+return;
+}
+
+tbody.innerHTML=list
+.slice()
+.reverse()
+.map(s=>`
+
+<tr>
+
+<td>${dateTime(s.createdAt)}</td>
+<td>${esc(s.folio)}</td>
+<td>${esc(customerName(s.customerId))}</td>
+<td>${money(getSaleNetTotal(s))}</td>
+<td>${paymentName(s.paymentMethod)}</td>
+
+<td>
+<button class="btn btn-danger" onclick="openReturn('${s.id}')">
+Devolver
+</button>
+</td>
+
+</tr>
+
+`).join("");
+
+}
+
+
+function openReturn(saleId){
+
+if(!canOperate()){
+toast("No tienes permiso para realizar devoluciones.");
+return;
+}
+
+const sale=data(KEY.sales).find(s=>s.id===saleId);
+
+if(!sale)return;
+
+if(saleStatus(sale)==="devuelta"){
+toast("Esta venta ya fue devuelta completamente.");
+return;
+}
+
+currentReturnSale=sale;
+
+document.getElementById("returnReason").value="";
+
+document.getElementById("returnInfo").innerHTML=`
+
+<div class="credit-info">
+
+<strong>Folio ${esc(sale.folio)}</strong>
+
+<div class="line">
+<span>Total original</span>
+<strong>${money(sale.total)}</strong>
+</div>
+
+<div class="line">
+<span>Ya devuelto</span>
+<strong>${money(getSaleReturnedAmount(sale.id))}</strong>
+</div>
+
+<div class="line">
+<span>Disponible para devolución</span>
+<strong>${money(getSaleNetTotal(sale))}</strong>
+</div>
+
+<div class="line">
+<span>Pago</span>
+<strong>${paymentName(sale.paymentMethod)}</strong>
+</div>
+
+</div>
+
+`;
+
+
+const products=data(KEY.products);
+
+document.getElementById("returnItems").innerHTML=sale.items.map((item,i)=>{
+
+const already=getReturnedQuantity(sale.id,item.productId);
+const available=Math.max(0,Number(item.quantity)-already);
+
+return`
+
+<div class="switchrow">
+
+<div>
+<strong>${esc(item.name)}</strong>
+
+<p style="font-size:12px;color:#64748b">
+Comprado: ${item.quantity} ${esc(
+products.find(p=>p.id===item.productId)?.unit||"PZA"
+)}
+</p>
+
+<p style="font-size:12px;color:#64748b">
+Ya devuelto: ${already} • Disponible: ${available}
+</p>
+
+</div>
+
+<div style="width:100px">
+
+<input
+id="returnQty${i}"
+type="number"
+min="0"
+max="${available}"
+value="0"
+>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+openModal("returnModal");
+
+}
+
+
+function processReturn(){
+
+if(!currentReturnSale)return;
+
+if(!canOperate()){
+toast("No tienes permiso para realizar devoluciones.");
+return;
+}
+
+const reason=document.getElementById("returnReason").value.trim();
+
+if(!reason){
+toast("Escribe el motivo.");
+return;
+}
+
+const sale=currentReturnSale;
+const products=data(KEY.products);
+const returns=data(KEY.returns);
+
+let refundBase=0;
+let refund=0;
+const returnedItems=[];
+
+
+/*
+Primero validamos TODO para evitar que una devolución
+parcial se procese a medias.
+*/
+
+for(let i=0;i<sale.items.length;i++){
+
+const item=sale.items[i];
+
+const quantity=Number(
+document.getElementById("returnQty"+i)?.value||0
+);
+
+const already=getReturnedQuantity(sale.id,item.productId);
+const available=Math.max(0,Number(item.quantity)-already);
+
+if(quantity<0||quantity>available){
+
+toast("Cantidad de devolución inválida para "+item.name+".");
+return;
+
+}
+
+if(quantity>0){
+
+refundBase+=Number(item.price)*quantity;
+
+}
+
+}
+
+if(refundBase<=0){
+toast("Selecciona productos para devolver.");
+return;
+}
+
+
+/*
+En una venta a crédito el importe financiado incluye
+el interés. Se devuelve proporcionalmente el importe
+financiado correspondiente a los artículos devueltos.
+*/
+
+if(sale.paymentMethod==="credito"){
+
+const factor=
+Number(sale.subtotal)>0
+?
+Number(sale.total)/Number(sale.subtotal)
+:
+1;
+
+refund=refundBase*factor;
+
+}else{
+
+refund=refundBase;
+
+}
+
+
+for(let i=0;i<sale.items.length;i++){
+
+const item=sale.items[i];
+
+const quantity=Number(
+document.getElementById("returnQty"+i)?.value||0
+);
+
+if(quantity<=0)continue;
+
+const p=products.find(x=>x.id===item.productId);
+
+if(p){
+p.stock=Number(p.stock)+quantity;
+}
+
+const baseItemAmount=Number(item.price)*quantity;
+
+const itemRefund=
+sale.paymentMethod==="credito"
+?
+baseItemAmount*
+(
+Number(sale.subtotal)>0
+?
+Number(sale.total)/Number(sale.subtotal)
+:
+1
+)
+:
+baseItemAmount;
+
+returnedItems.push({
+
+productId:item.productId,
+name:item.name,
+code:item.code,
+price:item.price,
+quantity,
+total:baseItemAmount,
+creditRefundAmount:itemRefund
+
+});
+
+}
+
+
+if(sale.paymentMethod==="credito"&&sale.customerId){
+
+const customers=data(KEY.customers);
+const c=customers.find(x=>x.id===sale.customerId);
+
+if(c){
+
+c.debt=Math.max(
+0,
+Number((Number(c.debt||0)-refund).toFixed(2))
+);
+
+let remaining=refund;
+
+/*
+La devolución se aplica al crédito de esa venta.
+*/
+
+const accounts=(c.creditAccounts||[])
+.filter(a=>a.saleId===sale.id)
+.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+
+for(const account of accounts){
+
+if(remaining<=0)break;
+
+const paidPart=
+Number(account.originalAmount||account.remaining||0)-
+Number(account.remaining||0);
+
+const maxIncrease=Math.min(
+Number(account.originalAmount||0)-Number(account.remaining||0)+
+Number(account.remaining||0),
+remaining
+);
+
+if(maxIncrease>0){
+
+account.remaining=
+Number(
+Math.min(
+Number(account.originalAmount||0),
+Number(account.remaining||0)+remaining
+).toFixed(2)
+);
+
+account.paidAt=null;
+
+remaining=
+Math.max(
+0,
+Number(
+(remaining-maxIncrease).toFixed(2)
+)
+);
+
+}
+
+}
+
+save(KEY.customers,customers);
+
+}
+
+}else if(sale.paymentMethod==="efectivo"){
+
+const cash=getOpenCash();
+
+if(!cash){
+
+toast(
+"Debes abrir caja para devolver efectivo. La devolución no fue procesada."
+);
+
+return;
+
+}
+
+cash.cashOut=Number(cash.cashOut||0)+refund;
+
+cash.movements=cash.movements||[];
+
+cash.movements.push({
+
+type:"devolucion",
+amount:-refund,
+folio:sale.folio,
+createdAt:now(),
+username:currentUser.username
+
+});
+
+save(KEY.cash,cash);
+
+}
+
+
+/* RESTAURAR INVENTARIO */
+
+save(KEY.products,products);
+
+
+/* REGISTRAR DEVOLUCIÓN */
+
+returns.push({
+
+id:id("RET"),
+saleId:sale.id,
+folio:sale.folio,
+amount:Number(refund.toFixed(2)),
+baseAmount:Number(refundBase.toFixed(2)),
+items:returnedItems,
+reason,
+paymentMethod:sale.paymentMethod,
+createdAt:now(),
+username:currentUser.username
+
+});
+
+save(KEY.returns,returns);
+
+closeModal("returnModal");
+
+refreshEverything();
+
+toast("Devolución registrada por "+money(refund));
+
+}
+
+
+function renderSalesHistory(){
+
+const sales=data(KEY.sales).slice().reverse();
+const tbody=document.getElementById("salesHistoryTable");
+
+if(!sales.length){
+
+tbody.innerHTML=`
+<tr><td colspan="9" class="empty">No hay ventas.</td></tr>
+`;
+
+return;
+}
+
+tbody.innerHTML=sales.map(s=>{
+
+const status=saleStatus(s);
+
+return`
+
+<tr>
+
+<td>${dateTime(s.createdAt)}</td>
+<td>${esc(s.folio)}</td>
+<td>${esc(customerName(s.customerId))}</td>
+<td>${money(s.subtotal)}</td>
+<td>${money(s.interest)}</td>
+<td>${money(getSaleNetTotal(s))}</td>
+<td>${paymentName(s.paymentMethod)}</td>
+
+<td>
+${
+status==="devuelta"
+?
+'<span class="badge red">Devuelta</span>'
+:
+status==="parcialmente_devuelta"
+?
+'<span class="badge orange">Parcialmente devuelta</span>'
+:
+'<span class="badge green">Completada</span>'
+}
+</td>
+
+<td>
+
+<button class="btn btn-secondary"
+onclick="showTicketById('${s.id}')">
+Ticket
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}).join("");
+
+}
+
+
+function showTicketById(idv){
+
+const sale=data(KEY.sales).find(s=>s.id===idv);
+
+if(sale)showTicket(sale);
+
+}
+
+
+function getOpenCash(){
+
+const value=localStorage.getItem(KEY.cash);
+
+return value?JSON.parse(value):null;
+
+}
+
+
+function openCash(){
+
+if(!canOperate()){
+toast("No tienes permiso para abrir caja.");
+return;
+}
+
+if(getOpenCash()){
+toast("Ya existe una caja abierta.");
+return;
+}
+
+const amount=Number(
+document.getElementById("openingAmount").value
+);
+
+if(amount<0||isNaN(amount)){
+toast("Monto inicial inválido.");
+return;
+}
+
+const cash={
+
+id:id("CASH"),
+username:currentUser.username,
+openedAt:now(),
+openingAmount:amount,
+cashSales:0,
+cashIn:0,
+cashOut:0,
+movements:[]
+
+};
+
+save(KEY.cash,cash);
+
+document.getElementById("openingAmount").value="";
+
+refreshEverything();
+
+toast("Caja abierta correctamente.");
+
+}
+
+
+function getExpectedCash(cash){
+
+return Number(cash.openingAmount||0)+
+Number(cash.cashSales||0)+
+Number(cash.cashIn||0)-
+Number(cash.cashOut||0);
+
+}
+
+
+function renderCash(){
+
+const active=getOpenCash();
+
+const openPanel=document.getElementById("cashOpenPanel");
+const activePanel=document.getElementById("cashActivePanel");
+
+if(!active){
+
+openPanel.classList.remove("hidden");
+activePanel.classList.add("hidden");
+return;
+
+}
+
+openPanel.classList.add("hidden");
+activePanel.classList.remove("hidden");
+
+document.getElementById("cashOpening").textContent=
+money(active.openingAmount);
+
+document.getElementById("cashCashSales").textContent=
+money(active.cashSales);
+
+document.getElementById("cashIn").textContent=
+money(active.cashIn);
+
+document.getElementById("cashOut").textContent=
+money(active.cashOut);
+
+const expected=getExpectedCash(active);
+
+document.getElementById("cashExpected").innerHTML=`
+
+<div class="credit-grid">
+
+<div class="credit-item">
+<small>Fondo inicial</small>
+<strong>${money(active.openingAmount)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Ventas efectivo</small>
+<strong>${money(active.cashSales)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Entradas</small>
+<strong>${money(active.cashIn)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Salidas/devoluciones</small>
+<strong>${money(active.cashOut)}</strong>
+</div>
+
+<div class="credit-item">
+<small>Dinero que debe haber</small>
+<strong>${money(expected)}</strong>
+</div>
+
+</div>
+
+`;
+
+}
+
+
+function buildProductSummary(sales){
+
+const summary={};
+
+sales.forEach(s=>{
+
+s.items.forEach(item=>{
+
+const returned=getReturnedQuantity(s.id,item.productId);
+const netQuantity=Math.max(
+0,
+Number(item.quantity)-returned
+);
+
+if(netQuantity<=0)return;
+
+if(!summary[item.name]){
+summary[item.name]={
+quantity:0,
+amount:0
+};
+}
+
+summary[item.name].quantity+=netQuantity;
+summary[item.name].amount+=
+Number(item.price)*netQuantity;
+
+});
+
+});
+
+return summary;
+
+}
+
+
+function closeCash(){
+
+const cash=getOpenCash();
+
+if(!cash){
+toast("No hay una caja abierta.");
+return;
+}
+
+if(currentUser.role!=="gerente"&&cash.username!==currentUser.username){
+
+toast("Esta caja pertenece a otro cajero.");
+return;
+
+}
+
+const counted=Number(
+document.getElementById("closingAmount").value
+);
+
+if(isNaN(counted)||counted<0){
+toast("Escribe el dinero contado.");
+return;
+}
+
+const expected=getExpectedCash(cash);
+const difference=counted-expected;
+
+const openedDate=new Date(cash.openedAt);
+
+const sales=data(KEY.sales)
+.filter(s=>
+new Date(s.createdAt)>=openedDate &&
+new Date(s.createdAt)<=new Date()
+);
+
+const returned=data(KEY.returns)
+.filter(r=>
+new Date(r.createdAt)>=openedDate &&
+new Date(r.createdAt)<=new Date()
+);
+
+const productSummary=buildProductSummary(sales);
+
+currentClosing={
+
+cash,
+expected,
+counted,
+difference,
+sales,
+returned,
+productSummary,
+closedAt:now()
+
+};
+
+
+const history=data(KEY.cashHistory);
+
+history.push({
+
+id:id("CORTE"),
+cashId:cash.id,
+username:cash.username,
+openedAt:cash.openedAt,
+closedAt:now(),
+openingAmount:cash.openingAmount,
+cashSales:cash.cashSales,
+cashIn:cash.cashIn,
+cashOut:cash.cashOut,
+expected,
+counted,
+difference,
+salesCount:sales.length,
+returnsAmount:returned.reduce((a,r)=>a+Number(r.amount),0)
+
+});
+
+save(KEY.cashHistory,history);
+
+localStorage.removeItem(KEY.cash);
+
+document.getElementById("closingAmount").value="";
+
+drawClosingTicket(currentClosing);
+
+openModal("closingTicketModal");
+
+refreshEverything();
+
+toast("Corte realizado.");
+
+}
+
+
+function drawClosingTicket(c){
+
+const products=Object.keys(c.productSummary);
+const width=450;
+
+let height=
+430+
+products.length*42;
+
+if(c.returned.length)height+=60;
+
+const canvas=document.getElementById("closingCanvas");
+
+canvas.width=width;
+canvas.height=height;
+
+const ctx=canvas.getContext("2d");
+
+ctx.fillStyle="#fff";
+ctx.fillRect(0,0,width,height);
+
+ctx.fillStyle="#111827";
+ctx.textAlign="center";
+
+ctx.font="bold 25px Arial";
+ctx.fillText("NEXUSPOS",width/2,35);
+
+ctx.font="bold 16px Arial";
+ctx.fillText("CORTE DE CAJA",width/2,60);
+
+ctx.font="12px Arial";
+ctx.fillText(dateTime(c.closedAt),width/2,80);
+
+ctx.textAlign="left";
+
+let y=115;
+
+ctx.font="bold 14px Arial";
+ctx.fillText("CAJERO",20,y);
+
+y+=22;
+
+ctx.font="12px Arial";
+ctx.fillText(c.cash.username,20,y);
+
+y+=25;
+
+ctx.fillText(
+"Apertura: "+dateTime(c.cash.openedAt),
+20,
+y
+);
+
+y+=30;
+
+ctx.font="bold 14px Arial";
+ctx.fillText("RESUMEN DE CAJA",20,y);
+
+y+=24;
+
+ctx.font="12px Arial";
+
+function lineTicket(label,value){
+
+ctx.textAlign="left";
+ctx.fillText(label,20,y);
+
+ctx.textAlign="right";
+ctx.fillText(money(value),width-20,y);
+
+ctx.textAlign="left";
+
+y+=21;
+
+}
+
+lineTicket("Fondo inicial",c.cash.openingAmount);
+lineTicket("Ventas en efectivo",c.cash.cashSales);
+lineTicket("Entradas",c.cash.cashIn);
+lineTicket("Salidas/devoluciones",c.cash.cashOut);
+
+y+=9;
+
+ctx.font="bold 16px Arial";
+
+ctx.fillText("DEBE HABER",20,y);
+
+ctx.textAlign="right";
+ctx.fillText(money(c.expected),width-20,y);
+
+ctx.textAlign="left";
+
+y+=25;
+
+ctx.font="13px Arial";
+ctx.fillText("DINERO CONTADO",20,y);
+
+ctx.textAlign="right";
+ctx.fillText(money(c.counted),width-20,y);
+
+ctx.textAlign="left";
+
+y+=25;
+
+ctx.fillText("DIFERENCIA",20,y);
+
+ctx.textAlign="right";
+ctx.fillText(money(c.difference),width-20,y);
+
+ctx.textAlign="left";
+
+y+=35;
+
+ctx.font="bold 14px Arial";
+ctx.fillText("PRODUCTOS VENDIDOS",20,y);
+
+y+=25;
+
+ctx.font="12px Arial";
+
+products.forEach(name=>{
+
+const item=c.productSummary[name];
+
+ctx.textAlign="left";
+
+const lines=wrapText(
+ctx,
+name,
+width-150
+);
+
+ctx.fillText(lines[0],20,y);
+
+ctx.textAlign="right";
+
+ctx.fillText(
+item.quantity+" • "+money(item.amount),
+width-20,
+y
+);
+
+ctx.textAlign="left";
+
+y+=22;
+
+});
+
+
+y+=10;
+
+ctx.font="bold 14px Arial";
+
+ctx.fillText(
+"VENTAS DEL TURNO: "+c.sales.length,
+20,
+y
+);
+
+y+=25;
+
+ctx.fillText(
+"DEVOLUCIONES: "+c.returned.length,
+20,
+y
+);
+
+if(c.returned.length){
+
+y+=22;
+
+const totalReturns=c.returned.reduce(
+(a,r)=>a+Number(r.amount||0),
+0
+);
+
+ctx.font="12px Arial";
+
+ctx.fillText(
+"Importe devuelto:",
+20,
+y
+);
+
+ctx.textAlign="right";
+ctx.fillText(
+money(totalReturns),
+width-20,
+y
+);
+
+ctx.textAlign="left";
+
+}
+
+y+=30;
+
+ctx.textAlign="center";
+ctx.font="12px Arial";
+ctx.fillStyle="#64748b";
+
+ctx.fillText(
+"Corte generado por NexusPOS",
+width/2,
+y
+);
+
+}
+
+
+async function downloadClosingTicket(){
+
+const canvas=document.getElementById("closingCanvas");
+
+canvas.toBlob(blob=>{
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+a.download="corte-caja-"+Date.now()+".png";
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+setTimeout(()=>URL.revokeObjectURL(url),500);
+
+},"image/png");
+
+}
+
+
+async function shareClosingTicket(){
+
+const canvas=document.getElementById("closingCanvas");
+
+canvas.toBlob(async blob=>{
+
+const file=new File(
+[blob],
+"corte-caja.png",
+{type:"image/png"}
+);
+
+if(navigator.share){
+
+try{
+
+if(!navigator.canShare||navigator.canShare({files:[file]})){
+
+await navigator.share({
+
+title:"Corte de caja",
+text:"Corte de caja NexusPOS",
+files:[file]
+
+});
+
+return;
+
+}
+
+}catch(e){
+
+if(e.name==="AbortError")return;
+
+}
+
+}
+
+downloadClosingTicket();
+
+toast("Corte descargado.");
+
+},"image/png");
+
+}
+
+
+function renderCashHistory(){
+
+const history=data(KEY.cashHistory).slice().reverse();
+const tbody=document.getElementById("cashHistoryTable");
+
+if(!history.length){
+
+tbody.innerHTML=`
+<tr>
+<td colspan="9" class="empty">
+No hay cortes registrados.
+</td>
+</tr>
+`;
+
+return;
+}
+
+const list=
+currentUser?.role==="gerente"
+?
+history
+:
+history.filter(h=>h.username===currentUser.username);
+
+tbody.innerHTML=list.map(h=>`
+
+<tr>
+
+<td>${dateTime(h.closedAt)}</td>
+<td>${esc(h.username)}</td>
+<td>${money(h.openingAmount)}</td>
+<td>${money(h.cashSales)}</td>
+<td>${money(h.expected)}</td>
+<td>${money(h.counted)}</td>
+
+<td>
+
+<span class="badge ${
+Number(h.difference)===0?"green":
+Number(h.difference)>0?"blue":"red"
+}">
+
+${money(h.difference)}
+
+</span>
+
+</td>
+
+<td>
+<span class="badge green">Cerrada</span>
+</td>
+
+<td>
+
+<button class="btn btn-secondary"
+onclick="showHistoricalClosing('${h.id}')">
+Ticket
+</button>
+
+</td>
+
+</tr>
+
+`).join("");
+
+}
+
+
+function showHistoricalClosing(idv){
+
+const h=data(KEY.cashHistory).find(x=>x.id===idv);
+
+if(!h)return;
+
+if(
+currentUser.role!=="gerente" &&
+h.username!==currentUser.username
+){
+toast("No puedes consultar este corte.");
+return;
+}
+
+const sales=data(KEY.sales).filter(s=>
+new Date(s.createdAt)>=new Date(h.openedAt)&&
+new Date(s.createdAt)<=new Date(h.closedAt)
+);
+
+const returned=data(KEY.returns).filter(r=>
+new Date(r.createdAt)>=new Date(h.openedAt)&&
+new Date(r.createdAt)<=new Date(h.closedAt)
+);
+
+const productSummary=buildProductSummary(sales);
+
+currentClosing={
+
+cash:{
+username:h.username,
+openedAt:h.openedAt,
+openingAmount:h.openingAmount,
+cashSales:h.cashSales,
+cashIn:h.cashIn,
+cashOut:h.cashOut
+},
+
+expected:h.expected,
+counted:h.counted,
+difference:h.difference,
+sales,
+returned,
+productSummary,
+closedAt:h.closedAt
+
+};
+
+drawClosingTicket(currentClosing);
+
+openModal("closingTicketModal");
+
+}
+
+
+function openUserModal(){
+
+if(!isManager()){
+toast("Solo el gerente puede administrar usuarios.");
+return;
+}
+
+document.getElementById("newUsername").value="";
+document.getElementById("newPassword").value="";
+document.getElementById("newRole").value="cajero";
+
+populateUserCustomers();
+roleChanged();
+
+openModal("userModal");
+
+}
+
+
+function populateUserCustomers(){
+
+const select=document.getElementById("newCustomer");
+
+select.innerHTML='<option value="">Seleccionar...</option>';
+
+data(KEY.customers).forEach(c=>{
+
+select.innerHTML+=`
+<option value="${c.id}">${esc(c.name)}</option>
+`;
+
+});
+
+}
+
+
+function roleChanged(){
+
+document
+.getElementById("userCustomerField")
+.classList.toggle(
+"hidden",
+document.getElementById("newRole").value!=="cliente"
+);
+
+}
+
+
+function saveUser(){
+
+if(!isManager()){
+toast("Solo el gerente puede crear usuarios.");
+return;
+}
+
+const username=document.getElementById("newUsername").value.trim();
+const password=document.getElementById("newPassword").value;
+const role=document.getElementById("newRole").value;
+const customerId=document.getElementById("newCustomer").value||null;
+
+if(username.length<3){
+toast("El usuario debe tener mínimo 3 caracteres.");
+return;
+}
+
+if(password.length<4){
+toast("La contraseña debe tener mínimo 4 caracteres.");
+return;
+}
+
+if(role==="cliente"&&!customerId){
+toast("Selecciona el cliente asociado.");
+return;
+}
+
+const users=data(KEY.users);
+
+if(users.some(u=>
+u.username.toLowerCase()===username.toLowerCase()
+)){
+toast("Ese usuario ya existe.");
+return;
+}
+
+users.push({
+
+id:id("USR"),
+username,
+password,
+role,
+customerId,
+active:true,
+createdAt:now()
+
+});
+
+save(KEY.users,users);
+
+closeModal("userModal");
+refreshEverything();
+
+toast("Usuario creado.");
+
+}
+
+
+function renderUsers(){
+
+const tbody=document.getElementById("usersTable");
+
+if(!tbody)return;
+
+const users=data(KEY.users);
+
+if(!isManager()){
+tbody.innerHTML="";
+return;
+}
+
+tbody.innerHTML=users.map(u=>`
+
+<tr>
+
+<td>${esc(u.username)}</td>
+
+<td>
+
+<span class="badge ${
+u.role==="gerente"?"purple":
+u.role==="cajero"?"blue":"green"
+}">
+
+${u.role}
+
+</span>
+
+</td>
+
+<td>${esc(customerName(u.customerId))}</td>
+
+<td>
+
+${
+u.active
+?
+'<span class="badge green">Activo</span>'
+:
+'<span class="badge red">Inactivo</span>'
+}
+
+</td>
+
+<td>
+
+${
+u.id!==currentUser.id
+?
+`<button
+class="btn ${u.active?"btn-danger":"btn-success"}"
+onclick="toggleUser('${u.id}')">
+
+${u.active?"Desactivar":"Activar"}
+
+</button>`
+:
+'<span class="badge blue">Actual</span>'
+}
+
+</td>
+
+</tr>
+
+`).join("");
+
+}
+
+
+function toggleUser(idv){
+
+if(!isManager()){
+toast("Solo el gerente puede modificar usuarios.");
+return;
+}
+
+const users=data(KEY.users);
+
+const u=users.find(x=>x.id===idv);
+
+if(!u)return;
+
+u.active=!u.active;
+
+save(KEY.users,users);
+
+renderUsers();
+
+toast(
+u.active?"Usuario activado.":"Usuario desactivado."
+);
+
+}
+
+
+function openChangePasswordModal(){
+
+document.getElementById("currentPassword").value="";
+document.getElementById("newOwnPassword").value="";
+document.getElementById("newOwnPassword2").value="";
+
+openModal("changePasswordModal");
+
+}
+
+
+function changeOwnPassword(){
+
+if(!currentUser)return;
+
+const current=document.getElementById("currentPassword").value;
+const newPassword=document.getElementById("newOwnPassword").value;
+const confirmPassword=document.getElementById("newOwnPassword2").value;
+
+if(current!==currentUser.password){
+
+toast("La clave actual es incorrecta.");
+return;
+
+}
+
+if(newPassword.length<4){
+
+toast("La nueva clave debe tener mínimo 4 caracteres.");
+return;
+
+}
+
+if(newPassword!==confirmPassword){
+
+toast("Las nuevas claves no coinciden.");
+return;
+
+}
+
+if(newPassword===current){
+
+toast("La nueva clave debe ser diferente.");
+return;
+
+}
+
+const users=data(KEY.users);
+
+const u=users.find(x=>x.id===currentUser.id);
+
+if(!u){
+
+toast("Usuario no encontrado.");
+return;
+
+}
+
+u.password=newPassword;
+
+save(KEY.users,users);
+
+currentUser=u;
+
+closeModal("changePasswordModal");
+
+toast("Tu clave fue cambiada correctamente.");
+
+}
+
+
+function loadSettingsUI(){
+
+const s=settings();
+
+const container=document.getElementById("interestFields");
+
+if(!container)return;
+
+if(isManager()){
+
+document.getElementById("businessName").value=s.businessName||"";
+document.getElementById("businessRFC").value=s.businessRFC||"";
+document.getElementById("businessAddress").value=s.businessAddress||"";
+document.getElementById("businessPhone").value=s.businessPhone||"";
+document.getElementById("businessEmail").value=s.businessEmail||"";
+
+}
+
+container.innerHTML="";
+
+for(let i=1;i<=30;i++){
+
+container.innerHTML+=`
+
+<div class="field">
+
+<label>${i} ${i===1?"semana":"semanas"} (%)</label>
+
+<input
+id="interest${i}"
+type="number"
+min="0"
+step=".01"
+value="${s.interestRates[i]||0}"
+>
+
+</div>
+
+`;
+
+}
+
+document.getElementById("creditEnabled").checked=!!s.creditEnabled;
+document.getElementById("increaseEnabled").checked=!!s.increaseEnabled;
+
+}
+
+
+function saveBusinessSettings(){
+
+if(!isManager()){
+toast("Solo el gerente puede modificar la configuración.");
+return;
+}
+
+const s=settings();
+
+s.businessName=
+document.getElementById("businessName").value.trim()||
+"NexusPOS";
+
+s.businessRFC=
+document.getElementById("businessRFC").value.trim().toUpperCase();
+
+s.businessAddress=
+document.getElementById("businessAddress").value.trim();
+
+s.businessPhone=
+document.getElementById("businessPhone").value.trim();
+
+s.businessEmail=
+document.getElementById("businessEmail").value.trim();
+
+save(KEY.settings,s);
+
+refreshEverything();
+
+toast("Datos del negocio guardados.");
+
+}
+
+
+function saveCreditSettings(){
+
+if(!isManager()){
+toast("Solo el gerente puede modificar los intereses.");
+return;
+}
+
+const s=settings();
+
+for(let i=1;i<=30;i++){
+
+const input=document.getElementById("interest"+i);
+
+if(!input)continue;
+
+const value=Number(input.value);
+
+if(isNaN(value)||value<0){
+
+toast("El porcentaje no puede ser negativo.");
+return;
+
+}
+
+s.interestRates[i]=value;
+
+}
+
+save(KEY.settings,s);
+
+refreshEverything();
+
+toast("Intereses guardados.");
+
+}
+
+
+function saveGeneralSettings(){
+
+if(!isManager()){
+toast("Solo el gerente puede modificar la configuración.");
+return;
+}
+
+const s=settings();
+
+s.creditEnabled=
+document.getElementById("creditEnabled").checked;
+
+s.increaseEnabled=
+document.getElementById("increaseEnabled").checked;
+
+save(KEY.settings,s);
+
+refreshEverything();
+
+toast("Configuración guardada.");
+
+}
+
+
+function exportBackup(){
+
+if(!isManager()){
+toast("Solo el gerente puede descargar respaldos.");
+return;
+}
+
+const backup={
+
+version:"3.0",
+createdAt:now(),
+
+users:data(KEY.users),
+products:data(KEY.products),
+customers:data(KEY.customers),
+sales:data(KEY.sales),
+payments:data(KEY.payments),
+returns:data(KEY.returns),
+cashHistory:data(KEY.cashHistory),
+settings:settings()
+
+};
+
+const blob=new Blob(
+[JSON.stringify(backup,null,2)],
+{type:"application/json"}
+);
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+a.download="nexuspos-respaldo-"+Date.now()+".json";
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+setTimeout(()=>URL.revokeObjectURL(url),500);
+
+}
+
+
+function importBackup(event){
+
+if(!isManager()){
+toast("Solo el gerente puede restaurar respaldos.");
+event.target.value="";
+return;
+}
+
+const file=event.target.files[0];
+
+if(!file)return;
+
+const reader=new FileReader();
+
+reader.onload=()=>{
+
+try{
+
+const b=JSON.parse(reader.result);
+
+if(!b.version)throw new Error();
+
+if(!confirm(
+"Esto reemplazará la información actual. ¿Continuar?"
+))return;
+
+if(b.users)save(KEY.users,b.users);
+if(b.products)save(KEY.products,b.products);
+if(b.customers)save(KEY.customers,b.customers);
+if(b.sales)save(KEY.sales,b.sales);
+if(b.payments)save(KEY.payments,b.payments);
+if(b.returns)save(KEY.returns,b.returns);
+if(b.cashHistory)save(KEY.cashHistory,b.cashHistory);
+if(b.settings)save(KEY.settings,b.settings);
+
+settings();
+
+toast("Respaldo restaurado.");
+
+refreshEverything();
+
+}catch(e){
+
+toast("Respaldo inválido.");
+
+}
+
+event.target.value="";
+
+};
+
+reader.readAsText(file);
+
+}
+
+
+function renderClient(){
+
+if(!currentUser||currentUser.role!=="cliente")return;
+
+const c=data(KEY.customers).find(
+x=>x.id===currentUser.customerId
+);
+
+if(!c)return;
+
+const limit=Number(c.creditLimit||200);
+const debt=Number(c.debt||0);
+
+document.getElementById("clientName").textContent=c.name;
+document.getElementById("clientLimit").textContent=money(limit);
+document.getElementById("clientDebt").textContent=money(debt);
+document.getElementById("clientAvailable").textContent=
+money(Math.max(0,limit-debt));
+
+const sales=data(KEY.sales)
+.filter(s=>s.customerId===c.id);
+
+const payments=data(KEY.payments)
+.filter(p=>p.customerId===c.id);
+
+const returns=data(KEY.returns)
+.filter(r=>{
+const sale=sales.find(s=>s.id===r.saleId);
+return !!sale;
+});
+
+const movements=[];
+
+sales.forEach(s=>{
+
+movements.push({
+date:s.createdAt,
+type:"Compra",
+amount:getSaleNetTotal(s),
+status:s.paymentMethod==="credito"?"Crédito":"Pagada"
+});
+
+});
+
+payments.forEach(p=>{
+
+movements.push({
+date:p.createdAt,
+type:"Pago",
+amount:p.amount,
+status:"Registrado"
+});
+
+});
+
+returns.forEach(r=>{
+
+movements.push({
+date:r.createdAt,
+type:"Devolución",
+amount:-Number(r.amount||0),
+status:"Procesada"
+});
+
+});
+
+movements.sort(
+(a,b)=>new Date(b.date)-new Date(a.date)
+);
+
+document.getElementById("clientMovements").innerHTML=
+movements.map(m=>`
+
+<tr>
+<td>${dateTime(m.date)}</td>
+<td>${esc(m.type)}</td>
+<td>${money(m.amount)}</td>
+<td><span class="badge blue">${esc(m.status)}</span></td>
+</tr>
+
+`).join("")||
+`
+<tr>
+<td colspan="4" class="empty">Sin movimientos.</td>
+</tr>
+`;
+
+}
+
+
+function updateClock(){
+
+document.getElementById("clock").textContent=
+new Date().toLocaleString("es-MX",{
+dateStyle:"medium",
+timeStyle:"short"
+});
+
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+
+document.querySelectorAll(".modal").forEach(m=>{
+
+m.addEventListener("click",e=>{
+
+if(e.target===m)m.classList.remove("show");
+
+});
+
+});
+
+
+renderCart();
+restoreSession();
+
+</script>
+
+</body>
+</html>
