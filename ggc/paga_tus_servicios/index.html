@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+
+<html lang='es'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>Consulta de Adeudo</title>
+
+<script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top left,#dbeafe 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#bfdbfe 0%,transparent 35%),
+        linear-gradient(135deg,#f8fafc,#e2e8f0);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    color:#0f172a;
+}
+
+.app{
+    width:100%;
+    max-width:520px;
+}
+
+.card{
+    background:#fff;
+    border-radius:28px;
+    box-shadow:0 25px 70px rgba(15,23,42,.16);
+    overflow:hidden;
+}
+
+.header{
+    padding:30px 25px;
+    text-align:center;
+    background:linear-gradient(135deg,#0f172a,#1e3a8a);
+    color:#fff;
+}
+
+.logo{
+    width:68px;
+    height:68px;
+    margin:0 auto 15px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.12);
+    font-size:32px;
+}
+
+.header h1{
+    font-size:25px;
+    margin-bottom:7px;
+}
+
+.header p{
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+.screen{
+    display:none;
+    padding:28px;
+}
+
+.screen.active{
+    display:block;
+}
+
+.title{
+    font-size:22px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.subtitle{
+    color:#64748b;
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:24px;
+}
+
+.field{
+    margin-bottom:17px;
+}
+
+.field label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:8px;
+    color:#334155;
+}
+
+.field input{
+    width:100%;
+    padding:16px;
+    border:1px solid #cbd5e1;
+    border-radius:14px;
+    outline:none;
+    font-size:16px;
+    background:#f8fafc;
+}
+
+.field input:focus{
+    border-color:#2563eb;
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(37,99,235,.1);
+}
+
+.btn{
+    width:100%;
+    border:0;
+    border-radius:14px;
+    padding:16px;
+    font-size:15px;
+    font-weight:800;
+    cursor:pointer;
+    margin-top:8px;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+.btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.btn-primary{
+    color:#fff;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    box-shadow:0 10px 25px rgba(37,99,235,.25);
+}
+
+.btn-light{
+    color:#334155;
+    background:#f1f5f9;
+}
+
+.client-box,
+.details{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.client-row,
+.detail{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:12px 0;
+    border-bottom:1px solid #e2e8f0;
+}
+
+.client-row:last-child,
+.detail:last-child{
+    border-bottom:0;
+}
+
+.client-label,
+.detail span:first-child{
+    color:#64748b;
+    font-size:13px;
+}
+
+.client-value,
+.detail span:last-child{
+    font-weight:800;
+    text-align:right;
+    word-break:break-word;
+}
+
+.balance-box{
+    text-align:center;
+    padding:30px 20px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#eff6ff,#dbeafe);
+    border:1px solid #bfdbfe;
+    margin-bottom:20px;
+}
+
+.balance-label{
+    color:#475569;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.balance{
+    font-size:42px;
+    font-weight:900;
+    color:#1d4ed8;
+}
+
+.payment-grid{
+    display:grid;
+    gap:12px;
+}
+
+.payment-btn{
+    border:1px solid #e2e8f0;
+    background:#fff;
+    border-radius:18px;
+    padding:17px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    text-align:left;
+    transition:.2s;
+}
+
+.payment-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(15,23,42,.08);
+}
+
+.payment-icon{
+    width:48px;
+    height:48px;
+    min-width:48px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    background:#eff6ff;
+}
+
+.payment-name{
+    font-weight:800;
+    font-size:15px;
+}
+
+.payment-description{
+    color:#64748b;
+    font-size:12px;
+    margin-top:3px;
+}
+
+.message{
+    display:none;
+    padding:13px 15px;
+    border-radius:13px;
+    margin-bottom:18px;
+    font-size:14px;
+    line-height:1.4;
+}
+
+.message.show{
+    display:block;
+}
+
+.message.error{
+    background:#fef2f2;
+    color:#991b1b;
+    border:1px solid #fecaca;
+}
+
+.message.success{
+    background:#f0fdf4;
+    color:#166534;
+    border:1px solid #bbf7d0;
+}
+
+.processing{
+    text-align:center;
+    padding:30px 10px;
+}
+
+.loader{
+    width:64px;
+    height:64px;
+    border:6px solid #dbeafe;
+    border-top-color:#2563eb;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:0 auto 25px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.success-icon{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    margin:0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:48px;
+    background:#dcfce7;
+    color:#16a34a;
+    border:5px solid #bbf7d0;
+}
+
+.success-title{
+    font-size:25px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.success-text{
+    color:#64748b;
+    line-height:1.5;
+    margin-bottom:25px;
+}
+
+.receipt-container{
+    text-align:center;
+    margin-top:20px;
+}
+
+.receipt-container img{
+    width:100%;
+    max-width:390px;
+    border-radius:14px;
+    box-shadow:0 15px 35px rgba(15,23,42,.15);
+    border:1px solid #e2e8f0;
+}
+
+.receipt-title{
+    font-size:14px;
+    color:#64748b;
+    margin-bottom:12px;
+    font-weight:700;
+}
+
+.footer-note{
+    text-align:center;
+    color:#94a3b8;
+    font-size:11px;
+    margin-top:18px;
+    line-height:1.5;
+}
+
+@media(max-width:480px){
+    body{
+        padding:10px;
+    }
+
+    .screen{
+        padding:22px 18px;
+    }
+
+    .header{
+        padding:25px 18px;
+    }
+
+    .balance{
+        font-size:35px;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class='app'>
+
+<div class='card'>
+
+<div class='header'>
+<div class='logo'>💳</div>
+<h1>Consulta de Adeudo</h1>
+<p>Consulta y realiza el pago de tu servicio</p>
+</div>
+
+<!-- BUSQUEDA -->
+
+<section id='screenSearch' class='screen active'>
+
+<div class='title'>Consultar servicio</div>
+
+<div class='subtitle'>
+Ingresa tu número de servicio o número de referencia para consultar tu información.
+</div>
+
+<div id='searchMessage' class='message'></div>
+
+<div class='field'>
+<label>Número de servicio o referencia</label>
+
+<input
+id='serviceInput'
+type='text'
+autocomplete='off'
+placeholder='Ej. 100025'>
+
+</div>
+
+<button id='searchButton' class='btn btn-primary'>
+Consultar servicio
+</button>
+
+<div class='footer-note'>
+La información mostrada corresponde a los datos registrados en el sistema.
+</div>
+
+</section>
+
+<!-- CLIENTE -->
+
+<section id='screenClient' class='screen'>
+
+<div class='title'>Información del servicio</div>
+
+<div class='subtitle'>
+Hemos encontrado la información correspondiente.
+</div>
+
+<div id='clientData' class='client-box'></div>
+
+<button id='balanceButton' class='btn btn-primary'>
+Consultar saldo
+</button>
+
+<button id='backSearchButton' class='btn btn-light'>
+Nueva consulta
+</button>
+
+</section>
+
+<!-- SALDO -->
+
+<section id='screenBalance' class='screen'>
+
+<div class='title'>Saldo del servicio</div>
+
+<div class='subtitle'>
+Consulta el importe pendiente y selecciona una forma de pago.
+</div>
+
+<div class='balance-box'>
+
+<div class='balance-label'>
+SALDO PENDIENTE
+</div>
+
+<div id='balanceAmount' class='balance'>
+$0.00
+</div>
+
+</div>
+
+<div class='payment-grid'>
+
+<button class='payment-btn' data-method='Mercado Pago'>
+
+<div class='payment-icon'>💙</div>
+
+<div>
+<div class='payment-name'>Mercado Pago</div>
+<div class='payment-description'>Pagar de forma segura</div>
+</div>
+
+</button>
+
+<button class='payment-btn' data-method='Clip'>
+
+<div class='payment-icon'>💳</div>
+
+<div>
+<div class='payment-name'>Clip</div>
+<div class='payment-description'>Pagar con tarjeta</div>
+</div>
+
+</button>
+
+<button class='payment-btn' data-method='PayPal'>
+
+<div class='payment-icon'>🅿️</div>
+
+<div>
+<div class='payment-name'>PayPal</div>
+<div class='payment-description'>Pagar con PayPal</div>
+</div>
+
+</button>
+
+<button id='redeemButton' class='payment-btn'>
+
+<div class='payment-icon'>🎟️</div>
+
+<div>
+<div class='payment-name'>Canjear código</div>
+<div class='payment-description'>Aplicar un código de saldo</div>
+</div>
+
+</button>
+
+</div>
+
+<button id='backClientButton' class='btn btn-light'>
+Regresar
+</button>
+
+</section>
+
+<!-- CODIGO -->
+
+<section id='screenCode' class='screen'>
+
+<div class='title'>Canjear código</div>
+
+<div class='subtitle'>
+Introduce el código de saldo que recibiste para aplicarlo a tu servicio.
+</div>
+
+<div id='codeMessage' class='message'></div>
+
+<div class='client-box' style='text-align:center'>
+
+<div style='font-size:45px;margin-bottom:10px'>
+🎟️
+</div>
+
+<strong>Código de saldo</strong>
+
+<p style='color:#64748b;font-size:13px;margin-top:7px'>
+El código solamente puede utilizarse una vez.
+</p>
+
+</div>
+
+<div class='field'>
+
+<label>Código</label>
+
+<input
+id='codeInput'
+type='text'
+autocomplete='off'
+placeholder='Ingresa tu código'>
+
+</div>
+
+<button id='redeemConfirmButton' class='btn btn-primary'>
+Canjear código
+</button>
+
+<button id='backBalanceButton' class='btn btn-light'>
+Regresar
+</button>
+
+</section>
+
+<!-- PROCESANDO -->
+
+<section id='screenProcessing' class='screen'>
+
+<div class='processing'>
+
+<div class='loader'></div>
+
+<div class='title'>
+Procesando pago
+</div>
+
+<p class='subtitle' style='margin-bottom:0'>
+Estamos preparando tu pago. No cierres esta ventana.
+</p>
+
+</div>
+
+</section>
+
+<!-- COMPROBANTE -->
+
+<section id='screenPaid' class='screen'>
+
+<div style='text-align:center'>
+
+<div class='success-icon'>
+✓
+</div>
+
+<div class='success-title'>
+Servicio pagado
+</div>
+
+<div class='success-text'>
+Tu comprobante ha sido generado correctamente.
+</div>
+
+</div>
+
+<div id='paymentDetails' class='details'></div>
+
+<div class='receipt-container'>
+
+<div class='receipt-title'>
+COMPROBANTE DE PAGO
+</div>
+
+<img
+id='receiptImage'
+alt='Comprobante de pago'>
+
+</div>
+
+<button id='downloadReceiptButton' class='btn btn-primary'>
+Descargar comprobante
+</button>
+
+<button id='printReceiptButton' class='btn btn-light'>
+Imprimir comprobante
+</button>
+
+<button id='finishButton' class='btn btn-light'>
+Finalizar
+</button>
+
+</section>
+
+</div>
+
+</div>
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+'https://ieaielptonscbsimbtyx.supabase.co';
+
+const SUPABASE_KEY =
+'sb_publishable_pmJ3fN_2FUKM1AskoReusA_0vaZz7f_';
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =====================================================
+   ENLACES DE PAGO
+===================================================== */
+
+const LINKS_PAGO = {
+
+    'Mercado Pago':
+    'TU_LINK_MERCADOPAGO',
+
+    'Clip':
+    'TU_LINK_CLIP',
+
+    'PayPal':
+    'TU_LINK_PAYPAL'
+
+};
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let clienteActual = null;
+
+let pagoActual = null;
+
+
+/* =====================================================
+   PANTALLAS
+===================================================== */
+
+const screens = {
+
+search:
+document.getElementById('screenSearch'),
+
+client:
+document.getElementById('screenClient'),
+
+balance:
+document.getElementById('screenBalance'),
+
+code:
+document.getElementById('screenCode'),
+
+processing:
+document.getElementById('screenProcessing'),
+
+paid:
+document.getElementById('screenPaid')
+
+};
+
+
+/* =====================================================
+   CAMBIAR PANTALLA
+===================================================== */
+
+function mostrarPantalla(nombre){
+
+Object.values(screens).forEach(function(screen){
+
+screen.classList.remove('active');
+
+});
+
+screens[nombre].classList.add('active');
+
+}
+
+
+/* =====================================================
+   MENSAJES
+===================================================== */
+
+function mostrarMensaje(elemento,texto,tipo){
+
+elemento.textContent = texto;
+
+elemento.className =
+'message show ' + tipo;
+
+}
+
+
+function ocultarMensaje(elemento){
+
+elemento.textContent = '';
+
+elemento.className = 'message';
+
+}
+
+
+/* =====================================================
+   MONEDA
+===================================================== */
+
+function formatoMoneda(valor){
+
+return Number(valor || 0).toLocaleString(
+'es-MX',
+{
+style:'currency',
+currency:'MXN'
+}
+);
+
+}
+
+
+/* =====================================================
+   ESCAPAR HTML
+===================================================== */
+
+function escapeHtml(valor){
+
+return String(valor ?? '')
+.replaceAll('&','&amp;')
+.replaceAll('<','&lt;')
+.replaceAll('>','&gt;')
+.replaceAll("'","&#039;");
+
+}
+
+
+/* =====================================================
+   BUSCAR SERVICIO
+===================================================== */
+
+async function buscarServicio(){
+
+const input =
+document.getElementById('serviceInput');
+
+const mensaje =
+document.getElementById('searchMessage');
+
+const valor =
+input.value.trim();
+
+ocultarMensaje(mensaje);
+
+if(!valor){
+
+mostrarMensaje(
+mensaje,
+'Ingresa tu número de servicio o referencia.',
+'error'
+);
+
+input.focus();
+
+return;
+
+}
+
+const boton =
+document.getElementById('searchButton');
+
+boton.disabled = true;
+
+boton.textContent =
+'Buscando...';
+
+try{
+
+let resultado = null;
+
+
+/* BUSQUEDA POR SERVICIO */
+
+const servicio =
+await supabaseClient
+.from('clientes_servicio')
+.select('*')
+.eq('numero_servicio',valor)
+.limit(1);
+
+if(servicio.error){
+
+throw servicio.error;
+
+}
+
+if(
+servicio.data &&
+servicio.data.length > 0
+){
+
+resultado =
+servicio.data[0];
+
+}
+
+
+/* BUSQUEDA POR REFERENCIA */
+
+if(!resultado){
+
+const referencia =
+await supabaseClient
+.from('clientes_servicio')
+.select('*')
+.eq('numero_referencia',valor)
+.limit(1);
+
+if(referencia.error){
+
+throw referencia.error;
+
+}
+
+if(
+referencia.data &&
+referencia.data.length > 0
+){
+
+resultado =
+referencia.data[0];
+
+}
+
+}
+
+
+/* NO ENCONTRADO */
+
+if(!resultado){
+
+mostrarMensaje(
+mensaje,
+'No encontramos un servicio con el número o referencia ingresado.',
+'error'
+);
+
+return;
+
+}
+
+
+clienteActual = resultado;
+
+mostrarDatosCliente();
+
+mostrarPantalla('client');
+
+}
+catch(error){
+
+console.error(error);
+
+mostrarMensaje(
+mensaje,
+'No fue posible consultar la información. Verifica la conexión con Supabase.',
+'error'
+);
+
+}
+finally{
+
+boton.disabled = false;
+
+boton.textContent =
+'Consultar servicio';
+
+}
+
+}
+
+
+/* =====================================================
+   DATOS DEL CLIENTE
+===================================================== */
+
+function mostrarDatosCliente(){
+
+const contenedor =
+document.getElementById('clientData');
+
+const nombre =
+clienteActual.nombre ||
+clienteActual.nombre_completo ||
+'Cliente';
+
+const iniciales =
+clienteActual.iniciales ||
+'—';
+
+const servicio =
+clienteActual.numero_servicio ||
+'—';
+
+const referencia =
+clienteActual.numero_referencia ||
+'—';
+
+
+contenedor.innerHTML = `
+
+<div class='client-row'>
+
+<div class='client-label'>
+Cliente
+</div>
+
+<div class='client-value'>
+${escapeHtml(nombre)}
+</div>
+
+</div>
+
+
+<div class='client-row'>
+
+<div class='client-label'>
+Iniciales
+</div>
+
+<div class='client-value'>
+${escapeHtml(iniciales)}
+</div>
+
+</div>
+
+
+<div class='client-row'>
+
+<div class='client-label'>
+Número de servicio
+</div>
+
+<div class='client-value'>
+${escapeHtml(servicio)}
+</div>
+
+</div>
+
+
+<div class='client-row'>
+
+<div class='client-label'>
+Referencia
+</div>
+
+<div class='client-value'>
+${escapeHtml(referencia)}
+</div>
+
+</div>
+
+`;
+
+}
+
+
+/* =====================================================
+   SALDO
+===================================================== */
+
+function consultarSaldo(){
+
+if(!clienteActual){
+
+mostrarPantalla('search');
+
+return;
+
+}
+
+document.getElementById('balanceAmount')
+.textContent =
+formatoMoneda(clienteActual.saldo);
+
+mostrarPantalla('balance');
+
+}
+
+
+/* =====================================================
+   MOSTRAR CANJE
+===================================================== */
+
+function mostrarCanje(){
+
+const mensaje =
+document.getElementById('codeMessage');
+
+ocultarMensaje(mensaje);
+
+document.getElementById('codeInput')
+.value = '';
+
+mostrarPantalla('code');
+
+setTimeout(function(){
+
+document.getElementById('codeInput')
+.focus();
+
+},100);
+
+}
+
+
+/* =====================================================
+   CANJEAR CODIGO
+===================================================== */
+
+async function canjearCodigo(){
+
+const input =
+document.getElementById('codeInput');
+
+const mensaje =
+document.getElementById('codeMessage');
+
+const boton =
+document.getElementById('redeemConfirmButton');
+
+const codigo =
+input.value.trim();
+
+ocultarMensaje(mensaje);
+
+if(!clienteActual){
+
+mostrarMensaje(
+mensaje,
+'No hay un servicio seleccionado.',
+'error'
+);
+
+return;
+
+}
+
+if(!codigo){
+
+mostrarMensaje(
+mensaje,
+'Ingresa un código de saldo.',
+'error'
+);
+
+input.focus();
+
+return;
+
+}
+
+boton.disabled = true;
+
+boton.textContent =
+'Validando...';
+
+try{
+
+const resultado =
+await supabaseClient
+.from('codigos_saldo')
+.select('*')
+.eq('codigo',codigo)
+.eq('usado',false)
+.limit(1);
+
+if(resultado.error){
+
+throw resultado.error;
+
+}
+
+if(
+!resultado.data ||
+resultado.data.length === 0
+){
+
+mostrarMensaje(
+mensaje,
+'El código no existe, ya fue utilizado o no está disponible.',
+'error'
+);
+
+return;
+
+}
+
+const codigoData =
+resultado.data[0];
+
+const cantidad =
+Number(codigoData.saldo) || 0;
+
+if(cantidad <= 0){
+
+mostrarMensaje(
+mensaje,
+'El código no tiene un saldo válido.',
+'error'
+);
+
+return;
+
+}
+
+const saldoActual =
+Number(clienteActual.saldo) || 0;
+
+const nuevoSaldo =
+Math.max(0,saldoActual - cantidad);
+
+
+/* ACTUALIZAR CLIENTE */
+
+const actualizarCliente =
+await supabaseClient
+.from('clientes_servicio')
+.update({
+saldo:nuevoSaldo
+})
+.eq('id',clienteActual.id);
+
+if(actualizarCliente.error){
+
+throw actualizarCliente.error;
+
+}
+
+
+/* MARCAR CODIGO */
+
+const actualizarCodigo =
+await supabaseClient
+.from('codigos_saldo')
+.update({
+usado:true
+})
+.eq('id',codigoData.id);
+
+if(actualizarCodigo.error){
+
+throw actualizarCodigo.error;
+
+}
+
+
+/* ACTUALIZAR LOCAL */
+
+clienteActual.saldo =
+nuevoSaldo;
+
+document.getElementById('balanceAmount')
+.textContent =
+formatoMoneda(nuevoSaldo);
+
+mostrarPantalla('balance');
+
+setTimeout(function(){
+
+alert(
+'Código aplicado correctamente.\n\n' +
+'Saldo aplicado: ' +
+formatoMoneda(cantidad) +
+'\nNuevo saldo pendiente: ' +
+formatoMoneda(nuevoSaldo)
+);
+
+},100);
+
+}
+catch(error){
+
+console.error(error);
+
+mostrarMensaje(
+mensaje,
+'No fue posible aplicar el código. Verifica los permisos de Supabase.',
+'error'
+);
+
+}
+finally{
+
+boton.disabled = false;
+
+boton.textContent =
+'Canjear código';
+
+}
+
+}
+
+
+/* =====================================================
+   PAGAR
+===================================================== */
+
+function pagarCon(metodo){
+
+if(!clienteActual){
+
+mostrarPantalla('search');
+
+return;
+
+}
+
+const saldo =
+Number(clienteActual.saldo) || 0;
+
+if(saldo <= 0){
+
+alert(
+'Este servicio no tiene saldo pendiente.'
+);
+
+return;
+
+}
+
+const enlace =
+LINKS_PAGO[metodo];
+
+if(
+!enlace ||
+enlace.startsWith('TU_LINK_')
+){
+
+alert(
+'El método ' +
+metodo +
+' todavía no tiene configurado su enlace de pago.'
+);
+
+return;
+
+}
+
+
+/* DATOS DEL PAGO */
+
+pagoActual = {
+
+metodo:metodo,
+
+monto:saldo,
+
+servicio:
+clienteActual.numero_servicio || '—',
+
+referencia:
+clienteActual.numero_referencia || '—',
+
+cliente:
+clienteActual.nombre ||
+clienteActual.nombre_completo ||
+clienteActual.iniciales ||
+'Cliente',
+
+fecha:new Date(),
+
+folio:
+generarFolio()
+
+};
+
+
+/* PROCESANDO */
+
+mostrarPantalla('processing');
+
+
+/*
+Abrimos el proveedor.
+*/
+
+setTimeout(function(){
+
+window.location.href =
+enlace;
+
+},1200);
+
+}
+
+
+/* =====================================================
+   GENERAR FOLIO
+===================================================== */
+
+function generarFolio(){
+
+const ahora =
+Date.now().toString();
+
+const aleatorio =
+Math.floor(
+1000 + Math.random() * 9000
+);
+
+return 'PAG-' +
+ahora.slice(-8) +
+'-' +
+aleatorio;
+
+}
+
+
+/* =====================================================
+   GENERAR COMPROBANTE COMO IMAGEN
+===================================================== */
+
+function generarComprobante(){
+
+if(!pagoActual){
+
+return;
+
+}
+
+
+/*
+Creamos un canvas grande.
+*/
+
+const canvas =
+document.createElement('canvas');
+
+const ctx =
+canvas.getContext('2d');
+
+canvas.width = 1000;
+
+canvas.height = 1450;
+
+
+/* FONDO */
+
+ctx.fillStyle =
+'#f8fafc';
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+/* TARJETA */
+
+ctx.fillStyle =
+'#ffffff';
+
+ctx.roundRect(
+50,
+50,
+900,
+1350,
+35
+);
+
+ctx.fill();
+
+
+/* ENCABEZADO */
+
+ctx.fillStyle =
+'#0f172a';
+
+ctx.fillRect(
+50,
+50,
+900,
+260
+);
+
+
+/* ICONO */
+
+ctx.fillStyle =
+'#2563eb';
+
+ctx.beginPath();
+
+ctx.arc(
+500,
+135,
+48,
+0,
+Math.PI * 2
+);
+
+ctx.fill();
+
+ctx.fillStyle =
+'#ffffff';
+
+ctx.font =
+'bold 48px Arial';
+
+ctx.textAlign =
+'center';
+
+ctx.fillText(
+'✓',
+500,
+152
+);
+
+
+/* TITULO */
+
+ctx.fillStyle =
+'#ffffff';
+
+ctx.font =
+'bold 38px Arial';
+
+ctx.fillText(
+'SERVICIO PAGADO',
+500,
+215
+);
+
+
+/* FOLIO */
+
+ctx.fillStyle =
+'#64748b';
+
+ctx.font =
+'22px Arial';
+
+ctx.fillText(
+pagoActual.folio,
+500,
+350
+);
+
+
+/* IMPORTE */
+
+ctx.fillStyle =
+'#1d4ed8';
+
+ctx.font =
+'bold 72px Arial';
+
+ctx.fillText(
+formatoMoneda(pagoActual.monto),
+500,
+450
+);
+
+
+/* LINEA */
+
+ctx.strokeStyle =
+'#e2e8f0';
+
+ctx.lineWidth = 3;
+
+ctx.beginPath();
+
+ctx.moveTo(110,500);
+
+ctx.lineTo(890,500);
+
+ctx.stroke();
+
+
+/* DATOS */
+
+ctx.textAlign =
+'left';
+
+function fila(etiqueta,valor,y){
+
+ctx.fillStyle =
+'#64748b';
+
+ctx.font =
+'22px Arial';
+
+ctx.fillText(
+etiqueta,
+120,
+y
+);
+
+ctx.fillStyle =
+'#0f172a';
+
+ctx.font =
+'bold 24px Arial';
+
+ctx.fillText(
+String(valor),
+120,
+y + 35
+);
+
+}
+
+
+fila(
+'CLIENTE',
+pagoActual.cliente,
+570
+);
+
+fila(
+'NUMERO DE SERVICIO',
+pagoActual.servicio,
+680
+);
+
+fila(
+'REFERENCIA',
+pagoActual.referencia,
+790
+);
+
+fila(
+'METODO DE PAGO',
+pagoActual.metodo,
+900
+);
+
+fila(
+'FECHA Y HORA',
+pagoActual.fecha.toLocaleString('es-MX'),
+1010
+);
+
+
+/* QR SIMULADO / IDENTIFICADOR VISUAL */
+
+ctx.fillStyle =
+'#f1f5f9';
+
+ctx.fillRect(
+120,
+1110,
+250,
+180
+);
+
+ctx.fillStyle =
+'#0f172a';
+
+ctx.font =
+'bold 20px Arial';
+
+ctx.textAlign =
+'center';
+
+ctx.fillText(
+'COMPROBANTE',
+245,
+1160
+);
+
+ctx.font =
+'18px Arial';
+
+ctx.fillText(
+pagoActual.folio,
+245,
+1200
+);
+
+ctx.fillText(
+'VALIDACION DIGITAL',
+245,
+1240
+);
+
+
+/* ESTADO */
+
+ctx.fillStyle =
+'#16a34a';
+
+ctx.font =
+'bold 30px Arial';
+
+ctx.fillText(
+'✓ PAGO CONFIRMADO',
+700,
+1190
+);
+
+
+/* PIE */
+
+ctx.fillStyle =
+'#94a3b8';
+
+ctx.font =
+'18px Arial';
+
+ctx.fillText(
+'Conserve este comprobante como referencia.',
+500,
+1340
+);
+
+
+/* CREAR IMAGEN */
+
+const imagen =
+canvas.toDataURL('image/png');
+
+
+document.getElementById(
+'receiptImage'
+).src = imagen;
+
+
+/* BOTON DESCARGA */
+
+document
+.getElementById('downloadReceiptButton')
+.onclick = function(){
+
+const enlace =
+document.createElement('a');
+
+enlace.href = imagen;
+
+enlace.download =
+'comprobante-' +
+pagoActual.folio +
+'.png';
+
+enlace.click();
+
+};
+
+
+/* BOTON IMPRIMIR */
+
+document
+.getElementById('printReceiptButton')
+.onclick = function(){
+
+const ventana =
+window.open(
+'',
+'_blank'
+);
+
+ventana.document.write(`
+
+<html>
+
+<head>
+
+<title>
+Comprobante ${escapeHtml(pagoActual.folio)}
+</title>
+
+<style>
+
+body{
+margin:0;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+background:#fff;
+}
+
+img{
+max-width:95%;
+max-height:95vh;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<img src='${imagen}'>
+
+<script>
+
+window.onload=function(){
+
+window.print();
+
+};
+
+<\/script>
+
+</body>
+
+</html>
+
+`);
+
+ventana.document.close();
+
+};
+
+}
+
+
+/* =====================================================
+   MOSTRAR PAGO
+===================================================== */
+
+function mostrarPagoExitoso(){
+
+if(!pagoActual){
+
+return;
+
+}
+
+const detalles =
+document.getElementById('paymentDetails');
+
+detalles.innerHTML = `
+
+<div class='detail'>
+
+<span>Folio</span>
+
+<span>
+${escapeHtml(pagoActual.folio)}
+</span>
+
+</div>
+
+
+<div class='detail'>
+
+<span>Método</span>
+
+<span>
+${escapeHtml(pagoActual.metodo)}
+</span>
+
+</div>
+
+
+<div class='detail'>
+
+<span>Importe</span>
+
+<span>
+${formatoMoneda(pagoActual.monto)}
+</span>
+
+</div>
+
+
+<div class='detail'>
+
+<span>Servicio</span>
+
+<span>
+${escapeHtml(pagoActual.servicio)}
+</span>
+
+</div>
+
+
+<div class='detail'>
+
+<span>Referencia</span>
+
+<span>
+${escapeHtml(pagoActual.referencia)}
+</span>
+
+</div>
+
+
+<div class='detail'>
+
+<span>Fecha</span>
+
+<span>
+${escapeHtml(
+pagoActual.fecha.toLocaleString('es-MX')
+)}
+</span>
+
+</div>
+
+`;
+
+
+generarComprobante();
+
+mostrarPantalla('paid');
+
+}
+
+
+/* =====================================================
+   EVENTOS
+===================================================== */
+
+document
+.getElementById('searchButton')
+.addEventListener(
+'click',
+buscarServicio
+);
+
+
+document
+.getElementById('serviceInput')
+.addEventListener(
+'keydown',
+function(event){
+
+if(event.key === 'Enter'){
+
+buscarServicio();
+
+}
+
+}
+);
+
+
+document
+.getElementById('balanceButton')
+.addEventListener(
+'click',
+consultarSaldo
+);
+
+
+document
+.getElementById('backSearchButton')
+.addEventListener(
+'click',
+function(){
+
+clienteActual = null;
+
+document.getElementById(
+'serviceInput'
+).value = '';
+
+mostrarPantalla('search');
+
+}
+);
+
+
+document
+.getElementById('backClientButton')
+.addEventListener(
+'click',
+function(){
+
+mostrarPantalla('client');
+
+}
+);
+
+
+document
+.getElementById('redeemButton')
+.addEventListener(
+'click',
+mostrarCanje
+);
+
+
+document
+.getElementById('backBalanceButton')
+.addEventListener(
+'click',
+function(){
+
+mostrarPantalla('balance');
+
+}
+);
+
+
+document
+.getElementById('redeemConfirmButton')
+.addEventListener(
+'click',
+canjearCodigo
+);
+
+
+document
+.getElementById('codeInput')
+.addEventListener(
+'keydown',
+function(event){
+
+if(event.key === 'Enter'){
+
+canjearCodigo();
+
+}
+
+}
+);
+
+
+/* BOTONES DE PAGO */
+
+document
+.querySelectorAll(
+'.payment-btn[data-method]'
+)
+.forEach(function(boton){
+
+boton.addEventListener(
+'click',
+function(){
+
+const metodo =
+boton.getAttribute(
+'data-method'
+);
+
+pagarCon(metodo);
+
+}
+);
+
+});
+
+
+/* FINALIZAR */
+
+document
+.getElementById('finishButton')
+.addEventListener(
+'click',
+function(){
+
+clienteActual = null;
+
+pagoActual = null;
+
+document.getElementById(
+'serviceInput'
+).value = '';
+
+mostrarPantalla('search');
+
+}
+);
+
+
+/* =====================================================
+   MODO DE PRUEBA
+=====================================================
+
+Para probar el comprobante SIN realizar un pago real,
+puedes ejecutar desde la consola:
+
+mostrarPagoExitoso()
+
+Esto genera el comprobante.
+
+IMPORTANTE:
+En producción esta función debe ejecutarse solamente
+después de que tu servidor confirme realmente el pago.
+===================================================== */
+
+</script>
+
+</body>
+</html>
