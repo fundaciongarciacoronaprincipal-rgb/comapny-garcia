@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nuestras Empresas | GRUPO GARCIA CORONA</title>
+
+<style>
+
+:root{
+    --bg:#050b14;
+    --bg2:#091525;
+    --card:#0d1b2d;
+    --primary:#1d73ff;
+    --cyan:#18d7ff;
+    --white:#fff;
+    --text:#dce7f5;
+    --muted:#91a4bb;
+    --border:rgba(255,255,255,.09);
+    --success:#28e0a0;
+    --shadow:0 25px 70px rgba(0,0,0,.35);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(29,115,255,.13),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(24,215,255,.08),
+            transparent 25%
+        ),
+        linear-gradient(
+            180deg,
+            var(--bg),
+            var(--bg2)
+        );
+
+    color:var(--text);
+    min-height:100vh;
+    line-height:1.7;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+    position:relative;
+    min-height:55vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:90px 24px 70px;
+
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+
+    width:650px;
+    height:650px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(29,115,255,.20),
+            transparent 68%
+        );
+
+    top:-250px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    pointer-events:none;
+}
+
+.hero-content{
+    position:relative;
+    max-width:950px;
+    z-index:2;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+
+    padding:8px 15px;
+
+    border:1px solid rgba(24,215,255,.22);
+
+    background:rgba(24,215,255,.06);
+
+    border-radius:50px;
+
+    color:var(--cyan);
+
+    font-size:11px;
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+
+    margin-bottom:25px;
+}
+
+.eyebrow .dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--cyan);
+
+    box-shadow:0 0 12px var(--cyan);
+}
+
+.hero h1{
+    font-size:clamp(40px,6vw,72px);
+
+    line-height:1.05;
+
+    margin-bottom:25px;
+
+    letter-spacing:-2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #d9e9ff 50%,
+            #7beaff
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+}
+
+.hero p{
+    max-width:780px;
+
+    margin:auto;
+
+    color:var(--muted);
+
+    font-size:17px;
+}
+
+.hero p strong{
+    color:#fff;
+}
+
+
+/* =====================================================
+   EMPRESAS
+===================================================== */
+
+.empresas-section{
+    padding:20px 24px 90px;
+}
+
+.container{
+    max-width:1150px;
+    margin:auto;
+}
+
+.section-label{
+    color:var(--cyan);
+
+    text-transform:uppercase;
+
+    letter-spacing:2px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    margin-bottom:12px;
+}
+
+.section-title{
+    color:#fff;
+
+    font-size:38px;
+
+    line-height:1.15;
+
+    margin-bottom:15px;
+}
+
+.section-description{
+    color:var(--muted);
+
+    max-width:800px;
+
+    margin-bottom:45px;
+}
+
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.empresas-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:24px;
+}
+
+
+/* =====================================================
+   TARJETAS
+===================================================== */
+
+.empresa-card{
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.045),
+            rgba(255,255,255,.015)
+        );
+
+    border:1px solid var(--border);
+
+    border-radius:24px;
+
+    padding:18px;
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease,
+        box-shadow .35s ease;
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,.18);
+}
+
+.empresa-card:hover{
+    transform:translateY(-8px);
+
+    border-color:
+        rgba(24,215,255,.30);
+
+    box-shadow:
+        0 25px 65px rgba(0,0,0,.35);
+}
+
+
+/* =====================================================
+   LOGOS
+===================================================== */
+
+.logo-container{
+    height:210px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #0b1727,
+            #07101d
+        );
+
+    border:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:25px;
+
+    overflow:hidden;
+}
+
+.logo{
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+
+    transition:
+        transform .35s ease;
+}
+
+.empresa-card:hover .logo{
+    transform:scale(1.04);
+}
+
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+.logo-placeholder{
+    width:100%;
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+}
+
+.logo-placeholder .icon{
+    width:60px;
+    height:60px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid var(--border);
+
+    color:var(--cyan);
+
+    font-size:25px;
+
+    margin-bottom:15px;
+}
+
+.logo-placeholder span{
+    color:#60758e;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+}
+
+
+/* =====================================================
+   INFORMACIÓN
+===================================================== */
+
+.empresa-info{
+    padding:24px 8px 8px;
+}
+
+.empresa-info h3{
+    color:#fff;
+
+    font-size:23px;
+
+    line-height:1.25;
+
+    margin-bottom:10px;
+}
+
+.empresa-info p{
+    color:var(--muted);
+
+    font-size:14px;
+
+    min-height:70px;
+
+    margin-bottom:18px;
+}
+
+
+/* =====================================================
+   ESTADO
+===================================================== */
+
+.status{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:6px 11px;
+
+    border-radius:30px;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:.8px;
+
+    text-transform:uppercase;
+
+    margin-bottom:18px;
+}
+
+.status.active{
+    color:var(--success);
+
+    background:rgba(40,224,160,.08);
+
+    border:1px solid rgba(40,224,160,.16);
+}
+
+.status.pending{
+    color:#91a4bb;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid var(--border);
+}
+
+.status-dot{
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+}
+
+.active .status-dot{
+    background:var(--success);
+
+    box-shadow:
+        0 0 10px var(--success);
+}
+
+.pending .status-dot{
+    background:#66788e;
+}
+
+
+/* =====================================================
+   BOTONES
+===================================================== */
+
+.btn{
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    width:100%;
+
+    min-height:46px;
+
+    padding:12px 20px;
+
+    border-radius:11px;
+
+    text-decoration:none;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.btn-primary{
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #1256ca
+        );
+
+    box-shadow:
+        0 10px 30px rgba(29,115,255,.22);
+}
+
+.btn-primary:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 14px 35px rgba(29,115,255,.32);
+}
+
+.btn-disabled{
+    color:#64778e;
+
+    background:rgba(255,255,255,.035);
+
+    border:1px solid var(--border);
+
+    cursor:not-allowed;
+
+    opacity:.8;
+}
+
+
+/* =====================================================
+   DERECHOS RESERVADOS
+===================================================== */
+
+.rights{
+    text-align:center;
+
+    padding:35px 20px;
+
+    border-top:1px solid var(--border);
+
+    background:#040910;
+
+    color:#66788e;
+
+    font-size:11px;
+}
+
+
+/* =====================================================
+   ANIMACIÓN
+===================================================== */
+
+.reveal{
+    opacity:0;
+
+    transform:translateY(25px);
+
+    transition:
+        opacity .7s ease,
+        transform .7s ease;
+}
+
+.reveal.visible{
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:1000px){
+
+    .empresas-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+}
+
+
+@media(max-width:700px){
+
+    .hero{
+        min-height:50vh;
+
+        padding:
+            80px 20px 60px;
+    }
+
+    .hero h1{
+        font-size:42px;
+
+        letter-spacing:-1.5px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .empresas-section{
+        padding:
+            10px 20px 65px;
+    }
+
+    .section-title{
+        font-size:30px;
+    }
+
+    .empresas-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     ENCABEZADO
+===================================================== -->
+
+<section class="hero">
+
+
+<div class="hero-content reveal">
+
+    <div class="eyebrow">
+
+        <span class="dot"></span>
+
+        Grupo empresarial
+
+    </div>
+
+
+    <h1>
+
+        Nuestras Empresas
+
+    </h1>
+
+
+    <p>
+
+        Conoce las empresas, proyectos y soluciones
+
+        que forman parte de
+
+        <strong>GRUPO GARCIA CORONA</strong>.
+
+    </p>
+
+</div>
+
+
+</section>
+
+<!-- =====================================================
+     EMPRESAS
+===================================================== -->
+
+<section class="empresas-section">
+
+
+<div class="container">
+
+
+    <div class="section-label reveal">
+
+        01 · Empresas
+
+    </div>
+
+
+    <h2 class="section-title reveal">
+
+        Empresas que forman parte del grupo
+
+    </h2>
+
+
+    <p class="section-description reveal">
+
+        Explora las empresas que actualmente forman
+
+        parte de nuestro grupo empresarial.
+
+    </p>
+
+
+
+    <div class="empresas-grid">
+
+
+
+        <!-- =================================================
+             CORPORATIVO NEXEL DIGITAL
+        ================================================== -->
+
+        <div class="empresa-card reveal">
+
+
+            <div class="logo-container">
+
+                <img
+
+                    src="https://companygarciacorona.com.mx/corporativo_nexel_digital/imagenes/logo_corporativo_nexel_digital_1.png"
+
+                    class="logo"
+
+                    alt="Corporativo Nexel Digital"
+
+                >
+
+            </div>
+
+
+            <div class="empresa-info">
+
+
+                <div class="status active">
+
+                    <span class="status-dot"></span>
+
+                    Sitio oficial disponible
+
+                </div>
+
+
+                <h3>
+
+                    Corporativo Nexel Digital
+
+                </h3>
+
+
+                <p>
+
+                    Empresa enfocada en soluciones
+
+                    digitales, tecnológicas y proyectos
+
+                    orientados a la innovación y al
+
+                    desarrollo de nuevas herramientas.
+
+                </p>
+
+
+                <a
+
+                    href="https://companygarciacorona.com.mx/corporativo_nexel_digital/INDEX.HTML"
+
+                    class="btn btn-primary"
+
+                >
+
+                    Conocer empresa
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             MY MARKET GARCIA CORONA
+        ================================================== -->
+
+        <div class="empresa-card reveal">
+
+
+            <div class="logo-container">
+
+
+                <div class="logo-placeholder">
+
+                    <div class="icon">
+
+                        ◆
+
+                    </div>
+
+
+                    <span>
+
+                        Logotipo próximamente
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="empresa-info">
+
+
+                <div class="status pending">
+
+                    <span class="status-dot"></span>
+
+                    Próximamente
+
+                </div>
+
+
+                <h3>
+
+                    MY MARKET GARCIA CORONA
+
+                </h3>
+
+
+                <p>
+
+                    Proyecto empresarial orientado al
+
+                    comercio, productos, servicios y
+
+                    soluciones para clientes y negocios.
+
+                </p>
+
+
+                <a
+
+                    href="#"
+
+                    class="btn btn-disabled"
+
+                    data-disabled="true"
+
+                >
+
+                    Sitio oficial próximamente
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SDTEI
+        ================================================== -->
+
+        <div class="empresa-card reveal">
+
+
+            <div class="logo-container">
+
+
+                <div class="logo-placeholder">
+
+                    <div class="icon">
+
+                        ◇
+
+                    </div>
+
+
+                    <span>
+
+                        Logotipo próximamente
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="empresa-info">
+
+
+                <div class="status pending">
+
+                    <span class="status-dot"></span>
+
+                    Próximamente
+
+                </div>
+
+
+                <h3>
+
+                    SDTEI
+
+                </h3>
+
+
+                <p>
+
+                    Empresa y proyecto enfocado en
+
+                    soluciones, desarrollo y nuevas
+
+                    oportunidades dentro del grupo
+
+                    empresarial.
+
+                </p>
+
+
+                <a
+
+                    href="#"
+
+                    class="btn btn-disabled"
+
+                    data-disabled="true"
+
+                >
+
+                    Sitio oficial próximamente
+
+                </a>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- =====================================================
+     DERECHOS RESERVADOS
+===================================================== -->
+
+<div class="rights">
+
+
+© 2026 GRUPO GARCIA CORONA. Todos los derechos reservados. 
+
+
+</div>
+
+<script>
+
+/* =====================================================
+   ANIMACIONES
+===================================================== */
+
+const observer = new IntersectionObserver(
+
+    (entries)=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.classList.add("visible");
+
+            }
+
+        });
+
+    },
+
+    {
+        threshold:.12
+    }
+
+);
+
+
+document
+
+    .querySelectorAll(".reveal")
+
+    .forEach(element=>{
+
+        observer.observe(element);
+
+    });
+
+
+
+/* =====================================================
+   ANIMACIÓN INICIAL
+===================================================== */
+
+window.addEventListener("load",()=>{
+
+    document
+
+        .querySelectorAll(".hero .reveal")
+
+        .forEach(element=>{
+
+            setTimeout(()=>{
+
+                element.classList.add("visible");
+
+            },150);
+
+        });
+
+});
+
+
+
+/* =====================================================
+   BOTONES SIN ENLACE OFICIAL
+===================================================== */
+
+document
+
+    .querySelectorAll('[data-disabled="true"]')
+
+    .forEach(button=>{
+
+        button.addEventListener("click",(event)=>{
+
+            event.preventDefault();
+
+        });
+
+    });
+
+</script>
+
+</body>
+
+</html>
