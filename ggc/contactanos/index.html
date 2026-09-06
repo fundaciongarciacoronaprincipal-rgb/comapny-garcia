@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Contactos | GRUPO GARCIA CORONA</title>
+
+<meta name="description" content="Directorio de áreas y canales oficiales de contacto de GRUPO GARCIA CORONA.">
+
+<style>
+
+:root{
+    --bg:#050b14;
+    --bg2:#091525;
+    --card:#0d1b2d;
+    --primary:#1d73ff;
+    --cyan:#18d7ff;
+    --white:#ffffff;
+    --text:#dce7f5;
+    --muted:#91a4bb;
+    --border:rgba(255,255,255,.09);
+    --green:#4ee59a;
+    --shadow:0 25px 70px rgba(0,0,0,.35);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(29,115,255,.13),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(24,215,255,.08),
+            transparent 25%
+        ),
+        linear-gradient(
+            180deg,
+            var(--bg),
+            var(--bg2)
+        );
+
+    color:var(--text);
+    line-height:1.7;
+    min-height:100vh;
+}
+
+
+/* ==========================================
+   HERO
+========================================== */
+
+.hero{
+    position:relative;
+
+    min-height:62vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:100px 24px 80px;
+
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+
+    width:650px;
+    height:650px;
+
+    top:-250px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(29,115,255,.22),
+            transparent 68%
+        );
+
+    pointer-events:none;
+}
+
+.hero::after{
+    content:"";
+
+    position:absolute;
+
+    width:400px;
+    height:400px;
+
+    right:-200px;
+    bottom:-200px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(24,215,255,.11),
+            transparent 70%
+        );
+
+    pointer-events:none;
+}
+
+.hero-content{
+    position:relative;
+
+    max-width:900px;
+
+    z-index:2;
+}
+
+.eyebrow{
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:8px 15px;
+
+    border:1px solid
+        rgba(24,215,255,.22);
+
+    background:
+        rgba(24,215,255,.06);
+
+    border-radius:50px;
+
+    color:var(--cyan);
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+
+    margin-bottom:25px;
+}
+
+.eyebrow .dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:var(--cyan);
+
+    box-shadow:
+        0 0 12px var(--cyan);
+}
+
+.hero h1{
+    font-size:
+        clamp(42px,6vw,76px);
+
+    line-height:1.03;
+
+    margin-bottom:25px;
+
+    letter-spacing:-2.5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #d9e9ff 50%,
+            #7beaff
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+}
+
+.hero p{
+    max-width:760px;
+
+    margin:auto;
+
+    color:var(--muted);
+
+    font-size:17px;
+}
+
+.hero p strong{
+    color:#fff;
+}
+
+
+/* ==========================================
+   SECCIONES
+========================================== */
+
+section{
+    padding:80px 24px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+.section-label{
+    color:var(--cyan);
+
+    text-transform:uppercase;
+
+    letter-spacing:2px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    margin-bottom:12px;
+}
+
+.section-title{
+    font-size:38px;
+
+    line-height:1.15;
+
+    margin-bottom:15px;
+
+    color:var(--white);
+
+    letter-spacing:-.8px;
+}
+
+.section-description{
+    color:var(--muted);
+
+    max-width:780px;
+
+    margin-bottom:45px;
+
+    font-size:15px;
+}
+
+
+/* ==========================================
+   DIRECTORIO
+========================================== */
+
+.directory{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:22px;
+}
+
+
+/* ==========================================
+   TARJETA DE ÁREA
+========================================== */
+
+.area-card{
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.045),
+            rgba(255,255,255,.012)
+        );
+
+    border:1px solid var(--border);
+
+    border-radius:23px;
+
+    padding:30px;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0,0,0,.18);
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease,
+        box-shadow .35s ease;
+}
+
+.area-card::before{
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+    height:220px;
+
+    top:-120px;
+    right:-120px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(24,215,255,.10),
+            transparent 70%
+        );
+
+    pointer-events:none;
+}
+
+.area-card:hover{
+    transform:translateY(-6px);
+
+    border-color:
+        rgba(24,215,255,.25);
+
+    box-shadow:
+        0 25px 60px
+        rgba(0,0,0,.30);
+}
+
+
+/* ==========================================
+   ENCABEZADO ÁREA
+========================================== */
+
+.area-header{
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin-bottom:22px;
+}
+
+.area-number{
+    width:48px;
+    height:48px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(29,115,255,.18),
+            rgba(24,215,255,.08)
+        );
+
+    border:1px solid
+        rgba(24,215,255,.15);
+
+    color:var(--cyan);
+
+    font-size:13px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+}
+
+.area-header h3{
+    color:#fff;
+
+    font-size:20px;
+
+    line-height:1.25;
+}
+
+.area-subtitle{
+    color:var(--muted);
+
+    font-size:12px;
+
+    margin-top:2px;
+}
+
+
+/* ==========================================
+   CONTACTO
+========================================== */
+
+.contact-list{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+}
+
+.contact-item{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:1px solid
+        rgba(255,255,255,.055);
+}
+
+.contact-info{
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    min-width:0;
+}
+
+.contact-icon{
+    width:42px;
+    height:42px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:
+        rgba(29,115,255,.12);
+
+    border:1px solid
+        rgba(29,115,255,.12);
+
+    color:var(--cyan);
+
+    font-size:18px;
+}
+
+.contact-text{
+    min-width:0;
+}
+
+.contact-label{
+    display:block;
+
+    color:#7f93aa;
+
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    font-weight:700;
+}
+
+.contact-value{
+    display:block;
+
+    color:#fff;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    word-break:break-word;
+
+    margin-top:1px;
+}
+
+.contact-value.disabled{
+    color:#596b80;
+    font-weight:500;
+}
+
+
+/* ==========================================
+   BOTÓN
+========================================== */
+
+.contact-button{
+    flex-shrink:0;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:9px 14px;
+
+    min-width:105px;
+
+    border-radius:9px;
+
+    text-decoration:none;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    transition:.3s;
+}
+
+.contact-button.active{
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #1256ca
+        );
+
+    box-shadow:
+        0 8px 22px
+        rgba(29,115,255,.20);
+}
+
+.contact-button.active:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 12px 28px
+        rgba(29,115,255,.30);
+}
+
+.contact-button.disabled{
+    color:#596b80;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:1px solid
+        rgba(255,255,255,.06);
+
+    cursor:not-allowed;
+
+    pointer-events:none;
+}
+
+
+/* ==========================================
+   ESTADO
+========================================== */
+
+.area-status{
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    margin-top:5px;
+
+    color:#63768c;
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    font-weight:700;
+}
+
+.area-status.active{
+    color:var(--green);
+}
+
+.area-status span{
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    background:#63768c;
+}
+
+.area-status.active span{
+    background:var(--green);
+
+    box-shadow:
+        0 0 8px var(--green);
+}
+
+
+/* ==========================================
+   AVISO
+========================================== */
+
+.notice{
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(29,115,255,.12),
+            rgba(24,215,255,.04)
+        ),
+
+        var(--card);
+
+    border:1px solid
+        rgba(29,115,255,.22);
+
+    border-radius:22px;
+
+    padding:28px;
+
+    margin-top:28px;
+
+    box-shadow:var(--shadow);
+}
+
+.notice-icon{
+    width:48px;
+    height:48px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:13px;
+
+    background:
+        rgba(29,115,255,.12);
+
+    color:var(--cyan);
+
+    font-size:21px;
+}
+
+.notice h3{
+    color:#fff;
+
+    font-size:18px;
+
+    margin-bottom:5px;
+}
+
+.notice p{
+    color:var(--muted);
+
+    font-size:14px;
+}
+
+
+/* ==========================================
+   CONTACTO GENERAL
+========================================== */
+
+.main-contact{
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(24,215,255,.13),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 0% 100%,
+            rgba(29,115,255,.12),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            135deg,
+            #0d1d32,
+            #0a1422
+        );
+
+    border:1px solid
+        rgba(24,215,255,.16);
+
+    border-radius:26px;
+
+    padding:50px 40px;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+}
+
+.main-contact h2{
+    color:#fff;
+
+    font-size:34px;
+
+    line-height:1.2;
+
+    margin-bottom:14px;
+}
+
+.main-contact p{
+    color:var(--muted);
+
+    max-width:700px;
+
+    margin:0 auto;
+
+    font-size:15px;
+}
+
+
+/* ==========================================
+   DERECHOS
+========================================== */
+
+.rights{
+    text-align:center;
+
+    padding:35px 20px;
+
+    border-top:1px solid var(--border);
+
+    background:#040910;
+
+    color:#66788e;
+
+    font-size:11px;
+}
+
+.rights strong{
+    color:#91a4bb;
+}
+
+
+/* ==========================================
+   ANIMACIONES
+========================================== */
+
+.reveal{
+    opacity:0;
+
+    transform:translateY(25px);
+
+    transition:
+        opacity .7s ease,
+        transform .7s ease;
+}
+
+.reveal.visible{
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:850px){
+
+    .directory{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .hero{
+        min-height:58vh;
+
+        padding:
+            85px 20px 65px;
+    }
+
+    .hero h1{
+        font-size:42px;
+
+        letter-spacing:-1.5px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    section{
+        padding:65px 20px;
+    }
+
+    .section-title{
+        font-size:30px;
+    }
+
+    .area-card{
+        padding:24px 20px;
+    }
+
+    .contact-item{
+        align-items:flex-start;
+
+        flex-direction:column;
+    }
+
+    .contact-button{
+        width:100%;
+    }
+
+    .notice{
+        flex-direction:column;
+    }
+
+    .main-contact{
+        padding:35px 22px;
+    }
+
+    .main-contact h2{
+        font-size:28px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     HERO
+================================================== -->
+
+<section class="hero">
+
+<div class="hero-content reveal">
+
+<div class="eyebrow">
+
+<span class="dot"></span>
+
+Directorio corporativo
+
+</div>
+
+<h1>
+
+Contacta con<br>
+nuestro equipo
+
+</h1>
+
+<p>
+
+Encuentra los canales de contacto correspondientes
+a cada área de <strong>GRUPO GARCIA CORONA</strong>.
+Cada departamento cuenta con sus propios medios
+de comunicación.
+
+</p>
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+     DIRECTORIO
+================================================== -->
+
+<section>
+
+<div class="container">
+
+
+<div class="section-label reveal">
+
+01 · Directorio
+
+</div>
+
+
+<h2 class="section-title reveal">
+
+Áreas de contacto
+
+</h2>
+
+
+<p class="section-description reveal">
+
+Selecciona el área con la que deseas comunicarte.
+Los teléfonos y correos que todavía no hayan sido
+configurados permanecerán desactivados.
+
+</p>
+
+
+<div class="directory" id="directory">
+
+
+<!-- LAS 10 ÁREAS SE GENERAN AUTOMÁTICAMENTE -->
+
+
+</div>
+
+
+<div class="notice reveal">
+
+<div class="notice-icon">
+ℹ
+</div>
+
+<div>
+
+<h3>
+Canales pendientes de configuración
+</h3>
+
+<p>
+
+Los medios que aparezcan como
+<strong>“No disponible”</strong> todavía no han sido
+configurados. Para activarlos solamente debes agregar
+el número telefónico o correo correspondiente en la
+sección de configuración del código.
+
+</p>
+
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+     CONTACTO GENERAL
+================================================== -->
+
+<section>
+
+<div class="container">
+
+<div class="main-contact reveal">
+
+<h2>
+Atención corporativa
+</h2>
+
+<p>
+
+Para asuntos generales, selecciona el área correspondiente
+en nuestro directorio. De esta manera tu solicitud podrá
+ser dirigida al departamento adecuado.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- ==================================================
+     DERECHOS RESERVADOS
+================================================== -->
+
+<div class="rights">
+
+© 2026
+<strong>GRUPO GARCIA CORONA</strong>.
+Todos los derechos reservados.
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================================
+   CONFIGURACIÓN DE LAS 10 ÁREAS
+
+   AQUÍ ES DONDE DEBES COLOCAR LOS DATOS REALES.
+
+   Si dejas teléfono y correo vacíos:
+   → permanecerán DESACTIVADOS.
+
+   Si colocas un teléfono:
+   → se activa automáticamente "Llamar".
+
+   Si colocas un correo:
+   → se activa automáticamente "Enviar correo".
+
+========================================================= */
+
+
+const areas = [
+
+
+    /* =====================================================
+       01 · DIRECCIÓN GENERAL
+    ===================================================== */
+
+    {
+        nombre:"Dirección General",
+
+        descripcion:
+        "Atención relacionada con la dirección y asuntos generales del grupo.",
+
+        telefono:"",
+
+        correo:""
+    },
+
+
+    /* =====================================================
+       02 · ATENCIÓN AL CLIENTE
+    ===================================================== */
+
+    {
+        nombre:"Atención al Cliente",
+
+        descripcion:
+        "Consultas, solicitudes y atención para clientes.",
+
+        telefono:"",
+
+        correo:""
+    },
+
+
+    /* =====================================================
+       03 · SOPORTE TÉCNICO
+    ===================================================== */
+
+    {
+        nombre:"Soporte Técnico",
+
+        descripcion:
+        "Asistencia técnica para plataformas, sistemas y servicios.",
+
+        telefono:"",
+
+        correo:""
+    },
+
+
+    /* =====================================================
+       04 · VENTAS
+    ===================================================== */
+
+    {
+        nombre:"Ventas",
+
+        descripcion:
+        "Información comercial, productos, servicios y oportunidades.",
+
+        telefono:"",
+
+        correo:""
+    },
+
+
+    /* =====================================================
+       05 · RECURSOS HUMANOS
+    ===================================================== */
+
+    {
+        nombre:"Recursos Humanos",
+
+        descripcion:
+        "Atención relacionada con personal, colaboradores y oportunidades laborales.",
+
+        telefono:"",
+
+        correo:""
+    },
+
+
+    /* =====================================================
+       06 · ADMINISTRACIÓN
+    ===================================================== */
+
+    {
+        nombre:"Administración",
+
+        descripcion:
+        "Asuntos administrativos y gestión interna.",
+
+        telefono:"",
+
+        correo:""
+    },
+
+
+    /* =====================================================
+       07 · CONTABILIDAD Y FINANZAS
+    ===================================================== */
+
+    {
+        nombre:"Contabilidad y Finanzas",
+
+        descripcion:
+        "Asuntos contables, financieros, facturación y pagos.",
+
+        telefono:"",
+
+        correo:""
+    },
+
+
+    /* =====================================================
+       08 · MARKETING Y COMUNICACIÓN
+    ===================================================== */
+
+    {
+        nombre:"Marketing y Comunicación",
+
+        descripcion:
+        "Comunicación corporativa, publicidad y relaciones digitales.",
+
+        telefono:"",
+
+        correo:""
+    },
+
+
+    /* =====================================================
+       09 · PROYECTOS Y DESARROLLO
+    ===================================================== */
+
+    {
+        nombre:"Proyectos y Desarrollo",
+
+        descripcion:
+        "Información sobre proyectos, colaboraciones y desarrollo empresarial.",
+
+        telefono:"",
+
+        correo:""
+    },
+
+
+    /* =====================================================
+       10 · ASUNTOS LEGALES
+    ===================================================== */
+
+    {
+        nombre:"Asuntos Legales",
+
+        descripcion:
+        "Consultas relacionadas con documentación y asuntos legales.",
+
+        telefono:"",
+
+        correo:""
+    }
+
+];
+
+
+
+/* =========================================================
+   CREAR DIRECTORIO
+========================================================= */
+
+const directory =
+document.getElementById("directory");
+
+
+
+areas.forEach((area,index)=>{
+
+
+    const telefonoActivo =
+        area.telefono &&
+        area.telefono.trim() !== "";
+
+
+    const correoActivo =
+        area.correo &&
+        area.correo.trim() !== "";
+
+
+    const areaActiva =
+        telefonoActivo ||
+        correoActivo;
+
+
+    const numero =
+        String(index + 1)
+        .padStart(2,"0");
+
+
+    const card =
+        document.createElement("div");
+
+
+    card.className =
+        "area-card reveal";
+
+
+    /* =====================================================
+       TELÉFONO
+    ===================================================== */
+
+    let telefonoHTML;
+
+
+    if(telefonoActivo){
+
+        const telefonoURL =
+            area.telefono
+            .replace(/[^\d+]/g,"");
+
+
+        telefonoHTML = `
+
+            <div class="contact-item">
+
+                <div class="contact-info">
+
+                    <div class="contact-icon">
+                        ☎
+                    </div>
+
+                    <div class="contact-text">
+
+                        <span class="contact-label">
+                            Teléfono
+                        </span>
+
+                        <span class="contact-value">
+                            ${area.telefono}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="tel:${telefonoURL}"
+                    class="contact-button active"
+                >
+
+                    Llamar
+
+                </a>
+
+            </div>
+
+        `;
+
+    }else{
+
+        telefonoHTML = `
+
+            <div class="contact-item">
+
+                <div class="contact-info">
+
+                    <div class="contact-icon">
+                        ☎
+                    </div>
+
+                    <div class="contact-text">
+
+                        <span class="contact-label">
+                            Teléfono
+                        </span>
+
+                        <span class="contact-value disabled">
+                            No disponible
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="contact-button disabled"
+                    aria-disabled="true"
+                >
+
+                    Desactivado
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+
+    /* =====================================================
+       CORREO
+    ===================================================== */
+
+    let correoHTML;
+
+
+    if(correoActivo){
+
+        correoHTML = `
+
+            <div class="contact-item">
+
+                <div class="contact-info">
+
+                    <div class="contact-icon">
+                        ✉
+                    </div>
+
+                    <div class="contact-text">
+
+                        <span class="contact-label">
+                            Correo electrónico
+                        </span>
+
+                        <span class="contact-value">
+                            ${area.correo}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="mailto:${area.correo}"
+                    class="contact-button active"
+                >
+
+                    Enviar correo
+
+                </a>
+
+            </div>
+
+        `;
+
+    }else{
+
+        correoHTML = `
+
+            <div class="contact-item">
+
+                <div class="contact-info">
+
+                    <div class="contact-icon">
+                        ✉
+                    </div>
+
+                    <div class="contact-text">
+
+                        <span class="contact-label">
+                            Correo electrónico
+                        </span>
+
+                        <span class="contact-value disabled">
+                            No disponible
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="contact-button disabled"
+                    aria-disabled="true"
+                >
+
+                    Desactivado
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+
+    /* =====================================================
+       ESTADO
+    ===================================================== */
+
+    const estadoHTML = areaActiva
+
+        ? `
+
+            <div class="area-status active">
+
+                <span></span>
+
+                Canal disponible
+
+            </div>
+
+        `
+
+        : `
+
+            <div class="area-status">
+
+                <span></span>
+
+                Canales pendientes
+
+            </div>
+
+        `;
+
+
+
+    /* =====================================================
+       TARJETA COMPLETA
+    ===================================================== */
+
+    card.innerHTML = `
+
+        <div class="area-header">
+
+            <div class="area-number">
+
+                ${numero}
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    ${area.nombre}
+                </h3>
+
+                <div class="area-subtitle">
+
+                    Área corporativa
+
+                </div>
+
+                ${estadoHTML}
+
+            </div>
+
+        </div>
+
+
+        <div class="contact-list">
+
+            ${telefonoHTML}
+
+            ${correoHTML}
+
+        </div>
+
+    `;
+
+
+    directory.appendChild(card);
+
+});
+
+
+
+/* =========================================================
+   ANIMACIONES
+========================================================= */
+
+const observer =
+new IntersectionObserver(
+
+(entries)=>{
+
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
+
+            entry.target
+                .classList
+                .add("visible");
+
+        }
+
+    });
+
+},
+
+{
+    threshold:.10
+}
+
+);
+
+
+document
+.querySelectorAll(".reveal")
+.forEach(element=>{
+
+    observer.observe(element);
+
+});
+
+
+
+/* =========================================================
+   ANIMACIÓN DEL HERO
+========================================================= */
+
+window.addEventListener(
+    "load",
+    ()=>{
+
+        document
+        .querySelectorAll(".hero .reveal")
+        .forEach(element=>{
+
+            setTimeout(()=>{
+
+                element
+                    .classList
+                    .add("visible");
+
+            },150);
+
+        });
+
+    }
+);
+
+</script>
+
+
+</body>
+</html>
