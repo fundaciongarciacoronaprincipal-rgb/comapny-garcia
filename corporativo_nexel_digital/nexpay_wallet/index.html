@@ -1,0 +1,4343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>NexPay Wallet</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:"Segoe UI",Arial,sans-serif;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top left,#2563eb 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#7c3aed 0%,transparent 35%),
+        linear-gradient(135deg,#07111f,#0f172a,#111827);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    color:#111827;
+}
+
+.container{
+    width:100%;
+    max-width:460px;
+    min-height:620px;
+    background:rgba(255,255,255,.97);
+    border:1px solid rgba(255,255,255,.4);
+    border-radius:30px;
+    padding:28px;
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.45),
+        0 0 0 1px rgba(255,255,255,.08);
+    position:relative;
+    overflow:hidden;
+}
+
+.container::before{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    background:#2563eb;
+    filter:blur(90px);
+    opacity:.15;
+    top:-80px;
+    right:-60px;
+    pointer-events:none;
+}
+
+.seccion{
+    display:none;
+    animation:aparecer .35s ease;
+}
+
+.active{
+    display:block;
+}
+
+@keyframes aparecer{
+    from{
+        opacity:0;
+        transform:translateY(12px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.logo{
+    width:70px;
+    height:70px;
+    border-radius:22px;
+    margin:10px auto 18px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    font-size:28px;
+    font-weight:900;
+    box-shadow:0 12px 30px rgba(37,99,235,.35);
+}
+
+.logo.smallLogo{
+    width:48px;
+    height:48px;
+    border-radius:15px;
+    font-size:18px;
+    margin:0;
+}
+
+h1{
+    text-align:center;
+    font-size:34px;
+    font-weight:900;
+    letter-spacing:-1px;
+    color:#0f172a;
+}
+
+h2{
+    color:#0f172a;
+    text-align:center;
+    margin:10px 0 22px;
+    font-size:25px;
+}
+
+h3{
+    color:#0f172a;
+}
+
+.subtitulo{
+    text-align:center;
+    color:#64748b;
+    margin-top:8px;
+    font-size:14px;
+}
+
+.inicioHeader{
+    padding:30px 0 35px;
+}
+
+.inicioHeader p{
+    text-align:center;
+    color:#64748b;
+    line-height:1.6;
+    margin-top:12px;
+}
+
+.beneficios{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin:20px 0;
+}
+
+.beneficio{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    border-radius:16px;
+    padding:14px 7px;
+    text-align:center;
+}
+
+.beneficioIcon{
+    font-size:22px;
+    margin-bottom:6px;
+}
+
+.beneficio span{
+    display:block;
+    font-size:11px;
+    color:#64748b;
+}
+
+button{
+    width:100%;
+    border:none;
+    border-radius:15px;
+    padding:15px;
+    margin-top:12px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+    box-shadow:0 8px 20px rgba(37,99,235,.20);
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 12px 25px rgba(37,99,235,.30);
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+.btnSecundario{
+    background:#f1f5f9;
+    color:#334155;
+    box-shadow:none;
+}
+
+.btnSecundario:hover{
+    background:#e2e8f0;
+    box-shadow:none;
+}
+
+.btnRojo{
+    background:linear-gradient(135deg,#ef4444,#dc2626);
+}
+
+.btnVerde{
+    background:linear-gradient(135deg,#10b981,#059669);
+}
+
+.btnIcon{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+}
+
+.inputGroup{
+    margin-bottom:14px;
+}
+
+.inputGroup label{
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    color:#475569;
+    margin-bottom:7px;
+}
+
+input{
+    width:100%;
+    padding:15px 16px;
+    border-radius:14px;
+    border:1px solid #dbe3ed;
+    background:#f8fafc;
+    outline:none;
+    font-size:15px;
+    color:#0f172a;
+    transition:.2s;
+}
+
+input:focus{
+    border-color:#2563eb;
+    background:white;
+    box-shadow:0 0 0 4px rgba(37,99,235,.10);
+}
+
+.walletTop{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.walletTopText{
+    flex:1;
+}
+
+.walletTopText strong{
+    display:block;
+    color:#0f172a;
+    font-size:16px;
+}
+
+.walletTopText span{
+    font-size:12px;
+    color:#64748b;
+}
+
+.walletMenu{
+    width:42px;
+    height:42px;
+    border-radius:14px;
+    background:#f1f5f9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.saldoCard{
+    position:relative;
+    width:100%;
+    height:240px;
+    border-radius:25px;
+    padding:24px;
+    color:white;
+    margin-bottom:20px;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 90% 15%,rgba(255,255,255,.25),transparent 25%),
+        linear-gradient(135deg,#172554,#2563eb 55%,#7c3aed);
+    box-shadow:0 18px 35px rgba(37,99,235,.28);
+}
+
+.saldoCard::before{
+    content:"";
+    position:absolute;
+    width:190px;
+    height:190px;
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:50%;
+    right:-70px;
+    bottom:-80px;
+}
+
+.saldoCard::after{
+    content:"";
+    position:absolute;
+    width:120px;
+    height:120px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:50%;
+    right:-25px;
+    bottom:-40px;
+}
+
+.walletTitle{
+    position:absolute;
+    top:22px;
+    right:23px;
+    font-size:12px;
+    letter-spacing:1px;
+    font-weight:800;
+    opacity:.9;
+}
+
+.chip{
+    width:52px;
+    height:37px;
+    border-radius:9px;
+    position:absolute;
+    top:25px;
+    left:24px;
+    background:
+        linear-gradient(90deg,transparent 45%,rgba(0,0,0,.15) 46%,transparent 49%),
+        linear-gradient(0deg,transparent 45%,rgba(0,0,0,.15) 46%,transparent 49%),
+        linear-gradient(135deg,#fde68a,#f59e0b);
+    border:1px solid rgba(255,255,255,.4);
+}
+
+.saldoLabel{
+    position:absolute;
+    top:85px;
+    left:25px;
+    font-size:12px;
+    opacity:.75;
+}
+
+.saldoNumero{
+    position:absolute;
+    top:103px;
+    left:24px;
+    font-size:34px;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.usuarioCardNombre{
+    position:absolute;
+    left:25px;
+    bottom:45px;
+    font-size:14px;
+    font-weight:700;
+}
+
+.datosInferiores{
+    position:absolute;
+    left:25px;
+    bottom:17px;
+    display:flex;
+    gap:40px;
+}
+
+.datoBox{
+    display:flex;
+    flex-direction:column;
+}
+
+.small{
+    font-size:9px;
+    opacity:.65;
+    margin:0;
+    letter-spacing:.6px;
+}
+
+.infoValor{
+    font-size:12px;
+    font-weight:700;
+    margin-top:3px;
+}
+
+.acciones{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.accion{
+    margin-top:0;
+    padding:16px 10px;
+    border-radius:17px;
+    background:#f8fafc;
+    color:#0f172a;
+    border:1px solid #e2e8f0;
+    box-shadow:none;
+    font-size:13px;
+}
+
+.accion:hover{
+    background:#eef2ff;
+    border-color:#c7d2fe;
+    box-shadow:none;
+}
+
+.accionIcon{
+    font-size:22px;
+    display:block;
+    margin-bottom:7px;
+}
+
+.card{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    padding:18px;
+    border-radius:18px;
+    margin-top:18px;
+}
+
+.sectionHeader{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:22px;
+}
+
+.sectionHeader h2{
+    flex:1;
+    margin:0;
+    text-align:left;
+}
+
+.backButton{
+    width:42px;
+    height:42px;
+    margin:0;
+    padding:0;
+    border-radius:13px;
+    background:#f1f5f9;
+    color:#334155;
+    box-shadow:none;
+    font-size:20px;
+}
+
+.infoServicio{
+    text-align:center;
+}
+
+.saldoPendiente{
+    font-size:24px;
+    font-weight:800;
+    color:#2563eb;
+    margin:8px 0 18px;
+}
+
+.movimientoResumen{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.movimientoItem{
+    background:white;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:12px;
+    box-shadow:0 5px 15px rgba(15,23,42,.05);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.movimientoItem:hover{
+    transform:translateY(-2px);
+    border-color:#c7d2fe;
+    box-shadow:0 12px 25px rgba(37,99,235,.12);
+}
+
+.movimientoSuperior{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.movimientoTipo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:800;
+    color:#0f172a;
+    font-size:14px;
+}
+
+.movimientoIcon{
+    width:40px;
+    height:40px;
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eef2ff;
+    font-size:19px;
+}
+
+.movimientoMonto{
+    font-size:16px;
+    font-weight:900;
+    color:#2563eb;
+    white-space:nowrap;
+}
+
+.movimientoFecha{
+    font-size:11px;
+    color:#94a3b8;
+    margin-top:4px;
+}
+
+.movimientoDetalle{
+    margin-top:13px;
+    padding-top:12px;
+    border-top:1px solid #f1f5f9;
+}
+
+.movimientoDato{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    font-size:12px;
+    margin-top:7px;
+}
+
+.movimientoDato span:first-child{
+    color:#94a3b8;
+}
+
+.movimientoDato span:last-child{
+    color:#334155;
+    font-weight:600;
+    text-align:right;
+    word-break:break-word;
+}
+
+.movimientoSaldo{
+    margin-top:12px;
+    padding:10px;
+    border-radius:12px;
+    background:#f8fafc;
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+}
+
+.movimientoSaldo strong{
+    color:#059669;
+}
+
+.footer{
+    text-align:center;
+    color:#94a3b8;
+    font-size:11px;
+    margin-top:22px;
+}
+
+.qrAcciones{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:10px;
+}
+
+.qrAccion{
+    margin-top:0;
+    padding:15px 8px;
+    border-radius:17px;
+    background:#eef2ff;
+    color:#1e3a8a;
+    border:1px solid #c7d2fe;
+    box-shadow:none;
+    font-size:13px;
+}
+
+.qrAccion:hover{
+    background:#e0e7ff;
+    box-shadow:none;
+}
+
+.qrBox{
+    background:white;
+    border:1px solid #e2e8f0;
+    border-radius:22px;
+    padding:20px;
+    text-align:center;
+    margin-top:18px;
+}
+
+#qrcode{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:230px;
+}
+
+#qrcode img,
+#qrcode canvas{
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+}
+
+.qrDato{
+    margin-top:14px;
+    font-size:12px;
+    color:#64748b;
+    line-height:1.6;
+    word-break:break-word;
+}
+
+.scannerBox{
+    overflow:hidden;
+    border-radius:20px;
+    background:#0f172a;
+    margin-top:18px;
+    min-height:260px;
+}
+
+#qr-reader{
+    width:100%;
+}
+
+#qr-reader video{
+    width:100%!important;
+    border-radius:20px;
+}
+
+#qr-reader__dashboard{
+    padding:10px!important;
+    background:white;
+}
+
+.scannerEstado{
+    text-align:center;
+    color:#64748b;
+    font-size:12px;
+    margin-top:10px;
+    line-height:1.5;
+}
+
+.destinoDetectado{
+    background:#ecfdf5;
+    border:1px solid #a7f3d0;
+    color:#065f46;
+    border-radius:15px;
+    padding:13px;
+    margin-top:15px;
+    font-size:13px;
+    display:none;
+}
+
+/* MODAL */
+
+.modalOverlay{
+    position:fixed;
+    inset:0;
+    background:rgba(2,6,23,.68);
+    backdrop-filter:blur(8px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:9999;
+}
+
+.modalOverlay.active{
+    display:flex;
+}
+
+.modalCaja{
+    width:100%;
+    max-width:390px;
+    background:white;
+    border-radius:25px;
+    padding:26px;
+    text-align:center;
+    box-shadow:0 30px 80px rgba(0,0,0,.35);
+    animation:modalEntrada .25s ease;
+}
+
+@keyframes modalEntrada{
+    from{
+        opacity:0;
+        transform:scale(.92) translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
+}
+
+.modalIcon{
+    width:70px;
+    height:70px;
+    margin:0 auto 16px;
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    background:linear-gradient(135deg,#dbeafe,#ede9fe);
+}
+
+.modalCaja h3{
+    font-size:21px;
+    margin-bottom:8px;
+}
+
+.modalCaja p{
+    color:#64748b;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.modalBotones{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:20px;
+}
+
+.modalBotones button{
+    margin-top:0;
+}
+
+/* COMPROBANTE */
+
+.comprobanteWrapper{
+    padding-bottom:10px;
+}
+
+.comprobante{
+    width:100%;
+    background:#fff;
+    border-radius:24px;
+    overflow:hidden;
+    border:1px solid #e2e8f0;
+    box-shadow:0 15px 40px rgba(15,23,42,.10);
+}
+
+.comprobanteHeader{
+    padding:25px 22px;
+    color:white;
+    background:linear-gradient(135deg,#172554,#2563eb,#7c3aed);
+    text-align:center;
+}
+
+.comprobanteLogo{
+    width:54px;
+    height:54px;
+    border-radius:17px;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 10px;
+    font-size:22px;
+    font-weight:900;
+}
+
+.comprobanteMarca{
+    font-size:21px;
+    font-weight:900;
+    letter-spacing:.5px;
+}
+
+.comprobanteSub{
+    font-size:11px;
+    opacity:.8;
+    margin-top:4px;
+}
+
+.comprobanteEstado{
+    margin:18px auto 0;
+    width:max-content;
+    padding:7px 13px;
+    border-radius:50px;
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.25);
+    font-size:11px;
+    font-weight:800;
+}
+
+.comprobanteCuerpo{
+    padding:22px;
+}
+
+.comprobanteOperacion{
+    text-align:center;
+    padding-bottom:20px;
+    border-bottom:1px dashed #cbd5e1;
+}
+
+.comprobanteOperacion small{
+    display:block;
+    color:#94a3b8;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.comprobanteOperacion strong{
+    display:block;
+    font-size:30px;
+    color:#0f172a;
+    margin-top:5px;
+}
+
+.comprobanteOperacion span{
+    display:block;
+    color:#64748b;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.comprobanteFila{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:11px 0;
+    border-bottom:1px solid #f1f5f9;
+    font-size:12px;
+}
+
+.comprobanteFila:last-child{
+    border-bottom:none;
+}
+
+.comprobanteFila .label{
+    color:#94a3b8;
+}
+
+.comprobanteFila .valor{
+    color:#0f172a;
+    font-weight:700;
+    text-align:right;
+    max-width:60%;
+    word-break:break-word;
+}
+
+.comprobanteSaldo{
+    margin-top:15px;
+    padding:14px;
+    border-radius:15px;
+    background:#f8fafc;
+}
+
+.comprobanteSaldoFila{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    margin-top:7px;
+}
+
+.comprobanteSaldoFila:first-child{
+    margin-top:0;
+}
+
+.comprobanteSaldoFila span{
+    color:#64748b;
+}
+
+.comprobanteSaldoFila strong{
+    color:#059669;
+}
+
+.comprobanteFooter{
+    padding:15px 20px;
+    background:#f8fafc;
+    border-top:1px solid #e2e8f0;
+    text-align:center;
+    font-size:9px;
+    line-height:1.5;
+    color:#94a3b8;
+}
+
+.comprobanteAcciones{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:14px;
+}
+
+.comprobanteAcciones button{
+    margin-top:0;
+    font-size:12px;
+    padding:13px 8px;
+}
+
+.comprobanteAcciones .ancho{
+    grid-column:1 / -1;
+}
+
+/* DETALLE */
+
+.modalDetalle{
+    position:fixed;
+    inset:0;
+    background:rgba(2,6,23,.75);
+    backdrop-filter:blur(8px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+    z-index:10000;
+    overflow-y:auto;
+}
+
+.modalDetalle.active{
+    display:flex;
+}
+
+.detalleCaja{
+    width:100%;
+    max-width:430px;
+    max-height:95vh;
+    overflow-y:auto;
+    background:#f8fafc;
+    border-radius:25px;
+    padding:18px;
+    box-shadow:0 30px 80px rgba(0,0,0,.40);
+}
+
+.detalleTitulo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.detalleTitulo h3{
+    flex:1;
+    font-size:18px;
+}
+
+.cerrarDetalle{
+    width:38px;
+    height:38px;
+    padding:0;
+    margin:0;
+    border-radius:12px;
+    background:#e2e8f0;
+    color:#334155;
+    box-shadow:none;
+    font-size:18px;
+}
+
+.detalleComprobante{
+    background:white;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:500px){
+
+    body{
+        padding:0;
+        align-items:stretch;
+    }
+
+    .container{
+        min-height:100vh;
+        border-radius:0;
+        max-width:none;
+        padding:24px 20px;
+    }
+
+    .saldoCard{
+        height:225px;
+    }
+
+    .saldoNumero{
+        font-size:30px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- INICIO -->
+
+<div id="inicio" class="seccion active">
+
+    <div class="inicioHeader">
+
+        <div class="logo">N</div>
+
+        <h1>NexPay</h1>
+
+        <p class="subtitulo">
+            Tu billetera digital, simple y segura
+        </p>
+
+        <p>
+            Administra tu saldo, realiza transferencias
+            y paga tus servicios desde un solo lugar.
+        </p>
+
+    </div>
+
+    <div class="beneficios">
+
+        <div class="beneficio">
+            <div class="beneficioIcon">💳</div>
+            <span>Billetera digital</span>
+        </div>
+
+        <div class="beneficio">
+            <div class="beneficioIcon">⚡</div>
+            <span>Transferencias</span>
+        </div>
+
+        <div class="beneficio">
+            <div class="beneficioIcon">🔒</div>
+            <span>Acceso seguro</span>
+        </div>
+
+    </div>
+
+    <button class="btnIcon" onclick="mostrar('login')">
+        🔐 Iniciar sesión
+    </button>
+
+    <button class="btnSecundario btnIcon" onclick="mostrar('registro')">
+        ✨ Crear una cuenta
+    </button>
+
+    <div class="footer">
+        NexPay Wallet · Plataforma digital
+    </div>
+
+</div>
+
+<!-- LOGIN -->
+
+<div id="login" class="seccion">
+
+    <div class="sectionHeader">
+
+        <button class="backButton" onclick="mostrar('inicio')">
+            ←
+        </button>
+
+        <h2>Iniciar sesión</h2>
+
+    </div>
+
+    <div class="logo smallLogo" style="margin-bottom:22px;">
+        N
+    </div>
+
+    <div class="inputGroup">
+
+        <label>USUARIO</label>
+
+        <input
+            type="text"
+            id="loginUsuario"
+            placeholder="Ingresa tu usuario"
+            autocomplete="username"
+        >
+
+    </div>
+
+    <div class="inputGroup">
+
+        <label>CONTRASEÑA</label>
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Ingresa tu contraseña"
+            autocomplete="current-password"
+        >
+
+    </div>
+
+    <button onclick="iniciarSesion()">
+        Entrar a NexPay
+    </button>
+
+</div>
+
+<!-- REGISTRO -->
+
+<div id="registro" class="seccion">
+
+    <div class="sectionHeader">
+
+        <button class="backButton" onclick="mostrar('inicio')">
+            ←
+        </button>
+
+        <h2>Crear cuenta</h2>
+
+    </div>
+
+    <div class="card">
+
+        <p style="font-size:13px;color:#64748b;line-height:1.5;">
+            Crea tus datos de acceso para comenzar
+            a utilizar NexPay Wallet.
+        </p>
+
+    </div>
+
+    <div class="inputGroup">
+
+        <label>USUARIO</label>
+
+        <input
+            type="text"
+            id="nuevoUsuario"
+            placeholder="Ej. usuario123"
+        >
+
+    </div>
+
+    <div class="inputGroup">
+
+        <label>CONTRASEÑA</label>
+
+        <input
+            type="password"
+            id="nuevoPassword"
+            placeholder="Crea una contraseña"
+        >
+
+    </div>
+
+    <button onclick="crearCuenta()">
+        Crear cuenta
+    </button>
+
+</div>
+
+<!-- WALLET -->
+
+<div id="wallet" class="seccion">
+
+    <div class="walletTop">
+
+        <div class="logo smallLogo">
+            N
+        </div>
+
+        <div class="walletTopText">
+
+            <strong>NexPay Wallet</strong>
+
+            <span>Cuenta digital</span>
+
+        </div>
+
+        <div class="walletMenu">
+            ⋮
+        </div>
+
+    </div>
+
+    <h2 id="saludoUsuario">
+        ¡HOLA! BIENVENID@
+    </h2>
+
+    <div class="saldoCard">
+
+        <div class="walletTitle">
+            NEXPAY WALLET
+        </div>
+
+        <div class="chip"></div>
+
+        <div class="saldoLabel">
+            SALDO DISPONIBLE
+        </div>
+
+        <div class="saldoNumero" id="saldoTexto">
+            $0.00
+        </div>
+
+        <div class="usuarioCardNombre" id="usuarioCardNombre">
+            usuario
+        </div>
+
+        <div class="datosInferiores">
+
+            <div class="datoBox">
+
+                <p class="small">
+                    IDENTIFICADOR
+                </p>
+
+                <p class="infoValor" id="clabeInfoCard">
+                    0000000000
+                </p>
+
+            </div>
+
+            <div class="datoBox">
+
+                <p class="small">
+                    REFERENCIA
+                </p>
+
+                <p class="infoValor" id="referenciaInfoCard">
+                    0000000
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="acciones">
+
+        <button class="accion" onclick="mostrarPagoServicio()">
+            <span class="accionIcon">🧾</span>
+            Pagar servicio
+        </button>
+
+        <button class="accion" onclick="mostrarTransferencia()">
+            <span class="accionIcon">💸</span>
+            Transferir
+        </button>
+
+        <button class="accion" onclick="mostrarCanje()">
+            <span class="accionIcon">🎁</span>
+            Canjear código
+        </button>
+
+        <button class="accion" onclick="mostrarMovimientos()">
+            <span class="accionIcon">📋</span>
+            Movimientos
+        </button>
+
+    </div>
+
+    <div class="qrAcciones">
+
+        <button class="qrAccion" onclick="mostrarMiQR()">
+            <span class="accionIcon">▣</span>
+            Mi código QR
+        </button>
+
+        <button class="qrAccion" onclick="mostrarEscanerQR()">
+            <span class="accionIcon">📷</span>
+            Escanear y pagar
+        </button>
+
+    </div>
+
+    <button class="btnRojo" onclick="cerrarSesion()">
+        Cerrar sesión
+    </button>
+
+</div>
+
+<!-- PAGO SERVICIO -->
+
+<div id="pagoServicio" class="seccion">
+
+    <div class="sectionHeader">
+
+        <button class="backButton" onclick="volverWallet()">
+            ←
+        </button>
+
+        <h2>Pagar servicio</h2>
+
+    </div>
+
+    <div class="card">
+
+        <h3>🔎 Consultar servicio</h3>
+
+        <p style="font-size:12px;color:#64748b;margin-top:6px;">
+            Introduce tu número de servicio
+            o referencia.
+        </p>
+
+    </div>
+
+    <div class="inputGroup">
+
+        <label>
+            NÚMERO DE SERVICIO / REFERENCIA
+        </label>
+
+        <input
+            type="text"
+            id="numeroServicioPago"
+            placeholder="Ej. 123456789"
+        >
+
+    </div>
+
+    <button onclick="consultarServicio()">
+        Consultar saldo
+    </button>
+
+    <div
+        id="infoServicio"
+        class="card infoServicio"
+        style="display:none;"
+    >
+
+        <h3>Saldo pendiente</h3>
+
+        <div
+            class="saldoPendiente"
+            id="saldoServicioTexto"
+        >
+            $0.00
+        </div>
+
+        <div class="inputGroup">
+
+            <label>
+                MONTO A PAGAR
+            </label>
+
+            <input
+                type="number"
+                id="montoPago"
+                placeholder="0.00"
+                min="1"
+                step="0.01"
+            >
+
+        </div>
+
+        <button class="btnVerde" onclick="pagarServicio()">
+            Confirmar pago
+        </button>
+
+    </div>
+
+</div>
+
+<!-- TRANSFERENCIA -->
+
+<div id="transferencia" class="seccion">
+
+    <div class="sectionHeader">
+
+        <button class="backButton" onclick="volverWallet()">
+            ←
+        </button>
+
+        <h2>Transferencia</h2>
+
+    </div>
+
+    <div class="card">
+
+        <h3>💸 Enviar dinero</h3>
+
+        <p style="font-size:12px;color:#64748b;margin-top:6px;line-height:1.5;">
+            Puedes utilizar usuario, identificador
+            o referencia del destinatario.
+        </p>
+
+    </div>
+
+    <div class="inputGroup">
+
+        <label>DESTINATARIO</label>
+
+        <input
+            type="text"
+            id="destinoTransferencia"
+            placeholder="Usuario, identificador o referencia"
+        >
+
+    </div>
+
+    <div class="inputGroup">
+
+        <label>MONTO</label>
+
+        <input
+            type="number"
+            id="montoTransferencia"
+            placeholder="0.00"
+            min="1"
+            step="0.01"
+        >
+
+    </div>
+
+    <button class="btnVerde" onclick="hacerTransferencia()">
+        💸 Transferir dinero
+    </button>
+
+</div>
+
+<!-- CANJEAR -->
+
+<div id="canje" class="seccion">
+
+    <div class="sectionHeader">
+
+        <button class="backButton" onclick="volverWallet()">
+            ←
+        </button>
+
+        <h2>Canjear código</h2>
+
+    </div>
+
+    <div class="card" style="text-align:center;">
+
+        <div style="font-size:45px;">
+            🎁
+        </div>
+
+        <h3 style="margin-top:8px;">
+            Agrega saldo
+        </h3>
+
+        <p style="font-size:13px;color:#64748b;margin-top:7px;line-height:1.5;">
+            Introduce un código válido para agregar
+            saldo a tu billetera.
+        </p>
+
+    </div>
+
+    <div class="inputGroup">
+
+        <label>CÓDIGO DE CANJE</label>
+
+        <input
+            type="text"
+            id="codigoCanje"
+            placeholder="Ingresa tu código"
+        >
+
+    </div>
+
+    <button class="btnVerde" onclick="canjearCodigo()">
+        🎁 Canjear código
+    </button>
+
+</div>
+
+<!-- MI QR -->
+
+<div id="miQR" class="seccion">
+
+    <div class="sectionHeader">
+
+        <button class="backButton" onclick="volverWallet()">
+            ←
+        </button>
+
+        <h2>Mi código QR</h2>
+
+    </div>
+
+    <div class="card" style="text-align:center;">
+
+        <h3>📱 Recibe dinero fácilmente</h3>
+
+        <p style="font-size:12px;color:#64748b;margin-top:7px;line-height:1.5;">
+            Muestra este código para que otro usuario
+            de NexPay lo escanee.
+        </p>
+
+    </div>
+
+    <div class="qrBox">
+
+        <div id="qrcode"></div>
+
+        <div class="qrDato" id="qrUsuarioTexto"></div>
+
+    </div>
+
+    <button onclick="descargarMiQR()">
+        ⬇️ Guardar mi QR
+    </button>
+
+    <button class="btnSecundario" onclick="compartirMiQR()">
+        📤 Compartir QR
+    </button>
+
+    <button class="btnSecundario" onclick="volverWallet()">
+        ← Volver a mi wallet
+    </button>
+
+</div>
+
+<!-- ESCANER QR -->
+
+<div id="escanerQR" class="seccion">
+
+    <div class="sectionHeader">
+
+        <button class="backButton" onclick="cerrarEscanerQR()">
+            ←
+        </button>
+
+        <h2>Escanear QR</h2>
+
+    </div>
+
+    <div class="card">
+
+        <h3>📷 Escanea el código del destinatario</h3>
+
+        <p style="font-size:12px;color:#64748b;margin-top:7px;line-height:1.5;">
+            Permite el acceso a la cámara y apunta al
+            código QR de la otra persona.
+        </p>
+
+    </div>
+
+    <div class="scannerBox">
+        <div id="qr-reader"></div>
+    </div>
+
+    <div id="scannerEstado" class="scannerEstado">
+        Preparando cámara...
+    </div>
+
+    <div id="destinoDetectado" class="destinoDetectado"></div>
+
+    <button class="btnSecundario" onclick="cerrarEscanerQR()">
+        Cancelar
+    </button>
+
+</div>
+
+<!-- MOVIMIENTOS -->
+
+<div id="movimientos" class="seccion">
+
+    <div class="sectionHeader">
+
+        <button class="backButton" onclick="volverWallet()">
+            ←
+        </button>
+
+        <h2>Movimientos</h2>
+
+    </div>
+
+    <div class="card movimientoResumen">
+
+        <div style="font-size:30px;">
+            📊
+        </div>
+
+        <div>
+
+            <strong id="totalMovimientos">
+                0 movimientos
+            </strong>
+
+            <p style="font-size:12px;color:#64748b;margin-top:4px;">
+                Actividad de tu cuenta
+            </p>
+
+        </div>
+
+    </div>
+
+    <div
+        id="listaMovimientos"
+        style="margin-top:18px;"
+    >
+
+        <div class="card" style="text-align:center;">
+
+            <p style="color:#64748b;">
+                Cargando movimientos...
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<!-- MODAL DESCARGA -->
+
+<div id="modalComprobante" class="modalOverlay">
+
+    <div class="modalCaja">
+
+        <div class="modalIcon">
+            🧾
+        </div>
+
+        <h3>
+            Operación realizada
+        </h3>
+
+        <p>
+            Tu operación fue procesada correctamente.
+            ¿Deseas descargar el comprobante?
+        </p>
+
+        <div class="modalBotones">
+
+            <button
+                class="btnVerde"
+                onclick="descargarComprobanteActual()"
+            >
+                ✓ Sí, descargar
+            </button>
+
+            <button
+                class="btnSecundario"
+                onclick="cerrarModalComprobante()"
+            >
+                No
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL DETALLE -->
+
+<div id="modalDetalleMovimiento" class="modalDetalle">
+
+    <div class="detalleCaja">
+
+        <div class="detalleTitulo">
+
+            <h3>
+                Comprobante de movimiento
+            </h3>
+
+            <button
+                class="cerrarDetalle"
+                onclick="cerrarDetalleMovimiento()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="detalleComprobanteContenido"></div>
+
+    </div>
+
+</div>
+
+<script>
+const SUPABASE_URL =
+"https://ieaielptonscbsimbtyx.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_pmJ3fN_2FUKM1AskoReusA_0vaZz7f_";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+let usuarioActual = null;
+let servicioActual = null;
+let intervaloRefresco = null;
+let qrScanner = null;
+let escanerActivo = false;
+let comprobanteActual = null;
+let movimientosActuales = [];
+
+function mostrar(id){
+
+    document
+    .querySelectorAll(".seccion")
+    .forEach(sec=>{
+        sec.classList.remove("active");
+    });
+
+    const seccion =
+    document.getElementById(id);
+
+    if(seccion){
+        seccion.classList.add("active");
+    }
+}
+
+function generarNumeros(longitud){
+
+    let resultado="";
+
+    for(let i=0;i<longitud;i++){
+
+        resultado +=
+        Math.floor(
+            Math.random()*10
+        );
+    }
+
+    return resultado;
+}
+
+function obtenerFechaActual(){
+
+    return new Date().toISOString();
+
+}
+
+function formatearFecha(fecha){
+
+    if(!fecha){
+        return "";
+    }
+
+    const f = new Date(fecha);
+
+    if(isNaN(f.getTime())){
+        return "";
+    }
+
+    return f.toLocaleString(
+        "es-MX",
+        {
+            dateStyle:"medium",
+            timeStyle:"short"
+        }
+    );
+}
+
+function moneda(valor){
+
+    return Number(valor || 0)
+    .toLocaleString(
+        "es-MX",
+        {
+            style:"currency",
+            currency:"MXN",
+            minimumFractionDigits:2
+        }
+    );
+}
+
+/* CREAR CUENTA */
+
+async function crearCuenta(){
+
+    const usuario =
+    document
+    .getElementById("nuevoUsuario")
+    .value
+    .trim();
+
+    const password =
+    document
+    .getElementById("nuevoPassword")
+    .value;
+
+    if(!usuario || !password){
+
+        alert(
+            "Completa usuario y contraseña."
+        );
+
+        return;
+    }
+
+    const identificador =
+    generarNumeros(10);
+
+    const referencia =
+    generarNumeros(7);
+
+    const { error } =
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .insert([{
+        usuario,
+        password,
+        identificador,
+        referencia,
+        saldo:0
+    }]);
+
+    if(error){
+
+        alert(error.message);
+
+        return;
+    }
+
+    alert(
+        "Cuenta creada correctamente.\n\n"+
+        "Identificador: "+identificador+
+        "\nReferencia: "+referencia
+    );
+
+    document
+    .getElementById("nuevoUsuario")
+    .value="";
+
+    document
+    .getElementById("nuevoPassword")
+    .value="";
+
+    mostrar("login");
+}
+
+/* LOGIN */
+
+async function iniciarSesion(){
+
+    const usuario =
+    document
+    .getElementById("loginUsuario")
+    .value
+    .trim();
+
+    const password =
+    document
+    .getElementById("loginPassword")
+    .value;
+
+    if(!usuario || !password){
+
+        alert(
+            "Ingresa usuario y contraseña."
+        );
+
+        return;
+    }
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .select("*")
+    .eq("usuario",usuario)
+    .eq("password",password);
+
+    if(
+        error ||
+        !data ||
+        data.length===0
+    ){
+
+        alert(
+            "Usuario o contraseña incorrectos."
+        );
+
+        return;
+    }
+
+    usuarioActual =
+    data[0];
+
+    actualizarWallet();
+
+    mostrar("wallet");
+
+    iniciarRefresco();
+}
+
+function iniciarRefresco(){
+
+    if(intervaloRefresco){
+
+        clearInterval(
+            intervaloRefresco
+        );
+    }
+
+    intervaloRefresco =
+    setInterval(
+        async()=>{
+
+            if(!usuarioActual){
+                return;
+            }
+
+            const {
+                data
+            } =
+            await supabaseClient
+            .from("nexus_wallet_users")
+            .select("*")
+            .eq(
+                "id",
+                usuarioActual.id
+            )
+            .single();
+
+            if(data){
+
+                usuarioActual =
+                data;
+
+                actualizarWallet();
+            }
+
+        },
+        3000
+    );
+}
+
+function actualizarWallet(){
+
+    if(!usuarioActual){
+        return;
+    }
+
+    document
+    .getElementById("saldoTexto")
+    .innerHTML =
+    moneda(usuarioActual.saldo);
+
+    document
+    .getElementById("usuarioCardNombre")
+    .innerHTML =
+    escapeHTML(
+        usuarioActual.usuario
+    );
+
+    document
+    .getElementById("clabeInfoCard")
+    .innerHTML =
+    escapeHTML(
+        usuarioActual.identificador
+    );
+
+    document
+    .getElementById("referenciaInfoCard")
+    .innerHTML =
+    escapeHTML(
+        usuarioActual.referencia
+    );
+
+    document
+    .getElementById("saludoUsuario")
+    .innerHTML =
+    "¡HOLA! "+
+    escapeHTML(
+        String(
+            usuarioActual.usuario
+        ).toUpperCase()
+    );
+}
+
+/* SECCIONES */
+
+function mostrarPagoServicio(){
+
+    document
+    .getElementById("infoServicio")
+    .style.display="none";
+
+    servicioActual=null;
+
+    mostrar("pagoServicio");
+}
+
+function mostrarTransferencia(){
+
+    mostrar("transferencia");
+}
+
+function mostrarCanje(){
+
+    mostrar("canje");
+}
+
+function volverWallet(){
+
+    actualizarWallet();
+
+    mostrar("wallet");
+}
+
+/* CONSULTAR SERVICIO */
+
+async function consultarServicio(){
+
+    const datoBusqueda =
+    document
+    .getElementById("numeroServicioPago")
+    .value
+    .trim();
+
+    if(!datoBusqueda){
+
+        alert(
+            "Ingresa un número de servicio o referencia."
+        );
+
+        return;
+    }
+
+    let {
+        data
+    } =
+    await supabaseClient
+    .from("clientes_servicio")
+    .select("*")
+    .eq(
+        "numero_servicio",
+        datoBusqueda
+    );
+
+    if(!data || data.length===0){
+
+        const respuesta =
+        await supabaseClient
+        .from("clientes_servicio")
+        .select("*")
+        .eq(
+            "numero_referencia",
+            datoBusqueda
+        );
+
+        data =
+        respuesta.data;
+    }
+
+    if(!data || data.length===0){
+
+        alert(
+            "Servicio no encontrado."
+        );
+
+        return;
+    }
+
+    servicioActual =
+    data[0];
+
+    document
+    .getElementById("infoServicio")
+    .style.display="block";
+
+    document
+    .getElementById("saldoServicioTexto")
+    .innerHTML =
+    moneda(
+        servicioActual.saldo
+    );
+
+    document
+    .getElementById("montoPago")
+    .value =
+    servicioActual.saldo;
+}
+
+/* MOVIMIENTO */
+
+async function registrarMovimiento(datos){
+
+    const movimiento = {
+
+        usuario:
+            usuarioActual.usuario,
+
+        tipo:
+            datos.tipo || "Movimiento",
+
+        monto:
+            Number(datos.monto || 0),
+
+        fecha:
+            datos.fecha || obtenerFechaActual(),
+
+        destinatario:
+            datos.destinatario || null,
+
+        numero_servicio:
+            datos.numero_servicio || null,
+
+        codigo_usado:
+            datos.codigo_usado || null,
+
+        comprobante_id:
+            datos.comprobante_id ||
+            datos.folio ||
+            null,
+
+        saldo_restante:
+            Number(
+                datos.saldo_restante ??
+                usuarioActual.saldo
+            )
+    };
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("nexus_wallet_pagos")
+    .insert([movimiento])
+    .select()
+    .single();
+
+    if(error){
+
+        console.error(
+            "No se pudo registrar el movimiento:",
+            error
+        );
+
+        return null;
+    }
+
+    return data;
+}
+
+/* DATOS COMPROBANTE */
+
+function crearDatosComprobante(datos){
+
+    return {
+
+        folio:
+            datos.folio ||
+            "NX-"+generarNumeros(10),
+
+        fecha:
+            datos.fecha ||
+            obtenerFechaActual(),
+
+        tipo:
+            datos.tipo ||
+            "Movimiento",
+
+        monto:
+            Number(
+                datos.monto || 0
+            ),
+
+        usuario:
+            datos.usuario ||
+            usuarioActual?.usuario ||
+            "",
+
+        destinatario:
+            datos.destinatario ||
+            "",
+
+        servicio:
+            datos.numero_servicio ||
+            "",
+
+        codigo:
+            datos.codigo_usado ||
+            "",
+
+        saldoAnterior:
+            Number(
+                datos.saldo_anterior ??
+                0
+            ),
+
+        saldoRestante:
+            Number(
+                datos.saldo_restante ??
+                usuarioActual?.saldo ??
+                0
+            ),
+
+        estado:
+            "OPERACIÓN EXITOSA"
+    };
+}
+
+/* HTML COMPROBANTE */
+
+function generarHTMLComprobante(datos){
+
+    const c =
+    crearDatosComprobante(datos);
+
+    let detalles="";
+
+    detalles += `
+        <div class="comprobanteFila">
+            <span class="label">Usuario</span>
+            <span class="valor">
+                ${escapeHTML(c.usuario)}
+            </span>
+        </div>
+    `;
+
+    if(c.destinatario){
+
+        detalles += `
+            <div class="comprobanteFila">
+                <span class="label">Destinatario</span>
+                <span class="valor">
+                    ${escapeHTML(c.destinatario)}
+                </span>
+            </div>
+        `;
+    }
+
+    if(c.servicio){
+
+        detalles += `
+            <div class="comprobanteFila">
+                <span class="label">Servicio</span>
+                <span class="valor">
+                    ${escapeHTML(c.servicio)}
+                </span>
+            </div>
+        `;
+    }
+
+    if(c.codigo){
+
+        detalles += `
+            <div class="comprobanteFila">
+                <span class="label">Código</span>
+                <span class="valor">
+                    ${escapeHTML(c.codigo)}
+                </span>
+            </div>
+        `;
+    }
+
+    return `
+
+        <div
+            class="comprobante"
+            id="comprobanteVisual"
+        >
+
+            <div class="comprobanteHeader">
+
+                <div class="comprobanteLogo">
+                    N
+                </div>
+
+                <div class="comprobanteMarca">
+                    NexPay
+                </div>
+
+                <div class="comprobanteSub">
+                    WALLET DIGITAL
+                </div>
+
+                <div class="comprobanteEstado">
+                    ✓ ${c.estado}
+                </div>
+
+            </div>
+
+            <div class="comprobanteCuerpo">
+
+                <div class="comprobanteOperacion">
+
+                    <small>
+                        ${escapeHTML(c.tipo)}
+                    </small>
+
+                    <strong>
+                        ${moneda(c.monto)}
+                    </strong>
+
+                    <span>
+                        ${escapeHTML(
+                            formatearFecha(c.fecha)
+                        )}
+                    </span>
+
+                </div>
+
+                <div style="margin-top:8px;">
+
+                    ${detalles}
+
+                    <div class="comprobanteFila">
+
+                        <span class="label">
+                            Folio
+                        </span>
+
+                        <span class="valor">
+                            ${escapeHTML(c.folio)}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="comprobanteSaldo">
+
+                    <div class="comprobanteSaldoFila">
+
+                        <span>
+                            Saldo anterior
+                        </span>
+
+                        <strong>
+                            ${moneda(c.saldoAnterior)}
+                        </strong>
+
+                    </div>
+
+                    <div class="comprobanteSaldoFila">
+
+                        <span>
+                            Saldo disponible
+                        </span>
+
+                        <strong>
+                            ${moneda(c.saldoRestante)}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="comprobanteFooter">
+
+                Comprobante electrónico generado por NexPay Wallet.<br>
+
+                Conserva este comprobante como referencia
+                de tu operación.
+
+            </div>
+
+        </div>
+    `;
+}
+
+/* MODAL */
+
+function mostrarModalComprobante(datos){
+
+    comprobanteActual =
+    crearDatosComprobante(datos);
+
+    document
+    .getElementById("modalComprobante")
+    .classList.add("active");
+}
+
+function cerrarModalComprobante(){
+
+    document
+    .getElementById("modalComprobante")
+    .classList.remove("active");
+}
+
+/* DESCARGA DESDE MODAL */
+
+async function descargarComprobanteActual(){
+
+    if(!comprobanteActual){
+
+        cerrarModalComprobante();
+
+        return;
+    }
+
+    cerrarModalComprobante();
+
+    await descargarComprobantePNG(
+        comprobanteActual
+    );
+}
+
+/* CREAR IMAGEN */
+
+async function crearImagenComprobante(datos){
+
+    const zona =
+    document.createElement("div");
+
+    zona.style.position="fixed";
+    zona.style.left="-10000px";
+    zona.style.top="0";
+    zona.style.width="390px";
+    zona.style.padding="15px";
+    zona.style.background="#f8fafc";
+
+    zona.innerHTML =
+    generarHTMLComprobante(datos);
+
+    document.body.appendChild(zona);
+
+    const comprobante =
+    zona.querySelector(".comprobante");
+
+    const canvas =
+    await html2canvas(
+        comprobante,
+        {
+            scale:3,
+            backgroundColor:"#ffffff",
+            useCORS:true
+        }
+    );
+
+    zona.remove();
+
+    return canvas;
+}
+
+/* PNG */
+
+async function descargarComprobantePNG(datos){
+
+    try{
+
+        const canvas =
+        await crearImagenComprobante(datos);
+
+        const enlace =
+        document.createElement("a");
+
+        enlace.download =
+            "NexPay-Comprobante-"+
+            datos.folio+
+            ".png";
+
+        enlace.href =
+            canvas.toDataURL("image/png");
+
+        document.body.appendChild(enlace);
+
+        enlace.click();
+
+        enlace.remove();
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "No fue posible generar la imagen del comprobante."
+        );
+    }
+}
+
+/* PDF */
+
+function descargarComprobantePDF(datos){
+
+    const { jsPDF } =
+    window.jspdf;
+
+    const doc =
+    new jsPDF();
+
+    doc.setFillColor(
+        23,
+        37,
+        84
+    );
+
+    doc.rect(
+        0,
+        0,
+        210,
+        48,
+        "F"
+    );
+
+    doc.setTextColor(
+        255,
+        255,
+        255
+    );
+
+    doc.setFontSize(25);
+
+    doc.text(
+        "NEXPAY",
+        20,
+        27
+    );
+
+    doc.setFontSize(10);
+
+    doc.text(
+        "WALLET DIGITAL",
+        20,
+        36
+    );
+
+    doc.setTextColor(
+        15,
+        23,
+        42
+    );
+
+    doc.setFontSize(17);
+
+    doc.text(
+        datos.tipo,
+        20,
+        67
+    );
+
+    doc.setFontSize(28);
+
+    doc.text(
+        moneda(datos.monto),
+        20,
+        83
+    );
+
+    doc.setFontSize(10);
+
+    doc.setTextColor(
+        100,
+        116,
+        139
+    );
+
+    doc.text(
+        formatearFecha(datos.fecha),
+        20,
+        93
+    );
+
+    let y=115;
+
+    const filas=[
+        ["Usuario",datos.usuario],
+        ["Folio",datos.folio]
+    ];
+
+    if(datos.destinatario){
+
+        filas.push([
+            "Destinatario",
+            datos.destinatario
+        ]);
+    }
+
+    if(datos.servicio){
+
+        filas.push([
+            "Servicio",
+            datos.servicio
+        ]);
+    }
+
+    if(datos.codigo){
+
+        filas.push([
+            "Código",
+            datos.codigo
+        ]);
+    }
+
+    filas.push([
+        "Saldo anterior",
+        moneda(datos.saldoAnterior)
+    ]);
+
+    filas.push([
+        "Saldo disponible",
+        moneda(datos.saldoRestante)
+    ]);
+
+    filas.forEach(fila=>{
+
+        doc.setTextColor(
+            148,
+            163,
+            184
+        );
+
+        doc.setFontSize(10);
+
+        doc.text(
+            fila[0],
+            20,
+            y
+        );
+
+        doc.setTextColor(
+            15,
+            23,
+            42
+        );
+
+        doc.setFontSize(11);
+
+        doc.text(
+            String(fila[1]),
+            190,
+            y,
+            {
+                align:"right"
+            }
+        );
+
+        y+=13;
+    });
+
+    doc.setDrawColor(
+        226,
+        232,
+        240
+    );
+
+    doc.line(
+        20,
+        y+5,
+        190,
+        y+5
+    );
+
+    doc.setFontSize(9);
+
+    doc.setTextColor(
+        148,
+        163,
+        184
+    );
+
+    doc.text(
+        "Operacion procesada correctamente por NexPay Wallet.",
+        20,
+        y+18
+    );
+
+    doc.text(
+        "Folio: "+datos.folio,
+        20,
+        y+26
+    );
+
+    doc.save(
+        "NexPay-Comprobante-"+
+        datos.folio+
+        ".pdf"
+    );
+}
+
+/* DETALLE DE MOVIMIENTO */
+
+function mostrarDetalleMovimiento(movimiento){
+
+    const tipoTexto =
+    String(
+        movimiento.tipo || ""
+    ).toLowerCase();
+
+    const esEntrada =
+        tipoTexto.includes("recarga") ||
+        tipoTexto.includes("canje") ||
+        tipoTexto.includes("recibida") ||
+        tipoTexto.includes("depósito") ||
+        tipoTexto.includes("deposito");
+
+    const saldoRestante =
+    Number(
+        movimiento.saldo_restante || 0
+    );
+
+    const monto =
+    Number(
+        movimiento.monto || 0
+    );
+
+    const saldoAnterior =
+    esEntrada
+    ? saldoRestante - monto
+    : saldoRestante + monto;
+
+    const datos =
+    crearDatosComprobante({
+
+        folio:
+            movimiento.comprobante_id ||
+            "NX-"+generarNumeros(10),
+
+        fecha:
+            movimiento.fecha,
+
+        tipo:
+            movimiento.tipo,
+
+        monto:
+            monto,
+
+        usuario:
+            movimiento.usuario,
+
+        destinatario:
+            movimiento.destinatario,
+
+        numero_servicio:
+            movimiento.numero_servicio,
+
+        codigo_usado:
+            movimiento.codigo_usado,
+
+        saldo_anterior:
+            saldoAnterior,
+
+        saldo_restante:
+            saldoRestante
+    });
+
+    comprobanteActual =
+    datos;
+
+    const contenido =
+    document.getElementById(
+        "detalleComprobanteContenido"
+    );
+
+    contenido.innerHTML = `
+
+        <div class="detalleComprobante">
+
+            ${generarHTMLComprobante(datos)}
+
+        </div>
+
+        <div class="comprobanteAcciones">
+
+            <button
+                onclick="descargarComprobantePNG(comprobanteActual)"
+            >
+                🖼️ Descargar imagen
+            </button>
+
+            <button
+                onclick="descargarComprobantePDF(comprobanteActual)"
+            >
+                📄 Descargar PDF
+            </button>
+
+            <button
+                class="btnSecundario ancho"
+                onclick="compartirComprobanteActual()"
+            >
+                📤 Compartir comprobante
+            </button>
+
+        </div>
+    `;
+
+    document
+    .getElementById(
+        "modalDetalleMovimiento"
+    )
+    .classList.add("active");
+}
+
+function cerrarDetalleMovimiento(){
+
+    document
+    .getElementById(
+        "modalDetalleMovimiento"
+    )
+    .classList.remove("active");
+}
+
+/* COMPARTIR */
+
+async function compartirComprobanteActual(){
+
+    if(!comprobanteActual){
+        return;
+    }
+
+    try{
+
+        const canvas =
+        await crearImagenComprobante(
+            comprobanteActual
+        );
+
+        canvas.toBlob(
+            async blob=>{
+
+                const archivo =
+                new File(
+                    [blob],
+                    "NexPay-Comprobante-"+
+                    comprobanteActual.folio+
+                    ".png",
+                    {
+                        type:"image/png"
+                    }
+                );
+
+                if(
+                    navigator.canShare &&
+                    navigator.canShare({
+                        files:[archivo]
+                    })
+                ){
+
+                    await navigator.share({
+
+                        title:
+                            "Comprobante NexPay",
+
+                        text:
+                            "Comprobante de movimiento NexPay · "+
+                            comprobanteActual.folio,
+
+                        files:[
+                            archivo
+                        ]
+
+                    });
+
+                }else if(navigator.share){
+
+                    await navigator.share({
+
+                        title:
+                            "Comprobante NexPay",
+
+                        text:
+                            "Comprobante de movimiento NexPay · "+
+                            comprobanteActual.folio
+                    });
+
+                }else{
+
+                    alert(
+                        "Tu navegador no permite compartir archivos. Puedes descargar el comprobante como imagen."
+                    );
+                }
+
+            },
+            "image/png"
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+}
+
+/* PAGAR SERVICIO */
+
+async function pagarServicio(){
+
+    if(!servicioActual){
+
+        alert(
+            "Consulta primero el servicio."
+        );
+
+        return;
+    }
+
+    const monto =
+    Number(
+        document
+        .getElementById("montoPago")
+        .value
+    );
+
+    if(monto<=0){
+
+        alert(
+            "Monto inválido."
+        );
+
+        return;
+    }
+
+    if(
+        monto >
+        Number(
+            usuarioActual.saldo
+        )
+    ){
+
+        alert(
+            "Saldo insuficiente."
+        );
+
+        return;
+    }
+
+    if(
+        monto >
+        Number(
+            servicioActual.saldo
+        )
+    ){
+
+        alert(
+            "El monto supera el saldo pendiente."
+        );
+
+        return;
+    }
+
+    const saldoAnterior =
+    Number(
+        usuarioActual.saldo
+    );
+
+    const saldoNuevoWallet =
+    saldoAnterior - monto;
+
+    const saldoServicioNuevo =
+    Number(
+        servicioActual.saldo
+    ) - monto;
+
+    const folio =
+        "NX-PAG-"+generarNumeros(10);
+
+    const fecha =
+        obtenerFechaActual();
+
+    const {
+        error:errorWallet
+    } =
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .update({
+        saldo:saldoNuevoWallet
+    })
+    .eq(
+        "id",
+        usuarioActual.id
+    );
+
+    if(errorWallet){
+
+        alert(
+            errorWallet.message
+        );
+
+        return;
+    }
+
+    const {
+        error:errorServicio
+    } =
+    await supabaseClient
+    .from("clientes_servicio")
+    .update({
+        saldo:
+            saldoServicioNuevo < 0
+            ? 0
+            : saldoServicioNuevo
+    })
+    .eq(
+        "id",
+        servicioActual.id
+    );
+
+    if(errorServicio){
+
+        alert(
+            errorServicio.message
+        );
+
+        return;
+    }
+
+    usuarioActual.saldo =
+    saldoNuevoWallet;
+
+    const datosComprobante =
+    crearDatosComprobante({
+
+        folio,
+
+        fecha,
+
+        tipo:
+            "PAGO DE SERVICIO",
+
+        monto,
+
+        usuario:
+            usuarioActual.usuario,
+
+        numero_servicio:
+            servicioActual.numero_servicio,
+
+        saldo_anterior:
+            saldoAnterior,
+
+        saldo_restante:
+            saldoNuevoWallet
+    });
+
+    await registrarMovimiento({
+
+        tipo:
+            "Pago de servicio",
+
+        monto,
+
+        fecha,
+
+        numero_servicio:
+            servicioActual.numero_servicio,
+
+        comprobante_id:
+            folio,
+
+        saldo_restante:
+            saldoNuevoWallet
+    });
+
+    actualizarWallet();
+
+    comprobanteActual =
+    datosComprobante;
+
+    document
+    .getElementById("montoPago")
+    .value="";
+
+    document
+    .getElementById("infoServicio")
+    .style.display="none";
+
+    servicioActual=null;
+
+    mostrarModalComprobante(
+        datosComprobante
+    );
+}
+
+/* TRANSFERENCIA */
+
+async function hacerTransferencia(){
+
+    const destino =
+    document
+    .getElementById("destinoTransferencia")
+    .value
+    .trim();
+
+    const monto =
+    Number(
+        document
+        .getElementById("montoTransferencia")
+        .value
+    );
+
+    if(destino===""){
+
+        alert(
+            "Ingresa el destinatario."
+        );
+
+        return;
+    }
+
+    if(monto<=0){
+
+        alert(
+            "Monto inválido."
+        );
+
+        return;
+    }
+
+    if(
+        monto >
+        Number(
+            usuarioActual.saldo
+        )
+    ){
+
+        alert(
+            "Saldo insuficiente."
+        );
+
+        return;
+    }
+
+    let {data} =
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .select("*")
+    .eq(
+        "usuario",
+        destino
+    );
+
+    if(!data || data.length===0){
+
+        const r1 =
+        await supabaseClient
+        .from("nexus_wallet_users")
+        .select("*")
+        .eq(
+            "identificador",
+            destino
+        );
+
+        data =
+        r1.data;
+    }
+
+    if(!data || data.length===0){
+
+        const r2 =
+        await supabaseClient
+        .from("nexus_wallet_users")
+        .select("*")
+        .eq(
+            "referencia",
+            destino
+        );
+
+        data =
+        r2.data;
+    }
+
+    if(!data || data.length===0){
+
+        alert(
+            "Destinatario no encontrado."
+        );
+
+        return;
+    }
+
+    const receptor =
+    data[0];
+
+    if(
+        receptor.id ===
+        usuarioActual.id
+    ){
+
+        alert(
+            "No puedes transferirte dinero a ti mismo."
+        );
+
+        return;
+    }
+
+    const saldoAnterior =
+    Number(
+        usuarioActual.saldo
+    );
+
+    const saldoNuevoEmisor =
+    saldoAnterior - monto;
+
+    const saldoNuevoReceptor =
+    Number(
+        receptor.saldo
+    ) + monto;
+
+    const folio =
+        "NX-TRF-"+generarNumeros(10);
+
+    const fecha =
+    obtenerFechaActual();
+
+    const {
+        error:errorEmisor
+    } =
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .update({
+        saldo:saldoNuevoEmisor
+    })
+    .eq(
+        "id",
+        usuarioActual.id
+    );
+
+    if(errorEmisor){
+
+        alert(
+            errorEmisor.message
+        );
+
+        return;
+    }
+
+    const {
+        error:errorReceptor
+    } =
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .update({
+        saldo:saldoNuevoReceptor
+    })
+    .eq(
+        "id",
+        receptor.id
+    );
+
+    if(errorReceptor){
+
+        alert(
+            errorReceptor.message
+        );
+
+        return;
+    }
+
+    usuarioActual.saldo =
+    saldoNuevoEmisor;
+
+    const datosComprobante =
+    crearDatosComprobante({
+
+        folio,
+
+        fecha,
+
+        tipo:
+            "TRANSFERENCIA",
+
+        monto,
+
+        usuario:
+            usuarioActual.usuario,
+
+        destinatario:
+            receptor.usuario,
+
+        saldo_anterior:
+            saldoAnterior,
+
+        saldo_restante:
+            saldoNuevoEmisor
+    });
+
+    await registrarMovimiento({
+
+        tipo:
+            "Transferencia enviada",
+
+        monto,
+
+        fecha,
+
+        destinatario:
+            receptor.usuario,
+
+        comprobante_id:
+            folio,
+
+        saldo_restante:
+            saldoNuevoEmisor
+    });
+
+    /* REGISTRO DE ENTRADA PARA EL RECEPTOR */
+
+    const saldoAnteriorReceptor =
+    Number(
+        receptor.saldo
+    );
+
+    await supabaseClient
+    .from("nexus_wallet_pagos")
+    .insert([{
+
+        usuario:
+            receptor.usuario,
+
+        tipo:
+            "Transferencia recibida",
+
+        monto,
+
+        fecha,
+
+        destinatario:
+            usuarioActual.usuario,
+
+        comprobante_id:
+            folio,
+
+        saldo_restante:
+            saldoNuevoReceptor
+    }]);
+
+    actualizarWallet();
+
+    document
+    .getElementById("destinoTransferencia")
+    .value="";
+
+    document
+    .getElementById("montoTransferencia")
+    .value="";
+
+    mostrarModalComprobante(
+        datosComprobante
+    );
+}
+
+/* CANJEAR */
+
+async function canjearCodigo(){
+
+    const codigo =
+    document
+    .getElementById("codigoCanje")
+    .value
+    .trim();
+
+    if(!codigo){
+
+        alert(
+            "Ingresa un código."
+        );
+
+        return;
+    }
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("codigos_saldo")
+    .select("*")
+    .eq(
+        "codigo",
+        codigo
+    )
+    .eq(
+        "usado",
+        false
+    );
+
+    if(error){
+
+        alert(
+            error.message
+        );
+
+        return;
+    }
+
+    if(!data || data.length===0){
+
+        alert(
+            "Código inválido o ya utilizado."
+        );
+
+        return;
+    }
+
+    const codigoData =
+    data[0];
+
+    const saldoAnterior =
+    Number(
+        usuarioActual.saldo
+    );
+
+    const saldoNuevo =
+    saldoAnterior +
+    Number(
+        codigoData.saldo
+    );
+
+    const folio =
+        "NX-RCG-"+generarNumeros(10);
+
+    const fecha =
+    obtenerFechaActual();
+
+    const {
+        error:errorSaldo
+    } =
+    await supabaseClient
+    .from("nexus_wallet_users")
+    .update({
+        saldo:saldoNuevo
+    })
+    .eq(
+        "id",
+        usuarioActual.id
+    );
+
+    if(errorSaldo){
+
+        alert(
+            errorSaldo.message
+        );
+
+        return;
+    }
+
+    const {
+        error:errorCodigo
+    } =
+    await supabaseClient
+    .from("codigos_saldo")
+    .update({
+        usado:true
+    })
+    .eq(
+        "id",
+        codigoData.id
+    );
+
+    if(errorCodigo){
+
+        alert(
+            errorCodigo.message
+        );
+
+        return;
+    }
+
+    usuarioActual.saldo =
+    saldoNuevo;
+
+    const datosComprobante =
+    crearDatosComprobante({
+
+        folio,
+
+        fecha,
+
+        tipo:
+            "RECARGA DE SALDO",
+
+        monto:
+            Number(
+                codigoData.saldo
+            ),
+
+        usuario:
+            usuarioActual.usuario,
+
+        codigo_usado:
+            codigo,
+
+        saldo_anterior:
+            saldoAnterior,
+
+        saldo_restante:
+            saldoNuevo
+    });
+
+    await registrarMovimiento({
+
+        tipo:
+            "Recarga por código",
+
+        monto:
+            Number(
+                codigoData.saldo
+            ),
+
+        fecha,
+
+        codigo_usado:
+            codigo,
+
+        comprobante_id:
+            folio,
+
+        saldo_restante:
+            saldoNuevo
+    });
+
+    actualizarWallet();
+
+    document
+    .getElementById("codigoCanje")
+    .value="";
+
+    mostrarModalComprobante(
+        datosComprobante
+    );
+}
+
+/* MOVIMIENTOS */
+
+async function mostrarMovimientos(){
+
+    if(!usuarioActual){
+
+        alert(
+            "No hay una cuenta abierta."
+        );
+
+        return;
+    }
+
+    mostrar("movimientos");
+
+    const lista =
+    document.getElementById(
+        "listaMovimientos"
+    );
+
+    lista.innerHTML = `
+
+        <div class="card" style="text-align:center;">
+
+            <p style="color:#64748b;">
+                Cargando movimientos...
+            </p>
+
+        </div>
+    `;
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("nexus_wallet_pagos")
+    .select("*")
+    .eq(
+        "usuario",
+        usuarioActual.usuario
+    )
+    .order(
+        "fecha",
+        {
+            ascending:false
+        }
+    );
+
+    if(error){
+
+        console.error(
+            "Error movimientos:",
+            error
+        );
+
+        lista.innerHTML = `
+
+            <div class="card" style="text-align:center;">
+
+                <div style="font-size:40px;">
+                    ⚠️
+                </div>
+
+                <h3 style="margin-top:10px;">
+                    No se pudieron cargar
+                    los movimientos
+                </h3>
+
+                <p style="color:#64748b;font-size:12px;margin-top:7px;">
+                    ${escapeHTML(error.message)}
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    movimientosActuales =
+    data || [];
+
+    if(
+        !data ||
+        data.length===0
+    ){
+
+        document
+        .getElementById("totalMovimientos")
+        .innerText =
+        "0 movimientos";
+
+        lista.innerHTML = `
+
+            <div class="card" style="text-align:center;">
+
+                <div style="font-size:45px;">
+                    📭
+                </div>
+
+                <h3 style="margin-top:10px;">
+                    Sin movimientos
+                </h3>
+
+                <p style="color:#64748b;font-size:13px;margin-top:7px;line-height:1.5;">
+                    Esta cuenta todavía no tiene
+                    movimientos registrados.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    document
+    .getElementById("totalMovimientos")
+    .innerText =
+    data.length+
+    (
+        data.length===1
+        ? " movimiento"
+        : " movimientos"
+    );
+
+    lista.innerHTML="";
+
+    data.forEach(
+        (movimiento,index)=>{
+
+        let icono="💳";
+
+        const nombreTipo =
+        movimiento.tipo ||
+        "Movimiento";
+
+        const tipo =
+        String(
+            movimiento.tipo || ""
+        ).toLowerCase();
+
+        if(tipo.includes("transfer")){
+            icono="💸";
+        }else if(
+            tipo.includes("pago") ||
+            tipo.includes("servicio")
+        ){
+            icono="🧾";
+        }else if(
+            tipo.includes("recarga") ||
+            tipo.includes("canje")
+        ){
+            icono="🎁";
+        }else if(
+            tipo.includes("depósito") ||
+            tipo.includes("deposito")
+        ){
+            icono="💰";
+        }
+
+        const monto =
+        Number(
+            movimiento.monto || 0
+        );
+
+        const montoFormateado =
+        moneda(monto);
+
+        const fecha =
+        formatearFecha(
+            movimiento.fecha
+        );
+
+        let detalles="";
+
+        if(movimiento.destinatario){
+
+            detalles += `
+
+                <div class="movimientoDato">
+
+                    <span>
+                        Destinatario
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            movimiento.destinatario
+                        )}
+                    </span>
+
+                </div>
+            `;
+        }
+
+        if(movimiento.numero_servicio){
+
+            detalles += `
+
+                <div class="movimientoDato">
+
+                    <span>
+                        Servicio
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            movimiento.numero_servicio
+                        )}
+                    </span>
+
+                </div>
+            `;
+        }
+
+        if(movimiento.codigo_usado){
+
+            detalles += `
+
+                <div class="movimientoDato">
+
+                    <span>
+                        Código utilizado
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            movimiento.codigo_usado
+                        )}
+                    </span>
+
+                </div>
+            `;
+        }
+
+        if(movimiento.comprobante_id){
+
+            detalles += `
+
+                <div class="movimientoDato">
+
+                    <span>
+                        Comprobante
+                    </span>
+
+                    <span>
+                        ${escapeHTML(
+                            movimiento.comprobante_id
+                        )}
+                    </span>
+
+                </div>
+            `;
+        }
+
+        lista.innerHTML += `
+
+            <div
+                class="movimientoItem"
+                onclick="abrirMovimientoPorIndice(${index})"
+            >
+
+                <div class="movimientoSuperior">
+
+                    <div class="movimientoTipo">
+
+                        <div class="movimientoIcon">
+                            ${icono}
+                        </div>
+
+                        <div>
+
+                            ${escapeHTML(nombreTipo)}
+
+                            <div class="movimientoFecha">
+                                ${escapeHTML(fecha)}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="movimientoMonto">
+                        ${montoFormateado}
+                    </div>
+
+                </div>
+
+                ${
+                    detalles
+                    ?
+                    `
+                    <div class="movimientoDetalle">
+                        ${detalles}
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+                ${
+                    movimiento.saldo_restante !== null &&
+                    movimiento.saldo_restante !== undefined
+                    ?
+                    `
+                    <div class="movimientoSaldo">
+
+                        <span>
+                            Saldo restante
+                        </span>
+
+                        <strong>
+                            ${moneda(
+                                movimiento.saldo_restante
+                            )}
+                        </strong>
+
+                    </div>
+                    `
+                    :
+                    ""
+                }
+
+                <div
+                    style="
+                    text-align:right;
+                    margin-top:10px;
+                    color:#2563eb;
+                    font-size:11px;
+                    font-weight:700;
+                    "
+                >
+                    Ver comprobante →
+                </div>
+
+            </div>
+        `;
+    });
+}
+
+function abrirMovimientoPorIndice(indice){
+
+    const movimiento =
+    movimientosActuales[indice];
+
+    if(!movimiento){
+        return;
+    }
+
+    mostrarDetalleMovimiento(
+        movimiento
+    );
+}
+
+/* QR */
+
+function obtenerDatosQR(){
+
+    if(!usuarioActual){
+        return null;
+    }
+
+    return JSON.stringify({
+
+        app:"NexPay",
+
+        tipo:"transferencia",
+
+        identificador:
+            String(
+                usuarioActual.identificador || ""
+            ),
+
+        usuario:
+            String(
+                usuarioActual.usuario || ""
+            ),
+
+        referencia:
+            String(
+                usuarioActual.referencia || ""
+            )
+    });
+}
+
+function mostrarMiQR(){
+
+    if(!usuarioActual){
+
+        alert(
+            "Primero inicia sesión."
+        );
+
+        return;
+    }
+
+    mostrar("miQR");
+
+    const cont =
+    document.getElementById(
+        "qrcode"
+    );
+
+    cont.innerHTML="";
+
+    new QRCode(
+        cont,
+        {
+            text:
+                obtenerDatosQR(),
+
+            width:230,
+
+            height:230,
+
+            colorDark:"#111827",
+
+            colorLight:"#ffffff",
+
+            correctLevel:
+                QRCode.CorrectLevel.H
+        }
+    );
+
+    document
+    .getElementById("qrUsuarioTexto")
+    .innerHTML =
+    "<strong>Usuario:</strong> "+
+    escapeHTML(
+        usuarioActual.usuario
+    )+
+    "<br><strong>Identificador:</strong> "+
+    escapeHTML(
+        usuarioActual.identificador
+    )+
+    "<br><strong>Referencia:</strong> "+
+    escapeHTML(
+        usuarioActual.referencia
+    );
+}
+
+function descargarMiQR(){
+
+    const img =
+    document.querySelector(
+        "#qrcode img"
+    );
+
+    const canvas =
+    document.querySelector(
+        "#qrcode canvas"
+    );
+
+    const src =
+    img
+    ? img.src
+    :
+    (
+        canvas
+        ? canvas.toDataURL("image/png")
+        : ""
+    );
+
+    if(!src){
+
+        alert(
+            "Genera primero tu código QR."
+        );
+
+        return;
+    }
+
+    const a =
+    document.createElement("a");
+
+    a.href=src;
+
+    a.download =
+        "NexPay-QR-"+
+        String(
+            usuarioActual.usuario ||
+            "usuario"
+        )+
+        ".png";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+}
+
+async function compartirMiQR(){
+
+    if(!usuarioActual){
+        return;
+    }
+
+    const texto =
+        "NexPay | Usuario: "+
+        usuarioActual.usuario+
+        " | Identificador: "+
+        usuarioActual.identificador+
+        " | Referencia: "+
+        usuarioActual.referencia;
+
+    try{
+
+        if(navigator.share){
+
+            await navigator.share({
+
+                title:
+                    "Mi código QR NexPay",
+
+                text:
+                    texto
+            });
+
+        }else{
+
+            await navigator.clipboard.writeText(
+                texto
+            );
+
+            alert(
+                "Datos de pago copiados al portapapeles."
+            );
+        }
+
+    }catch(e){
+
+        console.log(e);
+
+    }
+}
+
+/* ESCANER */
+
+async function mostrarEscanerQR(){
+
+    if(!usuarioActual){
+
+        alert(
+            "Primero inicia sesión."
+        );
+
+        return;
+    }
+
+    mostrar("escanerQR");
+
+    document
+    .getElementById("scannerEstado")
+    .innerText =
+    "Solicitando acceso a la cámara...";
+
+    document
+    .getElementById("destinoDetectado")
+    .style.display="none";
+
+    await detenerEscanerQR();
+
+    try{
+
+        qrScanner =
+        new Html5Qrcode(
+            "qr-reader"
+        );
+
+        escanerActivo=true;
+
+        await qrScanner.start(
+
+            {
+                facingMode:"environment"
+            },
+
+            {
+                fps:10,
+
+                qrbox:{
+                    width:230,
+                    height:230
+                },
+
+                aspectRatio:1
+            },
+
+            codigo =>
+            procesarQRNexPay(codigo),
+
+            ()=>{}
+        );
+
+        document
+        .getElementById("scannerEstado")
+        .innerText =
+        "Cámara activa. Apunta al código QR de NexPay.";
+
+    }catch(error){
+
+        console.error(error);
+
+        escanerActivo=false;
+
+        document
+        .getElementById("scannerEstado")
+        .innerText =
+        "No fue posible abrir la cámara. Usa HTTPS o localhost y permite el acceso a la cámara.";
+    }
+}
+
+async function procesarQRNexPay(texto){
+
+    let datos=null;
+
+    try{
+
+        datos =
+        JSON.parse(texto);
+
+    }catch(e){}
+
+    if(
+        !datos ||
+        datos.app!=="NexPay" ||
+        datos.tipo!=="transferencia"
+    ){
+
+        document
+        .getElementById("scannerEstado")
+        .innerText =
+        "Este código QR no pertenece a una cuenta NexPay.";
+
+        return;
+    }
+
+    if(
+        String(datos.identificador) ===
+        String(usuarioActual.identificador)
+    ){
+
+        alert(
+            "No puedes transferirte dinero a ti mismo."
+        );
+
+        return;
+    }
+
+    if(
+        !datos.identificador &&
+        !datos.usuario &&
+        !datos.referencia
+    ){
+
+        return;
+    }
+
+    await detenerEscanerQR();
+
+    const destino =
+        datos.identificador ||
+        datos.usuario ||
+        datos.referencia;
+
+    document
+    .getElementById("destinoTransferencia")
+    .value =
+    destino;
+
+    const box =
+    document.getElementById(
+        "destinoDetectado"
+    );
+
+    box.style.display="block";
+
+    box.innerHTML =
+        "✅ <strong>Destinatario detectado</strong><br>"+
+        escapeHTML(
+            datos.usuario ||
+            "Usuario NexPay"
+        )+
+        (
+            datos.identificador
+            ?
+            "<br>Identificador: "+
+            escapeHTML(
+                datos.identificador
+            )
+            :
+            ""
+        );
+
+    mostrar("transferencia");
+
+    setTimeout(
+        ()=>{
+            document
+            .getElementById(
+                "montoTransferencia"
+            )
+            ?.focus();
+        },
+        200
+    );
+}
+
+async function detenerEscanerQR(){
+
+    if(!qrScanner){
+        return;
+    }
+
+    try{
+
+        if(escanerActivo){
+
+            await qrScanner.stop();
+        }
+
+    }catch(e){}
+
+    try{
+
+        qrScanner.clear();
+
+    }catch(e){}
+
+    qrScanner=null;
+
+    escanerActivo=false;
+}
+
+async function cerrarEscanerQR(){
+
+    await detenerEscanerQR();
+
+    mostrar("wallet");
+}
+
+/* ESCAPE HTML */
+
+function escapeHTML(valor){
+
+    return String(
+        valor ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+}
+
+/* CERRAR SESIÓN */
+
+function cerrarSesion(){
+
+    detenerEscanerQR();
+
+    usuarioActual=null;
+
+    servicioActual=null;
+
+    comprobanteActual=null;
+
+    movimientosActuales=[];
+
+    if(intervaloRefresco){
+
+        clearInterval(
+            intervaloRefresco
+        );
+
+        intervaloRefresco=null;
+    }
+
+    mostrar("inicio");
+}
+
+/* CERRAR MODALES */
+
+document
+.getElementById("modalDetalleMovimiento")
+.addEventListener(
+    "click",
+    function(e){
+
+        if(e.target === this){
+
+            cerrarDetalleMovimiento();
+        }
+    }
+);
+
+document
+.getElementById("modalComprobante")
+.addEventListener(
+    "click",
+    function(e){
+
+        if(e.target === this){
+
+            cerrarModalComprobante();
+        }
+    }
+);
+</script>
+
+</body>
+</html>
