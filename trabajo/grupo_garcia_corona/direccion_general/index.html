@@ -1,0 +1,4122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dirección General | GRUPO GARCIA CORONA</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --primary:#0b1220;
+    --primary2:#111c31;
+    --sidebar:#0a1020;
+    --sidebar2:#101a2d;
+    --gold:#d4af37;
+    --gold2:#f1d477;
+    --white:#ffffff;
+    --text:#172033;
+    --muted:#6d7788;
+    --bg:#f3f5f9;
+    --card:#ffffff;
+    --border:#e2e6ee;
+    --success:#159957;
+    --danger:#dc3545;
+    --warning:#e6a817;
+    --info:#2878d7;
+    --shadow:0 12px 35px rgba(10,18,32,.08);
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+/* ==============================
+   LOGIN
+============================== */
+
+.login-screen{
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(212,175,55,.14),transparent 28%),
+        radial-gradient(circle at 80% 80%,rgba(40,120,215,.12),transparent 30%),
+        linear-gradient(135deg,#070c17,#111c31 55%,#070c17);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:9999;
+}
+
+.login-box{
+    width:100%;
+    max-width:440px;
+    background:rgba(255,255,255,.98);
+    border-radius:24px;
+    padding:38px;
+    box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+
+.login-logo{
+    width:78px;
+    height:78px;
+    margin:0 auto 18px;
+    border-radius:22px;
+    background:linear-gradient(135deg,var(--gold),#9b7815);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#111;
+    font-size:25px;
+    font-weight:900;
+    box-shadow:0 12px 30px rgba(212,175,55,.3);
+}
+
+.login-title{
+    text-align:center;
+    font-size:25px;
+    font-weight:900;
+    color:var(--primary);
+}
+
+.login-subtitle{
+    text-align:center;
+    color:var(--muted);
+    margin-top:7px;
+    margin-bottom:28px;
+    font-size:14px;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+.form-group label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:7px;
+    color:#354052;
+}
+
+.form-control{
+    width:100%;
+    height:46px;
+    border:1px solid var(--border);
+    border-radius:11px;
+    padding:0 14px;
+    outline:none;
+    font-size:14px;
+    transition:.2s;
+    background:#fff;
+}
+
+.form-control:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 4px rgba(212,175,55,.12);
+}
+
+.login-button{
+    width:100%;
+    height:48px;
+    border:0;
+    border-radius:11px;
+    background:linear-gradient(135deg,var(--gold),#b98e19);
+    color:#111;
+    font-weight:900;
+    cursor:pointer;
+    font-size:15px;
+    transition:.2s;
+}
+
+.login-button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(212,175,55,.25);
+}
+
+.login-error{
+    background:#fff0f1;
+    border:1px solid #ffc9ce;
+    color:#b4232f;
+    border-radius:10px;
+    padding:11px;
+    font-size:13px;
+    margin-bottom:15px;
+    display:none;
+}
+
+.login-info{
+    margin-top:20px;
+    text-align:center;
+    font-size:11px;
+    color:#8b94a3;
+}
+
+/* ==============================
+   APP
+============================== */
+
+.app{
+    display:none;
+    min-height:100vh;
+}
+
+/* ==============================
+   SIDEBAR
+============================== */
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:285px;
+    background:linear-gradient(180deg,var(--sidebar),#080d18);
+    color:#fff;
+    z-index:2000;
+    display:flex;
+    flex-direction:column;
+    border-right:1px solid rgba(255,255,255,.07);
+    transition:transform .3s ease;
+}
+
+.sidebar-header{
+    padding:25px 22px 20px;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.brand-logo{
+    width:48px;
+    height:48px;
+    min-width:48px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--gold),#987514);
+    color:#101010;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    font-size:15px;
+}
+
+.brand-name{
+    font-weight:900;
+    font-size:14px;
+    line-height:1.2;
+}
+
+.brand-name small{
+    display:block;
+    margin-top:4px;
+    color:#9da7b8;
+    font-size:10px;
+    font-weight:500;
+}
+
+.menu-scroll{
+    flex:1;
+    overflow-y:auto;
+    padding:17px 13px;
+}
+
+.menu-scroll::-webkit-scrollbar{
+    width:5px;
+}
+
+.menu-scroll::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.13);
+    border-radius:10px;
+}
+
+.menu-title{
+    color:#667287;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:1.2px;
+    padding:12px 12px 8px;
+}
+
+.menu-button{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#aeb8c9;
+    min-height:48px;
+    padding:0 12px;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    margin-bottom:4px;
+    text-align:left;
+    transition:.2s;
+    position:relative;
+}
+
+.menu-button:hover{
+    background:rgba(255,255,255,.07);
+    color:#fff;
+}
+
+.menu-button.active{
+    background:linear-gradient(90deg,rgba(212,175,55,.18),rgba(212,175,55,.06));
+    color:#fff;
+}
+
+.menu-button.active::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:9px;
+    bottom:9px;
+    width:3px;
+    border-radius:0 5px 5px 0;
+    background:var(--gold);
+}
+
+.menu-icon{
+    width:27px;
+    min-width:27px;
+    height:27px;
+    border-radius:8px;
+    background:rgba(255,255,255,.055);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:15px;
+}
+
+.menu-button.active .menu-icon{
+    background:rgba(212,175,55,.16);
+}
+
+.menu-label{
+    flex:1;
+    font-size:13px;
+    font-weight:700;
+}
+
+.menu-key{
+    border:1px solid rgba(255,255,255,.12);
+    color:#6f7b8e;
+    min-width:24px;
+    height:22px;
+    padding:0 5px;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:10px;
+    font-weight:900;
+}
+
+.menu-button:hover .menu-key,
+.menu-button.active .menu-key{
+    color:var(--gold2);
+    border-color:rgba(212,175,55,.3);
+}
+
+.sidebar-user{
+    padding:14px;
+    border-top:1px solid rgba(255,255,255,.07);
+}
+
+.user-box{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:11px;
+    background:rgba(255,255,255,.045);
+    border-radius:12px;
+}
+
+.user-avatar{
+    width:38px;
+    height:38px;
+    min-width:38px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--gold),#9c7717);
+    color:#111;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+}
+
+.user-info{
+    min-width:0;
+    flex:1;
+}
+
+.user-info strong{
+    display:block;
+    color:#fff;
+    font-size:12px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.user-info span{
+    display:block;
+    color:#79859a;
+    font-size:10px;
+    margin-top:3px;
+}
+
+/* ==============================
+   MAIN
+============================== */
+
+.main{
+    margin-left:285px;
+    min-height:100vh;
+}
+
+.topbar{
+    height:76px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    padding:0 28px;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.topbar-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.mobile-menu{
+    display:none;
+    border:0;
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:var(--primary);
+    color:#fff;
+    cursor:pointer;
+    font-size:20px;
+}
+
+.page-title h1{
+    font-size:21px;
+    color:var(--primary);
+}
+
+.page-title p{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:4px;
+}
+
+.topbar-right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.clock{
+    text-align:right;
+}
+
+.clock strong{
+    display:block;
+    font-size:14px;
+    color:var(--primary);
+}
+
+.clock span{
+    display:block;
+    font-size:10px;
+    color:var(--muted);
+    margin-top:3px;
+}
+
+.logout-button{
+    border:1px solid #e7dcae;
+    background:#fffaf0;
+    color:#8a6a08;
+    height:38px;
+    padding:0 13px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:800;
+    font-size:12px;
+}
+
+.content{
+    padding:28px;
+    max-width:1600px;
+    margin:auto;
+}
+
+/* ==============================
+   SECTIONS
+============================== */
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+    animation:fadeIn .25s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(5px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:22px;
+}
+
+.section-header h2{
+    font-size:23px;
+    color:var(--primary);
+}
+
+.section-header p{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:5px;
+}
+
+/* ==============================
+   DASHBOARD
+============================== */
+
+.welcome{
+    background:
+        radial-gradient(circle at 90% 10%,rgba(212,175,55,.2),transparent 25%),
+        linear-gradient(135deg,#0b1220,#15243e);
+    color:#fff;
+    border-radius:18px;
+    padding:27px;
+    margin-bottom:22px;
+    position:relative;
+    overflow:hidden;
+}
+
+.welcome::after{
+    content:"";
+    position:absolute;
+    right:-80px;
+    bottom:-100px;
+    width:260px;
+    height:260px;
+    border-radius:50%;
+    border:1px solid rgba(212,175,55,.15);
+}
+
+.welcome h2{
+    font-size:23px;
+}
+
+.welcome p{
+    color:#aeb8c9;
+    margin-top:8px;
+    font-size:13px;
+}
+
+.welcome-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin-top:17px;
+    padding:7px 10px;
+    border-radius:20px;
+    background:rgba(255,255,255,.08);
+    color:#f2d979;
+    font-size:10px;
+    font-weight:800;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:17px;
+    margin-bottom:22px;
+}
+
+.stat-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:20px;
+    box-shadow:var(--shadow);
+}
+
+.stat-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.stat-icon{
+    width:43px;
+    height:43px;
+    border-radius:12px;
+    background:#f4f6fa;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+.stat-card h3{
+    font-size:27px;
+    margin-top:15px;
+}
+
+.stat-card p{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:5px;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:15px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+
+.card-header{
+    padding:18px 20px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.card-header h3{
+    font-size:14px;
+    color:var(--primary);
+}
+
+.card-body{
+    padding:20px;
+}
+
+.activity-item{
+    display:flex;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid #eef0f4;
+}
+
+.activity-item:last-child{
+    border-bottom:0;
+}
+
+.activity-dot{
+    width:8px;
+    height:8px;
+    min-width:8px;
+    border-radius:50%;
+    background:var(--gold);
+    margin-top:5px;
+}
+
+.activity-text{
+    font-size:12px;
+}
+
+.activity-time{
+    color:#9aa2af;
+    font-size:10px;
+    margin-top:4px;
+}
+
+.quick-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.quick-button{
+    min-height:65px;
+    border:1px solid var(--border);
+    background:#fafbfd;
+    border-radius:11px;
+    cursor:pointer;
+    text-align:left;
+    padding:12px;
+    transition:.2s;
+}
+
+.quick-button:hover{
+    border-color:#d5b84c;
+    transform:translateY(-2px);
+}
+
+.quick-button strong{
+    display:block;
+    font-size:12px;
+}
+
+.quick-button span{
+    color:var(--muted);
+    font-size:10px;
+}
+
+/* ==============================
+   TABLES
+============================== */
+
+.table-container{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:15px;
+    overflow:auto;
+    box-shadow:var(--shadow);
+}
+
+.table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px;
+}
+
+.table th{
+    background:#f7f8fa;
+    color:#596476;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+    padding:14px;
+    text-align:left;
+}
+
+.table td{
+    padding:14px;
+    border-top:1px solid #edf0f4;
+    font-size:12px;
+}
+
+.table tr:hover td{
+    background:#fcfcfd;
+}
+
+.badge{
+    display:inline-flex;
+    padding:5px 8px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:800;
+}
+
+.badge-success{
+    background:#eaf8f0;
+    color:#168348;
+}
+
+.badge-warning{
+    background:#fff7df;
+    color:#9b7207;
+}
+
+.badge-danger{
+    background:#ffeff1;
+    color:#c22d3a;
+}
+
+.badge-info{
+    background:#edf5ff;
+    color:#246ab7;
+}
+
+.action-button{
+    border:1px solid var(--border);
+    background:#fff;
+    border-radius:7px;
+    padding:6px 9px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:700;
+}
+
+.action-button.delete{
+    color:var(--danger);
+}
+
+.action-button:hover{
+    background:#f5f6f8;
+}
+
+/* ==============================
+   BUTTONS
+============================== */
+
+.btn{
+    border:0;
+    height:40px;
+    padding:0 15px;
+    border-radius:9px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:800;
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:#fff;
+}
+
+.btn-gold{
+    background:linear-gradient(135deg,var(--gold),#b68b16);
+    color:#111;
+}
+
+.btn-danger{
+    background:#fff0f1;
+    color:#c72c38;
+}
+
+.btn-secondary{
+    background:#f1f3f6;
+    color:#4c5667;
+}
+
+.empty{
+    text-align:center;
+    padding:45px 20px;
+    color:#8b94a3;
+    font-size:12px;
+}
+
+/* ==============================
+   FORMS
+============================== */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.form-grid.three{
+    grid-template-columns:repeat(3,1fr);
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+textarea.form-control{
+    height:90px;
+    padding-top:12px;
+    resize:vertical;
+}
+
+select.form-control{
+    cursor:pointer;
+}
+
+/* ==============================
+   MODAL
+============================== */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(5,10,18,.68);
+    backdrop-filter:blur(5px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:5000;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:600px;
+    max-height:90vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:18px;
+    box-shadow:0 30px 80px rgba(0,0,0,.3);
+}
+
+.modal-header{
+    padding:19px 22px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.modal-header h3{
+    font-size:16px;
+}
+
+.close-modal{
+    width:32px;
+    height:32px;
+    border:0;
+    border-radius:8px;
+    background:#f2f4f7;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.modal-body{
+    padding:22px;
+}
+
+.modal-footer{
+    padding:15px 22px;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:flex-end;
+    gap:9px;
+}
+
+/* ==============================
+   CONFIG
+============================== */
+
+.config-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow:var(--shadow);
+}
+
+.config-card h3{
+    font-size:15px;
+    margin-bottom:4px;
+}
+
+.config-card p{
+    color:var(--muted);
+    font-size:11px;
+    margin-bottom:18px;
+}
+
+.danger-zone{
+    border-color:#ffd2d6;
+}
+
+.danger-zone h3{
+    color:#b72b37;
+}
+
+/* ==============================
+   MOBILE OVERLAY
+============================== */
+
+.sidebar-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    z-index:1500;
+}
+
+.sidebar-overlay.show{
+    display:block;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media(max-width:1100px){
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        width:285px;
+        box-shadow:15px 0 45px rgba(0,0,0,.25);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .mobile-menu{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .topbar{
+        padding:0 16px;
+    }
+
+    .content{
+        padding:20px 16px;
+    }
+
+    .clock{
+        display:none;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .topbar{
+        height:68px;
+    }
+
+    .page-title h1{
+        font-size:17px;
+    }
+
+    .page-title p{
+        display:none;
+    }
+
+    .logout-button{
+        width:38px;
+        padding:0;
+        font-size:0;
+    }
+
+    .logout-button::after{
+        content:"↪";
+        font-size:17px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:15px;
+    }
+
+    .stat-card h3{
+        font-size:23px;
+    }
+
+    .welcome{
+        padding:21px;
+    }
+
+    .welcome h2{
+        font-size:19px;
+    }
+
+    .section-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .form-grid,
+    .form-grid.three{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    .quick-actions{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:420px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .login-box{
+        padding:27px 21px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ==============================
+     LOGIN
+============================== -->
+
+<div class="login-screen" id="loginScreen">
+
+    <div class="login-box">
+
+        <div class="login-logo">
+            GGC
+        </div>
+
+        <div class="login-title">
+            GRUPO GARCIA CORONA
+        </div>
+
+        <div class="login-subtitle">
+            Acceso privado · Dirección General
+        </div>
+
+        <div class="login-error" id="loginError">
+            Usuario o contraseña incorrectos.
+        </div>
+
+        <div class="form-group">
+            <label>Usuario</label>
+            <input
+                type="text"
+                class="form-control"
+                id="loginUser"
+                placeholder="Ingrese su usuario"
+                autocomplete="username"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input
+                type="password"
+                class="form-control"
+                id="loginPassword"
+                placeholder="Ingrese su contraseña"
+                autocomplete="current-password"
+            >
+        </div>
+
+        <button class="login-button" onclick="login()">
+            🔐 Iniciar sesión
+        </button>
+
+        <div class="login-info">
+            Sistema privado de Dirección General<br>
+            Los datos se almacenan localmente en este dispositivo.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================
+     APP
+============================== -->
+
+<div class="app" id="app">
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileMenu()"></div>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="sidebar-header">
+
+            <div class="brand">
+
+                <div class="brand-logo">
+                    GGC
+                </div>
+
+                <div class="brand-name">
+                    GRUPO GARCIA CORONA
+                    <small>Dirección General</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="menu-scroll">
+
+            <div class="menu-title">
+                RESUMEN
+            </div>
+
+            <button class="menu-button active" onclick="showSection('dashboard',this)">
+                <div class="menu-icon">⌂</div>
+                <div class="menu-label">Dashboard</div>
+                <div class="menu-key">1</div>
+            </button>
+
+
+            <div class="menu-title">
+                GESTIÓN
+            </div>
+
+            <button class="menu-button" onclick="showSection('empresas',this)">
+                <div class="menu-icon">🏢</div>
+                <div class="menu-label">Empresas</div>
+                <div class="menu-key">2</div>
+            </button>
+
+            <button class="menu-button" onclick="showSection('personal',this)">
+                <div class="menu-icon">👥</div>
+                <div class="menu-label">Personal</div>
+                <div class="menu-key">3</div>
+            </button>
+
+            <button class="menu-button" onclick="showSection('documentos',this)">
+                <div class="menu-icon">📁</div>
+                <div class="menu-label">Documentos</div>
+                <div class="menu-key">4</div>
+            </button>
+
+
+            <div class="menu-title">
+                CONTROL
+            </div>
+
+            <button class="menu-button" onclick="showSection('finanzas',this)">
+                <div class="menu-icon">💰</div>
+                <div class="menu-label">Finanzas</div>
+                <div class="menu-key">5</div>
+            </button>
+
+            <button class="menu-button" onclick="showSection('agenda',this)">
+                <div class="menu-icon">📅</div>
+                <div class="menu-label">Agenda</div>
+                <div class="menu-key">6</div>
+            </button>
+
+            <button class="menu-button" onclick="showSection('avisos',this)">
+                <div class="menu-icon">🔔</div>
+                <div class="menu-label">Avisos</div>
+                <div class="menu-key">7</div>
+            </button>
+
+            <button class="menu-button" onclick="showSection('bitacora',this)">
+                <div class="menu-icon">📋</div>
+                <div class="menu-label">Bitácora</div>
+                <div class="menu-key">8</div>
+            </button>
+
+
+            <div class="menu-title">
+                SISTEMA
+            </div>
+
+            <button class="menu-button" onclick="showSection('configuracion',this)">
+                <div class="menu-icon">⚙</div>
+                <div class="menu-label">Configuración</div>
+                <div class="menu-key">9</div>
+            </button>
+
+        </div>
+
+
+        <div class="sidebar-user">
+
+            <div class="user-box">
+
+                <div class="user-avatar" id="sidebarAvatar">
+                    DG
+                </div>
+
+                <div class="user-info">
+                    <strong id="sidebarUserName">
+                        Director General
+                    </strong>
+
+                    <span>
+                        Acceso administrativo
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="mobile-menu"
+                    onclick="toggleMobileMenu()"
+                    title="Abrir menú"
+                >
+                    ☰
+                </button>
+
+                <div class="page-title">
+
+                    <h1 id="pageTitle">
+                        Dashboard
+                    </h1>
+
+                    <p id="pageSubtitle">
+                        Centro de control de Dirección General
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <div class="clock">
+
+                    <strong id="clock">
+                        00:00:00
+                    </strong>
+
+                    <span id="date">
+                        Cargando fecha...
+                    </span>
+
+                </div>
+
+                <button class="logout-button" onclick="logout()">
+                    Cerrar sesión
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <div class="content">
+
+
+            <!-- ==============================
+                 DASHBOARD
+            ============================== -->
+
+            <section class="section active" id="dashboard">
+
+                <div class="welcome">
+
+                    <h2 id="welcomeTitle">
+                        Bienvenido, Director General
+                    </h2>
+
+                    <p>
+                        Este es el centro privado de administración de
+                        GRUPO GARCIA CORONA.
+                    </p>
+
+                    <div class="welcome-badge">
+                        ● SISTEMA OPERATIVO
+                    </div>
+
+                </div>
+
+
+                <div class="stats">
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div>
+                                <h3 id="statCompanies">0</h3>
+                                <p>Empresas registradas</p>
+                            </div>
+
+                            <div class="stat-icon">
+                                🏢
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div>
+                                <h3 id="statEmployees">0</h3>
+                                <p>Personal registrado</p>
+                            </div>
+
+                            <div class="stat-icon">
+                                👥
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div>
+                                <h3 id="statDocuments">0</h3>
+                                <p>Documentos</p>
+                            </div>
+
+                            <div class="stat-icon">
+                                📁
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+
+                            <div>
+                                <h3 id="statFinances">$0</h3>
+                                <p>Movimientos registrados</p>
+                            </div>
+
+                            <div class="stat-icon">
+                                💰
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-grid">
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Actividad reciente</h3>
+                        </div>
+
+                        <div class="card-body" id="activityList">
+                        </div>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3>Acciones rápidas</h3>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="quick-actions">
+
+                                <button
+                                    class="quick-button"
+                                    onclick="openModal('companyModal')"
+                                >
+                                    <strong>🏢 Nueva empresa</strong>
+                                    <span>Registrar una empresa</span>
+                                </button>
+
+                                <button
+                                    class="quick-button"
+                                    onclick="openModal('employeeModal')"
+                                >
+                                    <strong>👤 Nuevo personal</strong>
+                                    <span>Agregar colaborador</span>
+                                </button>
+
+                                <button
+                                    class="quick-button"
+                                    onclick="openModal('documentModal')"
+                                >
+                                    <strong>📁 Documento</strong>
+                                    <span>Registrar documento</span>
+                                </button>
+
+                                <button
+                                    class="quick-button"
+                                    onclick="openModal('financeModal')"
+                                >
+                                    <strong>💰 Movimiento</strong>
+                                    <span>Registrar movimiento</span>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 EMPRESAS
+            ============================== -->
+
+            <section class="section" id="empresas">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Empresas</h2>
+                        <p>Administración de las empresas del grupo.</p>
+                    </div>
+
+                    <button
+                        class="btn btn-gold"
+                        onclick="openModal('companyModal')"
+                    >
+                        + Nueva empresa
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Empresa</th>
+                                <th>Actividad</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="companiesTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 PERSONAL
+            ============================== -->
+
+            <section class="section" id="personal">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Personal</h2>
+                        <p>Directorio interno de colaboradores.</p>
+                    </div>
+
+                    <button
+                        class="btn btn-gold"
+                        onclick="openModal('employeeModal')"
+                    >
+                        + Nuevo personal
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Puesto</th>
+                                <th>Área</th>
+                                <th>Empresa</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="employeesTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 DOCUMENTOS
+            ============================== -->
+
+            <section class="section" id="documentos">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Documentos</h2>
+                        <p>Control y registro documental.</p>
+                    </div>
+
+                    <button
+                        class="btn btn-gold"
+                        onclick="openModal('documentModal')"
+                    >
+                        + Nuevo documento
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Tipo</th>
+                                <th>Responsable</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="documentsTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 FINANZAS
+            ============================== -->
+
+            <section class="section" id="finanzas">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Finanzas</h2>
+                        <p>Registro interno de movimientos financieros.</p>
+                    </div>
+
+                    <button
+                        class="btn btn-gold"
+                        onclick="openModal('financeModal')"
+                    >
+                        + Nuevo movimiento
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Tipo</th>
+                                <th>Monto</th>
+                                <th>Fecha</th>
+                                <th>Notas</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="financesTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 AGENDA
+            ============================== -->
+
+            <section class="section" id="agenda">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Agenda</h2>
+                        <p>Compromisos y actividades de Dirección General.</p>
+                    </div>
+
+                    <button
+                        class="btn btn-gold"
+                        onclick="openModal('agendaModal')"
+                    >
+                        + Nuevo evento
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Lugar</th>
+                                <th>Prioridad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="agendaTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 AVISOS
+            ============================== -->
+
+            <section class="section" id="avisos">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Avisos</h2>
+                        <p>Comunicados internos de Dirección General.</p>
+                    </div>
+
+                    <button
+                        class="btn btn-gold"
+                        onclick="openModal('noticeModal')"
+                    >
+                        + Nuevo aviso
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Mensaje</th>
+                                <th>Fecha</th>
+                                <th>Prioridad</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="noticesTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 BITÁCORA
+            ============================== -->
+
+            <section class="section" id="bitacora">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Bitácora</h2>
+                        <p>Registro de actividades realizadas dentro del sistema.</p>
+                    </div>
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="clearLogs()"
+                    >
+                        Limpiar bitácora
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Actividad</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="logsTable">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==============================
+                 CONFIGURACIÓN
+            ============================== -->
+
+            <section class="section" id="configuracion">
+
+                <div class="section-header">
+
+                    <div>
+                        <h2>Configuración</h2>
+                        <p>Configuración del acceso y datos generales.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="config-card">
+
+                    <h3>Información de Dirección General</h3>
+
+                    <p>
+                        Estos datos se utilizan dentro del sistema.
+                    </p>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Nombre del Director General</label>
+                            <input
+                                class="form-control"
+                                id="configDirector"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nombre de la empresa</label>
+                            <input
+                                class="form-control"
+                                id="configCompany"
+                            >
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="btn btn-gold"
+                        onclick="saveGeneralConfig()"
+                    >
+                        Guardar información
+                    </button>
+
+                </div>
+
+
+                <div class="config-card">
+
+                    <h3>Credenciales de acceso</h3>
+
+                    <p>
+                        Cambia el usuario y contraseña utilizados para entrar.
+                    </p>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Usuario</label>
+                            <input
+                                class="form-control"
+                                id="configUser"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nueva contraseña</label>
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="configPassword"
+                            >
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="saveCredentials()"
+                    >
+                        Actualizar acceso
+                    </button>
+
+                </div>
+
+
+                <div class="config-card danger-zone">
+
+                    <h3>Zona de mantenimiento</h3>
+
+                    <p>
+                        Esta acción eliminará todos los datos guardados
+                        localmente por este sistema.
+                    </p>
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="resetSystem()"
+                    >
+                        Restablecer sistema
+                    </button>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ==============================
+     MODAL EMPRESA
+============================== -->
+
+<div class="modal" id="companyModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Registrar empresa</h3>
+
+            <button class="close-modal" onclick="closeModal('companyModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Nombre de la empresa</label>
+                    <input
+                        class="form-control"
+                        id="companyName"
+                        placeholder="Ej. CORPORATIVO NEXEL DIGITAL"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Actividad</label>
+                    <input
+                        class="form-control"
+                        id="companyActivity"
+                        placeholder="Actividad principal"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select class="form-control" id="companyStatus">
+                        <option>Activa</option>
+                        <option>En operación</option>
+                        <option>En desarrollo</option>
+                        <option>Inactiva</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeModal('companyModal')"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="btn btn-gold"
+                onclick="addCompany()"
+            >
+                Guardar empresa
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================
+     MODAL PERSONAL
+============================== -->
+
+<div class="modal" id="employeeModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Registrar personal</h3>
+
+            <button class="close-modal" onclick="closeModal('employeeModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Nombre completo</label>
+                    <input
+                        class="form-control"
+                        id="employeeName"
+                        placeholder="Nombre completo"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Puesto</label>
+                    <input
+                        class="form-control"
+                        id="employeePosition"
+                        placeholder="Puesto"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Área</label>
+                    <input
+                        class="form-control"
+                        id="employeeArea"
+                        placeholder="Área"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Empresa</label>
+                    <input
+                        class="form-control"
+                        id="employeeCompany"
+                        placeholder="Empresa"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select class="form-control" id="employeeStatus">
+                        <option>Activo</option>
+                        <option>Inactivo</option>
+                        <option>Vacaciones</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeModal('employeeModal')"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="btn btn-gold"
+                onclick="addEmployee()"
+            >
+                Guardar personal
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================
+     MODAL DOCUMENTO
+============================== -->
+
+<div class="modal" id="documentModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Registrar documento</h3>
+
+            <button class="close-modal" onclick="closeModal('documentModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Nombre del documento</label>
+                    <input
+                        class="form-control"
+                        id="documentName"
+                        placeholder="Nombre del documento"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select class="form-control" id="documentType">
+                        <option>Contrato</option>
+                        <option>Acta</option>
+                        <option>Reporte</option>
+                        <option>Oficio</option>
+                        <option>Administrativo</option>
+                        <option>Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Responsable</label>
+                    <input
+                        class="form-control"
+                        id="documentResponsible"
+                        placeholder="Responsable"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select class="form-control" id="documentStatus">
+                        <option>Vigente</option>
+                        <option>En revisión</option>
+                        <option>Archivado</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeModal('documentModal')"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="btn btn-gold"
+                onclick="addDocument()"
+            >
+                Guardar documento
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================
+     MODAL FINANZAS
+============================== -->
+
+<div class="modal" id="financeModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Registrar movimiento financiero</h3>
+
+            <button class="close-modal" onclick="closeModal('financeModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Concepto</label>
+                    <input
+                        class="form-control"
+                        id="financeConcept"
+                        placeholder="Concepto del movimiento"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo</label>
+                    <select class="form-control" id="financeType">
+                        <option>Ingreso</option>
+                        <option>Gasto</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Monto</label>
+                    <input
+                        type="number"
+                        step="0.01"
+                        class="form-control"
+                        id="financeAmount"
+                        placeholder="0.00"
+                    >
+                </div>
+
+                <div class="form-group full">
+                    <label>Notas</label>
+                    <textarea
+                        class="form-control"
+                        id="financeNotes"
+                        placeholder="Notas adicionales"
+                    ></textarea>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeModal('financeModal')"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="btn btn-gold"
+                onclick="addFinance()"
+            >
+                Guardar movimiento
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================
+     MODAL AGENDA
+============================== -->
+
+<div class="modal" id="agendaModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Nuevo evento</h3>
+
+            <button class="close-modal" onclick="closeModal('agendaModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Evento</label>
+                    <input
+                        class="form-control"
+                        id="agendaTitle"
+                        placeholder="Nombre del evento"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Fecha</label>
+                    <input
+                        type="date"
+                        class="form-control"
+                        id="agendaDate"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Hora</label>
+                    <input
+                        type="time"
+                        class="form-control"
+                        id="agendaTime"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Lugar</label>
+                    <input
+                        class="form-control"
+                        id="agendaPlace"
+                        placeholder="Lugar"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select class="form-control" id="agendaPriority">
+                        <option>Normal</option>
+                        <option>Importante</option>
+                        <option>Urgente</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeModal('agendaModal')"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="btn btn-gold"
+                onclick="addAgenda()"
+            >
+                Guardar evento
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================
+     MODAL AVISO
+============================== -->
+
+<div class="modal" id="noticeModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h3>Nuevo aviso</h3>
+
+            <button class="close-modal" onclick="closeModal('noticeModal')">
+                ×
+            </button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Título</label>
+                    <input
+                        class="form-control"
+                        id="noticeTitle"
+                        placeholder="Título del aviso"
+                    >
+                </div>
+
+                <div class="form-group full">
+                    <label>Mensaje</label>
+                    <textarea
+                        class="form-control"
+                        id="noticeMessage"
+                        placeholder="Escriba el mensaje"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select class="form-control" id="noticePriority">
+                        <option>Normal</option>
+                        <option>Importante</option>
+                        <option>Urgente</option>
+                    </select>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                class="btn btn-secondary"
+                onclick="closeModal('noticeModal')"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="btn btn-gold"
+                onclick="addNotice()"
+            >
+                Publicar aviso
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ==============================
+   LOCAL STORAGE
+============================== */
+
+const KEYS = {
+
+    config:"ggc_config",
+    session:"ggc_session",
+    companies:"ggc_companies",
+    employees:"ggc_employees",
+    documents:"ggc_documents",
+    finances:"ggc_finances",
+    agenda:"ggc_agenda",
+    notices:"ggc_notices",
+    logs:"ggc_logs"
+
+};
+
+
+/* ==============================
+   UTILIDADES
+============================== */
+
+function getData(key,fallback=[]){
+
+    try{
+
+        const data = localStorage.getItem(key);
+
+        return data ? JSON.parse(data) : fallback;
+
+    }catch(error){
+
+        return fallback;
+
+    }
+
+}
+
+
+function saveData(key,data){
+
+    localStorage.setItem(key,JSON.stringify(data));
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function today(){
+
+    return new Date().toISOString().split("T")[0];
+
+}
+
+
+function formatMoney(value){
+
+    return Number(value || 0).toLocaleString("es-MX",{
+        style:"currency",
+        currency:"MXN"
+    });
+
+}
+
+
+function formatDate(date){
+
+    if(!date) return "-";
+
+    const d = new Date(date + "T00:00:00");
+
+    return d.toLocaleDateString("es-MX",{
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+    });
+
+}
+
+
+/* ==============================
+   CONFIGURACIÓN
+============================== */
+
+function getConfig(){
+
+    const defaultConfig = {
+
+        director:"Director General",
+        company:"GRUPO GARCIA CORONA",
+        user:"director",
+        password:"123456"
+
+    };
+
+    const saved = getData(KEYS.config,null);
+
+    if(!saved){
+
+        saveData(KEYS.config,defaultConfig);
+
+        return defaultConfig;
+
+    }
+
+    return {
+        ...defaultConfig,
+        ...saved
+    };
+
+}
+
+
+/* ==============================
+   LOGIN
+============================== */
+
+function login(){
+
+    const user = document.getElementById("loginUser").value.trim();
+    const password = document.getElementById("loginPassword").value;
+
+    const config = getConfig();
+
+    if(
+        user === config.user &&
+        password === config.password
+    ){
+
+        localStorage.setItem(
+            KEYS.session,
+            JSON.stringify({
+                login:true,
+                time:Date.now()
+            })
+        );
+
+        document.getElementById("loginScreen").style.display="none";
+        document.getElementById("app").style.display="block";
+
+        loadAll();
+
+        addLog("Inicio de sesión en Dirección General");
+
+    }else{
+
+        const error = document.getElementById("loginError");
+
+        error.style.display="block";
+
+        setTimeout(()=>{
+            error.style.display="none";
+        },3000);
+
+    }
+
+}
+
+
+function logout(){
+
+    addLog("Cierre de sesión");
+
+    localStorage.removeItem(KEYS.session);
+
+    location.reload();
+
+}
+
+
+/* ==============================
+   NAVEGACIÓN
+============================== */
+
+const pageNames = {
+
+    dashboard:[
+        "Dashboard",
+        "Centro de control de Dirección General"
+    ],
+
+    empresas:[
+        "Empresas",
+        "Administración de las empresas del grupo"
+    ],
+
+    personal:[
+        "Personal",
+        "Directorio interno de colaboradores"
+    ],
+
+    documentos:[
+        "Documentos",
+        "Control y registro documental"
+    ],
+
+    finanzas:[
+        "Finanzas",
+        "Control de movimientos financieros"
+    ],
+
+    agenda:[
+        "Agenda",
+        "Compromisos y actividades"
+    ],
+
+    avisos:[
+        "Avisos",
+        "Comunicados internos"
+    ],
+
+    bitacora:[
+        "Bitácora",
+        "Registro de actividades del sistema"
+    ],
+
+    configuracion:[
+        "Configuración",
+        "Configuración general del sistema"
+    ]
+
+};
+
+
+function showSection(id,button){
+
+    document.querySelectorAll(".section").forEach(section=>{
+        section.classList.remove("active");
+    });
+
+    const target = document.getElementById(id);
+
+    if(target){
+        target.classList.add("active");
+    }
+
+
+    document.querySelectorAll(".menu-button").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    if(button){
+        button.classList.add("active");
+    }
+
+
+    const info = pageNames[id];
+
+    if(info){
+
+        document.getElementById("pageTitle").textContent=info[0];
+
+        document.getElementById("pageSubtitle").textContent=info[1];
+
+    }
+
+
+    closeMobileMenu();
+
+}
+
+
+function goToSection(id){
+
+    const button = [...document.querySelectorAll(".menu-button")]
+        .find(btn=>btn.getAttribute("onclick")?.includes(`'${id}'`));
+
+    showSection(id,button);
+
+}
+
+
+/* ==============================
+   MENÚ MÓVIL
+============================== */
+
+function toggleMobileMenu(){
+
+    document.getElementById("sidebar")
+        .classList.toggle("open");
+
+    document.getElementById("sidebarOverlay")
+        .classList.toggle("show");
+
+}
+
+
+function closeMobileMenu(){
+
+    document.getElementById("sidebar")
+        .classList.remove("open");
+
+    document.getElementById("sidebarOverlay")
+        .classList.remove("show");
+
+}
+
+
+/* ==============================
+   MODALES
+============================== */
+
+function openModal(id){
+
+    document.getElementById(id).classList.add("show");
+
+}
+
+
+function closeModal(id){
+
+    document.getElementById(id).classList.remove("show");
+
+}
+
+
+/* ==============================
+   EMPRESAS
+============================== */
+
+function getCompanies(){
+
+    return getData(KEYS.companies,[
+        {
+            id:1,
+            name:"GRUPO GARCIA CORONA",
+            activity:"Administración corporativa",
+            status:"Activa",
+            date:today()
+        },
+        {
+            id:2,
+            name:"CORPORATIVO NEXEL DIGITAL",
+            activity:"Tecnología y servicios digitales",
+            status:"En operación",
+            date:today()
+        }
+    ]);
+
+}
+
+
+function addCompany(){
+
+    const name=document.getElementById("companyName").value.trim();
+    const activity=document.getElementById("companyActivity").value.trim();
+    const status=document.getElementById("companyStatus").value;
+
+    if(!name){
+
+        alert("Ingrese el nombre de la empresa.");
+
+        return;
+
+    }
+
+    const data=getCompanies();
+
+    data.push({
+
+        id:Date.now(),
+        name,
+        activity,
+        status,
+        date:today()
+
+    });
+
+    saveData(KEYS.companies,data);
+
+    addLog(`Se registró la empresa "${name}"`);
+
+    closeModal("companyModal");
+
+    clearInputs("companyModal");
+
+    loadAll();
+
+}
+
+
+function deleteCompany(id){
+
+    if(!confirm("¿Eliminar esta empresa?")) return;
+
+    const data=getCompanies().filter(item=>item.id!==id);
+
+    saveData(KEYS.companies,data);
+
+    addLog("Se eliminó una empresa");
+
+    loadAll();
+
+}
+
+
+function renderCompanies(){
+
+    const data=getCompanies();
+
+    const tbody=document.getElementById("companiesTable");
+
+    if(!data.length){
+
+        tbody.innerHTML=`
+            <tr>
+                <td colspan="5">
+                    <div class="empty">
+                        No hay empresas registradas.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML=data.map(item=>`
+
+        <tr>
+
+            <td>
+                <strong>${escapeHTML(item.name)}</strong>
+            </td>
+
+            <td>
+                ${escapeHTML(item.activity)}
+            </td>
+
+            <td>
+                <span class="badge badge-success">
+                    ${escapeHTML(item.status)}
+                </span>
+            </td>
+
+            <td>
+                ${formatDate(item.date)}
+            </td>
+
+            <td>
+                <button
+                    class="action-button delete"
+                    onclick="deleteCompany(${item.id})"
+                >
+                    Eliminar
+                </button>
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* ==============================
+   PERSONAL
+============================== */
+
+function getEmployees(){
+
+    return getData(KEYS.employees,[]);
+
+}
+
+
+function addEmployee(){
+
+    const name=document.getElementById("employeeName").value.trim();
+    const position=document.getElementById("employeePosition").value.trim();
+    const area=document.getElementById("employeeArea").value.trim();
+    const company=document.getElementById("employeeCompany").value.trim();
+    const status=document.getElementById("employeeStatus").value;
+
+    if(!name){
+
+        alert("Ingrese el nombre del colaborador.");
+
+        return;
+
+    }
+
+    const data=getEmployees();
+
+    data.push({
+
+        id:Date.now(),
+        name,
+        position,
+        area,
+        company,
+        status,
+        date:today()
+
+    });
+
+    saveData(KEYS.employees,data);
+
+    addLog(`Se registró a ${name} en el personal`);
+
+    closeModal("employeeModal");
+
+    clearInputs("employeeModal");
+
+    loadAll();
+
+}
+
+
+function deleteEmployee(id){
+
+    if(!confirm("¿Eliminar este registro?")) return;
+
+    saveData(
+        KEYS.employees,
+        getEmployees().filter(item=>item.id!==id)
+    );
+
+    addLog("Se eliminó un registro de personal");
+
+    loadAll();
+
+}
+
+
+function renderEmployees(){
+
+    const data=getEmployees();
+
+    const tbody=document.getElementById("employeesTable");
+
+    if(!data.length){
+
+        tbody.innerHTML=`
+            <tr>
+                <td colspan="6">
+                    <div class="empty">
+                        No hay personal registrado.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML=data.map(item=>`
+
+        <tr>
+
+            <td>
+                <strong>${escapeHTML(item.name)}</strong>
+            </td>
+
+            <td>
+                ${escapeHTML(item.position)}
+            </td>
+
+            <td>
+                ${escapeHTML(item.area)}
+            </td>
+
+            <td>
+                ${escapeHTML(item.company)}
+            </td>
+
+            <td>
+                <span class="badge badge-success">
+                    ${escapeHTML(item.status)}
+                </span>
+            </td>
+
+            <td>
+
+                <button
+                    class="action-button delete"
+                    onclick="deleteEmployee(${item.id})"
+                >
+                    Eliminar
+                </button>
+
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* ==============================
+   DOCUMENTOS
+============================== */
+
+function getDocuments(){
+
+    return getData(KEYS.documents,[]);
+
+}
+
+
+function addDocument(){
+
+    const name=document.getElementById("documentName").value.trim();
+    const type=document.getElementById("documentType").value;
+    const responsible=document.getElementById("documentResponsible").value.trim();
+    const status=document.getElementById("documentStatus").value;
+
+    if(!name){
+
+        alert("Ingrese el nombre del documento.");
+
+        return;
+
+    }
+
+    const data=getDocuments();
+
+    data.push({
+
+        id:Date.now(),
+        name,
+        type,
+        responsible,
+        date:today(),
+        status
+
+    });
+
+    saveData(KEYS.documents,data);
+
+    addLog(`Se registró el documento "${name}"`);
+
+    closeModal("documentModal");
+
+    clearInputs("documentModal");
+
+    loadAll();
+
+}
+
+
+function deleteDocument(id){
+
+    if(!confirm("¿Eliminar este documento?")) return;
+
+    saveData(
+        KEYS.documents,
+        getDocuments().filter(item=>item.id!==id)
+    );
+
+    addLog("Se eliminó un documento");
+
+    loadAll();
+
+}
+
+
+function renderDocuments(){
+
+    const data=getDocuments();
+
+    const tbody=document.getElementById("documentsTable");
+
+    if(!data.length){
+
+        tbody.innerHTML=`
+            <tr>
+                <td colspan="6">
+                    <div class="empty">
+                        No hay documentos registrados.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML=data.map(item=>`
+
+        <tr>
+
+            <td>
+                <strong>${escapeHTML(item.name)}</strong>
+            </td>
+
+            <td>${escapeHTML(item.type)}</td>
+
+            <td>${escapeHTML(item.responsible)}</td>
+
+            <td>${formatDate(item.date)}</td>
+
+            <td>
+                <span class="badge badge-info">
+                    ${escapeHTML(item.status)}
+                </span>
+            </td>
+
+            <td>
+
+                <button
+                    class="action-button delete"
+                    onclick="deleteDocument(${item.id})"
+                >
+                    Eliminar
+                </button>
+
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* ==============================
+   FINANZAS
+============================== */
+
+function getFinances(){
+
+    return getData(KEYS.finances,[]);
+
+}
+
+
+function addFinance(){
+
+    const concept=document.getElementById("financeConcept").value.trim();
+    const type=document.getElementById("financeType").value;
+    const amount=parseFloat(document.getElementById("financeAmount").value);
+    const notes=document.getElementById("financeNotes").value.trim();
+
+    if(!concept){
+
+        alert("Ingrese el concepto.");
+
+        return;
+
+    }
+
+    if(isNaN(amount) || amount<=0){
+
+        alert("Ingrese un monto válido.");
+
+        return;
+
+    }
+
+    const data=getFinances();
+
+    data.push({
+
+        id:Date.now(),
+        concept,
+        type,
+        amount,
+        date:today(),
+        notes
+
+    });
+
+    saveData(KEYS.finances,data);
+
+    addLog(`Movimiento financiero: ${type} ${formatMoney(amount)}`);
+
+    closeModal("financeModal");
+
+    clearInputs("financeModal");
+
+    loadAll();
+
+}
+
+
+function deleteFinance(id){
+
+    if(!confirm("¿Eliminar este movimiento?")) return;
+
+    saveData(
+        KEYS.finances,
+        getFinances().filter(item=>item.id!==id)
+    );
+
+    addLog("Se eliminó un movimiento financiero");
+
+    loadAll();
+
+}
+
+
+function renderFinances(){
+
+    const data=getFinances();
+
+    const tbody=document.getElementById("financesTable");
+
+    if(!data.length){
+
+        tbody.innerHTML=`
+            <tr>
+                <td colspan="6">
+                    <div class="empty">
+                        No hay movimientos registrados.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML=data.map(item=>`
+
+        <tr>
+
+            <td>
+                <strong>${escapeHTML(item.concept)}</strong>
+            </td>
+
+            <td>
+
+                <span class="badge ${
+                    item.type==="Ingreso"
+                    ?"badge-success"
+                    :"badge-danger"
+                }">
+
+                    ${escapeHTML(item.type)}
+
+                </span>
+
+            </td>
+
+            <td>
+                <strong>${formatMoney(item.amount)}</strong>
+            </td>
+
+            <td>
+                ${formatDate(item.date)}
+            </td>
+
+            <td>
+                ${escapeHTML(item.notes)}
+            </td>
+
+            <td>
+
+                <button
+                    class="action-button delete"
+                    onclick="deleteFinance(${item.id})"
+                >
+                    Eliminar
+                </button>
+
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* ==============================
+   AGENDA
+============================== */
+
+function getAgenda(){
+
+    return getData(KEYS.agenda,[]);
+
+}
+
+
+function addAgenda(){
+
+    const title=document.getElementById("agendaTitle").value.trim();
+    const date=document.getElementById("agendaDate").value;
+    const time=document.getElementById("agendaTime").value;
+    const place=document.getElementById("agendaPlace").value.trim();
+    const priority=document.getElementById("agendaPriority").value;
+
+    if(!title || !date){
+
+        alert("Ingrese el evento y la fecha.");
+
+        return;
+
+    }
+
+    const data=getAgenda();
+
+    data.push({
+
+        id:Date.now(),
+        title,
+        date,
+        time,
+        place,
+        priority
+
+    });
+
+    saveData(KEYS.agenda,data);
+
+    addLog(`Se agregó el evento "${title}" a la agenda`);
+
+    closeModal("agendaModal");
+
+    clearInputs("agendaModal");
+
+    loadAll();
+
+}
+
+
+function deleteAgenda(id){
+
+    if(!confirm("¿Eliminar este evento?")) return;
+
+    saveData(
+        KEYS.agenda,
+        getAgenda().filter(item=>item.id!==id)
+    );
+
+    addLog("Se eliminó un evento de la agenda");
+
+    loadAll();
+
+}
+
+
+function renderAgenda(){
+
+    const data=getAgenda()
+        .sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+
+    const tbody=document.getElementById("agendaTable");
+
+    if(!data.length){
+
+        tbody.innerHTML=`
+            <tr>
+                <td colspan="6">
+                    <div class="empty">
+                        No hay eventos en la agenda.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML=data.map(item=>`
+
+        <tr>
+
+            <td>
+                <strong>${escapeHTML(item.title)}</strong>
+            </td>
+
+            <td>
+                ${formatDate(item.date)}
+            </td>
+
+            <td>
+                ${escapeHTML(item.time)}
+            </td>
+
+            <td>
+                ${escapeHTML(item.place)}
+            </td>
+
+            <td>
+
+                <span class="badge ${
+                    item.priority==="Urgente"
+                    ?"badge-danger"
+                    :
+                    item.priority==="Importante"
+                    ?"badge-warning"
+                    :"badge-info"
+                }">
+
+                    ${escapeHTML(item.priority)}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <button
+                    class="action-button delete"
+                    onclick="deleteAgenda(${item.id})"
+                >
+                    Eliminar
+                </button>
+
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* ==============================
+   AVISOS
+============================== */
+
+function getNotices(){
+
+    return getData(KEYS.notices,[]);
+
+}
+
+
+function addNotice(){
+
+    const title=document.getElementById("noticeTitle").value.trim();
+    const message=document.getElementById("noticeMessage").value.trim();
+    const priority=document.getElementById("noticePriority").value;
+
+    if(!title || !message){
+
+        alert("Ingrese el título y el mensaje.");
+
+        return;
+
+    }
+
+    const data=getNotices();
+
+    data.push({
+
+        id:Date.now(),
+        title,
+        message,
+        date:today(),
+        priority
+
+    });
+
+    saveData(KEYS.notices,data);
+
+    addLog(`Se publicó el aviso "${title}"`);
+
+    closeModal("noticeModal");
+
+    clearInputs("noticeModal");
+
+    loadAll();
+
+}
+
+
+function deleteNotice(id){
+
+    if(!confirm("¿Eliminar este aviso?")) return;
+
+    saveData(
+        KEYS.notices,
+        getNotices().filter(item=>item.id!==id)
+    );
+
+    addLog("Se eliminó un aviso");
+
+    loadAll();
+
+}
+
+
+function renderNotices(){
+
+    const data=getNotices();
+
+    const tbody=document.getElementById("noticesTable");
+
+    if(!data.length){
+
+        tbody.innerHTML=`
+            <tr>
+                <td colspan="5">
+                    <div class="empty">
+                        No hay avisos publicados.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML=data.map(item=>`
+
+        <tr>
+
+            <td>
+                <strong>${escapeHTML(item.title)}</strong>
+            </td>
+
+            <td>
+                ${escapeHTML(item.message)}
+            </td>
+
+            <td>
+                ${formatDate(item.date)}
+            </td>
+
+            <td>
+
+                <span class="badge ${
+                    item.priority==="Urgente"
+                    ?"badge-danger"
+                    :
+                    item.priority==="Importante"
+                    ?"badge-warning"
+                    :"badge-info"
+                }">
+
+                    ${escapeHTML(item.priority)}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <button
+                    class="action-button delete"
+                    onclick="deleteNotice(${item.id})"
+                >
+                    Eliminar
+                </button>
+
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+/* ==============================
+   BITÁCORA
+============================== */
+
+function addLog(text){
+
+    const data=getData(KEYS.logs,[]);
+
+    const now=new Date();
+
+    data.unshift({
+
+        date:now.toISOString().split("T")[0],
+
+        time:now.toLocaleTimeString("es-MX",{
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit"
+        }),
+
+        text
+
+    });
+
+    saveData(KEYS.logs,data.slice(0,200));
+
+}
+
+
+function getLogs(){
+
+    return getData(KEYS.logs,[]);
+
+}
+
+
+function renderLogs(){
+
+    const data=getLogs();
+
+    const tbody=document.getElementById("logsTable");
+
+    if(!data.length){
+
+        tbody.innerHTML=`
+            <tr>
+                <td colspan="3">
+                    <div class="empty">
+                        No existen actividades registradas.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML=data.map(item=>`
+
+        <tr>
+
+            <td>
+                ${formatDate(item.date)}
+            </td>
+
+            <td>
+                ${escapeHTML(item.time)}
+            </td>
+
+            <td>
+                ${escapeHTML(item.text)}
+            </td>
+
+        </tr>
+
+    `).join("");
+
+}
+
+
+function clearLogs(){
+
+    if(!confirm("¿Desea eliminar toda la bitácora?")) return;
+
+    localStorage.removeItem(KEYS.logs);
+
+    addLog("Bitácora restablecida");
+
+    loadAll();
+
+}
+
+
+/* ==============================
+   DASHBOARD
+============================== */
+
+function renderDashboard(){
+
+    const companies=getCompanies();
+    const employees=getEmployees();
+    const documents=getDocuments();
+    const finances=getFinances();
+
+    document.getElementById("statCompanies").textContent=companies.length;
+
+    document.getElementById("statEmployees").textContent=employees.length;
+
+    document.getElementById("statDocuments").textContent=documents.length;
+
+    document.getElementById("statFinances").textContent=finances.length;
+
+
+    const config=getConfig();
+
+    document.getElementById("welcomeTitle").textContent=
+        `Bienvenido, ${config.director}`;
+
+    document.getElementById("sidebarUserName").textContent=
+        config.director;
+
+    const initials=config.director
+        .split(" ")
+        .map(word=>word[0])
+        .slice(0,2)
+        .join("")
+        .toUpperCase();
+
+    document.getElementById("sidebarAvatar").textContent=
+        initials || "DG";
+
+
+    const activity=document.getElementById("activityList");
+
+    const logs=getLogs().slice(0,7);
+
+    if(!logs.length){
+
+        activity.innerHTML=`
+            <div class="empty">
+                No hay actividad reciente.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    activity.innerHTML=logs.map(log=>`
+
+        <div class="activity-item">
+
+            <div class="activity-dot"></div>
+
+            <div>
+
+                <div class="activity-text">
+                    ${escapeHTML(log.text)}
+                </div>
+
+                <div class="activity-time">
+                    ${formatDate(log.date)} · ${escapeHTML(log.time)}
+                </div>
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* ==============================
+   CONFIGURACIÓN
+============================== */
+
+function loadConfiguration(){
+
+    const config=getConfig();
+
+    document.getElementById("configDirector").value=
+        config.director;
+
+    document.getElementById("configCompany").value=
+        config.company;
+
+    document.getElementById("configUser").value=
+        config.user;
+
+}
+
+
+function saveGeneralConfig(){
+
+    const config=getConfig();
+
+    config.director=
+        document.getElementById("configDirector").value.trim()
+        ||"Director General";
+
+    config.company=
+        document.getElementById("configCompany").value.trim()
+        ||"GRUPO GARCIA CORONA";
+
+    saveData(KEYS.config,config);
+
+    addLog("Se actualizó la información general");
+
+    loadAll();
+
+    alert("Información guardada correctamente.");
+
+}
+
+
+function saveCredentials(){
+
+    const config=getConfig();
+
+    const user=
+        document.getElementById("configUser").value.trim();
+
+    const password=
+        document.getElementById("configPassword").value;
+
+    if(!user){
+
+        alert("El usuario no puede estar vacío.");
+
+        return;
+
+    }
+
+    if(password && password.length<3){
+
+        alert("La contraseña debe tener mínimo 3 caracteres.");
+
+        return;
+
+    }
+
+    config.user=user;
+
+    if(password){
+        config.password=password;
+    }
+
+    saveData(KEYS.config,config);
+
+    document.getElementById("configPassword").value="";
+
+    addLog("Se actualizaron las credenciales de acceso");
+
+    alert("Credenciales actualizadas correctamente.");
+
+}
+
+
+/* ==============================
+   RESET
+============================== */
+
+function resetSystem(){
+
+    const confirmation=prompt(
+        'Escriba "RESTABLECER" para eliminar todos los datos.'
+    );
+
+    if(confirmation!=="RESTABLECER"){
+
+        alert("Operación cancelada.");
+
+        return;
+
+    }
+
+    Object.values(KEYS).forEach(key=>{
+        localStorage.removeItem(key);
+    });
+
+    alert("El sistema fue restablecido.");
+
+    location.reload();
+
+}
+
+
+/* ==============================
+   LIMPIAR MODAL
+============================== */
+
+function clearInputs(modalId){
+
+    const modal=document.getElementById(modalId);
+
+    if(!modal) return;
+
+    modal.querySelectorAll("input, textarea").forEach(input=>{
+        input.value="";
+    });
+
+}
+
+
+/* ==============================
+   RELOJ
+============================== */
+
+function updateClock(){
+
+    const now=new Date();
+
+    document.getElementById("clock").textContent=
+        now.toLocaleTimeString("es-MX",{
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit"
+        });
+
+    document.getElementById("date").textContent=
+        now.toLocaleDateString("es-MX",{
+            weekday:"long",
+            day:"2-digit",
+            month:"long",
+            year:"numeric"
+        });
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+
+/* ==============================
+   ATAJOS
+============================== */
+
+document.addEventListener("keydown",function(event){
+
+    if(
+        event.target.tagName==="INPUT" ||
+        event.target.tagName==="TEXTAREA" ||
+        event.target.tagName==="SELECT"
+    ){
+
+        return;
+
+    }
+
+
+    if(event.key>="1" && event.key<="9"){
+
+        const index=parseInt(event.key)-1;
+
+        const buttons=
+            document.querySelectorAll(".menu-button");
+
+        if(buttons[index]){
+
+            buttons[index].click();
+
+        }
+
+    }
+
+
+    if(event.key==="Escape"){
+
+        document
+            .querySelectorAll(".modal.show")
+            .forEach(modal=>{
+                modal.classList.remove("show");
+            });
+
+        closeMobileMenu();
+
+    }
+
+});
+
+
+/* ==============================
+   CARGA GENERAL
+============================== */
+
+function loadAll(){
+
+    renderDashboard();
+
+    renderCompanies();
+
+    renderEmployees();
+
+    renderDocuments();
+
+    renderFinances();
+
+    renderAgenda();
+
+    renderNotices();
+
+    renderLogs();
+
+    loadConfiguration();
+
+}
+
+
+/* ==============================
+   SESIÓN AUTOMÁTICA
+============================== */
+
+function checkSession(){
+
+    const session=getData(KEYS.session,null);
+
+    if(
+        session &&
+        session.login === true
+    ){
+
+        document.getElementById("loginScreen").style.display="none";
+
+        document.getElementById("app").style.display="block";
+
+        loadAll();
+
+    }
+
+}
+
+
+/* ==============================
+   CERRAR MODALES AL DAR CLICK
+============================== */
+
+document.querySelectorAll(".modal").forEach(modal=>{
+
+    modal.addEventListener("click",function(event){
+
+        if(event.target===modal){
+
+            modal.classList.remove("show");
+
+        }
+
+    });
+
+});
+
+
+/* ==============================
+   INICIO
+============================== */
+
+checkSession();
+
+</script>
+
+</body>
+</html>
