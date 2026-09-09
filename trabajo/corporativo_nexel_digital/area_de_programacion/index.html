@@ -1,0 +1,4330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Programador | GRUPO GARCIA CORONA</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --azul:#0d6efd;
+    --azul2:#0284c7;
+    --azul3:#38bdf8;
+    --fondo:#07111f;
+    --fondo2:#0b1b30;
+    --panel:#0d2037;
+    --panel2:#102943;
+    --texto:#f8fafc;
+    --texto2:#a9bdd4;
+    --borde:rgba(255,255,255,.10);
+    --verde:#22c55e;
+    --rojo:#ef4444;
+    --amarillo:#f59e0b;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 0% 0%,rgba(13,110,253,.20),transparent 30%),
+        radial-gradient(circle at 100% 100%,rgba(56,189,248,.12),transparent 30%),
+        var(--fondo);
+    color:var(--texto);
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.login-card{
+    width:100%;
+    max-width:430px;
+    background:rgba(13,32,55,.90);
+    border:1px solid var(--borde);
+    border-radius:25px;
+    padding:35px;
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
+    backdrop-filter:blur(18px);
+}
+
+.logo{
+    width:78px;
+    height:78px;
+    margin:0 auto 20px;
+    border-radius:20px;
+    background:linear-gradient(135deg,var(--azul),var(--azul3));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    font-weight:900;
+    box-shadow:0 12px 35px rgba(13,110,253,.30);
+}
+
+.login-card h1{
+    text-align:center;
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.login-subtitle{
+    text-align:center;
+    color:var(--texto2);
+    font-size:13px;
+    line-height:1.5;
+    margin-bottom:28px;
+}
+
+.form-group{
+    margin-bottom:17px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    font-size:13px;
+    font-weight:bold;
+    color:#dbeafe;
+}
+
+.form-group input{
+    width:100%;
+    padding:14px;
+    border-radius:11px;
+    border:1px solid var(--borde);
+    outline:none;
+    background:rgba(0,0,0,.20);
+    color:white;
+    font-size:15px;
+}
+
+.form-group input:focus{
+    border-color:var(--azul3);
+    box-shadow:0 0 0 3px rgba(56,189,248,.10);
+}
+
+.password-wrap{
+    position:relative;
+}
+
+.password-wrap input{
+    padding-right:55px;
+}
+
+.show-password{
+    position:absolute;
+    right:7px;
+    top:50%;
+    transform:translateY(-50%);
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:8px;
+    background:rgba(255,255,255,.08);
+    color:white;
+    cursor:pointer;
+}
+
+.primary-btn{
+    width:100%;
+    border:0;
+    padding:15px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--azul),var(--azul2));
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:14px;
+    margin-top:5px;
+}
+
+.primary-btn:hover{
+    box-shadow:0 10px 30px rgba(13,110,253,.25);
+}
+
+.primary-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.login-error{
+    display:none;
+    margin-top:15px;
+    padding:12px;
+    border-radius:10px;
+    background:rgba(239,68,68,.12);
+    border:1px solid rgba(239,68,68,.25);
+    color:#fecaca;
+    font-size:13px;
+    text-align:center;
+}
+
+
+/* =========================================================
+   SISTEMA
+========================================================= */
+
+#app{
+    display:none;
+    min-height:100vh;
+}
+
+header{
+    height:72px;
+    background:rgba(7,17,31,.95);
+    border-bottom:1px solid var(--borde);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    position:sticky;
+    top:0;
+    z-index:100;
+    backdrop-filter:blur(15px);
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.header-logo{
+    width:43px;
+    height:43px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--azul),var(--azul3));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    font-weight:900;
+}
+
+.header-title{
+    font-size:17px;
+    font-weight:bold;
+}
+
+.header-subtitle{
+    font-size:11px;
+    color:#7f94ad;
+    margin-top:3px;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.user-info{
+    text-align:right;
+}
+
+.user-name{
+    font-size:13px;
+    font-weight:bold;
+}
+
+.user-server{
+    font-size:11px;
+    color:var(--azul3);
+    margin-top:3px;
+}
+
+.logout-btn{
+    border:1px solid rgba(239,68,68,.30);
+    background:rgba(239,68,68,.08);
+    color:#fca5a5;
+    padding:9px 12px;
+    border-radius:9px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+
+/* =========================================================
+   BARRA DE SECCIONES
+========================================================= */
+
+.section-bar{
+    padding:15px 20px;
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+    background:rgba(7,17,31,.70);
+    border-bottom:1px solid var(--borde);
+}
+
+.section-btn{
+    border:1px solid var(--borde);
+    background:var(--panel);
+    color:#b9c9dc;
+    padding:11px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:13px;
+    transition:.2s;
+}
+
+.section-btn:hover{
+    border-color:rgba(56,189,248,.35);
+}
+
+.section-btn.active{
+    background:linear-gradient(135deg,var(--azul),var(--azul2));
+    color:white;
+    border-color:transparent;
+}
+
+
+/* =========================================================
+   CONTENEDOR
+========================================================= */
+
+.workspace{
+    padding:18px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+}
+
+.workspace.single{
+    grid-template-columns:1fr;
+}
+
+.panel{
+    background:rgba(13,32,55,.88);
+    border:1px solid var(--borde);
+    border-radius:17px;
+    overflow:hidden;
+    min-width:0;
+    box-shadow:0 15px 45px rgba(0,0,0,.16);
+}
+
+.panel-header{
+    min-height:52px;
+    padding:12px 15px;
+    border-bottom:1px solid var(--borde);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.panel-title{
+    font-size:14px;
+    font-weight:bold;
+}
+
+.panel-body{
+    padding:15px;
+}
+
+
+/* =========================================================
+   EDITOR
+========================================================= */
+
+.editor-toolbar{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+}
+
+.tool-btn{
+    border:1px solid var(--borde);
+    background:#102943;
+    color:#dbeafe;
+    padding:9px 11px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.tool-btn:hover{
+    border-color:var(--azul3);
+}
+
+.tool-btn.save{
+    background:linear-gradient(135deg,#0d6efd,#0284c7);
+    border:0;
+    color:white;
+}
+
+.tool-btn.danger{
+    color:#fecaca;
+    border-color:rgba(239,68,68,.25);
+}
+
+textarea{
+    width:100%;
+    height:520px;
+    resize:vertical;
+    background:#06101d;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:12px;
+    color:#dbeafe;
+    padding:15px;
+    font-family:Consolas,Monaco,monospace;
+    font-size:13px;
+    line-height:1.55;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:rgba(56,189,248,.35);
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+.preview-toolbar{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+}
+
+.device-btn{
+    border:1px solid var(--borde);
+    background:#102943;
+    color:#b9c9dc;
+    padding:8px 11px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.device-btn.active{
+    background:var(--azul);
+    color:white;
+    border-color:var(--azul);
+}
+
+.preview-area{
+    min-height:560px;
+    background:#020617;
+    border-radius:12px;
+    padding:15px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    overflow:auto;
+}
+
+#previewFrame{
+    width:100%;
+    height:520px;
+    border:0;
+    background:white;
+    border-radius:5px;
+    transition:.3s;
+}
+
+#previewFrame.tablet{
+    width:768px;
+}
+
+#previewFrame.phone{
+    width:390px;
+}
+
+
+/* =========================================================
+   ETIQUETAS
+========================================================= */
+
+.tags-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.tags-table th,
+.tags-table td{
+    border-bottom:1px solid var(--borde);
+    padding:11px;
+    text-align:left;
+    font-size:12px;
+}
+
+.tags-table th{
+    color:var(--azul3);
+    background:rgba(0,0,0,.10);
+}
+
+.tags-table td:first-child{
+    font-family:Consolas,monospace;
+    color:#93c5fd;
+    font-weight:bold;
+}
+
+.tags-table tr:hover{
+    background:rgba(255,255,255,.025);
+}
+
+
+/* =========================================================
+   CÓDIGOS
+========================================================= */
+
+.codes-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.codes-count{
+    color:#8fa4bc;
+    font-size:12px;
+}
+
+.refresh-btn{
+    border:1px solid var(--borde);
+    background:#102943;
+    color:white;
+    padding:9px 12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:11px;
+}
+
+.codes-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+    gap:13px;
+}
+
+.code-card{
+    border:1px solid var(--borde);
+    background:rgba(0,0,0,.13);
+    border-radius:13px;
+    padding:15px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.code-card:hover{
+    border-color:rgba(56,189,248,.35);
+    transform:translateY(-2px);
+}
+
+.code-name{
+    font-weight:bold;
+    font-size:15px;
+    margin-bottom:7px;
+}
+
+.code-description{
+    color:#9eb1c8;
+    font-size:12px;
+    line-height:1.5;
+    min-height:38px;
+}
+
+.code-meta{
+    border-top:1px solid var(--borde);
+    margin-top:12px;
+    padding-top:10px;
+    color:#7f94ad;
+    font-size:10px;
+    line-height:1.7;
+}
+
+.creator{
+    color:#38bdf8;
+}
+
+.empty{
+    padding:50px 20px;
+    text-align:center;
+    color:#71859d;
+    border:1px dashed var(--borde);
+    border-radius:13px;
+}
+
+
+/* =========================================================
+   MIS CÓDIGOS
+========================================================= */
+
+.my-code-card{
+    border:1px solid rgba(56,189,248,.14);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13,110,253,.08),
+            rgba(0,0,0,.15)
+        );
+    border-radius:14px;
+    padding:16px;
+    transition:.2s;
+}
+
+.my-code-card:hover{
+    border-color:rgba(56,189,248,.40);
+    transform:translateY(-2px);
+}
+
+.my-code-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+}
+
+.my-code-name{
+    font-size:16px;
+    font-weight:bold;
+    color:white;
+}
+
+.my-code-status{
+    font-size:9px;
+    padding:5px 7px;
+    border-radius:7px;
+    background:rgba(34,197,94,.10);
+    color:#86efac;
+    border:1px solid rgba(34,197,94,.18);
+    white-space:nowrap;
+}
+
+.my-code-description{
+    color:#9eb1c8;
+    font-size:12px;
+    line-height:1.5;
+    margin-top:9px;
+    min-height:36px;
+}
+
+.my-code-meta{
+    margin-top:13px;
+    padding-top:11px;
+    border-top:1px solid var(--borde);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.my-code-meta-item{
+    font-size:10px;
+    color:#8196ad;
+}
+
+.my-code-meta-item strong{
+    color:#dbeafe;
+}
+
+.my-code-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:14px;
+}
+
+.my-action-btn{
+    flex:1;
+    min-width:80px;
+    border:1px solid var(--borde);
+    background:#102943;
+    color:#dbeafe;
+    padding:9px 8px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.my-action-btn:hover{
+    border-color:var(--azul3);
+}
+
+.my-action-btn.use{
+    background:linear-gradient(135deg,#0d6efd,#0284c7);
+    border-color:transparent;
+    color:white;
+}
+
+.my-action-btn.edit{
+    background:rgba(245,158,11,.10);
+    border-color:rgba(245,158,11,.25);
+    color:#fde68a;
+}
+
+.my-action-btn.delete{
+    background:rgba(239,68,68,.08);
+    border-color:rgba(239,68,68,.25);
+    color:#fca5a5;
+}
+
+.my-code-updated{
+    margin-top:9px;
+    color:#71859d;
+    font-size:9px;
+}
+
+
+/* =========================================================
+   MODALES
+========================================================= */
+
+.modal-bg{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    z-index:500;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    backdrop-filter:blur(5px);
+}
+
+.modal{
+    width:100%;
+    max-width:530px;
+    background:#0c2037;
+    border:1px solid var(--borde);
+    border-radius:18px;
+    padding:24px;
+    box-shadow:0 25px 70px rgba(0,0,0,.55);
+}
+
+.modal h2{
+    font-size:19px;
+    margin-bottom:18px;
+}
+
+.modal input,
+.modal textarea{
+    width:100%;
+    height:auto;
+    min-height:0;
+    margin-bottom:12px;
+    padding:12px;
+    border-radius:9px;
+    border:1px solid var(--borde);
+    background:#071525;
+    color:white;
+    outline:none;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+.modal textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:7px;
+}
+
+.modal-btn{
+    padding:10px 14px;
+    border-radius:9px;
+    border:1px solid var(--borde);
+    background:#102943;
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:12px;
+}
+
+.modal-btn.primary{
+    background:var(--azul);
+    border-color:var(--azul);
+}
+
+.modal-btn.delete{
+    background:var(--rojo);
+    border-color:var(--rojo);
+}
+
+
+/* =========================================================
+   DETALLE
+========================================================= */
+
+#detailScreen{
+    display:none;
+    min-height:calc(100vh - 72px);
+    padding:25px;
+}
+
+.detail-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+    gap:10px;
+}
+
+.back-btn{
+    border:1px solid var(--borde);
+    background:#102943;
+    color:white;
+    padding:10px 14px;
+    border-radius:9px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.detail-title{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.detail-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1.5fr) minmax(280px,.7fr);
+    gap:18px;
+}
+
+.detail-card{
+    background:#0d2037;
+    border:1px solid var(--borde);
+    border-radius:16px;
+    overflow:hidden;
+}
+
+.detail-card-header{
+    padding:15px;
+    border-bottom:1px solid var(--borde);
+    font-weight:bold;
+    font-size:14px;
+}
+
+.code-box{
+    padding:15px;
+}
+
+.code-box pre{
+    margin:0;
+    white-space:pre-wrap;
+    word-break:break-word;
+    background:#050d17;
+    border-radius:10px;
+    padding:16px;
+    max-height:650px;
+    overflow:auto;
+    color:#dbeafe;
+    font-family:Consolas,Monaco,monospace;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.use-code-btn{
+    width:100%;
+    margin-top:15px;
+    padding:13px;
+    border:0;
+    border-radius:10px;
+    background:linear-gradient(135deg,#0d6efd,#0284c7);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.users-list{
+    padding:15px;
+}
+
+.used-user{
+    padding:10px;
+    border-radius:9px;
+    background:rgba(255,255,255,.035);
+    margin-bottom:7px;
+}
+
+.used-user-name{
+    font-size:12px;
+    font-weight:bold;
+}
+
+.used-user-server{
+    font-size:10px;
+    color:#38bdf8;
+    margin-top:3px;
+}
+
+.used-user-date{
+    font-size:9px;
+    color:#71859d;
+    margin-top:3px;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+#toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:1000;
+    background:#102943;
+    border:1px solid var(--borde);
+    color:white;
+    padding:13px 17px;
+    border-radius:10px;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+    transform:translateY(100px);
+    opacity:0;
+    transition:.25s;
+    font-size:12px;
+}
+
+#toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+#toast.success{
+    border-color:rgba(34,197,94,.35);
+}
+
+#toast.error{
+    border-color:rgba(239,68,68,.35);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:900px){
+
+    .workspace{
+        grid-template-columns:1fr;
+    }
+
+    .detail-layout{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:650px){
+
+    header{
+        height:auto;
+        padding:12px;
+        gap:10px;
+        align-items:flex-start;
+    }
+
+    .header-right{
+        flex-direction:column;
+        align-items:flex-end;
+    }
+
+    .user-info{
+        display:none;
+    }
+
+    .section-bar{
+        padding:10px;
+    }
+
+    .section-btn{
+        flex:1;
+        min-width:120px;
+    }
+
+    .workspace{
+        padding:10px;
+    }
+
+    textarea{
+        height:400px;
+    }
+
+    .preview-area{
+        min-height:450px;
+    }
+
+    #previewFrame{
+        height:410px;
+    }
+
+    #detailScreen{
+        padding:12px;
+    }
+
+    .detail-title{
+        font-size:17px;
+    }
+
+}
+
+.hidden{
+    display:none !important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- =========================================================
+     LOGIN
+========================================================= -->
+
+<section id="loginScreen">
+
+    <div class="login-card">
+
+        <div class="logo">
+            GGC
+        </div>
+
+        <h1>PROGRAMADOR</h1>
+
+        <div class="login-subtitle">
+            Portal de desarrollo de
+            <strong>GRUPO GARCIA CORONA</strong>
+            <br>
+            Ingresa con tu número de empleado "SERVIDOR".
+        </div>
+
+        <form id="loginForm">
+
+            <div class="form-group">
+
+                <label>
+                    Número de empleado "SERVIDOR"
+                </label>
+
+                <input
+                    type="text"
+                    id="loginServidor"
+                    placeholder="02XXXXXXXX"
+                    maxlength="10"
+                    inputmode="numeric"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Contraseña
+                </label>
+
+                <div class="password-wrap">
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Ingresa tu contraseña"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        onclick="toggleLoginPassword()"
+                    >
+                        👁
+                    </button>
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                class="primary-btn"
+                id="loginButton"
+            >
+                INICIAR SESIÓN
+            </button>
+
+        </form>
+
+        <div
+            id="loginError"
+            class="login-error"
+        ></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     APP
+========================================================= -->
+
+<div id="app">
+
+    <header>
+
+        <div class="header-left">
+
+            <div class="header-logo">
+                GGC
+            </div>
+
+            <div>
+
+                <div class="header-title">
+                    PROGRAMADOR
+                </div>
+
+                <div class="header-subtitle">
+                    GRUPO GARCIA CORONA
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="header-right">
+
+            <div class="user-info">
+
+                <div
+                    class="user-name"
+                    id="headerUserName"
+                >
+                    Usuario
+                </div>
+
+                <div
+                    class="user-server"
+                    id="headerUserServer"
+                >
+                    02XXXXXXXX
+                </div>
+
+            </div>
+
+            <button
+                class="logout-btn"
+                onclick="cerrarSesion()"
+            >
+                CERRAR SESIÓN
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         BOTONES DE SECCIONES
+    ====================================================== -->
+
+    <div class="section-bar">
+
+        <button
+            class="section-btn active"
+            id="btnCodigo"
+            onclick="togglePanel('codigo')"
+        >
+            💻 CÓDIGO
+        </button>
+
+        <button
+            class="section-btn active"
+            id="btnPreview"
+            onclick="togglePanel('preview')"
+        >
+            👁 VISTA PREVIA
+        </button>
+
+        <button
+            class="section-btn active"
+            id="btnEtiquetas"
+            onclick="togglePanel('etiquetas')"
+        >
+            🏷 ETIQUETAS
+        </button>
+
+        <button
+            class="section-btn active"
+            id="btnCodigos"
+            onclick="togglePanel('codigos')"
+        >
+            📚 CÓDIGOS
+        </button>
+
+        <button
+            class="section-btn active"
+            id="btnMisCodigos"
+            onclick="togglePanel('misCodigos')"
+        >
+            👤 MIS CÓDIGOS
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         WORKSPACE
+    ====================================================== -->
+
+    <main
+        class="workspace"
+        id="workspace"
+    >
+
+
+        <!-- =================================================
+             CÓDIGO
+        ================================================== -->
+
+        <section
+            class="panel"
+            id="panelCodigo"
+        >
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    💻 Editor HTML
+                </div>
+
+            </div>
+
+            <div class="panel-body">
+
+                <div class="editor-toolbar">
+
+                    <button
+                        class="tool-btn save"
+                        onclick="abrirGuardarModal()"
+                    >
+                        💾 GUARDAR EN SUPABASE
+                    </button>
+
+                    <button
+                        class="tool-btn"
+                        onclick="descargarHTML()"
+                    >
+                        ⬇ DESCARGAR
+                    </button>
+
+                    <button
+                        class="tool-btn"
+                        onclick="copiarCodigo()"
+                    >
+                        📋 COPIAR
+                    </button>
+
+                    <button
+                        class="tool-btn danger"
+                        onclick="limpiarEditor()"
+                    >
+                        🗑 LIMPIAR
+                    </button>
+
+                </div>
+
+                <textarea
+                    id="codigoEditor"
+                    spellcheck="false"
+                    oninput="actualizarPreview()"
+                ><!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi página</title>
+<style>
+body{
+    font-family:Arial;
+    padding:30px;
+    text-align:center;
+}
+</style>
+</head>
+<body>
+
+<h1>Hola mundo</h1>
+
+<p>Comienza a programar aquí.</p>
+
+</body>
+</html></textarea>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VISTA PREVIA
+        ================================================== -->
+
+        <section
+            class="panel"
+            id="panelPreview"
+        >
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    👁 Vista previa
+                </div>
+
+            </div>
+
+            <div class="panel-body">
+
+                <div class="preview-toolbar">
+
+                    <button
+                        class="device-btn active"
+                        id="deviceComputer"
+                        onclick="cambiarDispositivo('computer')"
+                    >
+                        🖥 COMPUTADORA
+                    </button>
+
+                    <button
+                        class="device-btn"
+                        id="deviceTablet"
+                        onclick="cambiarDispositivo('tablet')"
+                    >
+                        📱 TABLET
+                    </button>
+
+                    <button
+                        class="device-btn"
+                        id="devicePhone"
+                        onclick="cambiarDispositivo('phone')"
+                    >
+                        📱 TELÉFONO
+                    </button>
+
+                </div>
+
+                <div class="preview-area">
+
+                    <iframe
+                        id="previewFrame"
+                        title="Vista previa"
+                    ></iframe>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ETIQUETAS
+        ================================================== -->
+
+        <section
+            class="panel"
+            id="panelEtiquetas"
+        >
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    🏷 Etiquetas HTML
+                </div>
+
+            </div>
+
+            <div class="panel-body">
+
+                <table class="tags-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Etiqueta</th>
+                            <th>Uso</th>
+                            <th>Ejemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>&lt;html&gt;</td>
+                            <td>Documento HTML</td>
+                            <td>&lt;html&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;head&gt;</td>
+                            <td>Información del documento</td>
+                            <td>&lt;head&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;body&gt;</td>
+                            <td>Contenido visible</td>
+                            <td>&lt;body&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;h1&gt;</td>
+                            <td>Título principal</td>
+                            <td>&lt;h1&gt;Título&lt;/h1&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;p&gt;</td>
+                            <td>Párrafo</td>
+                            <td>&lt;p&gt;Texto&lt;/p&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;div&gt;</td>
+                            <td>Contenedor</td>
+                            <td>&lt;div&gt;...&lt;/div&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;button&gt;</td>
+                            <td>Botón</td>
+                            <td>&lt;button&gt;Aceptar&lt;/button&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;input&gt;</td>
+                            <td>Campo de entrada</td>
+                            <td>&lt;input&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;form&gt;</td>
+                            <td>Formulario</td>
+                            <td>&lt;form&gt;...&lt;/form&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;img&gt;</td>
+                            <td>Imagen</td>
+                            <td>&lt;img src=""&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;a&gt;</td>
+                            <td>Enlace</td>
+                            <td>&lt;a href="#"&gt;Link&lt;/a&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;script&gt;</td>
+                            <td>JavaScript</td>
+                            <td>&lt;script&gt;...&lt;/script&gt;</td>
+                        </tr>
+
+                        <tr>
+                            <td>&lt;style&gt;</td>
+                            <td>CSS</td>
+                            <td>&lt;style&gt;...&lt;/style&gt;</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CÓDIGOS
+        ================================================== -->
+
+        <section
+            class="panel"
+            id="panelCodigos"
+        >
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    📚 Biblioteca de códigos
+                </div>
+
+            </div>
+
+            <div class="panel-body">
+
+                <div class="codes-top">
+
+                    <div
+                        class="codes-count"
+                        id="codesCount"
+                    >
+                        Cargando códigos...
+                    </div>
+
+                    <button
+                        class="refresh-btn"
+                        onclick="cargarCodigos()"
+                    >
+                        ↻ ACTUALIZAR
+                    </button>
+
+                </div>
+
+                <div
+                    class="codes-grid"
+                    id="codesGrid"
+                >
+
+                    <div class="empty">
+                        Cargando biblioteca...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             MIS CÓDIGOS
+        ================================================== -->
+
+        <section
+            class="panel"
+            id="panelMisCodigos"
+        >
+
+            <div class="panel-header">
+
+                <div class="panel-title">
+                    👤 Mis códigos
+                </div>
+
+                <button
+                    class="refresh-btn"
+                    onclick="cargarMisCodigos()"
+                >
+                    ↻ ACTUALIZAR
+                </button>
+
+            </div>
+
+            <div class="panel-body">
+
+                <div class="codes-top">
+
+                    <div
+                        class="codes-count"
+                        id="myCodesCount"
+                    >
+                        Cargando tus códigos...
+                    </div>
+
+                </div>
+
+                <div
+                    class="codes-grid"
+                    id="myCodesGrid"
+                >
+
+                    <div class="empty">
+                        Cargando tus códigos...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =====================================================
+         DETALLE
+    ====================================================== -->
+
+    <section
+        id="detailScreen"
+    >
+
+        <div class="detail-top">
+
+            <div>
+
+                <div
+                    class="detail-title"
+                    id="detailTitle"
+                >
+                    Código
+                </div>
+
+            </div>
+
+            <button
+                class="back-btn"
+                onclick="cerrarDetalle()"
+            >
+                ← VOLVER
+            </button>
+
+        </div>
+
+        <div class="detail-layout">
+
+            <div class="detail-card">
+
+                <div class="detail-card-header">
+                    Código HTML
+                </div>
+
+                <div class="code-box">
+
+                    <pre id="detailCode"></pre>
+
+                    <button
+                        class="use-code-btn"
+                        onclick="usarCodigoActual()"
+                    >
+                        ⚡ USARLO
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="detail-card">
+
+                    <div class="detail-card-header">
+                        Información del código
+                    </div>
+
+                    <div
+                        class="detail-info"
+                        id="detailInfo"
+                    ></div>
+
+                </div>
+
+                <div
+                    class="detail-card"
+                    style="margin-top:18px;"
+                >
+
+                    <div class="detail-card-header">
+                        Usuarios que lo utilizaron
+                    </div>
+
+                    <div
+                        class="users-list"
+                        id="detailUsers"
+                    ></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL GUARDAR
+========================================================= -->
+
+<div
+    class="modal-bg"
+    id="saveModal"
+>
+
+    <div class="modal">
+
+        <h2>
+            💾 Guardar código
+        </h2>
+
+        <input
+            type="text"
+            id="saveName"
+            placeholder="Nombre del código"
+        >
+
+        <textarea
+            id="saveDescription"
+            placeholder="Descripción breve"
+        ></textarea>
+
+        <textarea
+            id="saveWhat"
+            placeholder="¿Qué hace este código?"
+        ></textarea>
+
+        <div class="modal-actions">
+
+            <button
+                class="modal-btn"
+                onclick="cerrarGuardarModal()"
+            >
+                CANCELAR
+            </button>
+
+            <button
+                class="modal-btn primary"
+                onclick="guardarCodigo()"
+                id="confirmSaveBtn"
+            >
+                GUARDAR CÓDIGO
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     MODAL EDITAR
+========================================================= -->
+
+<div
+    class="modal-bg"
+    id="editModal"
+>
+
+    <div class="modal">
+
+        <h2>
+            ✏️ Editar código
+        </h2>
+
+        <input
+            type="text"
+            id="editName"
+            placeholder="Nombre del código"
+        >
+
+        <textarea
+            id="editDescription"
+            placeholder="Descripción breve"
+        ></textarea>
+
+        <textarea
+            id="editWhat"
+            placeholder="¿Qué hace este código?"
+        ></textarea>
+
+        <textarea
+            id="editCode"
+            placeholder="Código HTML"
+            style="
+                min-height:300px;
+                font-family:Consolas,Monaco,monospace;
+            "
+        ></textarea>
+
+        <div
+            style="
+                margin:-3px 0 13px;
+                color:#71859d;
+                font-size:10px;
+            "
+        >
+            ⚡ Las veces utilizadas se conservarán desde la creación del código.
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                class="modal-btn"
+                onclick="cerrarEditarModal()"
+            >
+                CANCELAR
+            </button>
+
+            <button
+                class="modal-btn primary"
+                onclick="actualizarCodigo()"
+                id="confirmEditBtn"
+            >
+                ACTUALIZAR CÓDIGO
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div id="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    'https://wxmjuqexffvckwwmiptu.supabase.co';
+
+const SUPABASE_KEY =
+    'sb_publishable_uOeANgEQM8HNr1BZ2UR9Kg_wZBOw65V';
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let usuarioActual = null;
+
+let codigoActualId = null;
+
+let codigoEditandoId = null;
+
+let dispositivoActual = 'computer';
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const loginScreen =
+    document.getElementById('loginScreen');
+
+const app =
+    document.getElementById('app');
+
+const detailScreen =
+    document.getElementById('detailScreen');
+
+const workspace =
+    document.getElementById('workspace');
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function(){
+
+        const servidorGuardado =
+            localStorage.getItem(
+                'programacion_ultimo_servidor'
+            );
+
+        if(servidorGuardado){
+
+            document.getElementById(
+                'loginServidor'
+            ).value = servidorGuardado;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SOLO NÚMEROS
+========================================================= */
+
+document
+.getElementById('loginServidor')
+.addEventListener('input',function(){
+
+    this.value =
+        this.value
+        .replace(/\D/g,'')
+        .slice(0,10);
+
+});
+
+
+/* =========================================================
+   MOSTRAR CONTRASEÑA
+========================================================= */
+
+function toggleLoginPassword(){
+
+    const input =
+        document.getElementById('loginPassword');
+
+    input.type =
+        input.type === 'password'
+        ? 'text'
+        : 'password';
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+document
+.getElementById('loginForm')
+.addEventListener('submit',async function(e){
+
+    e.preventDefault();
+
+    const servidor =
+        document
+        .getElementById('loginServidor')
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById('loginPassword')
+        .value;
+
+    const error =
+        document.getElementById('loginError');
+
+    error.style.display = 'none';
+    error.textContent = '';
+
+    if(!/^02\d{8}$/.test(servidor)){
+
+        mostrarLoginError(
+            'El número de servidor debe contener exactamente 10 dígitos y comenzar con 02.'
+        );
+
+        return;
+
+    }
+
+    if(!password){
+
+        mostrarLoginError(
+            'Ingresa tu contraseña.'
+        );
+
+        return;
+
+    }
+
+    const button =
+        document.getElementById('loginButton');
+
+    button.disabled = true;
+
+    button.textContent =
+        'INICIANDO SESIÓN...';
+
+    try{
+
+        const {data,error:rpcError} =
+            await supabaseClient.rpc(
+                'login_programador',
+                {
+                    p_numero_servidor:String(servidor),
+                    p_password:String(password)
+                }
+            );
+
+        console.log(
+            'Login:',
+            data,
+            rpcError
+        );
+
+        if(rpcError){
+
+            console.error(rpcError);
+
+            mostrarLoginError(
+                rpcError.message ||
+                'No fue posible iniciar sesión.'
+            );
+
+            return;
+
+        }
+
+        if(!data || data.ok !== true){
+
+            mostrarLoginError(
+                data?.mensaje ||
+                'Número de servidor o contraseña incorrectos.'
+            );
+
+            return;
+
+        }
+
+        usuarioActual = data;
+
+        localStorage.setItem(
+            'programacion_usuario',
+            JSON.stringify(data)
+        );
+
+        localStorage.setItem(
+            'programacion_ultimo_servidor',
+            servidor
+        );
+
+        mostrarAplicacion();
+
+    }catch(errorCatch){
+
+        console.error(errorCatch);
+
+        mostrarLoginError(
+            'Ocurrió un error al conectar con Supabase.'
+        );
+
+    }finally{
+
+        button.disabled = false;
+
+        button.textContent =
+            'INICIAR SESIÓN';
+
+    }
+
+});
+
+
+/* =========================================================
+   ERROR LOGIN
+========================================================= */
+
+function mostrarLoginError(mensaje){
+
+    const error =
+        document.getElementById(
+            'loginError'
+        );
+
+    error.textContent =
+        mensaje;
+
+    error.style.display =
+        'block';
+
+}
+
+
+/* =========================================================
+   MOSTRAR APP
+========================================================= */
+
+function mostrarAplicacion(){
+
+    loginScreen.style.display =
+        'none';
+
+    app.style.display =
+        'block';
+
+    detailScreen.style.display =
+        'none';
+
+    document.getElementById(
+        'headerUserName'
+    ).textContent =
+        usuarioActual.nombre_completo;
+
+    document.getElementById(
+        'headerUserServer'
+    ).textContent =
+        usuarioActual.numero_servidor;
+
+    cargarCodigos();
+
+    cargarMisCodigos();
+
+    actualizarPreview();
+
+}
+
+
+/* =========================================================
+   RECUPERAR SESIÓN
+========================================================= */
+
+(function recuperarSesion(){
+
+    try{
+
+        const guardado =
+            localStorage.getItem(
+                'programacion_usuario'
+            );
+
+        if(!guardado) return;
+
+        const datos =
+            JSON.parse(guardado);
+
+        if(
+            datos &&
+            datos.id &&
+            datos.numero_servidor &&
+            datos.nombre_completo
+        ){
+
+            usuarioActual = datos;
+
+            mostrarAplicacion();
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        localStorage.removeItem(
+            'programacion_usuario'
+        );
+
+    }
+
+})();
+
+
+/* =========================================================
+   CERRAR SESIÓN
+========================================================= */
+
+function cerrarSesion(){
+
+    localStorage.removeItem(
+        'programacion_usuario'
+    );
+
+    usuarioActual = null;
+
+    location.reload();
+
+}
+
+
+/* =========================================================
+   TOGGLE PANELES
+========================================================= */
+
+function togglePanel(panel){
+
+    const nombre =
+        panel.charAt(0).toUpperCase() +
+        panel.slice(1);
+
+    const panelElement =
+        document.getElementById(
+            'panel' + nombre
+        );
+
+    const button =
+        document.getElementById(
+            'btn' + nombre
+        );
+
+    if(!panelElement || !button) return;
+
+    if(
+        panelElement.style.display === 'none'
+    ){
+
+        panelElement.style.display =
+            'block';
+
+        button.classList.add('active');
+
+    }else{
+
+        panelElement.style.display =
+            'none';
+
+        button.classList.remove('active');
+
+    }
+
+    organizarWorkspace();
+
+}
+
+
+/* =========================================================
+   ORGANIZAR WORKSPACE
+========================================================= */
+
+function organizarWorkspace(){
+
+    const panels =
+        [
+            'panelCodigo',
+            'panelPreview',
+            'panelEtiquetas',
+            'panelCodigos',
+            'panelMisCodigos'
+        ];
+
+    const visibles =
+        panels.filter(id=>{
+
+            const elemento =
+                document.getElementById(id);
+
+            return elemento.style.display !== 'none';
+
+        });
+
+    workspace.classList.toggle(
+        'single',
+        visibles.length === 1
+    );
+
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function actualizarPreview(){
+
+    const codigo =
+        document.getElementById(
+            'codigoEditor'
+        ).value;
+
+    const frame =
+        document.getElementById(
+            'previewFrame'
+        );
+
+    try{
+
+        frame.srcdoc =
+            codigo;
+
+    }catch(error){
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================================
+   DISPOSITIVOS
+========================================================= */
+
+function cambiarDispositivo(tipo){
+
+    dispositivoActual =
+        tipo;
+
+    const frame =
+        document.getElementById(
+            'previewFrame'
+        );
+
+    frame.classList.remove(
+        'tablet',
+        'phone'
+    );
+
+    document
+    .querySelectorAll('.device-btn')
+    .forEach(btn=>{
+
+        btn.classList.remove(
+            'active'
+        );
+
+    });
+
+    if(tipo === 'tablet'){
+
+        frame.classList.add(
+            'tablet'
+        );
+
+        document
+        .getElementById(
+            'deviceTablet'
+        )
+        .classList.add(
+            'active'
+        );
+
+    }else if(tipo === 'phone'){
+
+        frame.classList.add(
+            'phone'
+        );
+
+        document
+        .getElementById(
+            'devicePhone'
+        )
+        .classList.add(
+            'active'
+        );
+
+    }else{
+
+        document
+        .getElementById(
+            'deviceComputer'
+        )
+        .classList.add(
+            'active'
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   COPIAR
+========================================================= */
+
+async function copiarCodigo(){
+
+    const codigo =
+        document
+        .getElementById('codigoEditor')
+        .value;
+
+    try{
+
+        await navigator.clipboard.writeText(
+            codigo
+        );
+
+        mostrarToast(
+            'Código copiado correctamente.',
+            'success'
+        );
+
+    }catch(error){
+
+        const textarea =
+            document.getElementById(
+                'codigoEditor'
+            );
+
+        textarea.select();
+
+        document.execCommand(
+            'copy'
+        );
+
+        mostrarToast(
+            'Código copiado.',
+            'success'
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DESCARGAR
+========================================================= */
+
+function descargarHTML(){
+
+    const codigo =
+        document
+        .getElementById('codigoEditor')
+        .value;
+
+    if(!codigo.trim()){
+
+        mostrarToast(
+            'El editor está vacío.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    const nombre =
+        prompt(
+            'Nombre del archivo:',
+            'mi-pagina'
+        );
+
+    if(nombre === null) return;
+
+    let nombreArchivo =
+        nombre.trim() ||
+        'mi-pagina';
+
+    if(
+        !nombreArchivo
+        .toLowerCase()
+        .endsWith('.html')
+    ){
+
+        nombreArchivo +=
+            '.html';
+
+    }
+
+    const blob =
+        new Blob(
+            [codigo],
+            {
+                type:
+                'text/html;charset=utf-8'
+            }
+        );
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+    const a =
+        document.createElement(
+            'a'
+        );
+
+    a.href =
+        url;
+
+    a.download =
+        nombreArchivo;
+
+    document.body.appendChild(
+        a
+    );
+
+    a.click();
+
+    a.remove();
+
+    URL.revokeObjectURL(
+        url
+    );
+
+    mostrarToast(
+        'HTML descargado.',
+        'success'
+    );
+
+}
+
+
+/* =========================================================
+   LIMPIAR
+========================================================= */
+
+function limpiarEditor(){
+
+    if(
+        !confirm(
+            '¿Seguro que deseas limpiar el editor?'
+        )
+    ){
+
+        return;
+
+    }
+
+    document
+    .getElementById(
+        'codigoEditor'
+    )
+    .value = '';
+
+    actualizarPreview();
+
+    mostrarToast(
+        'Editor limpiado.',
+        'success'
+    );
+
+}
+
+
+/* =========================================================
+   MODAL GUARDAR
+========================================================= */
+
+function abrirGuardarModal(){
+
+    const codigo =
+        document
+        .getElementById(
+            'codigoEditor'
+        )
+        .value
+        .trim();
+
+    if(!codigo){
+
+        mostrarToast(
+            'No hay código para guardar.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    document.getElementById(
+        'saveName'
+    ).value = '';
+
+    document.getElementById(
+        'saveDescription'
+    ).value = '';
+
+    document.getElementById(
+        'saveWhat'
+    ).value = '';
+
+    document.getElementById(
+        'saveModal'
+    ).style.display =
+        'flex';
+
+}
+
+
+function cerrarGuardarModal(){
+
+    document.getElementById(
+        'saveModal'
+    ).style.display =
+        'none';
+
+}
+
+
+/* =========================================================
+   GUARDAR NUEVO CÓDIGO
+========================================================= */
+
+async function guardarCodigo(){
+
+    if(!usuarioActual){
+
+        mostrarToast(
+            'Tu sesión no está disponible.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    const nombre =
+        document
+        .getElementById(
+            'saveName'
+        )
+        .value
+        .trim();
+
+    const descripcion =
+        document
+        .getElementById(
+            'saveDescription'
+        )
+        .value
+        .trim();
+
+    const queHace =
+        document
+        .getElementById(
+            'saveWhat'
+        )
+        .value
+        .trim();
+
+    const codigo =
+        document
+        .getElementById(
+            'codigoEditor'
+        )
+        .value;
+
+    if(!nombre){
+
+        mostrarToast(
+            'Escribe el nombre del código.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    if(!descripcion){
+
+        mostrarToast(
+            'Escribe una descripción breve.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    if(!queHace){
+
+        mostrarToast(
+            'Indica qué hace el código.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    if(!codigo.trim()){
+
+        mostrarToast(
+            'El editor está vacío.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    const button =
+        document.getElementById(
+            'confirmSaveBtn'
+        );
+
+    button.disabled =
+        true;
+
+    button.textContent =
+        'GUARDANDO...';
+
+    try{
+
+        const {data,error} =
+            await supabaseClient.rpc(
+                'guardar_codigo_programador',
+                {
+                    p_usuario_id:
+                        usuarioActual.id,
+
+                    p_nombre_codigo:
+                        nombre,
+
+                    p_descripcion_breve:
+                        descripcion,
+
+                    p_que_hace:
+                        queHace,
+
+                    p_codigo_html:
+                        codigo
+                }
+            );
+
+        if(error){
+
+            console.error(error);
+
+            mostrarToast(
+                error.message ||
+                'No fue posible guardar el código.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        if(!data || data.ok !== true){
+
+            mostrarToast(
+                data?.mensaje ||
+                'No fue posible guardar el código.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        cerrarGuardarModal();
+
+        mostrarToast(
+            'Código guardado correctamente.',
+            'success'
+        );
+
+        await cargarCodigos();
+
+        await cargarMisCodigos();
+
+    }catch(errorCatch){
+
+        console.error(errorCatch);
+
+        mostrarToast(
+            'Ocurrió un error al guardar.',
+            'error'
+        );
+
+    }finally{
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            'GUARDAR CÓDIGO';
+
+    }
+
+}
+
+
+/* =========================================================
+   CARGAR TODOS LOS CÓDIGOS
+========================================================= */
+
+async function cargarCodigos(){
+
+    const grid =
+        document.getElementById(
+            'codesGrid'
+        );
+
+    const count =
+        document.getElementById(
+            'codesCount'
+        );
+
+    grid.innerHTML =
+        '<div class="empty">Cargando códigos...</div>';
+
+    try{
+
+        const {data,error} =
+            await supabaseClient.rpc(
+                'obtener_codigos_programador'
+            );
+
+        if(error){
+
+            console.error(error);
+
+            grid.innerHTML =
+                '<div class="empty">No fue posible cargar los códigos.</div>';
+
+            count.textContent =
+                'Error al cargar';
+
+            return;
+
+        }
+
+        let lista =
+            data;
+
+        if(typeof lista === 'string'){
+
+            try{
+
+                lista =
+                    JSON.parse(
+                        lista
+                    );
+
+            }catch(e){
+
+                lista = [];
+
+            }
+
+        }
+
+        if(!Array.isArray(lista)){
+
+            lista = [];
+
+        }
+
+        count.textContent =
+            lista.length +
+            (
+                lista.length === 1
+                ? ' código disponible'
+                : ' códigos disponibles'
+            );
+
+        if(lista.length === 0){
+
+            grid.innerHTML =
+                '<div class="empty">Todavía no hay códigos guardados.</div>';
+
+            return;
+
+        }
+
+        grid.innerHTML = '';
+
+        lista.forEach(codigo=>{
+
+            const card =
+                document.createElement(
+                    'div'
+                );
+
+            card.className =
+                'code-card';
+
+            card.onclick =
+                function(){
+
+                    abrirDetalle(
+                        codigo.id
+                    );
+
+                };
+
+            const fecha =
+                codigo.fecha_creacion
+                ? new Date(
+                    codigo.fecha_creacion
+                ).toLocaleString(
+                    'es-MX'
+                )
+                : 'Sin fecha';
+
+            card.innerHTML = `
+
+                <div class="code-name">
+                    ${escapeHTML(
+                        codigo.nombre_codigo ||
+                        'Sin nombre'
+                    )}
+                </div>
+
+                <div class="code-description">
+                    ${escapeHTML(
+                        codigo.descripcion_breve ||
+                        ''
+                    )}
+                </div>
+
+                <div class="code-meta">
+
+                    <div>
+                        👤 Creador:
+                        <span class="creator">
+                            ${escapeHTML(
+                                codigo.creador_nombre ||
+                                'Desconocido'
+                            )}
+                        </span>
+                    </div>
+
+                    <div>
+                        🪪 Servidor:
+                        ${escapeHTML(
+                            codigo.creador_servidor ||
+                            ''
+                        )}
+                    </div>
+
+                    <div>
+                        ⚡ Usos:
+                        ${Number(
+                            codigo.veces_usado ||
+                            0
+                        )}
+                    </div>
+
+                    <div>
+                        📅 ${escapeHTML(
+                            fecha
+                        )}
+                    </div>
+
+                </div>
+            `;
+
+            grid.appendChild(
+                card
+            );
+
+        });
+
+    }catch(errorCatch){
+
+        console.error(errorCatch);
+
+        grid.innerHTML =
+            '<div class="empty">Error de conexión.</div>';
+
+        count.textContent =
+            'Error';
+
+    }
+
+}
+
+
+/* =========================================================
+   CARGAR MIS CÓDIGOS
+========================================================= */
+
+async function cargarMisCodigos(){
+
+    if(!usuarioActual){
+
+        return;
+
+    }
+
+    const grid =
+        document.getElementById(
+            'myCodesGrid'
+        );
+
+    const count =
+        document.getElementById(
+            'myCodesCount'
+        );
+
+    grid.innerHTML =
+        '<div class="empty">Cargando tus códigos...</div>';
+
+    count.textContent =
+        'Cargando...';
+
+    try{
+
+        const {data,error} =
+            await supabaseClient.rpc(
+                'obtener_mis_codigos_programador',
+                {
+                    p_usuario_id:
+                        usuarioActual.id
+                }
+            );
+
+        console.log(
+            'Mis códigos:',
+            data,
+            error
+        );
+
+        if(error){
+
+            console.error(error);
+
+            grid.innerHTML =
+                '<div class="empty">No fue posible cargar tus códigos.</div>';
+
+            count.textContent =
+                'Error';
+
+            return;
+
+        }
+
+        let lista =
+            data;
+
+        if(typeof lista === 'string'){
+
+            try{
+
+                lista =
+                    JSON.parse(
+                        lista
+                    );
+
+            }catch(e){
+
+                lista = [];
+
+            }
+
+        }
+
+        if(!Array.isArray(lista)){
+
+            lista = [];
+
+        }
+
+        count.textContent =
+            lista.length +
+            (
+                lista.length === 1
+                ? ' código creado por ti'
+                : ' códigos creados por ti'
+            );
+
+        if(lista.length === 0){
+
+            grid.innerHTML = `
+                <div class="empty">
+                    👤 Todavía no has creado ningún código.
+                    <br><br>
+                    Guarda tu primer HTML desde la sección CÓDIGO.
+                </div>
+            `;
+
+            return;
+
+        }
+
+        grid.innerHTML = '';
+
+        lista.forEach(codigo=>{
+
+            const card =
+                document.createElement(
+                    'div'
+                );
+
+            card.className =
+                'my-code-card';
+
+            const fechaCreacion =
+                codigo.fecha_creacion
+                ? new Date(
+                    codigo.fecha_creacion
+                ).toLocaleString(
+                    'es-MX'
+                )
+                : 'Sin fecha';
+
+            const fechaActualizacion =
+                codigo.fecha_actualizacion
+                ? new Date(
+                    codigo.fecha_actualizacion
+                ).toLocaleString(
+                    'es-MX'
+                )
+                : 'Sin actualización';
+
+            card.innerHTML = `
+
+                <div class="my-code-top">
+
+                    <div class="my-code-name">
+                        ${escapeHTML(
+                            codigo.nombre_codigo ||
+                            'Sin nombre'
+                        )}
+                    </div>
+
+                    <div class="my-code-status">
+                        PROPIO
+                    </div>
+
+                </div>
+
+
+                <div class="my-code-description">
+                    ${escapeHTML(
+                        codigo.descripcion_breve ||
+                        ''
+                    )}
+                </div>
+
+
+                <div class="my-code-meta">
+
+                    <div class="my-code-meta-item">
+                        ⚡ USOS:
+                        <strong>
+                            ${Number(
+                                codigo.veces_usado ||
+                                0
+                            )}
+                        </strong>
+                    </div>
+
+                    <div class="my-code-meta-item">
+                        📅 CREADO:
+                        <strong>
+                            ${escapeHTML(
+                                fechaCreacion
+                            )}
+                        </strong>
+                    </div>
+
+                    <div class="my-code-meta-item">
+                        🔄 ACTUALIZADO:
+                        <strong>
+                            ${escapeHTML(
+                                fechaActualizacion
+                            )}
+                        </strong>
+                    </div>
+
+                    <div class="my-code-meta-item">
+                        👤 CREADOR:
+                        <strong>
+                            Tú
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="my-code-updated">
+                    Las actualizaciones conservan el contador histórico de usos.
+                </div>
+
+
+                <div class="my-code-actions">
+
+                    <button
+                        class="my-action-btn use"
+                        onclick="event.stopPropagation(); usarMiCodigo('${codigo.id}')"
+                    >
+                        ⚡ USAR
+                    </button>
+
+                    <button
+                        class="my-action-btn edit"
+                        onclick="event.stopPropagation(); abrirEditarCodigo('${codigo.id}')"
+                    >
+                        ✏️ EDITAR
+                    </button>
+
+                    <button
+                        class="my-action-btn delete"
+                        onclick="event.stopPropagation(); eliminarCodigo('${codigo.id}')"
+                    >
+                        🗑 ELIMINAR
+                    </button>
+
+                </div>
+            `;
+
+            grid.appendChild(
+                card
+            );
+
+        });
+
+    }catch(errorCatch){
+
+        console.error(errorCatch);
+
+        grid.innerHTML =
+            '<div class="empty">Error de conexión.</div>';
+
+        count.textContent =
+            'Error';
+
+    }
+
+}
+
+
+/* =========================================================
+   EDITAR CÓDIGO
+========================================================= */
+
+async function abrirEditarCodigo(id){
+
+    if(!usuarioActual){
+
+        mostrarToast(
+            'Sesión no válida.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const {data,error} =
+            await supabaseClient.rpc(
+                'obtener_detalle_codigo_programador',
+                {
+                    p_codigo_id:
+                        id
+                }
+            );
+
+        if(error){
+
+            console.error(error);
+
+            mostrarToast(
+                'No fue posible cargar el código.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        if(!data || data.ok !== true){
+
+            mostrarToast(
+                data?.mensaje ||
+                'Código no encontrado.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        if(
+            String(data.creador_id || '') !==
+            String(usuarioActual.id)
+        ){
+
+            mostrarToast(
+                'Este código no pertenece a tu cuenta.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        codigoEditandoId =
+            id;
+
+        document.getElementById(
+            'editName'
+        ).value =
+            data.nombre_codigo || '';
+
+        document.getElementById(
+            'editDescription'
+        ).value =
+            data.descripcion_breve || '';
+
+        document.getElementById(
+            'editWhat'
+        ).value =
+            data.que_hace || '';
+
+        document.getElementById(
+            'editCode'
+        ).value =
+            data.codigo_html || '';
+
+        document.getElementById(
+            'editModal'
+        ).style.display =
+            'flex';
+
+    }catch(errorCatch){
+
+        console.error(errorCatch);
+
+        mostrarToast(
+            'Error al abrir el editor.',
+            'error'
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CERRAR EDITAR
+========================================================= */
+
+function cerrarEditarModal(){
+
+    document.getElementById(
+        'editModal'
+    ).style.display =
+        'none';
+
+    codigoEditandoId =
+        null;
+
+}
+
+
+/* =========================================================
+   ACTUALIZAR CÓDIGO
+========================================================= */
+
+async function actualizarCodigo(){
+
+    if(!usuarioActual){
+
+        mostrarToast(
+            'Sesión no válida.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    if(!codigoEditandoId){
+
+        mostrarToast(
+            'No hay código seleccionado.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    const nombre =
+        document
+        .getElementById(
+            'editName'
+        )
+        .value
+        .trim();
+
+    const descripcion =
+        document
+        .getElementById(
+            'editDescription'
+        )
+        .value
+        .trim();
+
+    const queHace =
+        document
+        .getElementById(
+            'editWhat'
+        )
+        .value
+        .trim();
+
+    const codigo =
+        document
+        .getElementById(
+            'editCode'
+        )
+        .value;
+
+    if(!nombre){
+
+        mostrarToast(
+            'El nombre es obligatorio.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    if(!descripcion){
+
+        mostrarToast(
+            'La descripción es obligatoria.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    if(!queHace){
+
+        mostrarToast(
+            'Indica qué hace el código.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    if(!codigo.trim()){
+
+        mostrarToast(
+            'El código HTML está vacío.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    const button =
+        document.getElementById(
+            'confirmEditBtn'
+        );
+
+    button.disabled =
+        true;
+
+    button.textContent =
+        'ACTUALIZANDO...';
+
+    try{
+
+        const {data,error} =
+            await supabaseClient.rpc(
+                'actualizar_codigo_programador',
+                {
+                    p_codigo_id:
+                        codigoEditandoId,
+
+                    p_usuario_id:
+                        usuarioActual.id,
+
+                    p_nombre_codigo:
+                        nombre,
+
+                    p_descripcion_breve:
+                        descripcion,
+
+                    p_que_hace:
+                        queHace,
+
+                    p_codigo_html:
+                        codigo
+                }
+            );
+
+        console.log(
+            'Actualizar:',
+            data,
+            error
+        );
+
+        if(error){
+
+            console.error(error);
+
+            mostrarToast(
+                error.message ||
+                'No fue posible actualizar.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        if(!data || data.ok !== true){
+
+            mostrarToast(
+                data?.mensaje ||
+                'No fue posible actualizar.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        cerrarEditarModal();
+
+        mostrarToast(
+            'Código actualizado correctamente. Los usos se conservaron.',
+            'success'
+        );
+
+        await cargarMisCodigos();
+
+        await cargarCodigos();
+
+    }catch(errorCatch){
+
+        console.error(errorCatch);
+
+        mostrarToast(
+            'Ocurrió un error al actualizar.',
+            'error'
+        );
+
+    }finally{
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            'ACTUALIZAR CÓDIGO';
+
+    }
+
+}
+
+
+/* =========================================================
+   USAR MI CÓDIGO
+========================================================= */
+
+async function usarMiCodigo(id){
+
+    codigoActualId =
+        id;
+
+    await usarCodigoActual();
+
+}
+
+
+/* =========================================================
+   ELIMINAR CÓDIGO
+========================================================= */
+
+async function eliminarCodigo(id){
+
+    if(!usuarioActual){
+
+        mostrarToast(
+            'Sesión no válida.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    const confirmar =
+        confirm(
+            '¿ESTÁS SEGURO DE ELIMINAR ESTE CÓDIGO?\n\nEsta acción no se puede deshacer.'
+        );
+
+    if(!confirmar){
+
+        return;
+
+    }
+
+    try{
+
+        const {data,error} =
+            await supabaseClient.rpc(
+                'eliminar_codigo_programador',
+                {
+                    p_codigo_id:
+                        id,
+
+                    p_usuario_id:
+                        usuarioActual.id
+                }
+            );
+
+        console.log(
+            'Eliminar:',
+            data,
+            error
+        );
+
+        if(error){
+
+            console.error(error);
+
+            mostrarToast(
+                error.message ||
+                'No fue posible eliminar el código.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        if(!data || data.ok !== true){
+
+            mostrarToast(
+                data?.mensaje ||
+                'No fue posible eliminar el código.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        mostrarToast(
+            'Código eliminado correctamente.',
+            'success'
+        );
+
+        await cargarMisCodigos();
+
+        await cargarCodigos();
+
+    }catch(errorCatch){
+
+        console.error(errorCatch);
+
+        mostrarToast(
+            'Ocurrió un error al eliminar.',
+            'error'
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DETALLE
+========================================================= */
+
+async function abrirDetalle(id){
+
+    codigoActualId =
+        id;
+
+    document.getElementById(
+        'workspace'
+    ).style.display =
+        'none';
+
+    document.querySelector(
+        '.section-bar'
+    ).style.display =
+        'none';
+
+    detailScreen.style.display =
+        'block';
+
+    document.getElementById(
+        'detailCode'
+    ).textContent =
+        'Cargando código...';
+
+    document.getElementById(
+        'detailInfo'
+    ).innerHTML =
+        '<div class="empty">Cargando información...</div>';
+
+    document.getElementById(
+        'detailUsers'
+    ).innerHTML =
+        '<div class="empty">Cargando usuarios...</div>';
+
+    try{
+
+        const {data,error} =
+            await supabaseClient.rpc(
+                'obtener_detalle_codigo_programador',
+                {
+                    p_codigo_id:
+                        id
+                }
+            );
+
+        console.log(
+            'Detalle:',
+            data,
+            error
+        );
+
+        if(error){
+
+            console.error(error);
+
+            mostrarToast(
+                'No fue posible obtener el código.',
+                'error'
+            );
+
+            cerrarDetalle();
+
+            return;
+
+        }
+
+        if(!data || data.ok !== true){
+
+            mostrarToast(
+                data?.mensaje ||
+                'Código no encontrado.',
+                'error'
+            );
+
+            cerrarDetalle();
+
+            return;
+
+        }
+
+        document.getElementById(
+            'detailTitle'
+        ).textContent =
+            data.nombre_codigo;
+
+        document.getElementById(
+            'detailCode'
+        ).textContent =
+            data.codigo_html || '';
+
+        const fechaCreacion =
+            data.fecha_creacion
+            ? new Date(
+                data.fecha_creacion
+            ).toLocaleString(
+                'es-MX'
+            )
+            : 'Sin fecha';
+
+        const fechaActualizacion =
+            data.fecha_actualizacion
+            ? new Date(
+                data.fecha_actualizacion
+            ).toLocaleString(
+                'es-MX'
+            )
+            : 'Sin fecha';
+
+        document.getElementById(
+            'detailInfo'
+        ).innerHTML = `
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Nombre
+                </div>
+
+                <div class="info-value">
+                    ${escapeHTML(
+                        data.nombre_codigo ||
+                        ''
+                    )}
+                </div>
+
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Descripción
+                </div>
+
+                <div class="info-value">
+                    ${escapeHTML(
+                        data.descripcion_breve ||
+                        ''
+                    )}
+                </div>
+
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    ¿Qué hace?
+                </div>
+
+                <div class="info-value">
+                    ${escapeHTML(
+                        data.que_hace ||
+                        ''
+                    )}
+                </div>
+
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Creador
+                </div>
+
+                <div class="info-value">
+                    ${escapeHTML(
+                        data.creador_nombre ||
+                        ''
+                    )}
+                </div>
+
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Servidor del creador
+                </div>
+
+                <div class="info-value">
+                    ${escapeHTML(
+                        data.creador_servidor ||
+                        ''
+                    )}
+                </div>
+
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Veces utilizado
+                </div>
+
+                <div class="info-value">
+                    ${Number(
+                        data.veces_usado ||
+                        0
+                    )}
+                </div>
+
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Fecha de creación
+                </div>
+
+                <div class="info-value">
+                    ${escapeHTML(
+                        fechaCreacion
+                    )}
+                </div>
+
+            </div>
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    Última actualización
+                </div>
+
+                <div class="info-value">
+                    ${escapeHTML(
+                        fechaActualizacion
+                    )}
+                </div>
+
+            </div>
+
+        `;
+
+        mostrarUsuarios(
+            data.usuarios_uso
+        );
+
+    }catch(errorCatch){
+
+        console.error(errorCatch);
+
+        mostrarToast(
+            'Error al cargar el detalle.',
+            'error'
+        );
+
+        cerrarDetalle();
+
+    }
+
+}
+
+
+/* =========================================================
+   USUARIOS
+========================================================= */
+
+function mostrarUsuarios(datos){
+
+    const container =
+        document.getElementById(
+            'detailUsers'
+        );
+
+    let usuarios =
+        datos;
+
+    if(typeof usuarios === 'string'){
+
+        try{
+
+            usuarios =
+                JSON.parse(
+                    usuarios
+                );
+
+        }catch(e){
+
+            usuarios = [];
+
+        }
+
+    }
+
+    if(!Array.isArray(usuarios)){
+
+        usuarios = [];
+
+    }
+
+    if(usuarios.length === 0){
+
+        container.innerHTML =
+            '<div class="empty">Ningún usuario ha utilizado este código.</div>';
+
+        return;
+
+    }
+
+    container.innerHTML = '';
+
+    usuarios.forEach(usuario=>{
+
+        const fecha =
+            usuario.fecha_uso
+            ? new Date(
+                usuario.fecha_uso
+            ).toLocaleString(
+                'es-MX'
+            )
+            : 'Sin fecha';
+
+        const div =
+            document.createElement(
+                'div'
+            );
+
+        div.className =
+            'used-user';
+
+        div.innerHTML = `
+
+            <div class="used-user-name">
+                ${escapeHTML(
+                    usuario.nombre ||
+                    'Usuario'
+                )}
+            </div>
+
+            <div class="used-user-server">
+                SERVIDOR:
+                ${escapeHTML(
+                    usuario.numero_servidor ||
+                    ''
+                )}
+            </div>
+
+            <div class="used-user-date">
+                USADO:
+                ${escapeHTML(
+                    fecha
+                )}
+            </div>
+
+        `;
+
+        container.appendChild(
+            div
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   USAR CÓDIGO
+========================================================= */
+
+async function usarCodigoActual(){
+
+    if(!codigoActualId){
+
+        mostrarToast(
+            'Código no seleccionado.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    if(!usuarioActual){
+
+        mostrarToast(
+            'Sesión no válida.',
+            'error'
+        );
+
+        return;
+
+    }
+
+    try{
+
+        const {data,error} =
+            await supabaseClient.rpc(
+                'usar_codigo_programador',
+                {
+                    p_codigo_id:
+                        codigoActualId,
+
+                    p_usuario_id:
+                        usuarioActual.id
+                }
+            );
+
+        console.log(
+            'Usar código:',
+            data,
+            error
+        );
+
+        if(error){
+
+            console.error(error);
+
+            mostrarToast(
+                error.message ||
+                'No fue posible utilizar el código.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        if(!data || data.ok !== true){
+
+            mostrarToast(
+                data?.mensaje ||
+                'No fue posible utilizar el código.',
+                'error'
+            );
+
+            return;
+
+        }
+
+        document.getElementById(
+            'codigoEditor'
+        ).value =
+            data.codigo_html ||
+            '';
+
+        actualizarPreview();
+
+        cerrarDetalle();
+
+        mostrarToast(
+            'Código cargado en el editor.',
+            'success'
+        );
+
+        const panelCodigo =
+            document.getElementById(
+                'panelCodigo'
+            );
+
+        panelCodigo.style.display =
+            'block';
+
+        document.getElementById(
+            'btnCodigo'
+        ).classList.add(
+            'active'
+        );
+
+        organizarWorkspace();
+
+        cargarMisCodigos();
+
+        cargarCodigos();
+
+    }catch(errorCatch){
+
+        console.error(errorCatch);
+
+        mostrarToast(
+            'Ocurrió un error al utilizar el código.',
+            'error'
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CERRAR DETALLE
+========================================================= */
+
+function cerrarDetalle(){
+
+    detailScreen.style.display =
+        'none';
+
+    document.getElementById(
+        'workspace'
+    ).style.display =
+        'grid';
+
+    document.querySelector(
+        '.section-bar'
+    ).style.display =
+        'flex';
+
+    codigoActualId =
+        null;
+
+}
+
+
+/* =========================================================
+   ESCAPAR HTML
+========================================================= */
+
+function escapeHTML(valor){
+
+    return String(
+        valor ?? ''
+    )
+    .replace(
+        /&/g,
+        '&amp;'
+    )
+    .replace(
+        /</g,
+        '&lt;'
+    )
+    .replace(
+        />/g,
+        '&gt;'
+    )
+    .replace(
+        /"/g,
+        '&quot;'
+    )
+    .replace(
+        /'/g,
+        '&#039;'
+    );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer =
+    null;
+
+function mostrarToast(
+    mensaje,
+    tipo = ''
+){
+
+    const toast =
+        document.getElementById(
+            'toast'
+        );
+
+    toast.textContent =
+        mensaje;
+
+    toast.className =
+        'show ' + tipo;
+
+    clearTimeout(
+        toastTimer
+    );
+
+    toastTimer =
+        setTimeout(
+            ()=>{
+                toast.className = '';
+            },
+            3500
+        );
+
+}
+
+
+/* =========================================================
+   CERRAR MODALES FUERA
+========================================================= */
+
+document
+.getElementById(
+    'saveModal'
+)
+.addEventListener(
+    'click',
+    function(e){
+
+        if(e.target === this){
+
+            cerrarGuardarModal();
+
+        }
+
+    }
+);
+
+
+document
+.getElementById(
+    'editModal'
+)
+.addEventListener(
+    'click',
+    function(e){
+
+        if(e.target === this){
+
+            cerrarEditarModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TECLAS DE ACCESO RÁPIDO
+========================================================= */
+
+document.addEventListener(
+    'keydown',
+    function(e){
+
+        if(e.ctrlKey){
+
+            if(e.key === '1'){
+
+                e.preventDefault();
+
+                togglePanel(
+                    'codigo'
+                );
+
+            }
+
+            if(e.key === '2'){
+
+                e.preventDefault();
+
+                togglePanel(
+                    'preview'
+                );
+
+            }
+
+            if(e.key === '3'){
+
+                e.preventDefault();
+
+                togglePanel(
+                    'etiquetas'
+                );
+
+            }
+
+            if(e.key === '4'){
+
+                e.preventDefault();
+
+                togglePanel(
+                    'codigos'
+                );
+
+            }
+
+            if(e.key === '5'){
+
+                e.preventDefault();
+
+                togglePanel(
+                    'misCodigos'
+                );
+
+            }
+
+            if(
+                e.key.toLowerCase()
+                ===
+                's'
+            ){
+
+                e.preventDefault();
+
+                abrirGuardarModal();
+
+            }
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
