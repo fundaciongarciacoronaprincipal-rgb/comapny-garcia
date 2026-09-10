@@ -1,0 +1,3674 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Producto e Innovación | CORPORATIVO NEXEL DIGITAL</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --fondo:#06111f;
+    --fondo2:#091827;
+    --panel:#0d1d31;
+    --panel2:#10263d;
+    --azul:#168cff;
+    --cyan:#00d9ff;
+    --texto:#f5f9ff;
+    --texto2:#9fb3c8;
+    --borde:rgba(255,255,255,.09);
+    --rojo:#ff5f6d;
+    --verde:#24d17e;
+    --amarillo:#ffc857;
+}
+
+body{
+    min-height:100vh;
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(circle at top right,rgba(0,217,255,.08),transparent 35%),
+        var(--fondo);
+    color:var(--texto);
+}
+
+button,
+input,
+textarea,
+select{
+    font-family:inherit;
+}
+
+#login{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+}
+
+.login-box{
+    width:100%;
+    max-width:450px;
+    background:rgba(13,29,49,.96);
+    border:1px solid var(--borde);
+    border-radius:24px;
+    padding:32px;
+    box-shadow:0 25px 70px rgba(0,0,0,.4);
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.logo-icon{
+    width:70px;
+    height:70px;
+    margin:auto;
+    border-radius:21px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,var(--azul),var(--cyan));
+    font-size:34px;
+}
+
+.logo h1{
+    font-size:22px;
+    margin-top:15px;
+}
+
+.logo p{
+    color:var(--texto2);
+    font-size:13px;
+    margin-top:6px;
+}
+
+.login-box h2{
+    font-size:21px;
+    margin-bottom:8px;
+}
+
+.descripcion{
+    color:var(--texto2);
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:22px;
+}
+
+.campo{
+    margin-bottom:17px;
+}
+
+.campo label{
+    display:block;
+    margin-bottom:7px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.campo input,
+.campo textarea,
+.campo select{
+    width:100%;
+    padding:13px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.1);
+    background:#071523;
+    color:white;
+    outline:none;
+    font-size:14px;
+}
+
+.campo textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 0 3px rgba(0,217,255,.08);
+}
+
+.boton{
+    border:0;
+    border-radius:12px;
+    padding:12px 17px;
+    background:linear-gradient(135deg,var(--azul),var(--cyan));
+    color:white;
+    font-size:13px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.boton:hover{
+    filter:brightness(1.08);
+}
+
+.boton-secundario{
+    border:1px solid var(--borde);
+    background:#0a1929;
+    color:white;
+}
+
+.boton-peligro{
+    background:rgba(255,95,109,.12);
+    border:1px solid rgba(255,95,109,.25);
+    color:#ff9fa8;
+}
+
+.acciones-form{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+
+.mensaje{
+    display:none;
+    padding:13px;
+    border-radius:12px;
+    margin-bottom:17px;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.mensaje.error{
+    display:block;
+    background:rgba(255,95,109,.1);
+    border:1px solid rgba(255,95,109,.25);
+    color:#ffb3ba;
+}
+
+.mensaje.exito{
+    display:block;
+    background:rgba(36,209,126,.1);
+    border:1px solid rgba(36,209,126,.25);
+    color:#8cf3bb;
+}
+
+#portal{
+    display:none;
+    min-height:100vh;
+}
+
+.header{
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    background:rgba(6,17,31,.94);
+    border-bottom:1px solid var(--borde);
+    position:sticky;
+    top:0;
+    z-index:20;
+    backdrop-filter:blur(14px);
+}
+
+.marca{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.marca-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--azul),var(--cyan));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.marca-text strong{
+    display:block;
+    font-size:14px;
+}
+
+.marca-text span{
+    color:var(--texto2);
+    font-size:11px;
+}
+
+.usuario{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.usuario-info{
+    text-align:right;
+}
+
+.usuario-info strong{
+    display:block;
+    font-size:13px;
+}
+
+.usuario-info span{
+    color:var(--cyan);
+    font-size:11px;
+}
+
+.logout{
+    border:1px solid rgba(255,255,255,.1);
+    background:#0b1b2c;
+    color:white;
+    border-radius:10px;
+    padding:9px 12px;
+    cursor:pointer;
+}
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 72px);
+}
+
+.sidebar{
+    width:260px;
+    background:#081523;
+    border-right:1px solid var(--borde);
+    padding:20px 14px;
+}
+
+.sidebar-title{
+    color:#71869b;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    margin:8px 10px 12px;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.menu button{
+    width:100%;
+    text-align:left;
+    border:1px solid transparent;
+    background:transparent;
+    color:#b9c9d9;
+    padding:12px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.menu button:hover,
+.menu button.activo{
+    background:rgba(22,140,255,.1);
+    border-color:rgba(22,140,255,.15);
+    color:white;
+}
+
+.contenido{
+    flex:1;
+    padding:30px;
+    min-width:0;
+}
+
+.vista{
+    display:none;
+}
+
+.vista.activa{
+    display:block;
+}
+
+.titulo{
+    margin-bottom:25px;
+}
+
+.titulo h2{
+    font-size:28px;
+}
+
+.titulo p{
+    color:var(--texto2);
+    margin-top:6px;
+    font-size:14px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:16px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:var(--panel);
+    border:1px solid var(--borde);
+    border-radius:17px;
+    padding:20px;
+}
+
+.card span{
+    color:var(--texto2);
+    font-size:12px;
+}
+
+.card strong{
+    display:block;
+    font-size:30px;
+    margin-top:8px;
+    color:var(--cyan);
+}
+
+.panel{
+    background:var(--panel);
+    border:1px solid var(--borde);
+    border-radius:18px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+
+.panel-head{
+    padding:18px 20px;
+    border-bottom:1px solid var(--borde);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.panel-head h3{
+    font-size:16px;
+}
+
+.panel-body{
+    padding:20px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:15px;
+}
+
+.form-grid .campo-completo{
+    grid-column:1/-1;
+}
+
+.tabla-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:850px;
+}
+
+th,
+td{
+    padding:13px 15px;
+    text-align:left;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    font-size:12px;
+}
+
+th{
+    color:#8fa6bb;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+td{
+    color:#dce8f4;
+}
+
+.vacio{
+    padding:35px;
+    text-align:center;
+    color:var(--texto2);
+}
+
+.estado{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    background:rgba(36,209,126,.1);
+    color:#7ef0b1;
+    font-size:10px;
+}
+
+.estado-pendiente{
+    background:rgba(255,200,87,.1);
+    color:#ffd978;
+}
+
+.estado-cerrado{
+    background:rgba(255,255,255,.07);
+    color:#aebdcb;
+}
+
+.acciones{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+}
+
+.acciones button{
+    padding:7px 9px;
+    border-radius:8px;
+    cursor:pointer;
+    border:1px solid var(--borde);
+    background:#0a1a2b;
+    color:white;
+    font-size:11px;
+}
+
+.acciones .eliminar{
+    color:#ff9fa8;
+    border-color:rgba(255,95,109,.2);
+}
+
+.seccion-mensaje{
+    margin-bottom:18px;
+}
+
+.oculto{
+    display:none !important;
+}
+
+@media(max-width:850px){
+
+    .layout{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        border-right:0;
+        border-bottom:1px solid var(--borde);
+        overflow-x:auto;
+    }
+
+    .menu{
+        flex-direction:row;
+        width:max-content;
+    }
+
+    .menu button{
+        white-space:nowrap;
+    }
+
+    .contenido{
+        padding:20px;
+    }
+
+    .header{
+        padding:0 15px;
+    }
+
+    .usuario-info{
+        display:none;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid .campo-completo{
+        grid-column:auto;
+    }
+}
+
+@media(max-width:600px){
+
+    .marca-text{
+        display:none;
+    }
+
+    .titulo h2{
+        font-size:23px;
+    }
+
+    .login-box{
+        padding:24px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section id="login">
+
+<div class="login-box">
+
+<div class="logo">
+
+<div class="logo-icon">
+🚀
+</div>
+
+<h1>CORPORATIVO NEXEL DIGITAL</h1>
+
+<p>Producto e Innovación</p>
+
+</div>
+
+<h2>Inicio de sesión</h2>
+
+<p class="descripcion">
+
+Ingresa con tu número de empleado o servidor
+y tu contraseña corporativa.
+
+</p>
+
+<div id="loginMensaje" class="mensaje"></div>
+
+<form id="loginForm">
+
+<div class="campo">
+
+<label for="numeroEmpleadoLogin">
+Número de empleado / servidor
+</label>
+
+<input
+type="text"
+id="numeroEmpleadoLogin"
+inputmode="numeric"
+maxlength="10"
+pattern="0202[0-9]{6}"
+placeholder="0202XXXXXX"
+required
+>
+
+</div>
+
+<div class="campo">
+
+<label for="passwordLogin">
+Contraseña
+</label>
+
+<input
+type="password"
+id="passwordLogin"
+autocomplete="current-password"
+required
+>
+
+</div>
+
+<button
+type="submit"
+class="boton"
+id="loginButton"
+>
+Iniciar sesión
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+<section id="portal">
+
+<header class="header">
+
+<div class="marca">
+
+<div class="marca-icon">
+🚀
+</div>
+
+<div class="marca-text">
+
+<strong>
+CORPORATIVO NEXEL DIGITAL
+</strong>
+
+<span>
+Producto e Innovación
+</span>
+
+</div>
+
+</div>
+
+<div class="usuario">
+
+<div class="usuario-info">
+
+<strong id="nombreUsuario">
+Colaborador
+</strong>
+
+<span id="numeroUsuario">
+0202000000
+</span>
+
+</div>
+
+<button
+class="logout"
+id="logoutButton"
+>
+Salir
+</button>
+
+</div>
+
+</header>
+
+
+<div class="layout">
+
+<aside class="sidebar">
+
+<div class="sidebar-title">
+Área de trabajo
+</div>
+
+<nav class="menu">
+
+<button class="activo" data-vista="inicio">
+🏠 Inicio
+</button>
+
+<button data-vista="iniciativas">
+🚀 Iniciativas
+</button>
+
+<button data-vista="investigacion">
+🔬 Investigación
+</button>
+
+<button data-vista="ia">
+🤖 Inteligencia Artificial
+</button>
+
+<button data-vista="prototipos">
+🧪 Prototipos
+</button>
+
+<button data-vista="automatizacion">
+⚙️ Automatización
+</button>
+
+<button data-vista="productos">
+📱 Productos digitales
+</button>
+
+<button data-vista="evolucion">
+📈 Evolución
+</button>
+
+<button data-vista="funciones">
+🧩 Funciones
+</button>
+
+<button data-vista="mercado">
+🌐 Mercado tecnológico
+</button>
+
+<button data-vista="indicadores">
+📊 Indicadores
+</button>
+
+</nav>
+
+</aside>
+
+
+<main class="contenido">
+
+
+<section class="vista activa" id="vista-inicio">
+
+<div class="titulo">
+
+<h2>
+Producto e Innovación
+</h2>
+
+<p>
+Centro de trabajo para crear,
+investigar, innovar y evolucionar
+soluciones tecnológicas.
+</p>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<span>Iniciativas</span>
+<strong id="totalIniciativas">0</strong>
+</div>
+
+<div class="card">
+<span>Investigación</span>
+<strong id="totalInvestigacion">0</strong>
+</div>
+
+<div class="card">
+<span>Prototipos</span>
+<strong id="totalPrototipos">0</strong>
+</div>
+
+<div class="card">
+<span>Productos</span>
+<strong id="totalProductos">0</strong>
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+
+<h3>
+Función del área
+</h3>
+
+</div>
+
+<div class="vacio">
+
+<p>
+Crear, innovar, investigar,
+automatizar y evolucionar
+tecnología para CORPORATIVO
+NEXEL DIGITAL.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-iniciativas">
+
+<div class="titulo">
+
+<h2>Iniciativas</h2>
+
+<p>
+Proyectos e ideas tecnológicas propuestas por el equipo.
+</p>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+
+<h3>Nueva iniciativa</h3>
+
+</div>
+
+<div class="panel-body">
+
+<form id="formIniciativas">
+
+<div class="form-grid">
+
+<div class="campo">
+
+<label>Título</label>
+
+<input id="iniciativaTitulo" required>
+
+</div>
+
+<div class="campo">
+
+<label>Estado</label>
+
+<select id="iniciativaEstado">
+
+<option value="En análisis">En análisis</option>
+<option value="En desarrollo">En desarrollo</option>
+<option value="Activa">Activa</option>
+<option value="Pausada">Pausada</option>
+<option value="Finalizada">Finalizada</option>
+
+</select>
+
+</div>
+
+<div class="campo campo-completo">
+
+<label>Descripción</label>
+
+<textarea id="iniciativaDescripcion" required></textarea>
+
+</div>
+
+</div>
+
+<div class="acciones-form">
+
+<button class="boton" type="submit">
+Guardar iniciativa
+</button>
+
+<button
+type="button"
+class="boton boton-secundario"
+onclick="limpiarFormulario('formIniciativas')"
+>
+Limpiar
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+
+<h3>Mis iniciativas</h3>
+
+</div>
+
+<div class="tabla-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Título</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Fecha</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaIniciativas"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-investigacion">
+
+<div class="titulo">
+
+<h2>Investigación</h2>
+
+<p>
+Investigación de nuevas tecnologías y tendencias.
+</p>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+
+<h3>Nueva investigación</h3>
+
+</div>
+
+<div class="panel-body">
+
+<form id="formInvestigacion">
+
+<div class="form-grid">
+
+<div class="campo">
+
+<label>Título</label>
+
+<input id="investigacionTitulo" required>
+
+</div>
+
+<div class="campo">
+
+<label>Tecnología</label>
+
+<input id="investigacionTecnologia" required>
+
+</div>
+
+<div class="campo campo-completo">
+
+<label>Descripción</label>
+
+<textarea id="investigacionDescripcion" required></textarea>
+
+</div>
+
+</div>
+
+<button class="boton" type="submit">
+Guardar investigación
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+
+<h3>Mis investigaciones</h3>
+
+</div>
+
+<div class="tabla-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Título</th>
+<th>Tecnología</th>
+<th>Descripción</th>
+<th>Fecha</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaInvestigacion"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-ia">
+
+<div class="titulo">
+
+<h2>Inteligencia Artificial</h2>
+
+<p>
+Investigación y desarrollo de soluciones basadas en IA.
+</p>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+
+<h3>Nuevo proyecto de IA</h3>
+
+</div>
+
+<div class="panel-body">
+
+<form id="formIA">
+
+<div class="form-grid">
+
+<div class="campo">
+
+<label>Proyecto</label>
+
+<input id="iaProyecto" required>
+
+</div>
+
+<div class="campo">
+
+<label>Modelo / tecnología</label>
+
+<input id="iaModelo" required>
+
+</div>
+
+<div class="campo campo-completo">
+
+<label>Descripción</label>
+
+<textarea id="iaDescripcion" required></textarea>
+
+</div>
+
+<div class="campo">
+
+<label>Estado</label>
+
+<select id="iaEstado">
+
+<option>En investigación</option>
+<option>En desarrollo</option>
+<option>Prueba</option>
+<option>Activo</option>
+<option>Finalizado</option>
+
+</select>
+
+</div>
+
+</div>
+
+<button class="boton" type="submit">
+Guardar proyecto de IA
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Mis proyectos de IA</h3>
+</div>
+
+<div class="tabla-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Proyecto</th>
+<th>Modelo</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaIA"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-prototipos">
+
+<div class="titulo">
+
+<h2>Prototipos</h2>
+
+<p>
+Pruebas y versiones iniciales de nuevos productos.
+</p>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Nuevo prototipo</h3>
+</div>
+
+<div class="panel-body">
+
+<form id="formPrototipos">
+
+<div class="form-grid">
+
+<div class="campo">
+<label>Nombre</label>
+<input id="prototipoNombre" required>
+</div>
+
+<div class="campo">
+<label>Estado</label>
+
+<select id="prototipoEstado">
+
+<option>En diseño</option>
+<option>En prueba</option>
+<option>En desarrollo</option>
+<option>Activo</option>
+<option>Cancelado</option>
+
+</select>
+
+</div>
+
+<div class="campo campo-completo">
+
+<label>Descripción</label>
+
+<textarea id="prototipoDescripcion" required></textarea>
+
+</div>
+
+</div>
+
+<button class="boton" type="submit">
+Guardar prototipo
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Mis prototipos</h3>
+</div>
+
+<div class="tabla-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Nombre</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Fecha</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaPrototipos"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-automatizacion">
+
+<div class="titulo">
+
+<h2>Automatización</h2>
+
+<p>
+Procesos y tareas susceptibles de automatización.
+</p>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Nueva automatización</h3>
+</div>
+
+<div class="panel-body">
+
+<form id="formAutomatizacion">
+
+<div class="form-grid">
+
+<div class="campo">
+<label>Proceso</label>
+<input id="automatizacionProceso" required>
+</div>
+
+<div class="campo">
+<label>Estado</label>
+
+<select id="automatizacionEstado">
+
+<option>Propuesta</option>
+<option>En análisis</option>
+<option>En desarrollo</option>
+<option>Implementada</option>
+<option>Finalizada</option>
+
+</select>
+
+</div>
+
+<div class="campo campo-completo">
+
+<label>Descripción</label>
+
+<textarea id="automatizacionDescripcion" required></textarea>
+
+</div>
+
+</div>
+
+<button class="boton" type="submit">
+Guardar automatización
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Mis automatizaciones</h3>
+</div>
+
+<div class="tabla-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Proceso</th>
+<th>Descripción</th>
+<th>Estado</th>
+<th>Fecha</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaAutomatizacion"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-productos">
+
+<div class="titulo">
+
+<h2>Productos digitales</h2>
+
+<p>
+Productos tecnológicos creados por el área.
+</p>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Nuevo producto digital</h3>
+</div>
+
+<div class="panel-body">
+
+<form id="formProductos">
+
+<div class="form-grid">
+
+<div class="campo">
+<label>Producto</label>
+<input id="productoNombre" required>
+</div>
+
+<div class="campo">
+<label>Versión</label>
+<input id="productoVersion" placeholder="V1.0">
+</div>
+
+<div class="campo campo-completo">
+
+<label>Descripción</label>
+
+<textarea id="productoDescripcion" required></textarea>
+
+</div>
+
+<div class="campo">
+
+<label>Estado</label>
+
+<select id="productoEstado">
+
+<option>En desarrollo</option>
+<option>Prueba</option>
+<option>Activo</option>
+<option>Mantenimiento</option>
+<option>Finalizado</option>
+
+</select>
+
+</div>
+
+</div>
+
+<button class="boton" type="submit">
+Guardar producto
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Mis productos</h3>
+</div>
+
+<div class="tabla-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Producto</th>
+<th>Descripción</th>
+<th>Versión</th>
+<th>Estado</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaProductos"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-evolucion">
+
+<div class="titulo">
+
+<h2>Evolución</h2>
+
+<p>
+Mejoras y evolución de productos existentes.
+</p>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Registrar evolución</h3>
+</div>
+
+<div class="panel-body">
+
+<form id="formEvolucion">
+
+<div class="form-grid">
+
+<div class="campo">
+<label>Producto</label>
+<input id="evolucionProducto" required>
+</div>
+
+<div class="campo">
+<label>Versión / cambio</label>
+<input id="evolucionVersion">
+</div>
+
+<div class="campo campo-completo">
+<label>Mejora realizada</label>
+<textarea id="evolucionDescripcion" required></textarea>
+</div>
+
+</div>
+
+<button class="boton" type="submit">
+Guardar evolución
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Historial de evolución</h3>
+</div>
+
+<div class="tabla-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Producto</th>
+<th>Versión</th>
+<th>Mejora</th>
+<th>Fecha</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaEvolucion"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-funciones">
+
+<div class="titulo">
+
+<h2>Funciones</h2>
+
+<p>
+Planeación de nuevas funciones y características.
+</p>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Nueva función</h3>
+</div>
+
+<div class="panel-body">
+
+<form id="formFunciones">
+
+<div class="form-grid">
+
+<div class="campo">
+<label>Producto</label>
+<input id="funcionProducto" required>
+</div>
+
+<div class="campo">
+<label>Prioridad</label>
+
+<select id="funcionPrioridad">
+
+<option>Baja</option>
+<option>Media</option>
+<option>Alta</option>
+<option>Crítica</option>
+
+</select>
+
+</div>
+
+<div class="campo campo-completo">
+
+<label>Función / característica</label>
+
+<textarea id="funcionDescripcion" required></textarea>
+
+</div>
+
+<div class="campo">
+
+<label>Estado</label>
+
+<select id="funcionEstado">
+
+<option>Planeada</option>
+<option>En desarrollo</option>
+<option>En prueba</option>
+<option>Implementada</option>
+
+</select>
+
+</div>
+
+</div>
+
+<button class="boton" type="submit">
+Guardar función
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Funciones registradas</h3>
+</div>
+
+<div class="tabla-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Producto</th>
+<th>Función</th>
+<th>Prioridad</th>
+<th>Estado</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaFunciones"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-mercado">
+
+<div class="titulo">
+
+<h2>Mercado tecnológico</h2>
+
+<p>
+Análisis del mercado, tendencias y oportunidades.
+</p>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Nueva investigación de mercado</h3>
+</div>
+
+<div class="panel-body">
+
+<form id="formMercado">
+
+<div class="form-grid">
+
+<div class="campo">
+<label>Título</label>
+<input id="mercadoTitulo" required>
+</div>
+
+<div class="campo">
+<label>Sector</label>
+<input id="mercadoSector" required>
+</div>
+
+<div class="campo campo-completo">
+<label>Análisis</label>
+<textarea id="mercadoAnalisis" required></textarea>
+</div>
+
+<div class="campo campo-completo">
+<label>Oportunidad detectada</label>
+<textarea id="mercadoOportunidad"></textarea>
+</div>
+
+</div>
+
+<button class="boton" type="submit">
+Guardar investigación
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<div class="panel-head">
+<h3>Investigaciones de mercado</h3>
+</div>
+
+<div class="tabla-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Título</th>
+<th>Sector</th>
+<th>Análisis</th>
+<th>Oportunidad</th>
+<th>Acciones</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaMercado"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="vista" id="vista-indicadores">
+
+<div class="titulo">
+
+<h2>Indicadores</h2>
+
+<p>
+Información general del área de Producto e Innovación.
+</p>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<span>Total de registros</span>
+<strong id="totalRegistros">0</strong>
+</div>
+
+<div class="card">
+<span>Iniciativas</span>
+<strong id="indicadorIniciativas">0</strong>
+</div>
+
+<div class="card">
+<span>Investigaciones</span>
+<strong id="indicadorInvestigacion">0</strong>
+</div>
+
+<div class="card">
+<span>Prototipos</span>
+<strong id="indicadorPrototipos">0</strong>
+</div>
+
+<div class="card">
+<span>Productos digitales</span>
+<strong id="indicadorProductos">0</strong>
+</div>
+
+<div class="card">
+<span>Estado</span>
+<strong style="font-size:18px;">
+ACTIVO
+</strong>
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+</section>
+
+
+<script>
+
+const SUPABASE_URL =
+'https://wxmjuqexffvckwwmiptu.supabase.co';
+
+const SUPABASE_PUBLISHABLE_KEY =
+'sb_publishable_uOeANgEQM8HNr1BZ2UR9Kg_wZBOw65V';
+
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
+
+
+let usuarioActual = null;
+
+let perfilActual = null;
+
+
+const configuraciones = {
+
+iniciativas:{
+tabla:'iniciativas_producto_e_innovacion',
+tbody:'tablaIniciativas'
+},
+
+investigacion:{
+tabla:'investigacion_producto_e_innovacion',
+tbody:'tablaInvestigacion'
+},
+
+ia:{
+tabla:'ia_producto_e_innovacion',
+tbody:'tablaIA'
+},
+
+prototipos:{
+tabla:'prototipos_producto_e_innovacion',
+tbody:'tablaPrototipos'
+},
+
+automatizacion:{
+tabla:'automatizacion_producto_e_innovacion',
+tbody:'tablaAutomatizacion'
+},
+
+productos:{
+tabla:'productos_producto_e_innovacion',
+tbody:'tablaProductos'
+},
+
+evolucion:{
+tabla:'evolucion_producto_e_innovacion',
+tbody:'tablaEvolucion'
+},
+
+funciones:{
+tabla:'funciones_producto_e_innovacion',
+tbody:'tablaFunciones'
+},
+
+mercado:{
+tabla:'mercado_producto_e_innovacion',
+tbody:'tablaMercado'
+}
+
+};
+
+
+const login =
+document.getElementById('login');
+
+const portal =
+document.getElementById('portal');
+
+const loginForm =
+document.getElementById('loginForm');
+
+const loginMensaje =
+document.getElementById('loginMensaje');
+
+
+function mostrarLoginError(texto){
+
+loginMensaje.className =
+'mensaje error';
+
+loginMensaje.textContent =
+texto;
+
+}
+
+
+function limpiarLoginError(){
+
+loginMensaje.className =
+'mensaje';
+
+loginMensaje.textContent =
+'';
+
+}
+
+
+function escaparHTML(texto){
+
+if(texto === null || texto === undefined){
+return '';
+}
+
+return String(texto)
+.replace(/&/g,'&amp;')
+.replace(/</g,'&lt;')
+.replace(/>/g,'&gt;')
+.replace(/"/g,'&quot;')
+.replace(/'/g,'&#039;');
+
+}
+
+
+function limpiarFormulario(id){
+
+const formulario =
+document.getElementById(id);
+
+if(formulario){
+formulario.reset();
+}
+
+}
+
+
+function mostrarVista(nombre){
+
+document.querySelectorAll('.vista')
+.forEach(function(vista){
+
+vista.classList.remove('activa');
+
+});
+
+
+const vista =
+document.getElementById(
+'vista-' + nombre
+);
+
+
+if(vista){
+vista.classList.add('activa');
+}
+
+
+document.querySelectorAll('.menu button')
+.forEach(function(button){
+
+button.classList.remove('activo');
+
+});
+
+
+const boton =
+document.querySelector(
+'.menu button[data-vista="' +
+nombre +
+'"]'
+);
+
+
+if(boton){
+boton.classList.add('activo');
+}
+
+}
+
+
+document.querySelectorAll(
+'.menu button'
+).forEach(function(button){
+
+button.addEventListener(
+'click',
+function(){
+
+mostrarVista(
+button.dataset.vista
+);
+
+if(configuraciones[button.dataset.vista]){
+cargarTabla(button.dataset.vista);
+}
+
+}
+);
+
+});
+
+
+async function cargarPerfil(){
+
+if(!usuarioActual){
+return null;
+}
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from(
+'usuarios_producto_e_innovacion'
+)
+.select('*')
+.eq(
+'id',
+usuarioActual.id
+)
+.maybeSingle();
+
+
+if(error){
+
+console.error(error);
+
+return null;
+
+}
+
+return data;
+
+}
+
+
+async function iniciarPortal(){
+
+perfilActual =
+await cargarPerfil();
+
+
+if(!perfilActual){
+
+await supabaseClient.auth.signOut();
+
+mostrarLoginError(
+'La cuenta existe, pero no tiene un perfil de Producto e Innovación.'
+);
+
+return;
+
+}
+
+
+document.getElementById(
+'nombreUsuario'
+).textContent =
+perfilActual.nombre_completo;
+
+
+document.getElementById(
+'numeroUsuario'
+).textContent =
+perfilActual.numero_empleado;
+
+
+login.style.display =
+'none';
+
+portal.style.display =
+'block';
+
+
+await cargarTodo();
+
+}
+
+
+async function cargarTodo(){
+
+const nombres = Object.keys(
+configuraciones
+);
+
+for(const nombre of nombres){
+
+await cargarTabla(nombre);
+
+}
+
+await cargarIndicadores();
+
+}
+
+
+async function cargarTabla(nombre){
+
+const config =
+configuraciones[nombre];
+
+if(!config || !perfilActual){
+return;
+}
+
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from(config.tabla)
+.select('*')
+.eq(
+'numero_empleado',
+perfilActual.numero_empleado
+)
+.order(
+'created_at',
+{
+ascending:false
+}
+);
+
+
+const tbody =
+document.getElementById(config.tbody);
+
+
+if(!tbody){
+return;
+}
+
+
+if(error){
+
+console.error(
+'Error cargando ' + config.tabla,
+error
+);
+
+tbody.innerHTML =
+'<tr><td colspan="10">No se pudieron cargar los registros.</td></tr>';
+
+return;
+
+}
+
+
+if(!data || data.length === 0){
+
+tbody.innerHTML =
+'<tr><td colspan="10" class="vacio">No hay registros todavía.</td></tr>';
+
+return;
+
+}
+
+
+tbody.innerHTML =
+data.map(function(registro){
+
+return construirFila(
+nombre,
+registro
+);
+
+}).join('');
+
+}
+
+
+function estadoHTML(estado){
+
+if(!estado){
+return '';
+}
+
+let clase =
+'estado';
+
+if(
+estado === 'Pausada' ||
+estado === 'Pendiente' ||
+estado === 'Propuesta'
+){
+clase +=
+' estado-pendiente';
+}
+
+if(
+estado === 'Cancelado' ||
+estado === 'Finalizada'
+){
+clase +=
+' estado-cerrado';
+}
+
+return `
+<span class="${clase}">
+${escaparHTML(estado)}
+</span>
+`;
+
+}
+
+
+function construirFila(nombre,registro){
+
+const id =
+registro.id;
+
+
+let contenido = '';
+
+
+if(nombre === 'iniciativas'){
+
+contenido = `
+<td>${escaparHTML(registro.titulo)}</td>
+<td>${escaparHTML(registro.descripcion)}</td>
+<td>${estadoHTML(registro.estado)}</td>
+<td>${formatearFecha(registro.created_at)}</td>
+`;
+
+}
+
+
+if(nombre === 'investigacion'){
+
+contenido = `
+<td>${escaparHTML(registro.titulo)}</td>
+<td>${escaparHTML(registro.tecnologia)}</td>
+<td>${escaparHTML(registro.descripcion)}</td>
+<td>${formatearFecha(registro.created_at)}</td>
+`;
+
+}
+
+
+if(nombre === 'ia'){
+
+contenido = `
+<td>${escaparHTML(registro.proyecto)}</td>
+<td>${escaparHTML(registro.modelo)}</td>
+<td>${escaparHTML(registro.descripcion)}</td>
+<td>${estadoHTML(registro.estado)}</td>
+`;
+
+}
+
+
+if(nombre === 'prototipos'){
+
+contenido = `
+<td>${escaparHTML(registro.nombre)}</td>
+<td>${escaparHTML(registro.descripcion)}</td>
+<td>${estadoHTML(registro.estado)}</td>
+<td>${formatearFecha(registro.created_at)}</td>
+`;
+
+}
+
+
+if(nombre === 'automatizacion'){
+
+contenido = `
+<td>${escaparHTML(registro.proceso)}</td>
+<td>${escaparHTML(registro.descripcion)}</td>
+<td>${estadoHTML(registro.estado)}</td>
+<td>${formatearFecha(registro.created_at)}</td>
+`;
+
+}
+
+
+if(nombre === 'productos'){
+
+contenido = `
+<td>${escaparHTML(registro.producto)}</td>
+<td>${escaparHTML(registro.descripcion)}</td>
+<td>${escaparHTML(registro.version)}</td>
+<td>${estadoHTML(registro.estado)}</td>
+`;
+
+}
+
+
+if(nombre === 'evolucion'){
+
+contenido = `
+<td>${escaparHTML(registro.producto)}</td>
+<td>${escaparHTML(registro.version)}</td>
+<td>${escaparHTML(registro.descripcion)}</td>
+<td>${formatearFecha(registro.created_at)}</td>
+`;
+
+}
+
+
+if(nombre === 'funciones'){
+
+contenido = `
+<td>${escaparHTML(registro.producto)}</td>
+<td>${escaparHTML(registro.descripcion)}</td>
+<td>${escaparHTML(registro.prioridad)}</td>
+<td>${estadoHTML(registro.estado)}</td>
+`;
+
+}
+
+
+if(nombre === 'mercado'){
+
+contenido = `
+<td>${escaparHTML(registro.titulo)}</td>
+<td>${escaparHTML(registro.sector)}</td>
+<td>${escaparHTML(registro.analisis)}</td>
+<td>${escaparHTML(registro.oportunidad)}</td>
+`;
+
+}
+
+
+return `
+<tr>
+${contenido}
+
+<td>
+
+<div class="acciones">
+
+<button onclick="editarRegistro('${nombre}','${id}')">
+Editar
+</button>
+
+<button
+class="eliminar"
+onclick="eliminarRegistro('${nombre}','${id}')"
+>
+Eliminar
+</button>
+
+</div>
+
+</td>
+
+</tr>
+`;
+
+}
+
+
+function formatearFecha(fecha){
+
+if(!fecha){
+return '';
+}
+
+return new Date(fecha)
+.toLocaleDateString(
+'es-MX',
+{
+year:'numeric',
+month:'2-digit',
+day:'2-digit'
+}
+);
+
+}
+
+
+async function guardarRegistro(
+tabla,
+datos,
+formulario
+){
+
+if(!perfilActual){
+alert('No hay una sesión activa.');
+return;
+}
+
+
+datos.numero_empleado =
+perfilActual.numero_empleado;
+
+
+const {
+error
+} =
+await supabaseClient
+.from(tabla)
+.insert(datos);
+
+
+if(error){
+
+console.error(error);
+
+alert(
+'No se pudo guardar el registro.\n\n' +
+error.message
+);
+
+return;
+
+}
+
+
+alert(
+'Registro guardado correctamente.'
+);
+
+
+if(formulario){
+formulario.reset();
+}
+
+
+await cargarTodo();
+
+}
+
+
+document.getElementById(
+'formIniciativas'
+).addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+await guardarRegistro(
+'iniciativas_producto_e_innovacion',
+{
+titulo:
+document.getElementById(
+'iniciativaTitulo'
+).value.trim(),
+
+descripcion:
+document.getElementById(
+'iniciativaDescripcion'
+).value.trim(),
+
+estado:
+document.getElementById(
+'iniciativaEstado'
+).value
+},
+this
+);
+
+}
+);
+
+
+document.getElementById(
+'formInvestigacion'
+).addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+await guardarRegistro(
+'investigacion_producto_e_innovacion',
+{
+titulo:
+document.getElementById(
+'investigacionTitulo'
+).value.trim(),
+
+tecnologia:
+document.getElementById(
+'investigacionTecnologia'
+).value.trim(),
+
+descripcion:
+document.getElementById(
+'investigacionDescripcion'
+).value.trim()
+},
+this
+);
+
+}
+);
+
+
+document.getElementById(
+'formIA'
+).addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+await guardarRegistro(
+'ia_producto_e_innovacion',
+{
+proyecto:
+document.getElementById(
+'iaProyecto'
+).value.trim(),
+
+modelo:
+document.getElementById(
+'iaModelo'
+).value.trim(),
+
+descripcion:
+document.getElementById(
+'iaDescripcion'
+).value.trim(),
+
+estado:
+document.getElementById(
+'iaEstado'
+).value
+},
+this
+);
+
+}
+);
+
+
+document.getElementById(
+'formPrototipos'
+).addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+await guardarRegistro(
+'prototipos_producto_e_innovacion',
+{
+nombre:
+document.getElementById(
+'prototipoNombre'
+).value.trim(),
+
+descripcion:
+document.getElementById(
+'prototipoDescripcion'
+).value.trim(),
+
+estado:
+document.getElementById(
+'prototipoEstado'
+).value
+},
+this
+);
+
+}
+);
+
+
+document.getElementById(
+'formAutomatizacion'
+).addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+await guardarRegistro(
+'automatizacion_producto_e_innovacion',
+{
+proceso:
+document.getElementById(
+'automatizacionProceso'
+).value.trim(),
+
+descripcion:
+document.getElementById(
+'automatizacionDescripcion'
+).value.trim(),
+
+estado:
+document.getElementById(
+'automatizacionEstado'
+).value
+},
+this
+);
+
+}
+);
+
+
+document.getElementById(
+'formProductos'
+).addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+await guardarRegistro(
+'productos_producto_e_innovacion',
+{
+producto:
+document.getElementById(
+'productoNombre'
+).value.trim(),
+
+descripcion:
+document.getElementById(
+'productoDescripcion'
+).value.trim(),
+
+version:
+document.getElementById(
+'productoVersion'
+).value.trim(),
+
+estado:
+document.getElementById(
+'productoEstado'
+).value
+},
+this
+);
+
+}
+);
+
+
+document.getElementById(
+'formEvolucion'
+).addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+await guardarRegistro(
+'evolucion_producto_e_innovacion',
+{
+producto:
+document.getElementById(
+'evolucionProducto'
+).value.trim(),
+
+version:
+document.getElementById(
+'evolucionVersion'
+).value.trim(),
+
+descripcion:
+document.getElementById(
+'evolucionDescripcion'
+).value.trim()
+},
+this
+);
+
+}
+);
+
+
+document.getElementById(
+'formFunciones'
+).addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+await guardarRegistro(
+'funciones_producto_e_innovacion',
+{
+producto:
+document.getElementById(
+'funcionProducto'
+).value.trim(),
+
+descripcion:
+document.getElementById(
+'funcionDescripcion'
+).value.trim(),
+
+prioridad:
+document.getElementById(
+'funcionPrioridad'
+).value,
+
+estado:
+document.getElementById(
+'funcionEstado'
+).value
+},
+this
+);
+
+}
+);
+
+
+document.getElementById(
+'formMercado'
+).addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+await guardarRegistro(
+'mercado_producto_e_innovacion',
+{
+titulo:
+document.getElementById(
+'mercadoTitulo'
+).value.trim(),
+
+sector:
+document.getElementById(
+'mercadoSector'
+).value.trim(),
+
+analisis:
+document.getElementById(
+'mercadoAnalisis'
+).value.trim(),
+
+oportunidad:
+document.getElementById(
+'mercadoOportunidad'
+).value.trim()
+},
+this
+);
+
+}
+);
+
+
+async function eliminarRegistro(
+nombre,
+id
+){
+
+if(!confirm(
+'¿Seguro que deseas eliminar este registro?'
+)){
+
+return;
+
+}
+
+
+const tabla =
+configuraciones[nombre].tabla;
+
+
+const {
+error
+} =
+await supabaseClient
+.from(tabla)
+.delete()
+.eq('id',id)
+.eq(
+'numero_empleado',
+perfilActual.numero_empleado
+);
+
+
+if(error){
+
+console.error(error);
+
+alert(
+'No se pudo eliminar el registro.\n\n' +
+error.message
+);
+
+return;
+
+}
+
+
+await cargarTodo();
+
+}
+
+
+async function editarRegistro(
+nombre,
+id
+){
+
+const tabla =
+configuraciones[nombre].tabla;
+
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from(tabla)
+.select('*')
+.eq('id',id)
+.eq(
+'numero_empleado',
+perfilActual.numero_empleado
+)
+.maybeSingle();
+
+
+if(error || !data){
+
+alert(
+'No se pudo obtener el registro.'
+);
+
+return;
+
+}
+
+
+let nuevo = {};
+
+
+if(nombre === 'iniciativas'){
+
+const titulo =
+prompt(
+'Título:',
+data.titulo || ''
+);
+
+if(titulo === null){
+return;
+}
+
+const descripcion =
+prompt(
+'Descripción:',
+data.descripcion || ''
+);
+
+if(descripcion === null){
+return;
+}
+
+const estado =
+prompt(
+'Estado:',
+data.estado || ''
+);
+
+if(estado === null){
+return;
+}
+
+nuevo = {
+titulo,
+descripcion,
+estado
+};
+
+}
+
+
+if(nombre === 'investigacion'){
+
+const titulo =
+prompt(
+'Título:',
+data.titulo || ''
+);
+
+if(titulo === null){
+return;
+}
+
+const tecnologia =
+prompt(
+'Tecnología:',
+data.tecnologia || ''
+);
+
+if(tecnologia === null){
+return;
+}
+
+const descripcion =
+prompt(
+'Descripción:',
+data.descripcion || ''
+);
+
+if(descripcion === null){
+return;
+}
+
+nuevo = {
+titulo,
+tecnologia,
+descripcion
+};
+
+}
+
+
+if(nombre === 'ia'){
+
+const proyecto =
+prompt(
+'Proyecto:',
+data.proyecto || ''
+);
+
+if(proyecto === null){
+return;
+}
+
+const modelo =
+prompt(
+'Modelo / tecnología:',
+data.modelo || ''
+);
+
+if(modelo === null){
+return;
+}
+
+const descripcion =
+prompt(
+'Descripción:',
+data.descripcion || ''
+);
+
+if(descripcion === null){
+return;
+}
+
+const estado =
+prompt(
+'Estado:',
+data.estado || ''
+);
+
+if(estado === null){
+return;
+}
+
+nuevo = {
+proyecto,
+modelo,
+descripcion,
+estado
+};
+
+}
+
+
+if(nombre === 'prototipos'){
+
+const nombreRegistro =
+prompt(
+'Nombre:',
+data.nombre || ''
+);
+
+if(nombreRegistro === null){
+return;
+}
+
+const descripcion =
+prompt(
+'Descripción:',
+data.descripcion || ''
+);
+
+if(descripcion === null){
+return;
+}
+
+const estado =
+prompt(
+'Estado:',
+data.estado || ''
+);
+
+if(estado === null){
+return;
+}
+
+nuevo = {
+nombre:nombreRegistro,
+descripcion,
+estado
+};
+
+}
+
+
+if(nombre === 'automatizacion'){
+
+const proceso =
+prompt(
+'Proceso:',
+data.proceso || ''
+);
+
+if(proceso === null){
+return;
+}
+
+const descripcion =
+prompt(
+'Descripción:',
+data.descripcion || ''
+);
+
+if(descripcion === null){
+return;
+}
+
+const estado =
+prompt(
+'Estado:',
+data.estado || ''
+);
+
+if(estado === null){
+return;
+}
+
+nuevo = {
+proceso,
+descripcion,
+estado
+};
+
+}
+
+
+if(nombre === 'productos'){
+
+const producto =
+prompt(
+'Producto:',
+data.producto || ''
+);
+
+if(producto === null){
+return;
+}
+
+const descripcion =
+prompt(
+'Descripción:',
+data.descripcion || ''
+);
+
+if(descripcion === null){
+return;
+}
+
+const version =
+prompt(
+'Versión:',
+data.version || ''
+);
+
+if(version === null){
+return;
+}
+
+const estado =
+prompt(
+'Estado:',
+data.estado || ''
+);
+
+if(estado === null){
+return;
+}
+
+nuevo = {
+producto,
+descripcion,
+version,
+estado
+};
+
+}
+
+
+if(nombre === 'evolucion'){
+
+const producto =
+prompt(
+'Producto:',
+data.producto || ''
+);
+
+if(producto === null){
+return;
+}
+
+const version =
+prompt(
+'Versión:',
+data.version || ''
+);
+
+if(version === null){
+return;
+}
+
+const descripcion =
+prompt(
+'Mejora:',
+data.descripcion || ''
+);
+
+if(descripcion === null){
+return;
+}
+
+nuevo = {
+producto,
+version,
+descripcion
+};
+
+}
+
+
+if(nombre === 'funciones'){
+
+const producto =
+prompt(
+'Producto:',
+data.producto || ''
+);
+
+if(producto === null){
+return;
+}
+
+const descripcion =
+prompt(
+'Función:',
+data.descripcion || ''
+);
+
+if(descripcion === null){
+return;
+}
+
+const prioridad =
+prompt(
+'Prioridad:',
+data.prioridad || ''
+);
+
+if(prioridad === null){
+return;
+}
+
+const estado =
+prompt(
+'Estado:',
+data.estado || ''
+);
+
+if(estado === null){
+return;
+}
+
+nuevo = {
+producto,
+descripcion,
+prioridad,
+estado
+};
+
+}
+
+
+if(nombre === 'mercado'){
+
+const titulo =
+prompt(
+'Título:',
+data.titulo || ''
+);
+
+if(titulo === null){
+return;
+}
+
+const sector =
+prompt(
+'Sector:',
+data.sector || ''
+);
+
+if(sector === null){
+return;
+}
+
+const analisis =
+prompt(
+'Análisis:',
+data.analisis || ''
+);
+
+if(analisis === null){
+return;
+}
+
+const oportunidad =
+prompt(
+'Oportunidad:',
+data.oportunidad || ''
+);
+
+if(oportunidad === null){
+return;
+}
+
+nuevo = {
+titulo,
+sector,
+analisis,
+oportunidad
+};
+
+}
+
+
+const resultado =
+await supabaseClient
+.from(tabla)
+.update(nuevo)
+.eq('id',id)
+.eq(
+'numero_empleado',
+perfilActual.numero_empleado
+);
+
+
+if(resultado.error){
+
+console.error(resultado.error);
+
+alert(
+'No se pudo actualizar el registro.\n\n' +
+resultado.error.message
+);
+
+return;
+
+}
+
+
+alert(
+'Registro actualizado correctamente.'
+);
+
+
+await cargarTodo();
+
+}
+
+
+async function cargarIndicadores(){
+
+if(!perfilActual){
+return;
+}
+
+
+let total = 0;
+
+
+const consultas = [
+
+{
+tabla:'iniciativas_producto_e_innovacion',
+elemento:'totalIniciativas',
+indicador:'indicadorIniciativas'
+},
+
+{
+tabla:'investigacion_producto_e_innovacion',
+elemento:'totalInvestigacion',
+indicador:'indicadorInvestigacion'
+},
+
+{
+tabla:'prototipos_producto_e_innovacion',
+elemento:'totalPrototipos',
+indicador:'indicadorPrototipos'
+},
+
+{
+tabla:'productos_producto_e_innovacion',
+elemento:'totalProductos',
+indicador:'indicadorProductos'
+}
+
+];
+
+
+for(
+const consulta of consultas
+){
+
+const {
+count,
+error
+} =
+await supabaseClient
+.from(consulta.tabla)
+.select(
+'*',
+{
+count:'exact',
+head:true
+}
+)
+.eq(
+'numero_empleado',
+perfilActual.numero_empleado
+);
+
+
+if(!error){
+
+const cantidad =
+count || 0;
+
+total += cantidad;
+
+
+document.getElementById(
+consulta.elemento
+).textContent =
+cantidad;
+
+
+document.getElementById(
+consulta.indicador
+).textContent =
+cantidad;
+
+}
+
+}
+
+
+const todas =
+Object.values(configuraciones);
+
+
+for(
+const configuracion of todas
+){
+
+if(
+consultas.some(
+x => x.tabla === configuracion.tabla
+)
+){
+continue;
+}
+
+
+const {
+count,
+error
+} =
+await supabaseClient
+.from(configuracion.tabla)
+.select(
+'*',
+{
+count:'exact',
+head:true
+}
+)
+.eq(
+'numero_empleado',
+perfilActual.numero_empleado
+);
+
+
+if(!error){
+
+total +=
+count || 0;
+
+}
+
+}
+
+
+document.getElementById(
+'totalRegistros'
+).textContent =
+total;
+
+}
+
+
+loginForm.addEventListener(
+'submit',
+async function(event){
+
+event.preventDefault();
+
+limpiarLoginError();
+
+
+const numeroEmpleado =
+document
+.getElementById(
+'numeroEmpleadoLogin'
+)
+.value
+.trim();
+
+
+const password =
+document
+.getElementById(
+'passwordLogin'
+)
+.value;
+
+
+if(
+!/^0202\d{6}$/.test(
+numeroEmpleado
+)
+){
+
+mostrarLoginError(
+'El número de empleado debe tener el formato 0202XXXXXX.'
+);
+
+return;
+
+}
+
+
+const loginButton =
+document.getElementById(
+'loginButton'
+);
+
+
+loginButton.disabled =
+true;
+
+loginButton.textContent =
+'Verificando...';
+
+
+const {
+data:perfil,
+error:errorPerfil
+} =
+await supabaseClient
+.from(
+'usuarios_producto_e_innovacion'
+)
+.select(
+'id,numero_empleado,nombre_completo,correo,estado'
+)
+.eq(
+'numero_empleado',
+numeroEmpleado
+)
+.maybeSingle();
+
+
+if(errorPerfil){
+
+console.error(errorPerfil);
+
+mostrarLoginError(
+'No se pudo consultar el perfil. Revisa las políticas RLS.'
+);
+
+loginButton.disabled =
+false;
+
+loginButton.textContent =
+'Iniciar sesión';
+
+return;
+
+}
+
+
+if(!perfil){
+
+mostrarLoginError(
+'El número de empleado no está registrado.'
+);
+
+loginButton.disabled =
+false;
+
+loginButton.textContent =
+'Iniciar sesión';
+
+return;
+
+}
+
+
+if(perfil.estado !== 'Activo'){
+
+mostrarLoginError(
+'Este usuario no se encuentra activo.'
+);
+
+loginButton.disabled =
+false;
+
+loginButton.textContent =
+'Iniciar sesión';
+
+return;
+
+}
+
+
+const {
+data,
+error
+} =
+await supabaseClient.auth.signInWithPassword({
+
+email:perfil.correo,
+
+password:password
+
+});
+
+
+if(error){
+
+mostrarLoginError(
+'Número de empleado o contraseña incorrectos.'
+);
+
+loginButton.disabled =
+false;
+
+loginButton.textContent =
+'Iniciar sesión';
+
+return;
+
+}
+
+
+usuarioActual =
+data.user;
+
+
+await supabaseClient
+.from(
+'usuarios_producto_e_innovacion'
+)
+.update({
+ultimo_acceso:
+new Date().toISOString()
+})
+.eq(
+'id',
+usuarioActual.id
+);
+
+
+await iniciarPortal();
+
+
+loginButton.disabled =
+false;
+
+loginButton.textContent =
+'Iniciar sesión';
+
+}
+);
+
+
+document.getElementById(
+'logoutButton'
+).addEventListener(
+'click',
+async function(){
+
+await supabaseClient.auth.signOut();
+
+usuarioActual =
+null;
+
+perfilActual =
+null;
+
+portal.style.display =
+'none';
+
+login.style.display =
+'flex';
+
+document.getElementById(
+'passwordLogin'
+).value =
+'';
+
+mostrarVista('inicio');
+
+}
+);
+
+
+async function verificarSesion(){
+
+const {
+data
+} =
+await supabaseClient.auth.getSession();
+
+
+if(
+data &&
+data.session
+){
+
+usuarioActual =
+data.session.user;
+
+await iniciarPortal();
+
+}
+
+}
+
+
+verificarSesion();
+
+
+supabaseClient.auth.onAuthStateChange(
+async function(event,session){
+
+if(
+event === 'SIGNED_IN' &&
+session
+){
+
+usuarioActual =
+session.user;
+
+}
+
+}
+);
+
+</script>
+
+</body>
+
+</html>
