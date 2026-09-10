@@ -44,9 +44,7 @@ header{
 
 .etiqueta{
     display:inline-block;
-
     padding:8px 16px;
-
     border-radius:30px;
 
     background:rgba(255,255,255,.08);
@@ -75,7 +73,6 @@ header h1 span{
 
 header p{
     max-width:700px;
-
     margin:auto;
 
     color:#b9c7d8;
@@ -89,13 +86,11 @@ header p{
 
 .contenido{
     width:min(1180px,calc(100% - 40px));
-
     margin:20px auto 50px;
 }
 
 .titulo-seccion{
     display:flex;
-
     justify-content:space-between;
     align-items:center;
 
@@ -116,9 +111,7 @@ header p{
 
 .contenedor{
     display:grid;
-
     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-
     gap:22px;
 }
 
@@ -126,18 +119,14 @@ header p{
     position:relative;
 
     min-height:270px;
-
     padding:35px 25px;
 
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
     justify-content:center;
 
     color:#fff;
-
     text-decoration:none;
 
     background:rgba(255,255,255,.065);
@@ -175,7 +164,6 @@ header p{
     height:105px;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
@@ -192,7 +180,6 @@ header p{
 
 .nombre-empresa{
     font-size:20px;
-
     font-weight:750;
 
     text-align:center;
@@ -222,7 +209,6 @@ header p{
     height:32px;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
@@ -242,7 +228,6 @@ header p{
     padding:18px 20px;
 
     display:flex;
-
     align-items:center;
 
     gap:15px;
@@ -325,7 +310,6 @@ header p{
     margin:0 auto 20px;
 
     display:flex;
-
     align-items:center;
     justify-content:center;
 
@@ -340,7 +324,6 @@ header p{
 
 .modal-contenido h2{
     font-size:26px;
-
     margin-bottom:15px;
 }
 
@@ -436,9 +419,7 @@ footer strong{
 
     .titulo-seccion{
         align-items:flex-start;
-
         flex-direction:column;
-
         gap:6px;
     }
 
@@ -485,14 +466,41 @@ herramientas, sistemas y recursos tecnológicos.
 </h2>
 
 <div class=contador>
-6 áreas disponibles
+8 accesos disponibles
 </div>
 
 </div>
 
 <section class=contenedor>
 
-<!-- 1 -->
+<!-- 1 DIRECTOR GENERAL -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+
+>
+
+<div class=icono>
+👔
+</div>
+
+<div class=nombre-empresa>
+Director General
+</div>
+
+<div class=descripcion>
+Dirección estratégica, supervisión general, toma de decisiones y administración de Corporativo Nexel Digital
+</div>
+
+<div class=flecha>
+→
+</div>
+
+</a>
+
+<!-- 2 DESARROLLO TECNOLÓGICO -->
 
 <a
 href="https://companygarciacorona.com.mx/trabajo/corporativo_nexel_digital/area_de_programacion"
@@ -519,7 +527,7 @@ Desarrollo, programación, implementación y evolución de sistemas y soluciones
 
 </a>
 
-<!-- 2 -->
+<!-- 3 PRODUCTO E INNOVACIÓN -->
 
 <a
 href=#
@@ -546,7 +554,7 @@ Creación, evolución y gestión de productos tecnológicos, innovación y nueva
 
 </a>
 
-<!-- 3 -->
+<!-- 4 DISEÑO UX/UI -->
 
 <a
 href=#
@@ -573,7 +581,7 @@ Diseño de experiencias, interfaces digitales, prototipos y soluciones centradas
 
 </a>
 
-<!-- 4 -->
+<!-- 5 INFRAESTRUCTURA Y OPERACIONES -->
 
 <a
 href=#
@@ -600,7 +608,7 @@ Gestión de infraestructura tecnológica, servidores, plataformas, seguridad y o
 
 </a>
 
-<!-- 5 -->
+<!-- 6 SOPORTE Y MANTENIMIENTO -->
 
 <a
 href=#
@@ -627,7 +635,7 @@ Soporte técnico, mantenimiento, atención de incidencias y continuidad de los s
 
 </a>
 
-<!-- 6 -->
+<!-- 7 COMERCIALIZACIÓN TECNOLÓGICA -->
 
 <a
 href=#
@@ -646,6 +654,33 @@ Comercialización Tecnológica
 
 <div class=descripcion>
 Comercialización, ventas, clientes, alianzas y posicionamiento de productos tecnológicos
+</div>
+
+<div class=flecha>
+→
+</div>
+
+</a>
+
+<!-- 8 MI PORTAL -->
+
+<a
+href=#
+class=boton
+onclick=controlarAcceso(event)
+
+>
+
+<div class=icono>
+🖥️
+</div>
+
+<div class=nombre-empresa>
+Mi Portal
+</div>
+
+<div class=descripcion>
+Acceso personal a herramientas, información, servicios y recursos internos de Corporativo Nexel Digital
 </div>
 
 <div class=flecha>
@@ -747,13 +782,6 @@ function controlarAcceso(event){
 
     const enlace=event.currentTarget.getAttribute("href");
 
-
-    /*
-    SI EL ENLACE ES #
-
-    NO NAVEGA Y MUESTRA EL MODAL
-    */
-
     if(enlace==="#"){
 
         event.preventDefault();
@@ -764,13 +792,6 @@ function controlarAcceso(event){
         .add("activo");
 
     }
-
-
-    /*
-    SI CAMBIAS # POR UN LINK REAL
-
-    EL NAVEGADOR LO ABRIRÁ NORMALMENTE
-    */
 
 }
 
