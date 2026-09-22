@@ -1,0 +1,6029 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#06111f">
+<meta name="description" content="GGC Music - Tu música. Tu espacio.">
+<title>GGC Music</title>
+
+<link rel="manifest" href="data:application/manifest+json,{
+  &quot;name&quot;:&quot;GGC Music&quot;,
+  &quot;short_name&quot;:&quot;GGC Music&quot;,
+  &quot;start_url&quot;:&quot;.&quot;,
+  &quot;display&quot;:&quot;standalone&quot;,
+  &quot;background_color&quot;:&quot;#06111f&quot;,
+  &quot;theme_color&quot;:&quot;#06111f&quot;
+}">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<style>
+:root{
+    --bg:#040a12;
+    --bg2:#071321;
+    --panel:#0a1929;
+    --panel2:#0d2135;
+    --border:rgba(90,190,255,.14);
+    --cyan:#25c7ff;
+    --cyan2:#65e1ff;
+    --blue:#287cff;
+    --text:#f3f8ff;
+    --muted:#8ea5bb;
+    --danger:#ff526b;
+    --success:#37df9b;
+    --warning:#ffc857;
+    --radius:20px;
+    --shadow:0 20px 70px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    background:
+      radial-gradient(circle at 15% 0%,rgba(37,199,255,.10),transparent 30%),
+      radial-gradient(circle at 90% 20%,rgba(40,124,255,.08),transparent 30%),
+      var(--bg);
+    color:var(--text);
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+
+body{
+    padding-bottom:115px;
+}
+
+button,input,select,textarea{
+    font:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+}
+
+::-webkit-scrollbar{
+    width:8px;
+}
+::-webkit-scrollbar-track{
+    background:#06101b;
+}
+::-webkit-scrollbar-thumb{
+    background:#17334d;
+    border-radius:20px;
+}
+::-webkit-scrollbar-thumb:hover{
+    background:#24506f;
+}
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 28px;
+    background:rgba(4,10,18,.82);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:900;
+    letter-spacing:.4px;
+    font-size:21px;
+}
+
+.logoIcon{
+    width:40px;
+    height:40px;
+    display:grid;
+    place-items:center;
+    border-radius:13px;
+    background:linear-gradient(135deg,#0d79c7,#25c7ff);
+    box-shadow:0 0 30px rgba(37,199,255,.22);
+}
+
+.headerActions{
+    display:flex;
+    gap:7px;
+    overflow:auto;
+}
+
+.iconBtn,
+.headerBtn,
+.playerBtn,
+.controlBtn{
+    background:rgba(255,255,255,.045);
+    color:var(--text);
+    border:1px solid var(--border);
+    transition:.2s;
+}
+
+.iconBtn{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+}
+
+.headerBtn{
+    padding:10px 14px;
+    border-radius:12px;
+    white-space:nowrap;
+}
+
+.iconBtn:hover,
+.headerBtn:hover,
+.playerBtn:hover,
+.controlBtn:hover{
+    background:rgba(37,199,255,.12);
+    border-color:rgba(37,199,255,.3);
+    transform:translateY(-1px);
+}
+
+.hero{
+    max-width:1400px;
+    margin:auto;
+    padding:70px 28px 35px;
+}
+
+.heroBox{
+    min-height:270px;
+    padding:45px;
+    border:1px solid var(--border);
+    border-radius:30px;
+    background:
+      linear-gradient(135deg,rgba(14,44,70,.75),rgba(6,18,31,.8)),
+      radial-gradient(circle at 85% 25%,rgba(37,199,255,.18),transparent 28%);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    position:relative;
+}
+
+.heroBox:after{
+    content:"GGC";
+    position:absolute;
+    right:40px;
+    bottom:-65px;
+    font-size:220px;
+    font-weight:1000;
+    color:rgba(37,199,255,.025);
+    pointer-events:none;
+}
+
+.hero h1{
+    font-size:clamp(40px,6vw,76px);
+    margin:0 0 12px;
+    letter-spacing:-3px;
+    line-height:.95;
+}
+
+.hero h1 span{
+    color:var(--cyan);
+}
+
+.hero p{
+    color:var(--muted);
+    max-width:650px;
+    font-size:17px;
+    line-height:1.7;
+}
+
+.main{
+    max-width:1400px;
+    margin:auto;
+    padding:0 28px 60px;
+}
+
+.section{
+    margin-bottom:35px;
+}
+
+.sectionTitle{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:16px;
+}
+
+.sectionTitle h2{
+    margin:0;
+    font-size:22px;
+}
+
+.sectionTitle span{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.searchBox{
+    display:flex;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.searchBox input,
+.formInput,
+.formSelect,
+.formTextarea{
+    width:100%;
+    background:#081522;
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:14px 16px;
+    border-radius:14px;
+    outline:none;
+}
+
+.searchBox input:focus,
+.formInput:focus,
+.formSelect:focus,
+.formTextarea:focus{
+    border-color:rgba(37,199,255,.55);
+    box-shadow:0 0 0 3px rgba(37,199,255,.08);
+}
+
+.songGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:17px;
+}
+
+.songCard{
+    position:relative;
+    background:linear-gradient(180deg,rgba(13,33,53,.95),rgba(7,18,30,.95));
+    border:1px solid var(--border);
+    border-radius:18px;
+    overflow:hidden;
+    transition:.25s;
+}
+
+.songCard:hover{
+    transform:translateY(-5px);
+    border-color:rgba(37,199,255,.3);
+    box-shadow:0 18px 50px rgba(0,0,0,.25);
+}
+
+.coverWrap{
+    aspect-ratio:1;
+    position:relative;
+    overflow:hidden;
+    background:#091725;
+}
+
+.coverWrap img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.4s;
+}
+
+.songCard:hover .coverWrap img{
+    transform:scale(1.04);
+}
+
+.playOverlay{
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    background:rgba(0,0,0,.3);
+    opacity:0;
+    transition:.2s;
+}
+
+.songCard:hover .playOverlay{
+    opacity:1;
+}
+
+.playCircle{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:var(--cyan);
+    color:#00101c;
+    font-size:23px;
+    box-shadow:0 0 35px rgba(37,199,255,.4);
+}
+
+.newBadge,
+.statusBadge{
+    position:absolute;
+    top:10px;
+    left:10px;
+    padding:5px 9px;
+    border-radius:9px;
+    background:rgba(37,199,255,.9);
+    color:#00101c;
+    font-size:10px;
+    font-weight:900;
+}
+
+.cardBody{
+    padding:14px;
+}
+
+.cardTop{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+}
+
+.songInfo{
+    min-width:0;
+    flex:1;
+}
+
+.songTitle{
+    font-weight:800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.songArtist{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:5px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.cardActions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:12px;
+}
+
+.smallBtn{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    background:rgba(255,255,255,.045);
+    border:1px solid var(--border);
+    color:var(--text);
+}
+
+.smallBtn.liked{
+    color:#ff4f73;
+    border-color:rgba(255,79,115,.3);
+}
+
+.moreBtn{
+    color:var(--muted);
+}
+
+.songMeta{
+    margin-top:9px;
+    display:flex;
+    gap:8px;
+    font-size:10px;
+    color:#6f879c;
+}
+
+.listView .songGrid{
+    grid-template-columns:1fr;
+}
+
+.listView .songCard{
+    display:flex;
+    height:90px;
+}
+
+.listView .coverWrap{
+    width:90px;
+    height:90px;
+    flex:none;
+}
+
+.listView .cardBody{
+    flex:1;
+}
+
+.listView .playOverlay{
+    opacity:0;
+}
+
+.statsGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;
+}
+
+.stat{
+    background:linear-gradient(145deg,#0a1d30,#07131f);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+}
+
+.statIcon{
+    font-size:23px;
+}
+
+.statValue{
+    font-size:29px;
+    font-weight:900;
+    margin-top:12px;
+}
+
+.statLabel{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:5px;
+}
+
+.chart{
+    height:190px;
+    display:flex;
+    align-items:flex-end;
+    gap:6px;
+    padding:20px 5px 0;
+}
+
+.bar{
+    flex:1;
+    min-width:5px;
+    border-radius:7px 7px 2px 2px;
+    background:linear-gradient(180deg,var(--cyan),var(--blue));
+    opacity:.75;
+    position:relative;
+}
+
+.bar span{
+    position:absolute;
+    bottom:-19px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:8px;
+    color:#6f879c;
+}
+
+.player{
+    position:fixed;
+    z-index:500;
+    left:0;
+    right:0;
+    bottom:0;
+    min-height:105px;
+    padding:12px 22px;
+    background:rgba(4,10,18,.94);
+    backdrop-filter:blur(25px);
+    border-top:1px solid var(--border);
+    box-shadow:0 -20px 60px rgba(0,0,0,.35);
+}
+
+.playerMain{
+    max-width:1500px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:minmax(200px,1fr) auto minmax(200px,1fr);
+    align-items:center;
+    gap:20px;
+}
+
+.nowPlaying{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+}
+
+.nowPlaying img{
+    width:60px;
+    height:60px;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+.nowText{
+    min-width:0;
+}
+
+.nowTitle{
+    font-weight:800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.nowArtist{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:4px;
+}
+
+.playerControls{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+}
+
+.playerBtn{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+}
+
+.playerBtn.big{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:var(--text);
+    color:#06111f;
+    font-size:20px;
+}
+
+.playerRight{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:9px;
+}
+
+.range{
+    appearance:none;
+    height:4px;
+    border-radius:10px;
+    background:#183248;
+    outline:none;
+    cursor:pointer;
+}
+
+.range::-webkit-slider-thumb{
+    appearance:none;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:var(--cyan);
+}
+
+.volume{
+    width:100px;
+}
+
+.progressRow{
+    max-width:1500px;
+    margin:7px auto 0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#6f879c;
+    font-size:10px;
+}
+
+.progressRow .range{
+    flex:1;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:rgba(0,0,0,.65);
+    backdrop-filter:blur(8px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modalBox{
+    width:min(850px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:linear-gradient(145deg,#0b1c2d,#06111c);
+    border:1px solid var(--border);
+    border-radius:25px;
+    box-shadow:0 30px 100px rgba(0,0,0,.55);
+}
+
+.modalHeader{
+    padding:20px 22px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    background:rgba(8,21,34,.94);
+    backdrop-filter:blur(15px);
+    z-index:3;
+}
+
+.modalHeader h3{
+    margin:0;
+}
+
+.modalContent{
+    padding:22px;
+}
+
+.close{
+    width:38px;
+    height:38px;
+    border-radius:11px;
+    background:rgba(255,255,255,.05);
+    color:var(--text);
+}
+
+.menuGrid{
+    display:grid;
+    gap:7px;
+}
+
+.menuItem{
+    width:100%;
+    text-align:left;
+    padding:14px;
+    border-radius:12px;
+    color:var(--text);
+    background:rgba(255,255,255,.035);
+    border:1px solid transparent;
+}
+
+.menuItem:hover{
+    background:rgba(37,199,255,.08);
+    border-color:var(--border);
+}
+
+.playlistGrid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:14px;
+}
+
+.playlistCard{
+    padding:12px;
+    background:#091927;
+    border:1px solid var(--border);
+    border-radius:16px;
+}
+
+.playlistCover{
+    width:100%;
+    aspect-ratio:1;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+.playlistName{
+    margin-top:10px;
+    font-weight:800;
+}
+
+.playlistDesc{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+}
+
+.row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.between{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.primary{
+    padding:12px 16px;
+    border-radius:12px;
+    color:#00101c;
+    background:linear-gradient(135deg,var(--cyan),#4ca4ff);
+    font-weight:800;
+}
+
+.secondary{
+    padding:12px 16px;
+    border-radius:12px;
+    color:var(--text);
+    background:rgba(255,255,255,.055);
+    border:1px solid var(--border);
+}
+
+.danger{
+    background:rgba(255,82,107,.10);
+    border-color:rgba(255,82,107,.2);
+    color:#ff8293;
+}
+
+.formGroup{
+    margin-bottom:15px;
+}
+
+.formGroup label{
+    display:block;
+    color:#9db3c8;
+    font-size:12px;
+    margin-bottom:7px;
+}
+
+.formGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+}
+
+.toggle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.025);
+    border-radius:14px;
+}
+
+.switch{
+    position:relative;
+    width:45px;
+    height:24px;
+}
+
+.switch input{
+    display:none;
+}
+
+.slider{
+    position:absolute;
+    inset:0;
+    border-radius:20px;
+    background:#183044;
+    cursor:pointer;
+}
+
+.slider:before{
+    content:"";
+    position:absolute;
+    width:18px;
+    height:18px;
+    left:3px;
+    top:3px;
+    background:white;
+    border-radius:50%;
+    transition:.2s;
+}
+
+.switch input:checked+.slider{
+    background:var(--cyan);
+}
+
+.switch input:checked+.slider:before{
+    transform:translateX(21px);
+}
+
+.timerOptions{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.timerOption{
+    padding:12px;
+    border-radius:11px;
+    background:#091927;
+    border:1px solid var(--border);
+    color:var(--text);
+}
+
+.timerOption.active{
+    border-color:var(--cyan);
+    background:rgba(37,199,255,.1);
+}
+
+.fullPlayer{
+    text-align:center;
+}
+
+.fullPlayer img{
+    width:min(360px,80vw);
+    aspect-ratio:1;
+    object-fit:cover;
+    border-radius:25px;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+}
+
+.fullTitle{
+    font-size:25px;
+    font-weight:900;
+    margin-top:20px;
+}
+
+.fullArtist{
+    color:var(--muted);
+    margin-top:7px;
+}
+
+.lyrics{
+    white-space:pre-wrap;
+    line-height:2;
+    color:#c7d7e6;
+    background:#06121e;
+    border-radius:15px;
+    padding:20px;
+}
+
+.visualizer{
+    height:160px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    padding:20px;
+}
+
+.visualBar{
+    width:6px;
+    height:20px;
+    border-radius:5px;
+    background:var(--cyan);
+    animation:visual 1s infinite ease-in-out alternate;
+}
+
+@keyframes visual{
+    from{height:15px;opacity:.35}
+    to{height:130px;opacity:1}
+}
+
+.visualBar:nth-child(2n){animation-delay:.15s}
+.visualBar:nth-child(3n){animation-delay:.28s}
+.visualBar:nth-child(4n){animation-delay:.42s}
+.visualBar:nth-child(5n){animation-delay:.55s}
+
+.toast{
+    position:fixed;
+    z-index:2000;
+    right:20px;
+    bottom:125px;
+    padding:13px 17px;
+    background:#0d2337;
+    border:1px solid rgba(37,199,255,.25);
+    border-radius:13px;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+    transform:translateY(20px);
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+.empty{
+    padding:50px 20px;
+    text-align:center;
+    color:var(--muted);
+    border:1px dashed var(--border);
+    border-radius:18px;
+}
+
+.contextSong{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    padding:10px;
+    background:#071522;
+    border-radius:14px;
+    margin-bottom:12px;
+}
+
+.contextSong img{
+    width:55px;
+    height:55px;
+    border-radius:10px;
+    object-fit:cover;
+}
+
+.adminPanel{
+    display:grid;
+    gap:12px;
+}
+
+.adminItem{
+    padding:15px;
+    border:1px solid var(--border);
+    background:#071522;
+    border-radius:15px;
+}
+
+.queueItem,
+.historyItem{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.queueItem img,
+.historyItem img{
+    width:48px;
+    height:48px;
+    object-fit:cover;
+    border-radius:9px;
+}
+
+.dragHandle{
+    color:#668198;
+    cursor:grab;
+}
+
+.kpi{
+    font-size:11px;
+    color:#7891a7;
+}
+
+.rating{
+    display:flex;
+    gap:5px;
+}
+
+.star{
+    cursor:pointer;
+    font-size:23px;
+    color:#455d72;
+}
+
+.star.active{
+    color:#ffd35a;
+}
+
+.qr{
+    display:grid;
+    place-items:center;
+    padding:20px;
+    background:white;
+    border-radius:15px;
+    width:max-content;
+    margin:auto;
+}
+
+.themeLight{
+    --bg:#f2f6fa;
+    --bg2:#fff;
+    --panel:#fff;
+    --panel2:#edf4f9;
+    --text:#07131f;
+    --muted:#607487;
+    --border:rgba(7,40,70,.13);
+}
+
+.themeLight .header,
+.themeLight .player{
+    background:rgba(255,255,255,.92);
+}
+
+.amoled{
+    --bg:#000;
+    --bg2:#000;
+    --panel:#000;
+    --panel2:#050505;
+}
+
+.noAnimations *{
+    animation:none!important;
+    transition:none!important;
+}
+
+@media(max-width:900px){
+    .header{
+        padding:0 14px;
+    }
+
+    .headerActions .headerBtn span{
+        display:none;
+    }
+
+    .hero{
+        padding:30px 14px 20px;
+    }
+
+    .heroBox{
+        padding:30px 22px;
+    }
+
+    .main{
+        padding:0 14px 40px;
+    }
+
+    .playerMain{
+        grid-template-columns:1fr auto;
+    }
+
+    .playerRight{
+        display:none;
+    }
+
+    .playerControls{
+        justify-content:flex-end;
+    }
+
+    .nowPlaying img{
+        width:50px;
+        height:50px;
+    }
+
+    .player{
+        padding:9px 12px;
+    }
+
+    .formGrid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:560px){
+    .hero h1{
+        font-size:45px;
+    }
+
+    .songGrid{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+    }
+
+    .cardBody{
+        padding:10px;
+    }
+
+    .songTitle{
+        font-size:13px;
+    }
+
+    .songArtist{
+        font-size:11px;
+    }
+
+    .header{
+        height:62px;
+    }
+
+    .logo{
+        font-size:16px;
+    }
+
+    .logoIcon{
+        width:35px;
+        height:35px;
+    }
+
+    .headerActions{
+        max-width:65%;
+    }
+
+    .headerBtn{
+        padding:8px 10px;
+    }
+
+    .timerOptions{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo">
+        <div class="logoIcon">♪</div>
+        <div>GGC Music</div>
+    </div>
+
+    <div class="headerActions">
+        <button class="headerBtn" onclick="abrirReproductorCompleto()">🎧 <span>Reproductor</span></button>
+        <button class="headerBtn" onclick="abrirCola()">📋 <span>Cola</span></button>
+        <button class="headerBtn" onclick="abrirPlaylists()">🎵 <span>Playlists</span></button>
+        <button class="headerBtn" onclick="abrirLikes()">❤️ <span>Me gusta</span></button>
+        <button class="headerBtn" onclick="abrirEstadisticas()">📊 <span>Estadísticas</span></button>
+        <button class="headerBtn" onclick="abrirMenuMas()">☰</button>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="heroBox">
+        <h1>Tu música.<br><span>Tu espacio.</span></h1>
+        <p>
+            GGC Music reúne tu biblioteca, favoritos, playlists,
+            historial, recomendaciones, estadísticas y reproductor
+            inteligente en una sola experiencia.
+        </p>
+
+        <div class="row" style="margin-top:25px;flex-wrap:wrap">
+            <button class="primary" onclick="reproducirPrimera()">▶ Reproducir música</button>
+            <button class="secondary" onclick="sorprendeme()">✨ Sorpréndeme</button>
+            <button class="secondary" onclick="abrirDescubre()">🔎 Descubre música</button>
+        </div>
+    </div>
+</section>
+
+<main class="main">
+
+    <section class="section">
+        <div class="sectionTitle">
+            <h2>Biblioteca musical</h2>
+            <div class="row">
+                <button class="secondary" onclick="alternarVista()">▦ Vista</button>
+                <span id="contadorCanciones">0 canciones</span>
+            </div>
+        </div>
+
+        <div class="searchBox">
+            <input
+                id="busqueda"
+                type="search"
+                placeholder="Buscar canción, artista, álbum, género..."
+                oninput="renderBiblioteca()"
+            >
+            <button class="primary" onclick="abrirBusquedaAvanzada()">🔎</button>
+        </div>
+
+        <div id="filtrosRapidos" class="row" style="flex-wrap:wrap;margin-bottom:18px"></div>
+
+        <div id="biblioteca" class="songGrid"></div>
+    </section>
+
+    <section class="section">
+        <div class="sectionTitle">
+            <h2>Tu actividad</h2>
+            <span>Estadísticas personales</span>
+        </div>
+
+        <div class="statsGrid">
+            <div class="stat">
+                <div class="statIcon">⏱️</div>
+                <div class="statValue" id="statMinutos">0</div>
+                <div class="statLabel">Minutos escuchados</div>
+            </div>
+
+            <div class="stat">
+                <div class="statIcon">▶️</div>
+                <div class="statValue" id="statReproducciones">0</div>
+                <div class="statLabel">Reproducciones</div>
+            </div>
+
+            <div class="stat">
+                <div class="statIcon">❤️</div>
+                <div class="statValue" id="statLikes">0</div>
+                <div class="statLabel">Me gusta</div>
+            </div>
+
+            <div class="stat">
+                <div class="statIcon">📋</div>
+                <div class="statValue" id="statPlaylists">0</div>
+                <div class="statLabel">Playlists</div>
+            </div>
+
+            <div class="stat">
+                <div class="statIcon">🔥</div>
+                <div class="statValue" id="statTop">—</div>
+                <div class="statLabel">Canción más escuchada</div>
+            </div>
+
+            <div class="stat">
+                <div class="statIcon">🎤</div>
+                <div class="statValue" id="statArtist">—</div>
+                <div class="statLabel">Artista principal</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="sectionTitle">
+            <h2>Actividad de escucha</h2>
+            <span>Últimos registros</span>
+        </div>
+
+        <div class="stat">
+            <div class="chart" id="chart"></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="sectionTitle">
+            <h2>Escuchadas recientemente</h2>
+            <button class="secondary" onclick="abrirHistorial()">Ver todo</button>
+        </div>
+
+        <div id="recientes" class="songGrid"></div>
+    </section>
+
+    <section class="section">
+        <div class="sectionTitle">
+            <h2>Más escuchadas</h2>
+            <span>Según tu historial</span>
+        </div>
+
+        <div id="masEscuchadas" class="songGrid"></div>
+    </section>
+
+    <section class="section">
+        <div class="sectionTitle">
+            <h2>Hecho para ti</h2>
+            <span>Recomendaciones inteligentes</span>
+        </div>
+
+        <div id="recomendaciones" class="songGrid"></div>
+    </section>
+
+</main>
+
+<div class="player">
+
+    <div class="playerMain">
+
+        <div class="nowPlaying">
+            <img id="playerCover"
+                 src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600"
+                 alt="Portada">
+
+            <div class="nowText">
+                <div class="nowTitle" id="playerTitle">Selecciona una canción</div>
+                <div class="nowArtist" id="playerArtist">GGC Music</div>
+            </div>
+        </div>
+
+        <div>
+            <div class="playerControls">
+                <button class="playerBtn" onclick="anterior()">⏮</button>
+                <button class="playerBtn" onclick="retroceder5()">↶</button>
+                <button class="playerBtn big" onclick="togglePlay()" id="playBtn">▶</button>
+                <button class="playerBtn" onclick="avanzar5()">↷</button>
+                <button class="playerBtn" onclick="siguiente()">⏭</button>
+            </div>
+
+            <div class="progressRow">
+                <span id="currentTime">0:00</span>
+                <input id="progress" class="range" type="range" min="0" max="100" value="0" oninput="seek(this.value)">
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+
+        <div class="playerRight">
+            <button class="playerBtn" onclick="toggleMute()">🔊</button>
+            <input id="volume" class="range volume" type="range" min="0" max="1" step=".01" value=".8" oninput="cambiarVolumen(this.value)">
+            <button class="playerBtn" onclick="toggleShuffle()" id="shuffleBtn">🔀</button>
+            <button class="playerBtn" onclick="cambiarRepeat()" id="repeatBtn">🔁</button>
+            <button class="playerBtn" onclick="abrirTemporizador()">⏱</button>
+            <button class="playerBtn" onclick="abrirVelocidad()">1×</button>
+            <button class="playerBtn" onclick="compartirActual()">↗</button>
+        </div>
+
+    </div>
+</div>
+
+<audio id="audio" preload="metadata"></audio>
+
+<div id="toast" class="toast"></div>
+
+<!-- MODAL GENERAL -->
+
+<div id="modal" class="modal" onclick="cerrarModalFondo(event)">
+    <div class="modalBox" id="modalBox">
+        <div class="modalHeader">
+            <h3 id="modalTitle">GGC Music</h3>
+            <button class="close" onclick="cerrarModal()">×</button>
+        </div>
+        <div class="modalContent" id="modalContent"></div>
+    </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURACIÓN
+============================================================ */
+
+const SUPABASE_URL = "https://bststulzaedeqshxofsm.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_-J3VXQGH-nItZ9J8MIXUiQ_uBY7IIdd";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const DEFAULT_COVER =
+"https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=600";
+
+const audio = document.getElementById("audio");
+
+/* ============================================================
+   ESTADO
+============================================================ */
+
+let canciones = [];
+let actual = null;
+let indiceActual = -1;
+
+let shuffle = false;
+let repeatMode = "all";
+let speed = 1;
+
+let cola = JSON.parse(localStorage.getItem("ggc_music_queue") || "[]");
+let likes = JSON.parse(localStorage.getItem("ggc_music_likes") || "[]");
+let historial = JSON.parse(localStorage.getItem("ggc_music_history") || "{}");
+let playlists = JSON.parse(localStorage.getItem("ggc_music_playlists") || "[]");
+
+let configuracion = JSON.parse(
+    localStorage.getItem("ggc_music_config") || "{}"
+);
+
+let minutosEscuchados =
+    Number(localStorage.getItem("ggc_music_minutes") || 0);
+
+let reproducciones =
+    Number(localStorage.getItem("ggc_music_plays") || 0);
+
+let registrosEscucha =
+    JSON.parse(localStorage.getItem("ggc_music_listen_records") || "[]");
+
+let timer = null;
+let currentStartTime = null;
+let vistaLista = false;
+
+let filtros = {
+    artista:"",
+    album:"",
+    genero:"",
+    orden:""
+};
+
+/* ============================================================
+   UTILIDADES
+============================================================ */
+
+function escapeHTML(text){
+    return String(text ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+function guardarEstado(){
+    localStorage.setItem(
+        "ggc_music_queue",
+        JSON.stringify(cola)
+    );
+
+    localStorage.setItem(
+        "ggc_music_likes",
+        JSON.stringify(likes)
+    );
+
+    localStorage.setItem(
+        "ggc_music_history",
+        JSON.stringify(historial)
+    );
+
+    localStorage.setItem(
+        "ggc_music_playlists",
+        JSON.stringify(playlists)
+    );
+
+    localStorage.setItem(
+        "ggc_music_config",
+        JSON.stringify(configuracion)
+    );
+
+    localStorage.setItem(
+        "ggc_music_minutes",
+        minutosEscuchados
+    );
+
+    localStorage.setItem(
+        "ggc_music_plays",
+        reproducciones
+    );
+
+    localStorage.setItem(
+        "ggc_music_listen_records",
+        JSON.stringify(registrosEscucha)
+    );
+}
+
+function toast(mensaje){
+    const el = document.getElementById("toast");
+
+    el.textContent = mensaje;
+    el.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(()=>{
+        el.classList.remove("show");
+    },2500);
+}
+
+function formatearTiempo(seg){
+    if(!Number.isFinite(seg)) return "0:00";
+
+    const minutos = Math.floor(seg / 60);
+    const segundos = Math.floor(seg % 60)
+        .toString()
+        .padStart(2,"0");
+
+    return `${minutos}:${segundos}`;
+}
+
+function idNormalizado(id){
+    return String(id);
+}
+
+function obtenerCancion(id){
+    return canciones.find(
+        c => idNormalizado(c.id) === idNormalizado(id)
+    );
+}
+
+function portada(c){
+    return c?.portada_url || DEFAULT_COVER;
+}
+
+/* ============================================================
+   SUPABASE / BIBLIOTECA
+============================================================ */
+
+async function cargarCanciones(){
+
+    try{
+
+        const {data,error} = await supabaseClient
+            .from("audios")
+            .select("*")
+            .eq("activo",true)
+            .order("created_at",{ascending:true});
+
+        if(error) throw error;
+
+        canciones = data || [];
+
+        procesarCanciones();
+
+        renderTodo();
+
+        cargarCancionCompartida();
+
+    }catch(error){
+
+        console.error(error);
+
+        toast("No se pudo cargar la biblioteca.");
+
+        canciones = [];
+
+        renderTodo();
+    }
+}
+
+function procesarCanciones(){
+
+    canciones = canciones.map(c => ({
+        ...c,
+        titulo:c.titulo || "Sin título",
+        artista:c.artista || "Artista desconocido",
+        album:c.album || "Sin álbum",
+        genero:c.genero || "Sin género",
+        url_mp3:c.url_mp3 || "",
+        portada_url:c.portada_url || DEFAULT_COVER
+    }));
+
+    crearFiltros();
+}
+
+/* ============================================================
+   BIBLIOTECA
+============================================================ */
+
+function renderTodo(){
+
+    renderBiblioteca();
+    renderRecientes();
+    renderMasEscuchadas();
+    renderRecomendaciones();
+    renderStats();
+    renderChart();
+}
+
+function cancionesFiltradas(){
+
+    let lista = [...canciones];
+
+    const texto =
+        document.getElementById("busqueda")?.value
+        .trim()
+        .toLowerCase() || "";
+
+    if(texto){
+
+        lista = lista.filter(c =>
+            `${c.titulo} ${c.artista} ${c.album} ${c.genero}`
+                .toLowerCase()
+                .includes(texto)
+        );
+    }
+
+    if(filtros.artista){
+        lista = lista.filter(
+            c => c.artista === filtros.artista
+        );
+    }
+
+    if(filtros.album){
+        lista = lista.filter(
+            c => c.album === filtros.album
+        );
+    }
+
+    if(filtros.genero){
+        lista = lista.filter(
+            c => c.genero === filtros.genero
+        );
+    }
+
+    if(filtros.orden === "titulo"){
+        lista.sort((a,b)=>
+            a.titulo.localeCompare(b.titulo)
+        );
+    }
+
+    if(filtros.orden === "artista"){
+        lista.sort((a,b)=>
+            a.artista.localeCompare(b.artista)
+        );
+    }
+
+    if(filtros.orden === "fecha"){
+        lista.sort((a,b)=>
+            new Date(b.created_at || 0) -
+            new Date(a.created_at || 0)
+        );
+    }
+
+    if(filtros.orden === "reproducciones"){
+        lista.sort((a,b)=>
+            obtenerReproducciones(b.id) -
+            obtenerReproducciones(a.id)
+        );
+    }
+
+    return lista;
+}
+
+function renderBiblioteca(){
+
+    const cont = document.getElementById("biblioteca");
+
+    const lista = cancionesFiltradas();
+
+    document.getElementById("contadorCanciones")
+        .textContent =
+        `${lista.length} canción${lista.length === 1 ? "" : "es"}`;
+
+    if(!lista.length){
+
+        cont.innerHTML = `
+            <div class="empty" style="grid-column:1/-1">
+                <div style="font-size:40px">🎵</div>
+                <h3>No encontramos canciones</h3>
+                <p>Prueba con otro término de búsqueda.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    cont.className =
+        vistaLista ? "songGrid listView" : "songGrid";
+
+    cont.innerHTML = lista.map(renderSongCard).join("");
+}
+
+function renderSongCard(c){
+
+    const liked = likes.map(String)
+        .includes(String(c.id));
+
+    const count = obtenerReproducciones(c.id);
+
+    const esNueva =
+        c.created_at &&
+        Date.now() - new Date(c.created_at).getTime()
+        < 7 * 24 * 60 * 60 * 1000;
+
+    return `
+        <article class="songCard">
+
+            <div class="coverWrap"
+                 ondblclick="reproducirPorId('${escapeHTML(c.id)}')">
+
+                <img
+                    src="${escapeHTML(portada(c))}"
+                    alt="${escapeHTML(c.titulo)}"
+                    loading="lazy"
+                    onerror="this.src='${DEFAULT_COVER}'"
+                >
+
+                ${
+                    esNueva
+                    ? `<div class="newBadge">NUEVA</div>`
+                    : ""
+                }
+
+                <div class="playOverlay">
+                    <button class="playCircle"
+                        onclick="reproducirPorId('${escapeHTML(c.id)}')">
+                        ▶
+                    </button>
+                </div>
+            </div>
+
+            <div class="cardBody">
+
+                <div class="cardTop">
+
+                    <div class="songInfo"
+                         onclick="reproducirPorId('${escapeHTML(c.id)}')"
+                         style="cursor:pointer">
+
+                        <div class="songTitle">
+                            ${escapeHTML(c.titulo)}
+                        </div>
+
+                        <div class="songArtist">
+                            ${escapeHTML(c.artista)}
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="smallBtn ${liked ? "liked" : ""}"
+                        onclick="toggleLike('${escapeHTML(c.id)}')">
+                        ${liked ? "♥" : "♡"}
+                    </button>
+
+                    <button
+                        class="smallBtn moreBtn"
+                        onclick="abrirMenuCancion('${escapeHTML(c.id)}')">
+                        ⋮
+                    </button>
+
+                </div>
+
+                <div class="songMeta">
+                    <span>▶ ${count}</span>
+                    <span>•</span>
+                    <span>${escapeHTML(c.genero)}</span>
+                </div>
+
+            </div>
+
+        </article>
+    `;
+}
+
+function alternarVista(){
+
+    vistaLista = !vistaLista;
+
+    renderBiblioteca();
+
+    toast(
+        vistaLista
+        ? "Vista de lista activada"
+        : "Vista de tarjetas activada"
+    );
+}
+
+/* ============================================================
+   FILTROS
+============================================================ */
+
+function crearFiltros(){
+
+    const artistas =
+        [...new Set(canciones.map(c=>c.artista))]
+        .filter(Boolean)
+        .sort();
+
+    const generos =
+        [...new Set(canciones.map(c=>c.genero))]
+        .filter(Boolean)
+        .sort();
+
+    document.getElementById("filtrosRapidos").innerHTML = `
+
+        <button class="secondary"
+            onclick="limpiarFiltros()">
+            Todas
+        </button>
+
+        <select class="formSelect"
+            style="width:auto;padding:10px 12px"
+            onchange="filtros.artista=this.value;renderBiblioteca()">
+
+            <option value="">Artistas</option>
+
+            ${artistas.map(a=>`
+                <option value="${escapeHTML(a)}">
+                    ${escapeHTML(a)}
+                </option>
+            `).join("")}
+
+        </select>
+
+        <select class="formSelect"
+            style="width:auto;padding:10px 12px"
+            onchange="filtros.genero=this.value;renderBiblioteca()">
+
+            <option value="">Géneros</option>
+
+            ${generos.map(g=>`
+                <option value="${escapeHTML(g)}">
+                    ${escapeHTML(g)}
+                </option>
+            `).join("")}
+
+        </select>
+
+        <select class="formSelect"
+            style="width:auto;padding:10px 12px"
+            onchange="filtros.orden=this.value;renderBiblioteca()">
+
+            <option value="">Ordenar</option>
+            <option value="titulo">Título</option>
+            <option value="artista">Artista</option>
+            <option value="fecha">Más recientes</option>
+            <option value="reproducciones">Más escuchadas</option>
+
+        </select>
+    `;
+}
+
+function limpiarFiltros(){
+
+    filtros = {
+        artista:"",
+        album:"",
+        genero:"",
+        orden:""
+    };
+
+    renderBiblioteca();
+    crearFiltros();
+}
+
+function abrirBusquedaAvanzada(){
+
+    abrirModal(
+        "Búsqueda avanzada",
+        `
+        <div class="formGroup">
+            <label>Artista</label>
+            <input id="advArtist" class="formInput">
+        </div>
+
+        <div class="formGroup">
+            <label>Álbum</label>
+            <input id="advAlbum" class="formInput">
+        </div>
+
+        <div class="formGroup">
+            <label>Género</label>
+            <input id="advGenre" class="formInput">
+        </div>
+
+        <button class="primary"
+            onclick="
+                filtros.artista=document.getElementById('advArtist').value;
+                filtros.album=document.getElementById('advAlbum').value;
+                filtros.genero=document.getElementById('advGenre').value;
+                renderBiblioteca();
+                cerrarModal();
+            ">
+            Aplicar filtros
+        </button>
+        `
+    );
+}
+
+/* ============================================================
+   REPRODUCCIÓN
+============================================================ */
+
+function reproducirPrimera(){
+
+    if(!canciones.length){
+        toast("No hay canciones disponibles.");
+        return;
+    }
+
+    reproducir(canciones[0]);
+}
+
+function reproducirPorId(id){
+
+    const c = obtenerCancion(id);
+
+    if(c){
+        reproducir(c);
+        return;
+    }
+
+    toast("La canción ya no está disponible.");
+}
+
+function reproducir(c){
+
+    if(!c?.url_mp3){
+
+        toast("Esta canción no tiene audio disponible.");
+        return;
+    }
+
+    actual = c;
+
+    indiceActual =
+        canciones.findIndex(
+            x => idNormalizado(x.id) === idNormalizado(c.id)
+        );
+
+    audio.src = c.url_mp3;
+    audio.playbackRate = speed;
+
+    audio.play()
+        .then(()=>{
+
+            document.getElementById("playBtn")
+                .textContent = "Ⅱ";
+
+            registrarReproduccion(c);
+
+        })
+        .catch(error=>{
+            console.error(error);
+            toast("No se pudo reproducir el audio.");
+        });
+
+    actualizarPlayer();
+
+    guardarPosicionInicial(c);
+}
+
+function togglePlay(){
+
+    if(!actual){
+
+        reproducirPrimera();
+        return;
+    }
+
+    if(audio.paused){
+
+        audio.play()
+            .then(()=>{
+                document.getElementById("playBtn")
+                    .textContent = "Ⅱ";
+            });
+
+    }else{
+
+        audio.pause();
+
+        document.getElementById("playBtn")
+            .textContent = "▶";
+    }
+}
+
+function siguiente(){
+
+    if(!canciones.length) return;
+
+    if(cola.length){
+
+        const id = cola.shift();
+
+        guardarEstado();
+
+        const c = obtenerCancion(id);
+
+        if(c){
+            reproducir(c);
+            renderTodo();
+            return;
+        }
+    }
+
+    let siguienteIndice;
+
+    if(shuffle){
+
+        const posibles =
+            canciones.filter(
+                c => !actual ||
+                String(c.id) !== String(actual.id)
+            );
+
+        siguienteIndice =
+            canciones.indexOf(
+                posibles[
+                    Math.floor(Math.random()*posibles.length)
+                ]
+            );
+
+    }else{
+
+        siguienteIndice = indiceActual + 1;
+
+        if(siguienteIndice >= canciones.length){
+            siguienteIndice = 0;
+        }
+    }
+
+    reproducir(canciones[siguienteIndice]);
+}
+
+function anterior(){
+
+    if(!actual) return;
+
+    if(audio.currentTime > 5){
+
+        audio.currentTime = 0;
+        return;
+    }
+
+    let i = indiceActual - 1;
+
+    if(i < 0){
+        i = canciones.length - 1;
+    }
+
+    reproducir(canciones[i]);
+}
+
+function avanzar5(){
+
+    audio.currentTime =
+        Math.min(
+            audio.duration || 0,
+            audio.currentTime + 5
+        );
+}
+
+function retroceder5(){
+
+    audio.currentTime =
+        Math.max(
+            0,
+            audio.currentTime - 5
+        );
+}
+
+function seek(value){
+
+    if(!audio.duration) return;
+
+    audio.currentTime =
+        (value / 100) * audio.duration;
+}
+
+function cambiarVolumen(v){
+
+    audio.volume = Number(v);
+
+    if(audio.volume > 0){
+        audio.muted = false;
+    }
+}
+
+function toggleMute(){
+
+    audio.muted = !audio.muted;
+}
+
+function toggleShuffle(){
+
+    shuffle = !shuffle;
+
+    document.getElementById("shuffleBtn")
+        .style.color =
+        shuffle ? "var(--cyan)" : "";
+
+    toast(
+        shuffle
+        ? "Aleatorio activado"
+        : "Aleatorio desactivado"
+    );
+}
+
+function cambiarRepeat(){
+
+    if(repeatMode === "all"){
+        repeatMode = "one";
+    }else if(repeatMode === "one"){
+        repeatMode = "off";
+    }else{
+        repeatMode = "all";
+    }
+
+    document.getElementById("repeatBtn")
+        .textContent =
+        repeatMode === "one"
+        ? "🔂"
+        : "🔁";
+
+    toast(
+        repeatMode === "one"
+        ? "Repetir canción"
+        : repeatMode === "all"
+        ? "Repetir biblioteca"
+        : "Repetición desactivada"
+    );
+}
+
+function cambiarVelocidad(v){
+
+    speed = Number(v);
+
+    audio.playbackRate = speed;
+
+    toast(`Velocidad: ${speed}×`);
+
+    cerrarModal();
+}
+
+function abrirVelocidad(){
+
+    abrirModal(
+        "Velocidad de reproducción",
+        `
+        <div class="timerOptions">
+
+            ${[0.5,.75,1,1.25,1.5,1.75,2].map(v=>`
+                <button class="timerOption ${speed===v?"active":""}"
+                    onclick="cambiarVelocidad(${v})">
+                    ${v}×
+                </button>
+            `).join("")}
+
+        </div>
+        `
+    );
+}
+
+/* ============================================================
+   EVENTOS DEL AUDIO
+============================================================ */
+
+audio.addEventListener("loadedmetadata",()=>{
+
+    document.getElementById("duration")
+        .textContent =
+        formatearTiempo(audio.duration);
+
+});
+
+audio.addEventListener("timeupdate",()=>{
+
+    if(audio.duration){
+
+        document.getElementById("progress").value =
+            (audio.currentTime / audio.duration) * 100;
+    }
+
+    document.getElementById("currentTime")
+        .textContent =
+        formatearTiempo(audio.currentTime);
+
+    guardarPosicionCadaCancion();
+});
+
+audio.addEventListener("play",()=>{
+
+    currentStartTime = Date.now();
+
+});
+
+audio.addEventListener("pause",registrarTiempoEscucha);
+
+audio.addEventListener("ended",()=>{
+
+    registrarTiempoEscucha();
+
+    if(repeatMode === "one"){
+
+        audio.currentTime = 0;
+        audio.play();
+
+        return;
+    }
+
+    siguiente();
+});
+
+/* ============================================================
+   PLAYER
+============================================================ */
+
+function actualizarPlayer(){
+
+    if(!actual) return;
+
+    document.getElementById("playerCover").src =
+        portada(actual);
+
+    document.getElementById("playerTitle")
+        .textContent =
+        actual.titulo;
+
+    document.getElementById("playerArtist")
+        .textContent =
+        actual.artista;
+}
+
+function abrirReproductorCompleto(){
+
+    if(!actual){
+
+        abrirModal(
+            "Reproductor",
+            `
+            <div class="empty">
+                Selecciona una canción para abrir el reproductor.
+            </div>
+            `
+        );
+
+        return;
+    }
+
+    abrirModal(
+        "Reproductor",
+        `
+        <div class="fullPlayer">
+
+            <img src="${escapeHTML(portada(actual))}">
+
+            <div class="fullTitle">
+                ${escapeHTML(actual.titulo)}
+            </div>
+
+            <div class="fullArtist">
+                ${escapeHTML(actual.artista)}
+            </div>
+
+            <div class="visualizer" id="visualizer">
+                ${Array.from({length:30},(_,i)=>
+                    `<div class="visualBar" style="animation-delay:${i*.04}s"></div>`
+                ).join("")}
+            </div>
+
+            <div class="playerControls" style="margin-top:15px">
+                <button class="playerBtn"
+                    onclick="anterior()">⏮</button>
+
+                <button class="playerBtn"
+                    onclick="retroceder5()">↶</button>
+
+                <button class="playerBtn big"
+                    onclick="togglePlay()">▶</button>
+
+                <button class="playerBtn"
+                    onclick="avanzar5()">↷</button>
+
+                <button class="playerBtn"
+                    onclick="siguiente()">⏭</button>
+            </div>
+
+            <div class="row" style="justify-content:center;margin-top:18px">
+                <button class="secondary"
+                    onclick="abrirLetra()">
+                    📝 Letra
+                </button>
+
+                <button class="secondary"
+                    onclick="abrirKaraoke()">
+                    🎤 Karaoke
+                </button>
+
+                <button class="secondary"
+                    onclick="abrirMarcadores()">
+                    🔖 Marcadores
+                </button>
+            </div>
+
+        </div>
+        `
+    );
+}
+
+/* ============================================================
+   HISTORIAL
+============================================================ */
+
+function registrarReproduccion(c){
+
+    const id = idNormalizado(c.id);
+
+    if(!historial[id]){
+        historial[id] = {
+            count:0,
+            last:null,
+            first:new Date().toISOString()
+        };
+    }
+
+    historial[id].count++;
+    historial[id].last =
+        new Date().toISOString();
+
+    reproducciones++;
+
+    registrosEscucha.push({
+        id:id,
+        titulo:c.titulo,
+        artista:c.artista,
+        fecha:new Date().toISOString()
+    });
+
+    if(registrosEscucha.length > 1000){
+        registrosEscucha.shift();
+    }
+
+    guardarEstado();
+
+    renderStats();
+}
+
+function registrarTiempoEscucha(){
+
+    if(!currentStartTime || !actual) return;
+
+    const segundos =
+        (Date.now() - currentStartTime) / 1000;
+
+    if(segundos > 2){
+
+        minutosEscuchados += segundos / 60;
+
+        guardarEstado();
+    }
+
+    currentStartTime = null;
+}
+
+function guardarPosicionInicial(c){
+
+    const key =
+        `ggc_music_position_${c.id}`;
+
+    const pos =
+        Number(localStorage.getItem(key) || 0);
+
+    if(pos > 0 && pos < 36000){
+
+        audio.addEventListener(
+            "loadedmetadata",
+            function restaurar(){
+
+                audio.currentTime =
+                    Math.min(pos,audio.duration || pos);
+
+                audio.removeEventListener(
+                    "loadedmetadata",
+                    restaurar
+                );
+
+            }
+        );
+    }
+}
+
+function guardarPosicionCadaCancion(){
+
+    if(!actual) return;
+
+    localStorage.setItem(
+        `ggc_music_position_${actual.id}`,
+        audio.currentTime
+    );
+}
+
+function obtenerReproducciones(id){
+
+    return Number(
+        historial[idNormalizado(id)]?.count || 0
+    );
+}
+
+function abrirHistorial(){
+
+    const registros =
+        [...registrosEscucha]
+        .reverse()
+        .slice(0,100);
+
+    abrirModal(
+        "Historial de reproducción",
+        registros.length
+        ?
+        registros.map(r=>{
+
+            const c = obtenerCancion(r.id);
+
+            return `
+                <div class="historyItem">
+
+                    <img src="${escapeHTML(
+                        portada(c)
+                    )}">
+
+                    <div style="flex:1">
+                        <b>${escapeHTML(r.titulo)}</b>
+                        <div class="kpi">
+                            ${escapeHTML(r.artista)}
+                        </div>
+                    </div>
+
+                    <div class="kpi">
+                        ${new Date(r.fecha)
+                            .toLocaleString()}
+                    </div>
+
+                    <button class="smallBtn"
+                        onclick="reproducirPorId('${escapeHTML(r.id)}')">
+                        ▶
+                    </button>
+
+                </div>
+            `;
+
+        }).join("")
+        :
+        `
+        <div class="empty">
+            Todavía no tienes historial.
+        </div>
+        `
+    );
+}
+
+/* ============================================================
+   LIKES
+============================================================ */
+
+function toggleLike(id){
+
+    id = idNormalizado(id);
+
+    const index =
+        likes.map(String).indexOf(id);
+
+    if(index >= 0){
+
+        likes.splice(index,1);
+
+        toast("Eliminado de Me gusta.");
+
+    }else{
+
+        likes.push(id);
+
+        toast("Añadido a Me gusta. ❤️");
+    }
+
+    guardarEstado();
+    renderTodo();
+}
+
+function abrirLikes(){
+
+    const lista =
+        canciones.filter(
+            c => likes.map(String)
+                .includes(String(c.id))
+        );
+
+    abrirModal(
+        "❤️ Me gusta",
+        `
+        <div class="between" style="margin-bottom:15px">
+            <span>${lista.length} canciones</span>
+
+            <div class="row">
+                <button class="secondary"
+                    onclick="reproducirLista(${JSON.stringify(lista.map(c=>c.id)).replaceAll('"','&quot;')})">
+                    ▶ Reproducir
+                </button>
+
+                <button class="secondary"
+                    onclick="reproducirLista(${JSON.stringify(lista.map(c=>c.id)).replaceAll('"','&quot;')},true)">
+                    🔀 Aleatorio
+                </button>
+            </div>
+        </div>
+
+        ${
+            lista.length
+            ?
+            lista.map(c=>`
+                <div class="queueItem">
+                    <img src="${escapeHTML(portada(c))}">
+                    <div style="flex:1">
+                        <b>${escapeHTML(c.titulo)}</b>
+                        <div class="kpi">
+                            ${escapeHTML(c.artista)}
+                        </div>
+                    </div>
+                    <button class="smallBtn"
+                        onclick="reproducirPorId('${escapeHTML(c.id)}')">
+                        ▶
+                    </button>
+                </div>
+            `).join("")
+            :
+            `<div class="empty">Todavía no tienes canciones favoritas.</div>`
+        }
+        `
+    );
+}
+
+/* ============================================================
+   COLA
+============================================================ */
+
+function agregarCola(id){
+
+    id = idNormalizado(id);
+
+    if(!cola.map(String).includes(id)){
+
+        cola.push(id);
+
+        guardarEstado();
+
+        toast("Añadido a la cola.");
+    }else{
+
+        toast("La canción ya está en la cola.");
+    }
+}
+
+function abrirCola(){
+
+    abrirModal(
+        "📋 Cola de reproducción",
+        `
+        <div class="between" style="margin-bottom:15px">
+
+            <span>
+                ${cola.length} canciones
+            </span>
+
+            <div class="row">
+
+                <button class="secondary"
+                    onclick="reproducirColaCompleta()">
+                    ▶ Reproducir
+                </button>
+
+                <button class="secondary"
+                    onclick="guardarColaComoPlaylist()">
+                    💾 Playlist
+                </button>
+
+                <button class="secondary danger"
+                    onclick="vaciarCola()">
+                    Vaciar
+                </button>
+
+            </div>
+        </div>
+
+        ${
+            cola.length
+            ?
+            cola.map((id,i)=>{
+
+                const c = obtenerCancion(id);
+
+                if(!c) return "";
+
+                return `
+                    <div class="queueItem"
+                         draggable="true"
+                         ondragstart="arrastrarCola(${i})"
+                         ondragover="event.preventDefault()"
+                         ondrop="soltarCola(${i})">
+
+                        <span class="dragHandle">☷</span>
+
+                        <img src="${escapeHTML(portada(c))}">
+
+                        <div style="flex:1">
+                            <b>${escapeHTML(c.titulo)}</b>
+                            <div class="kpi">
+                                ${escapeHTML(c.artista)}
+                            </div>
+                        </div>
+
+                        <button class="smallBtn"
+                            onclick="moverColaInicio(${i})">
+                            ↑
+                        </button>
+
+                        <button class="smallBtn"
+                            onclick="moverColaFinal(${i})">
+                            ↓
+                        </button>
+
+                        <button class="smallBtn danger"
+                            onclick="eliminarCola(${i})">
+                            ×
+                        </button>
+
+                    </div>
+                `;
+
+            }).join("")
+            :
+            `<div class="empty">La cola está vacía.</div>`
+        }
+        `
+    );
+}
+
+function eliminarCola(i){
+
+    cola.splice(i,1);
+
+    guardarEstado();
+
+    abrirCola();
+}
+
+function vaciarCola(){
+
+    cola = [];
+
+    guardarEstado();
+
+    abrirCola();
+
+    toast("Cola vaciada.");
+}
+
+let colaArrastre = null;
+
+function arrastrarCola(i){
+    colaArrastre = i;
+}
+
+function soltarCola(i){
+
+    if(colaArrastre === null) return;
+
+    const elemento =
+        cola.splice(colaArrastre,1)[0];
+
+    cola.splice(i,0,elemento);
+
+    colaArrastre = null;
+
+    guardarEstado();
+
+    abrirCola();
+}
+
+function moverColaInicio(i){
+
+    const e = cola.splice(i,1)[0];
+
+    cola.unshift(e);
+
+    guardarEstado();
+
+    abrirCola();
+}
+
+function moverColaFinal(i){
+
+    const e = cola.splice(i,1)[0];
+
+    cola.push(e);
+
+    guardarEstado();
+
+    abrirCola();
+}
+
+function reproducirColaCompleta(){
+
+    if(!cola.length){
+        toast("La cola está vacía.");
+        return;
+    }
+
+    const id = cola.shift();
+
+    guardarEstado();
+
+    const c = obtenerCancion(id);
+
+    if(c) reproducir(c);
+
+    cerrarModal();
+}
+
+function guardarColaComoPlaylist(){
+
+    if(!cola.length){
+
+        toast("La cola está vacía.");
+
+        return;
+    }
+
+    const p = {
+
+        id:crypto.randomUUID(),
+
+        nombre:"Mi cola",
+
+        descripcion:
+            "Playlist creada desde la cola.",
+
+        portada:
+            portada(obtenerCancion(cola[0])),
+
+        canciones:[...cola],
+
+        created_at:
+            new Date().toISOString(),
+
+        updated_at:
+            new Date().toISOString()
+    };
+
+    playlists.push(p);
+
+    guardarEstado();
+
+    toast("Cola guardada como playlist.");
+}
+
+/* ============================================================
+   PLAYLISTS
+============================================================ */
+
+function abrirPlaylists(){
+
+    abrirModal(
+        "🎵 Playlists",
+        `
+        <div class="between" style="margin-bottom:15px">
+
+            <span>
+                ${playlists.length} playlists
+            </span>
+
+            <button class="primary"
+                onclick="crearPlaylist()">
+                + Nueva playlist
+            </button>
+
+        </div>
+
+        ${
+            playlists.length
+            ?
+            `<div class="playlistGrid">
+                ${playlists.map(renderPlaylistCard).join("")}
+            </div>`
+            :
+            `
+            <div class="empty">
+                <div style="font-size:40px">🎵</div>
+                <h3>Crea tu primera playlist</h3>
+                <p>Organiza tus canciones favoritas.</p>
+            </div>
+            `
+        }
+        `
+    );
+}
+
+function renderPlaylistCard(p){
+
+    return `
+        <div class="playlistCard">
+
+            <img class="playlistCover"
+                src="${escapeHTML(
+                    p.portada || DEFAULT_COVER
+                )}">
+
+            <div class="playlistName">
+                ${escapeHTML(p.nombre)}
+            </div>
+
+            <div class="playlistDesc">
+                ${p.canciones.length} canciones
+            </div>
+
+            <div class="row" style="margin-top:10px">
+
+                <button class="smallBtn"
+                    onclick="abrirPlaylist('${escapeHTML(p.id)}')">
+                    ▶
+                </button>
+
+                <button class="smallBtn"
+                    onclick="editarPlaylist('${escapeHTML(p.id)}')">
+                    ✎
+                </button>
+
+                <button class="smallBtn"
+                    onclick="compartirPlaylist('${escapeHTML(p.id)}')">
+                    ↗
+                </button>
+
+                <button class="smallBtn danger"
+                    onclick="eliminarPlaylist('${escapeHTML(p.id)}')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+    `;
+}
+
+function crearPlaylist(){
+
+    abrirModal(
+        "Nueva playlist",
+        `
+        <div class="formGroup">
+            <label>Nombre</label>
+            <input id="newPlaylistName"
+                class="formInput"
+                placeholder="Mi playlist">
+        </div>
+
+        <div class="formGroup">
+            <label>Descripción</label>
+            <textarea id="newPlaylistDesc"
+                class="formTextarea"
+                placeholder="Descripción opcional"></textarea>
+        </div>
+
+        <div class="formGroup">
+            <label>URL de portada</label>
+            <input id="newPlaylistCover"
+                class="formInput"
+                placeholder="https://...">
+        </div>
+
+        <button class="primary"
+            onclick="guardarNuevaPlaylist()">
+            Crear playlist
+        </button>
+        `
+    );
+}
+
+function guardarNuevaPlaylist(){
+
+    const nombre =
+        document.getElementById("newPlaylistName")
+        .value.trim();
+
+    if(!nombre){
+
+        toast("Escribe un nombre.");
+
+        return;
+    }
+
+    playlists.push({
+
+        id:crypto.randomUUID(),
+
+        nombre,
+
+        descripcion:
+            document.getElementById("newPlaylistDesc")
+            .value.trim(),
+
+        portada:
+            document.getElementById("newPlaylistCover")
+            .value.trim() || DEFAULT_COVER,
+
+        canciones:[],
+
+        created_at:
+            new Date().toISOString(),
+
+        updated_at:
+            new Date().toISOString()
+    });
+
+    guardarEstado();
+
+    toast("Playlist creada.");
+
+    abrirPlaylists();
+
+    renderStats();
+}
+
+function abrirPlaylist(id){
+
+    const p =
+        playlists.find(
+            x => String(x.id) === String(id)
+        );
+
+    if(!p) return;
+
+    const lista =
+        p.canciones
+        .map(obtenerCancion)
+        .filter(Boolean);
+
+    abrirModal(
+        p.nombre,
+        `
+        <div class="between">
+
+            <div>
+                <p style="color:var(--muted)">
+                    ${escapeHTML(p.descripcion || "")}
+                </p>
+
+                <span class="kpi">
+                    ${lista.length} canciones
+                </span>
+            </div>
+
+            <div class="row">
+                <button class="secondary"
+                    onclick="reproducirLista(${JSON.stringify(p.canciones).replaceAll('"','&quot;')})">
+                    ▶ Reproducir
+                </button>
+
+                <button class="secondary"
+                    onclick="abrirAgregarCanciones('${escapeHTML(p.id)}')">
+                    + Agregar
+                </button>
+            </div>
+
+        </div>
+
+        <div style="margin-top:18px">
+
+            ${
+                lista.length
+                ?
+                lista.map((c,i)=>`
+
+                    <div class="queueItem"
+                         draggable="true"
+                         ondragover="event.preventDefault()"
+                         ondrop="reordenarPlaylist('${escapeHTML(p.id)}',${i})">
+
+                        <span class="dragHandle">☷</span>
+
+                        <img src="${escapeHTML(portada(c))}">
+
+                        <div style="flex:1">
+                            <b>${escapeHTML(c.titulo)}</b>
+                            <div class="kpi">
+                                ${escapeHTML(c.artista)}
+                            </div>
+                        </div>
+
+                        <button class="smallBtn"
+                            onclick="reproducirPorId('${escapeHTML(c.id)}')">
+                            ▶
+                        </button>
+
+                        <button class="smallBtn danger"
+                            onclick="quitarDePlaylist('${escapeHTML(p.id)}','${escapeHTML(c.id)}')">
+                            ×
+                        </button>
+
+                    </div>
+
+                `).join("")
+                :
+                `<div class="empty">
+                    Esta playlist todavía está vacía.
+                </div>`
+            }
+
+        </div>
+        `
+    );
+}
+
+function editarPlaylist(id){
+
+    const p =
+        playlists.find(
+            x=>String(x.id)===String(id)
+        );
+
+    if(!p) return;
+
+    abrirModal(
+        "Editar playlist",
+        `
+        <div class="formGroup">
+            <label>Nombre</label>
+            <input id="editPName"
+                class="formInput"
+                value="${escapeHTML(p.nombre)}">
+        </div>
+
+        <div class="formGroup">
+            <label>Descripción</label>
+            <textarea id="editPDesc"
+                class="formTextarea">${escapeHTML(p.descripcion || "")}</textarea>
+        </div>
+
+        <div class="formGroup">
+            <label>Portada</label>
+            <input id="editPCover"
+                class="formInput"
+                value="${escapeHTML(p.portada || "")}">
+        </div>
+
+        <button class="primary"
+            onclick="guardarEdicionPlaylist('${escapeHTML(p.id)}')">
+            Guardar cambios
+        </button>
+        `
+    );
+}
+
+function guardarEdicionPlaylist(id){
+
+    const p =
+        playlists.find(
+            x=>String(x.id)===String(id)
+        );
+
+    if(!p) return;
+
+    p.nombre =
+        document.getElementById("editPName").value.trim()
+        || p.nombre;
+
+    p.descripcion =
+        document.getElementById("editPDesc").value.trim();
+
+    p.portada =
+        document.getElementById("editPCover").value.trim()
+        || DEFAULT_COVER;
+
+    p.updated_at =
+        new Date().toISOString();
+
+    guardarEstado();
+
+    toast("Playlist actualizada.");
+
+    abrirPlaylists();
+}
+
+function eliminarPlaylist(id){
+
+    const p =
+        playlists.find(
+            x=>String(x.id)===String(id)
+        );
+
+    if(!p) return;
+
+    abrirModal(
+        "Eliminar playlist",
+        `
+        <div class="empty">
+
+            <div style="font-size:35px">⚠️</div>
+
+            <h3>¿Eliminar "${escapeHTML(p.nombre)}"?</h3>
+
+            <p>Esta acción no se puede deshacer.</p>
+
+            <div class="row" style="justify-content:center">
+
+                <button class="secondary"
+                    onclick="abrirPlaylists()">
+                    Cancelar
+                </button>
+
+                <button class="secondary danger"
+                    onclick="confirmarEliminarPlaylist('${escapeHTML(id)}')">
+                    Eliminar
+                </button>
+
+            </div>
+
+        </div>
+        `
+    );
+}
+
+function confirmarEliminarPlaylist(id){
+
+    playlists =
+        playlists.filter(
+            p=>String(p.id)!==String(id)
+        );
+
+    guardarEstado();
+
+    toast("Playlist eliminada.");
+
+    abrirPlaylists();
+
+    renderStats();
+}
+
+function quitarDePlaylist(pid,sid){
+
+    const p =
+        playlists.find(
+            x=>String(x.id)===String(pid)
+        );
+
+    if(!p) return;
+
+    p.canciones =
+        p.canciones.filter(
+            id=>String(id)!==String(sid)
+        );
+
+    p.updated_at =
+        new Date().toISOString();
+
+    guardarEstado();
+
+    abrirPlaylist(pid);
+}
+
+function abrirAgregarCanciones(pid){
+
+    const p =
+        playlists.find(
+            x=>String(x.id)===String(pid)
+        );
+
+    if(!p) return;
+
+    abrirModal(
+        "Agregar canciones",
+        `
+        <input
+            id="playlistSearch"
+            class="formInput"
+            placeholder="Buscar canción..."
+            oninput="renderAgregarCanciones('${escapeHTML(pid)}')">
+
+        <div id="playlistSongs"
+             style="margin-top:15px">
+        </div>
+        `
+    );
+
+    renderAgregarCanciones(pid);
+}
+
+function renderAgregarCanciones(pid){
+
+    const input =
+        document.getElementById("playlistSearch");
+
+    const cont =
+        document.getElementById("playlistSongs");
+
+    if(!input || !cont) return;
+
+    const q =
+        input.value.trim().toLowerCase();
+
+    const lista =
+        canciones.filter(c =>
+            `${c.titulo} ${c.artista}`
+                .toLowerCase()
+                .includes(q)
+        );
+
+    cont.innerHTML =
+        lista.map(c=>`
+
+            <div class="queueItem">
+
+                <img src="${escapeHTML(portada(c))}">
+
+                <div style="flex:1">
+                    <b>${escapeHTML(c.titulo)}</b>
+                    <div class="kpi">
+                        ${escapeHTML(c.artista)}
+                    </div>
+                </div>
+
+                <button class="smallBtn"
+                    onclick="agregarAPlaylist('${escapeHTML(pid)}','${escapeHTML(c.id)}')">
+                    +
+                </button>
+
+            </div>
+
+        `).join("");
+}
+
+function agregarAPlaylist(pid,sid){
+
+    const p =
+        playlists.find(
+            x=>String(x.id)===String(pid)
+        );
+
+    if(!p) return;
+
+    if(!p.canciones.map(String).includes(String(sid))){
+
+        p.canciones.push(sid);
+
+        p.updated_at =
+            new Date().toISOString();
+
+        guardarEstado();
+
+        toast("Canción añadida.");
+    }
+
+    renderAgregarCanciones(pid);
+}
+
+function reordenarPlaylist(pid,target){
+
+    const p =
+        playlists.find(
+            x=>String(x.id)===String(pid)
+        );
+
+    if(!p) return;
+
+    if(p.canciones.length < 2) return;
+
+    const item =
+        p.canciones.splice(0,1)[0];
+
+    p.canciones.splice(target,0,item);
+
+    p.updated_at =
+        new Date().toISOString();
+
+    guardarEstado();
+
+    abrirPlaylist(pid);
+}
+
+function reproducirLista(ids,aleatorio=false){
+
+    if(!ids?.length){
+
+        toast("No hay canciones.");
+        return;
+    }
+
+    cola = ids.map(String);
+
+    if(aleatorio){
+
+        cola.sort(
+            ()=>Math.random()-.5
+        );
+    }
+
+    const first =
+        cola.shift();
+
+    guardarEstado();
+
+    const c = obtenerCancion(first);
+
+    if(c){
+        reproducir(c);
+    }
+
+    cerrarModal();
+}
+
+/* ============================================================
+   COMPARTIR
+============================================================ */
+
+async function compartirActual(){
+
+    if(!actual){
+
+        toast("No hay canción seleccionada.");
+
+        return;
+    }
+
+    const url =
+        `${location.origin}${location.pathname}?audio=${encodeURIComponent(actual.url_mp3)}&id=${encodeURIComponent(actual.id)}&title=${encodeURIComponent(actual.titulo)}&artist=${encodeURIComponent(actual.artista)}`;
+
+    compartirTexto(
+        `${actual.titulo} - ${actual.artista}\n${url}`
+    );
+}
+
+async function compartirTexto(texto){
+
+    try{
+
+        if(navigator.share){
+
+            await navigator.share({
+                title:"GGC Music",
+                text:texto
+            });
+
+        }else{
+
+            await navigator.clipboard.writeText(texto);
+
+            toast("Enlace copiado.");
+        }
+
+    }catch(e){}
+}
+
+function compartirPlaylist(id){
+
+    const p =
+        playlists.find(
+            x=>String(x.id)===String(id)
+        );
+
+    if(!p) return;
+
+    /*
+      El modo local codifica los datos de la playlist
+      para permitir compartirla incluso sin tabla adicional.
+    */
+
+    const data = {
+        nombre:p.nombre,
+        descripcion:p.descripcion,
+        portada:p.portada,
+        canciones:p.canciones
+    };
+
+    const token =
+        btoa(
+            encodeURIComponent(
+                JSON.stringify(data)
+            )
+        );
+
+    const url =
+        `${location.origin}${location.pathname}?playlist=${encodeURIComponent(token)}`;
+
+    compartirTexto(
+        `${p.nombre} - GGC Music\n${url}`
+    );
+}
+
+function cargarCancionCompartida(){
+
+    const params =
+        new URLSearchParams(location.search);
+
+    const playlist =
+        params.get("playlist");
+
+    if(playlist){
+
+        try{
+
+            const data =
+                JSON.parse(
+                    decodeURIComponent(
+                        atob(playlist)
+                    )
+                );
+
+            const existente =
+                playlists.find(
+                    p=>p.nombre===data.nombre
+                );
+
+            if(!existente){
+
+                playlists.push({
+                    id:crypto.randomUUID(),
+                    nombre:data.nombre,
+                    descripcion:data.descripcion,
+                    portada:data.portada,
+                    canciones:data.canciones || [],
+                    created_at:new Date().toISOString(),
+                    updated_at:new Date().toISOString()
+                });
+
+                guardarEstado();
+
+                toast("Playlist compartida importada.");
+            }
+
+        }catch(e){
+            console.error(e);
+        }
+    }
+
+    const audioURL =
+        params.get("audio");
+
+    if(audioURL){
+
+        actual = {
+            id:params.get("id") || crypto.randomUUID(),
+            titulo:params.get("title") || "Audio compartido",
+            artista:params.get("artist") || "GGC Music",
+            url_mp3:audioURL,
+            portada_url:DEFAULT_COVER
+        };
+
+        audio.src = audioURL;
+
+        actualizarPlayer();
+
+        toast("Canción compartida lista.");
+    }
+}
+
+/* ============================================================
+   QR
+============================================================ */
+
+function generarQR(texto){
+
+    abrirModal(
+        "Código QR",
+        `
+        <div class="qr">
+            <div id="qrcode"></div>
+        </div>
+
+        <div style="text-align:center;margin-top:15px">
+            <button class="primary"
+                onclick="copiarQRTexto()">
+                Copiar enlace
+            </button>
+        </div>
+        `
+    );
+
+    setTimeout(()=>{
+
+        new QRCode(
+            document.getElementById("qrcode"),
+            {
+                text:texto,
+                width:220,
+                height:220
+            }
+        );
+
+    },100);
+}
+
+let ultimoQRTexto = "";
+
+function abrirQR(texto){
+
+    ultimoQRTexto = texto;
+
+    generarQR(texto);
+}
+
+function copiarQRTexto(){
+
+    navigator.clipboard.writeText(
+        ultimoQRTexto
+    );
+
+    toast("Enlace copiado.");
+}
+
+/* ============================================================
+   ESTADÍSTICAS
+============================================================ */
+
+function renderStats(){
+
+    document.getElementById("statMinutos")
+        .textContent =
+        Math.floor(minutosEscuchados);
+
+    document.getElementById("statReproducciones")
+        .textContent =
+        reproducciones;
+
+    document.getElementById("statLikes")
+        .textContent =
+        likes.length;
+
+    document.getElementById("statPlaylists")
+        .textContent =
+        playlists.length;
+
+    const orden =
+        [...canciones]
+        .sort(
+            (a,b)=>
+                obtenerReproducciones(b.id) -
+                obtenerReproducciones(a.id)
+        );
+
+    const top = orden[0];
+
+    document.getElementById("statTop")
+        .textContent =
+        top
+        ? top.titulo.slice(0,18)
+        : "—";
+
+    const artistas = {};
+
+    Object.keys(historial).forEach(id=>{
+
+        const c = obtenerCancion(id);
+
+        if(!c) return;
+
+        artistas[c.artista] =
+            (artistas[c.artista] || 0) +
+            obtenerReproducciones(id);
+    });
+
+    const topArtist =
+        Object.entries(artistas)
+        .sort((a,b)=>b[1]-a[1])[0];
+
+    document.getElementById("statArtist")
+        .textContent =
+        topArtist
+        ? topArtist[0].slice(0,18)
+        : "—";
+}
+
+function renderChart(){
+
+    const cont =
+        document.getElementById("chart");
+
+    const dias = [];
+
+    for(let i=6;i>=0;i--){
+
+        const d =
+            new Date();
+
+        d.setDate(
+            d.getDate()-i
+        );
+
+        const key =
+            d.toISOString().slice(0,10);
+
+        const count =
+            registrosEscucha.filter(
+                r=>r.fecha.slice(0,10)===key
+            ).length;
+
+        dias.push({
+            fecha:key,
+            count
+        });
+    }
+
+    const max =
+        Math.max(
+            1,
+            ...dias.map(x=>x.count)
+        );
+
+    cont.innerHTML =
+        dias.map(d=>`
+
+            <div class="bar"
+                 style="height:${20+(d.count/max)*120}px">
+
+                <span>
+                    ${d.fecha.slice(5)}
+                </span>
+
+            </div>
+
+        `).join("");
+}
+
+function abrirEstadisticas(){
+
+    const top =
+        [...canciones]
+        .sort(
+            (a,b)=>
+                obtenerReproducciones(b.id) -
+                obtenerReproducciones(a.id)
+        );
+
+    abrirModal(
+        "📊 Estadísticas personales",
+        `
+        <div class="statsGrid">
+
+            <div class="stat">
+                <div class="statValue">
+                    ${Math.floor(minutosEscuchados)}
+                </div>
+                <div class="statLabel">
+                    minutos escuchados
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="statValue">
+                    ${reproducciones}
+                </div>
+                <div class="statLabel">
+                    reproducciones
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="statValue">
+                    ${likes.length}
+                </div>
+                <div class="statLabel">
+                    canciones con Me gusta
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="statValue">
+                    ${registrosEscucha.length}
+                </div>
+                <div class="statLabel">
+                    registros
+                </div>
+            </div>
+
+        </div>
+
+        <h3 style="margin-top:30px">
+            🏆 Canciones más escuchadas
+        </h3>
+
+        ${
+            top.slice(0,10).map((c,i)=>`
+
+                <div class="queueItem">
+
+                    <b style="width:25px">
+                        ${i+1}
+                    </b>
+
+                    <img src="${escapeHTML(portada(c))}">
+
+                    <div style="flex:1">
+                        <b>${escapeHTML(c.titulo)}</b>
+                        <div class="kpi">
+                            ${escapeHTML(c.artista)}
+                        </div>
+                    </div>
+
+                    <strong>
+                        ${obtenerReproducciones(c.id)}
+                    </strong>
+
+                </div>
+
+            `).join("")
+        }
+        `
+    );
+}
+
+/* ============================================================
+   RECIENTES / MÁS ESCUCHADAS / RECOMENDACIONES
+============================================================ */
+
+function renderRecientes(){
+
+    const ids =
+        [...registrosEscucha]
+        .reverse()
+        .map(r=>String(r.id));
+
+    const unicos =
+        [...new Set(ids)];
+
+    const lista =
+        unicos
+        .slice(0,5)
+        .map(obtenerCancion)
+        .filter(Boolean);
+
+    document.getElementById("recientes").innerHTML =
+        lista.length
+        ? lista.map(renderSongCard).join("")
+        : `<div class="empty" style="grid-column:1/-1">
+            Todavía no tienes reproducciones.
+           </div>`;
+}
+
+function renderMasEscuchadas(){
+
+    const lista =
+        [...canciones]
+        .sort(
+            (a,b)=>
+                obtenerReproducciones(b.id) -
+                obtenerReproducciones(a.id)
+        )
+        .slice(0,5);
+
+    document.getElementById("masEscuchadas").innerHTML =
+        lista.length
+        ? lista.map(renderSongCard).join("")
+        : `<div class="empty" style="grid-column:1/-1">
+            Empieza a escuchar música.
+           </div>`;
+}
+
+function renderRecomendaciones(){
+
+    let lista =
+        [...canciones];
+
+    const artistas = {};
+
+    Object.keys(historial).forEach(id=>{
+
+        const c = obtenerCancion(id);
+
+        if(!c) return;
+
+        artistas[c.artista] =
+            (artistas[c.artista] || 0) +
+            obtenerReproducciones(id);
+    });
+
+    const artistaPrincipal =
+        Object.entries(artistas)
+        .sort((a,b)=>b[1]-a[1])[0]?.[0];
+
+    if(artistaPrincipal){
+
+        lista.sort((a,b)=>{
+
+            const aa =
+                a.artista===artistaPrincipal ? 1 : 0;
+
+            const bb =
+                b.artista===artistaPrincipal ? 1 : 0;
+
+            return bb-aa;
+        });
+    }
+
+    lista =
+        lista.slice(0,5);
+
+    document.getElementById("recomendaciones").innerHTML =
+        lista.map(renderSongCard).join("");
+}
+
+/* ============================================================
+   MENÚ DE CANCIÓN
+============================================================ */
+
+function abrirMenuCancion(id){
+
+    const c = obtenerCancion(id);
+
+    if(!c) return;
+
+    abrirModal(
+        "Opciones de canción",
+        `
+        <div class="contextSong">
+
+            <img src="${escapeHTML(portada(c))}">
+
+            <div>
+                <b>${escapeHTML(c.titulo)}</b>
+                <div class="kpi">
+                    ${escapeHTML(c.artista)}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="menuGrid">
+
+            <button class="menuItem"
+                onclick="reproducirPorId('${escapeHTML(id)}');cerrarModal()">
+                ▶ Reproducir
+            </button>
+
+            <button class="menuItem"
+                onclick="agregarCola('${escapeHTML(id)}');cerrarModal()">
+                📋 Añadir a cola
+            </button>
+
+            <button class="menuItem"
+                onclick="toggleLike('${escapeHTML(id)}');cerrarModal()">
+                ❤️ Me gusta
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirSelectorPlaylist('${escapeHTML(id)}')">
+                🎵 Añadir a playlist
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirCompartirCancion('${escapeHTML(id)}')">
+                🔗 Compartir
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirQR(generarUrlCancion('${escapeHTML(id)}'))">
+                ▦ Código QR
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirLetra('${escapeHTML(id)}')">
+                📝 Letra
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirMarcadores('${escapeHTML(id)}')">
+                🔖 Marcadores
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirNotaCancion('${escapeHTML(id)}')">
+                🗒 Nota personal
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirCalificacion('${escapeHTML(id)}')">
+                ⭐ Calificar
+            </button>
+
+        </div>
+        `
+    );
+}
+
+function abrirSelectorPlaylist(id){
+
+    abrirModal(
+        "Añadir a playlist",
+        `
+        ${
+            playlists.length
+            ?
+            playlists.map(p=>`
+
+                <button class="menuItem"
+                    onclick="agregarAPlaylist('${escapeHTML(p.id)}','${escapeHTML(id)}')">
+                    🎵 ${escapeHTML(p.nombre)}
+                </button>
+
+            `).join("")
+            :
+            `<div class="empty">
+                No tienes playlists.
+            </div>`
+        }
+
+        <button class="primary"
+            style="margin-top:15px"
+            onclick="crearPlaylist()">
+            + Crear playlist
+        </button>
+        `
+    );
+}
+
+function generarUrlCancion(id){
+
+    const c = obtenerCancion(id);
+
+    if(!c) return "";
+
+    return `${location.origin}${location.pathname}?audio=${encodeURIComponent(c.url_mp3)}&id=${encodeURIComponent(c.id)}&title=${encodeURIComponent(c.titulo)}&artist=${encodeURIComponent(c.artista)}`;
+}
+
+function abrirCompartirCancion(id){
+
+    const url =
+        generarUrlCancion(id);
+
+    abrirModal(
+        "Compartir canción",
+        `
+        <div class="formGroup">
+            <label>Enlace</label>
+            <input class="formInput"
+                value="${escapeHTML(url)}"
+                readonly>
+        </div>
+
+        <div class="row" style="flex-wrap:wrap">
+
+            <button class="primary"
+                onclick="navigator.clipboard.writeText('${escapeHTML(url)}');toast('Copiado')">
+                Copiar
+            </button>
+
+            <button class="secondary"
+                onclick="abrirQR('${escapeHTML(url)}')">
+                ▦ QR
+            </button>
+
+            <button class="secondary"
+                onclick="compartirTexto('${escapeHTML(url)}')">
+                ↗ Compartir
+            </button>
+
+        </div>
+        `
+    );
+}
+
+/* ============================================================
+   LETRAS / KARAOKE / MARCADORES / NOTAS
+============================================================ */
+
+function abrirLetra(id){
+
+    id = id || actual?.id;
+
+    const c = obtenerCancion(id);
+
+    if(!c) return;
+
+    const key =
+        `ggc_music_lyrics_${id}`;
+
+    const lyrics =
+        localStorage.getItem(key) ||
+        "No hay letra registrada para esta canción.";
+
+    abrirModal(
+        "📝 Letra",
+        `
+        <div class="lyrics">
+            ${escapeHTML(lyrics)}
+        </div>
+
+        <button class="secondary"
+            style="margin-top:15px"
+            onclick="editarLetra('${escapeHTML(id)}')">
+            ✎ Editar letra
+        </button>
+        `
+    );
+}
+
+function editarLetra(id){
+
+    const key =
+        `ggc_music_lyrics_${id}`;
+
+    const lyrics =
+        localStorage.getItem(key) || "";
+
+    abrirModal(
+        "Editar letra",
+        `
+        <textarea id="lyricsEdit"
+            class="formTextarea"
+            style="min-height:300px">${escapeHTML(lyrics)}</textarea>
+
+        <button class="primary"
+            style="margin-top:15px"
+            onclick="
+                localStorage.setItem(
+                    '${escapeHTML(key)}',
+                    document.getElementById('lyricsEdit').value
+                );
+                toast('Letra guardada');
+                cerrarModal();
+            ">
+            Guardar
+        </button>
+        `
+    );
+}
+
+function abrirKaraoke(){
+
+    if(!actual){
+
+        toast("Selecciona una canción.");
+
+        return;
+    }
+
+    abrirModal(
+        "🎤 Karaoke",
+        `
+        <div class="fullPlayer">
+
+            <img src="${escapeHTML(portada(actual))}">
+
+            <h2>${escapeHTML(actual.titulo)}</h2>
+
+            <div id="karaokeText"
+                class="lyrics"
+                style="font-size:22px;text-align:center">
+                Presiona reproducir para comenzar.
+            </div>
+
+        </div>
+        `
+    );
+}
+
+function abrirMarcadores(id){
+
+    id = id || actual?.id;
+
+    if(!id) return;
+
+    const key =
+        `ggc_music_marks_${id}`;
+
+    const marks =
+        JSON.parse(
+            localStorage.getItem(key) || "[]"
+        );
+
+    abrirModal(
+        "🔖 Marcadores",
+        `
+        <button class="primary"
+            onclick="crearMarcador('${escapeHTML(id)}')">
+            + Crear marcador en ${formatearTiempo(
+                actual?.id == id
+                ? audio.currentTime
+                : 0
+            )}
+        </button>
+
+        <div style="margin-top:15px">
+
+            ${
+                marks.length
+                ?
+                marks.map((m,i)=>`
+
+                    <div class="queueItem">
+
+                        <span>🔖</span>
+
+                        <div style="flex:1">
+                            <b>${escapeHTML(m.nombre)}</b>
+                            <div class="kpi">
+                                ${formatearTiempo(m.segundo)}
+                            </div>
+                        </div>
+
+                        <button class="smallBtn"
+                            onclick="saltarMarcador('${escapeHTML(id)}',${m.segundo})">
+                            ▶
+                        </button>
+
+                        <button class="smallBtn danger"
+                            onclick="eliminarMarcador('${escapeHTML(id)}',${i})">
+                            ×
+                        </button>
+
+                    </div>
+
+                `).join("")
+                :
+                `<div class="empty">Sin marcadores.</div>`
+            }
+
+        </div>
+        `
+    );
+}
+
+function crearMarcador(id){
+
+    const key =
+        `ggc_music_marks_${id}`;
+
+    const marks =
+        JSON.parse(
+            localStorage.getItem(key) || "[]"
+        );
+
+    const segundo =
+        actual?.id == id
+        ? audio.currentTime
+        : 0;
+
+    const nombre =
+        prompt(
+            "Nombre del marcador:",
+            `Marcador ${marks.length+1}`
+        );
+
+    if(!nombre) return;
+
+    marks.push({
+        nombre,
+        segundo
+    });
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(marks)
+    );
+
+    abrirMarcadores(id);
+}
+
+function saltarMarcador(id,segundo){
+
+    if(actual?.id == id){
+
+        audio.currentTime =
+            Number(segundo);
+
+        cerrarModal();
+    }
+}
+
+function eliminarMarcador(id,i){
+
+    const key =
+        `ggc_music_marks_${id}`;
+
+    const marks =
+        JSON.parse(
+            localStorage.getItem(key) || "[]"
+        );
+
+    marks.splice(i,1);
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(marks)
+    );
+
+    abrirMarcadores(id);
+}
+
+function abrirNotaCancion(id){
+
+    const key =
+        `ggc_music_note_${id}`;
+
+    const nota =
+        localStorage.getItem(key) || "";
+
+    abrirModal(
+        "🗒 Nota personal",
+        `
+        <textarea id="songNote"
+            class="formTextarea"
+            style="min-height:180px"
+            placeholder="Escribe una nota sobre esta canción...">${escapeHTML(nota)}</textarea>
+
+        <button class="primary"
+            style="margin-top:12px"
+            onclick="
+                localStorage.setItem(
+                    '${escapeHTML(key)}',
+                    document.getElementById('songNote').value
+                );
+                toast('Nota guardada');
+                cerrarModal();
+            ">
+            Guardar nota
+        </button>
+        `
+    );
+}
+
+function abrirCalificacion(id){
+
+    const key =
+        `ggc_music_rating_${id}`;
+
+    const rating =
+        Number(
+            localStorage.getItem(key) || 0
+        );
+
+    abrirModal(
+        "⭐ Calificar canción",
+        `
+        <div class="rating" style="justify-content:center">
+
+            ${[1,2,3,4,5].map(i=>`
+                <span
+                    class="star ${i<=rating?"active":""}"
+                    onclick="guardarCalificacion('${escapeHTML(id)}',${i})">
+                    ★
+                </span>
+            `).join("")}
+
+        </div>
+        `
+    );
+}
+
+function guardarCalificacion(id,rating){
+
+    localStorage.setItem(
+        `ggc_music_rating_${id}`,
+        rating
+    );
+
+    toast(`Calificación: ${rating}/5`);
+
+    cerrarModal();
+}
+
+/* ============================================================
+   TEMPORIZADOR
+============================================================ */
+
+function abrirTemporizador(){
+
+    abrirModal(
+        "⏱ Temporizador de apagado",
+        `
+        <div class="timerOptions">
+
+            ${[5,10,15,30,60].map(m=>`
+                <button class="timerOption"
+                    onclick="iniciarTemporizador(${m})">
+                    ${m} min
+                </button>
+            `).join("")}
+
+        </div>
+
+        <button class="secondary"
+            style="margin-top:15px"
+            onclick="cancelarTemporizador()">
+            Cancelar temporizador
+        </button>
+
+        <div id="timerStatus"
+             style="margin-top:15px;color:var(--muted)">
+            Sin temporizador activo.
+        </div>
+        `
+    );
+}
+
+function iniciarTemporizador(minutos){
+
+    clearTimeout(timer);
+
+    timer =
+        setTimeout(()=>{
+
+            audio.pause();
+
+            toast("Temporizador finalizado.");
+
+        },minutos*60*1000);
+
+    toast(`Apagado en ${minutos} minutos.`);
+
+    cerrarModal();
+}
+
+function cancelarTemporizador(){
+
+    clearTimeout(timer);
+
+    timer = null;
+
+    toast("Temporizador cancelado.");
+
+    cerrarModal();
+}
+
+/* ============================================================
+   REPRODUCTOR INTELIGENTE
+============================================================ */
+
+function crearColaInteligente(){
+
+    if(!canciones.length) return;
+
+    const escuchadas =
+        [...canciones]
+        .sort(
+            (a,b)=>
+                obtenerReproducciones(b.id) -
+                obtenerReproducciones(a.id)
+        );
+
+    const recientes =
+        new Set(
+            registrosEscucha
+            .slice(-8)
+            .map(r=>String(r.id))
+        );
+
+    const recomendadas =
+        escuchadas
+        .filter(
+            c=>!recientes.has(String(c.id))
+        )
+        .slice(0,15);
+
+    cola =
+        recomendadas.map(c=>c.id);
+
+    guardarEstado();
+
+    toast("Cola inteligente creada.");
+}
+
+function activarSmartPlayer(){
+
+    configuracion.smart =
+        !configuracion.smart;
+
+    guardarEstado();
+
+    toast(
+        configuracion.smart
+        ? "Reproductor inteligente activado."
+        : "Reproductor inteligente desactivado."
+    );
+}
+
+function sorprendeme(){
+
+    if(!canciones.length) return;
+
+    const disponibles =
+        canciones.filter(
+            c => !actual ||
+            String(c.id)!==String(actual.id)
+        );
+
+    const c =
+        disponibles[
+            Math.floor(
+                Math.random()*disponibles.length
+            )
+        ];
+
+    reproducir(c);
+}
+
+function abrirDescubre(){
+
+    const lista =
+        canciones
+        .filter(
+            c => obtenerReproducciones(c.id) === 0
+        )
+        .slice(0,20);
+
+    abrirModal(
+        "🔎 Descubre música",
+        `
+        <p style="color:var(--muted)">
+            Canciones que todavía no has escuchado.
+        </p>
+
+        ${
+            lista.length
+            ?
+            lista.map(c=>`
+
+                <div class="queueItem">
+
+                    <img src="${escapeHTML(portada(c))}">
+
+                    <div style="flex:1">
+                        <b>${escapeHTML(c.titulo)}</b>
+                        <div class="kpi">
+                            ${escapeHTML(c.artista)}
+                        </div>
+                    </div>
+
+                    <button class="smallBtn"
+                        onclick="reproducirPorId('${escapeHTML(c.id)}')">
+                        ▶
+                    </button>
+
+                </div>
+
+            `).join("")
+            :
+            `<div class="empty">
+                Ya has explorado toda la biblioteca.
+            </div>`
+        }
+        `
+    );
+}
+
+/* ============================================================
+   MENÚ GENERAL
+============================================================ */
+
+function abrirMenuMas(){
+
+    abrirModal(
+        "GGC Music",
+        `
+        <div class="menuGrid">
+
+            <button class="menuItem"
+                onclick="abrirConfiguracion()">
+                ⚙️ Configuración
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirTemporizador()">
+                ⏱ Temporizador
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirTema()">
+                🎨 Personalización
+            </button>
+
+            <button class="menuItem"
+                onclick="activarSmartPlayer()">
+                🤖 Reproductor inteligente
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirHistorial()">
+                🕘 Historial
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirEstadisticas()">
+                📊 Estadísticas
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirAdministrador()">
+                🛠 Administración
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirImportExport()">
+                💾 Importar / Exportar
+            </button>
+
+            <button class="menuItem"
+                onclick="abrirSistema()">
+                ℹ️ Acerca de GGC Music
+            </button>
+
+        </div>
+        `
+    );
+}
+
+/* ============================================================
+   CONFIGURACIÓN
+============================================================ */
+
+function abrirConfiguracion(){
+
+    abrirModal(
+        "⚙️ Configuración",
+        `
+        <div class="toggle">
+
+            <div>
+                <b>Reproductor inteligente</b>
+                <div class="kpi">
+                    Recomendaciones automáticas
+                </div>
+            </div>
+
+            <label class="switch">
+
+                <input type="checkbox"
+                    ${configuracion.smart ? "checked":""}
+                    onchange="configuracion.smart=this.checked;guardarEstado()">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+        <div class="toggle" style="margin-top:10px">
+
+            <div>
+                <b>Evitar canciones recientes</b>
+                <div class="kpi">
+                    Reduce repeticiones
+                </div>
+            </div>
+
+            <label class="switch">
+
+                <input type="checkbox"
+                    ${configuracion.avoidRecent!==false ? "checked":""}
+                    onchange="configuracion.avoidRecent=this.checked;guardarEstado()">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+        <div class="toggle" style="margin-top:10px">
+
+            <div>
+                <b>Modo ahorro de datos</b>
+            </div>
+
+            <label class="switch">
+
+                <input type="checkbox"
+                    ${configuracion.dataSaver ? "checked":""}
+                    onchange="configuracion.dataSaver=this.checked;guardarEstado()">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+        <div class="toggle" style="margin-top:10px">
+
+            <div>
+                <b>Animaciones</b>
+            </div>
+
+            <label class="switch">
+
+                <input type="checkbox"
+                    ${!document.body.classList.contains("noAnimations") ? "checked":""}
+                    onchange="document.body.classList.toggle('noAnimations',!this.checked);">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+        <button class="secondary"
+            style="margin-top:20px"
+            onclick="borrarDatosLocales()">
+            🗑 Borrar datos locales
+        </button>
+        `
+    );
+}
+
+function borrarDatosLocales(){
+
+    if(!confirm(
+        "¿Borrar historial, likes, playlists y configuración local?"
+    )) return;
+
+    localStorage.clear();
+
+    location.reload();
+}
+
+/* ============================================================
+   TEMAS
+============================================================ */
+
+function abrirTema(){
+
+    abrirModal(
+        "🎨 Personalización",
+        `
+        <div class="menuGrid">
+
+            <button class="menuItem"
+                onclick="aplicarTema('default')">
+                🔵 Azul GGC
+            </button>
+
+            <button class="menuItem"
+                onclick="aplicarTema('amoled')">
+                ⚫ AMOLED
+            </button>
+
+            <button class="menuItem"
+                onclick="aplicarTema('light')">
+                ☀️ Claro
+            </button>
+
+            <button class="menuItem"
+                onclick="aplicarTema('purple')">
+                🟣 Morado
+            </button>
+
+        </div>
+        `
+    );
+}
+
+function aplicarTema(t){
+
+    document.body.classList.remove(
+        "themeLight",
+        "amoled"
+    );
+
+    document.documentElement.style.removeProperty(
+        "--cyan"
+    );
+
+    if(t==="light"){
+        document.body.classList.add("themeLight");
+    }
+
+    if(t==="amoled"){
+        document.body.classList.add("amoled");
+    }
+
+    if(t==="purple"){
+
+        document.documentElement
+            .style.setProperty(
+                "--cyan",
+                "#b66cff"
+            );
+    }
+
+    configuracion.theme = t;
+
+    guardarEstado();
+
+    toast("Tema actualizado.");
+}
+
+/* ============================================================
+   IMPORTAR / EXPORTAR
+============================================================ */
+
+function abrirImportExport(){
+
+    abrirModal(
+        "💾 Importar / Exportar",
+        `
+        <p style="color:var(--muted)">
+            Puedes respaldar tus playlists, favoritos,
+            historial y configuración.
+        </p>
+
+        <button class="primary"
+            onclick="exportarDatos()">
+            ⬇ Exportar datos
+        </button>
+
+        <label class="secondary"
+            style="display:inline-block;margin-left:8px;cursor:pointer">
+
+            ⬆ Importar datos
+
+            <input
+                type="file"
+                accept=".json"
+                style="display:none"
+                onchange="importarDatos(this.files[0])">
+
+        </label>
+        `
+    );
+}
+
+function exportarDatos(){
+
+    const data = {
+
+        version:1,
+
+        likes,
+
+        cola,
+
+        historial,
+
+        playlists,
+
+        configuracion,
+
+        minutosEscuchados,
+
+        reproducciones,
+
+        registrosEscucha,
+
+        exportado:
+            new Date().toISOString()
+    };
+
+    const blob =
+        new Blob(
+            [JSON.stringify(data,null,2)],
+            {type:"application/json"}
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        `ggc-music-respaldo-${Date.now()}.json`;
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    toast("Respaldo exportado.");
+}
+
+function importarDatos(file){
+
+    if(!file) return;
+
+    const reader =
+        new FileReader();
+
+    reader.onload = ()=>{
+
+        try{
+
+            const data =
+                JSON.parse(reader.result);
+
+            likes =
+                data.likes || [];
+
+            cola =
+                data.cola || [];
+
+            historial =
+                data.historial || {};
+
+            playlists =
+                data.playlists || [];
+
+            configuracion =
+                data.configuracion || {};
+
+            minutosEscuchados =
+                data.minutosEscuchados || 0;
+
+            reproducciones =
+                data.reproducciones || 0;
+
+            registrosEscucha =
+                data.registrosEscucha || [];
+
+            guardarEstado();
+
+            renderTodo();
+
+            toast("Datos importados.");
+
+            cerrarModal();
+
+        }catch(e){
+
+            toast("Archivo inválido.");
+        }
+    };
+
+    reader.readAsText(file);
+}
+
+/* ============================================================
+   ADMINISTRACIÓN
+============================================================ */
+
+function abrirAdministrador(){
+
+    abrirModal(
+        "🛠 Administración de GGC Music",
+        `
+        <div class="adminPanel">
+
+            <div class="adminItem">
+                <b>Biblioteca</b>
+                <div class="kpi">
+                    ${canciones.length} canciones activas
+                </div>
+
+                <div class="row" style="margin-top:10px;flex-wrap:wrap">
+
+                    <button class="secondary"
+                        onclick="abrirAdminCanciones()">
+                        🎵 Administrar canciones
+                    </button>
+
+                    <button class="secondary"
+                        onclick="abrirNuevaCancion()">
+                        + Agregar canción
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="adminItem">
+                <b>Estadísticas globales</b>
+                <div class="kpi">
+                    Preparado para integrar métricas de Supabase.
+                </div>
+            </div>
+
+            <div class="adminItem">
+                <b>Actividad reciente</b>
+                <div class="kpi">
+                    ${registrosEscucha.length} reproducciones registradas localmente.
+                </div>
+            </div>
+
+            <div class="adminItem">
+                <b>Diagnóstico</b>
+                <button class="secondary"
+                    style="margin-top:10px"
+                    onclick="diagnostico()">
+                    Ejecutar diagnóstico
+                </button>
+            </div>
+
+        </div>
+        `
+    );
+}
+
+function abrirAdminCanciones(){
+
+    abrirModal(
+        "Administrar canciones",
+        `
+        <input id="adminSearch"
+            class="formInput"
+            placeholder="Buscar..."
+            oninput="renderAdminCanciones()">
+
+        <div id="adminSongs"
+            style="margin-top:15px">
+        </div>
+        `
+    );
+
+    renderAdminCanciones();
+}
+
+function renderAdminCanciones(){
+
+    const cont =
+        document.getElementById("adminSongs");
+
+    if(!cont) return;
+
+    const q =
+        document.getElementById("adminSearch")
+        .value.toLowerCase();
+
+    const lista =
+        canciones.filter(c=>
+            `${c.titulo} ${c.artista}`
+            .toLowerCase()
+            .includes(q)
+        );
+
+    cont.innerHTML =
+        lista.map(c=>`
+
+            <div class="adminItem">
+
+                <div class="between">
+
+                    <div class="row">
+
+                        <img
+                            src="${escapeHTML(portada(c))}"
+                            style="width:50px;height:50px;border-radius:10px;object-fit:cover">
+
+                        <div>
+                            <b>${escapeHTML(c.titulo)}</b>
+                            <div class="kpi">
+                                ${escapeHTML(c.artista)}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button class="secondary"
+                        onclick="editarCancionAdmin('${escapeHTML(c.id)}')">
+                        Editar
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+}
+
+function abrirNuevaCancion(){
+
+    abrirModal(
+        "Agregar canción",
+        `
+        <div class="formGrid">
+
+            <div class="formGroup">
+                <label>Título</label>
+                <input id="newAudioTitle"
+                    class="formInput">
+            </div>
+
+            <div class="formGroup">
+                <label>Artista</label>
+                <input id="newAudioArtist"
+                    class="formInput">
+            </div>
+
+            <div class="formGroup">
+                <label>Álbum</label>
+                <input id="newAudioAlbum"
+                    class="formInput">
+            </div>
+
+            <div class="formGroup">
+                <label>Género</label>
+                <input id="newAudioGenre"
+                    class="formInput">
+            </div>
+
+        </div>
+
+        <div class="formGroup">
+            <label>URL MP3</label>
+            <input id="newAudioURL"
+                class="formInput"
+                placeholder="https://...mp3">
+        </div>
+
+        <div class="formGroup">
+            <label>Portada URL</label>
+            <input id="newAudioCover"
+                class="formInput">
+        </div>
+
+        <button class="primary"
+            onclick="crearCancionAdmin()">
+            Guardar canción
+        </button>
+        `
+    );
+}
+
+async function crearCancionAdmin(){
+
+    const registro = {
+
+        titulo:
+            document.getElementById("newAudioTitle").value,
+
+        artista:
+            document.getElementById("newAudioArtist").value,
+
+        album:
+            document.getElementById("newAudioAlbum").value,
+
+        genero:
+            document.getElementById("newAudioGenre").value,
+
+        url_mp3:
+            document.getElementById("newAudioURL").value,
+
+        portada_url:
+            document.getElementById("newAudioCover").value ||
+            DEFAULT_COVER,
+
+        activo:true
+    };
+
+    try{
+
+        const {error} =
+            await supabaseClient
+            .from("audios")
+            .insert(registro);
+
+        if(error) throw error;
+
+        toast("Canción agregada.");
+
+        cerrarModal();
+
+        cargarCanciones();
+
+    }catch(e){
+
+        console.error(e);
+
+        toast(
+            "No se pudo guardar. Revisa las políticas RLS."
+        );
+    }
+}
+
+function editarCancionAdmin(id){
+
+    const c = obtenerCancion(id);
+
+    if(!c) return;
+
+    abrirModal(
+        "Editar canción",
+        `
+        <div class="formGroup">
+            <label>Título</label>
+            <input id="editTitle"
+                class="formInput"
+                value="${escapeHTML(c.titulo)}">
+        </div>
+
+        <div class="formGroup">
+            <label>Artista</label>
+            <input id="editArtist"
+                class="formInput"
+                value="${escapeHTML(c.artista)}">
+        </div>
+
+        <div class="formGroup">
+            <label>Álbum</label>
+            <input id="editAlbum"
+                class="formInput"
+                value="${escapeHTML(c.album || "")}">
+        </div>
+
+        <div class="formGroup">
+            <label>Género</label>
+            <input id="editGenre"
+                class="formInput"
+                value="${escapeHTML(c.genero || "")}">
+        </div>
+
+        <div class="formGroup">
+            <label>URL MP3</label>
+            <input id="editURL"
+                class="formInput"
+                value="${escapeHTML(c.url_mp3)}">
+        </div>
+
+        <div class="formGroup">
+            <label>Portada</label>
+            <input id="editCover"
+                class="formInput"
+                value="${escapeHTML(c.portada_url || "")}">
+        </div>
+
+        <div class="row">
+
+            <button class="primary"
+                onclick="guardarEdicionCancion('${escapeHTML(id)}')">
+                Guardar
+            </button>
+
+            <button class="secondary danger"
+                onclick="desactivarCancion('${escapeHTML(id)}')">
+                Desactivar
+            </button>
+
+        </div>
+        `
+    );
+}
+
+async function guardarEdicionCancion(id){
+
+    const cambios = {
+
+        titulo:
+            document.getElementById("editTitle").value,
+
+        artista:
+            document.getElementById("editArtist").value,
+
+        album:
+            document.getElementById("editAlbum").value,
+
+        genero:
+            document.getElementById("editGenre").value,
+
+        url_mp3:
+            document.getElementById("editURL").value,
+
+        portada_url:
+            document.getElementById("editCover").value
+    };
+
+    try{
+
+        const {error} =
+            await supabaseClient
+            .from("audios")
+            .update(cambios)
+            .eq("id",id);
+
+        if(error) throw error;
+
+        toast("Canción actualizada.");
+
+        cerrarModal();
+
+        cargarCanciones();
+
+    }catch(e){
+
+        console.error(e);
+
+        toast(
+            "No se pudo actualizar. Revisa RLS."
+        );
+    }
+}
+
+async function desactivarCancion(id){
+
+    try{
+
+        const {error} =
+            await supabaseClient
+            .from("audios")
+            .update({activo:false})
+            .eq("id",id);
+
+        if(error) throw error;
+
+        toast("Canción desactivada.");
+
+        cerrarModal();
+
+        cargarCanciones();
+
+    }catch(e){
+
+        console.error(e);
+
+        toast(
+            "No se pudo desactivar."
+        );
+    }
+}
+
+/* ============================================================
+   DIAGNÓSTICO
+============================================================ */
+
+function diagnostico(){
+
+    const problemas = [];
+
+    if(!window.supabase)
+        problemas.push("Supabase JS no está disponible.");
+
+    if(!SUPABASE_URL)
+        problemas.push("URL de Supabase vacía.");
+
+    if(!SUPABASE_KEY)
+        problemas.push("Clave de Supabase vacía.");
+
+    if(!canciones.length)
+        problemas.push("La biblioteca está vacía.");
+
+    abrirModal(
+        "Diagnóstico",
+        problemas.length
+        ?
+        `
+        <div class="empty">
+
+            <h3>Se encontraron observaciones</h3>
+
+            ${problemas.map(p=>`
+                <p>• ${escapeHTML(p)}</p>
+            `).join("")}
+
+        </div>
+        `
+        :
+        `
+        <div class="empty">
+
+            <div style="font-size:40px">✓</div>
+
+            <h3>GGC Music está funcionando</h3>
+
+            <p>
+                Supabase está disponible y hay
+                ${canciones.length} canciones cargadas.
+            </p>
+
+        </div>
+        `
+    );
+}
+
+/* ============================================================
+   SISTEMA
+============================================================ */
+
+function abrirSistema(){
+
+    abrirModal(
+        "GGC Music",
+        `
+        <div class="empty">
+
+            <div style="font-size:55px">🎵</div>
+
+            <h2>GGC Music</h2>
+
+            <p>
+                Plataforma musical de Grupo García Corona.
+            </p>
+
+            <p class="kpi">
+                Biblioteca · Reproductor · Playlists ·
+                Favoritos · Estadísticas · Recomendaciones
+            </p>
+
+            <p class="kpi">
+                Versión avanzada
+            </p>
+
+        </div>
+        `
+    );
+}
+
+/* ============================================================
+   TECLADO
+============================================================ */
+
+document.addEventListener("keydown",e=>{
+
+    if(
+        e.target.tagName==="INPUT" ||
+        e.target.tagName==="TEXTAREA"
+    ) return;
+
+    if(e.code==="Space"){
+
+        e.preventDefault();
+
+        togglePlay();
+    }
+
+    if(e.code==="ArrowRight"){
+
+        e.preventDefault();
+
+        avanzar5();
+    }
+
+    if(e.code==="ArrowLeft"){
+
+        e.preventDefault();
+
+        retroceder5();
+    }
+
+    if(e.code==="MediaTrackNext"){
+        siguiente();
+    }
+
+    if(e.code==="MediaTrackPrevious"){
+        anterior();
+    }
+
+    if(e.key==="Escape"){
+        cerrarModal();
+    }
+
+});
+
+/* ============================================================
+   MEDIA SESSION
+============================================================ */
+
+if("mediaSession" in navigator){
+
+    navigator.mediaSession.setActionHandler(
+        "play",
+        ()=>audio.play()
+    );
+
+    navigator.mediaSession.setActionHandler(
+        "pause",
+        ()=>audio.pause()
+    );
+
+    navigator.mediaSession.setActionHandler(
+        "previoustrack",
+        anterior
+    );
+
+    navigator.mediaSession.setActionHandler(
+        "nexttrack",
+        siguiente
+    );
+
+    navigator.mediaSession.setActionHandler(
+        "seekbackward",
+        ()=>retroceder5()
+    );
+
+    navigator.mediaSession.setActionHandler(
+        "seekforward",
+        ()=>avanzar5()
+    );
+}
+
+function actualizarMediaSession(){
+
+    if(
+        !("mediaSession" in navigator) ||
+        !actual
+    ) return;
+
+    navigator.mediaSession.metadata =
+        new MediaMetadata({
+            title:actual.titulo,
+            artist:actual.artista,
+            album:actual.album || "GGC Music",
+            artwork:[
+                {
+                    src:portada(actual),
+                    sizes:"512x512",
+                    type:"image/jpeg"
+                }
+            ]
+        });
+}
+
+/* ============================================================
+   PWA
+============================================================ */
+
+window.addEventListener(
+    "beforeinstallprompt",
+    e=>{
+
+        e.preventDefault();
+
+        window.ggcInstallPrompt = e;
+    }
+);
+
+async function instalarApp(){
+
+    if(!window.ggcInstallPrompt){
+
+        toast(
+            "Si tu navegador permite instalar GGC Music, aparecerá la opción."
+        );
+
+        return;
+    }
+
+    window.ggcInstallPrompt.prompt();
+
+    await window.ggcInstallPrompt.userChoice;
+
+    window.ggcInstallPrompt = null;
+}
+
+/* ============================================================
+   MINI PLAYER / PANTALLA COMPLETA
+============================================================ */
+
+async function pantallaCompleta(){
+
+    const el =
+        document.querySelector(".player");
+
+    if(!document.fullscreenElement){
+
+        await el.requestFullscreen?.();
+
+    }else{
+
+        await document.exitFullscreen?.();
+    }
+}
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+function abrirModal(titulo,contenido){
+
+    document.getElementById("modalTitle")
+        .textContent = titulo;
+
+    document.getElementById("modalContent")
+        .innerHTML = contenido;
+
+    document.getElementById("modal")
+        .classList.add("active");
+}
+
+function cerrarModal(){
+
+    document.getElementById("modal")
+        .classList.remove("active");
+}
+
+function cerrarModalFondo(e){
+
+    if(e.target.id==="modal"){
+        cerrarModal();
+    }
+}
+
+/* ============================================================
+   RECUPERACIÓN DE CONFIGURACIÓN
+============================================================ */
+
+function cargarConfiguracion(){
+
+    if(configuracion.theme){
+
+        aplicarTema(configuracion.theme);
+    }
+
+    if(configuracion.volume !== undefined){
+
+        audio.volume =
+            Number(configuracion.volume);
+
+        document.getElementById("volume")
+            .value =
+            configuracion.volume;
+    }
+}
+
+document.getElementById("volume")
+.addEventListener("change",e=>{
+
+    configuracion.volume =
+        Number(e.target.value);
+
+    guardarEstado();
+});
+
+/* ============================================================
+   PLAYLISTS AUTOMÁTICAS
+============================================================ */
+
+function playlistPorArtista(artista){
+
+    const lista =
+        canciones
+        .filter(c=>c.artista===artista)
+        .map(c=>c.id);
+
+    const p = {
+
+        id:crypto.randomUUID(),
+
+        nombre:`Mix de ${artista}`,
+
+        descripcion:
+            "Playlist automática por artista.",
+
+        portada:
+            portada(
+                obtenerCancion(lista[0])
+            ),
+
+        canciones:lista,
+
+        created_at:
+            new Date().toISOString(),
+
+        updated_at:
+            new Date().toISOString()
+    };
+
+    playlists.push(p);
+
+    guardarEstado();
+
+    toast("Playlist automática creada.");
+}
+
+function playlistPorGenero(genero){
+
+    const lista =
+        canciones
+        .filter(c=>c.genero===genero)
+        .map(c=>c.id);
+
+    playlists.push({
+
+        id:crypto.randomUUID(),
+
+        nombre:`Mix ${genero}`,
+
+        descripcion:
+            "Playlist automática por género.",
+
+        portada:
+            portada(
+                obtenerCancion(lista[0])
+            ),
+
+        canciones:lista,
+
+        created_at:
+            new Date().toISOString(),
+
+        updated_at:
+            new Date().toISOString()
+    });
+
+    guardarEstado();
+
+    toast("Mix por género creado.");
+}
+
+/* ============================================================
+   DETECCIÓN DE DUPLICADOS
+============================================================ */
+
+function detectarDuplicados(){
+
+    const mapa = {};
+
+    canciones.forEach(c=>{
+
+        const key =
+            `${c.titulo}|${c.artista}`
+            .toLowerCase();
+
+        if(!mapa[key])
+            mapa[key]=[];
+
+        mapa[key].push(c);
+    });
+
+    return Object.values(mapa)
+        .filter(x=>x.length>1);
+}
+
+/* ============================================================
+   CACHE
+============================================================ */
+
+function guardarCacheCancion(c){
+
+    /*
+      El navegador decide si puede almacenar el recurso.
+      No se intenta saltar las restricciones de CORS.
+    */
+
+    if(!("caches" in window)) return;
+
+    caches.open("ggc-music-cache")
+        .then(cache=>{
+            cache.add(c.url_mp3)
+                .catch(()=>{});
+        });
+}
+
+/* ============================================================
+   CONTROL DE NUEVOS AUDIOS
+============================================================ */
+
+let ultimaCantidad = 0;
+
+setInterval(async()=>{
+
+    try{
+
+        const {count,error} =
+            await supabaseClient
+            .from("audios")
+            .select("*",{count:"exact",head:true})
+            .eq("activo",true);
+
+        if(error) return;
+
+        if(
+            ultimaCantidad &&
+            count > ultimaCantidad
+        ){
+
+            toast("🎵 Hay nuevas canciones disponibles.");
+
+            cargarCanciones();
+        }
+
+        ultimaCantidad =
+            count || 0;
+
+    }catch(e){}
+
+},60000);
+
+/* ============================================================
+   CONTROL DE REPRODUCCIÓN
+============================================================ */
+
+audio.addEventListener("play",()=>{
+
+    if(actual){
+
+        guardarCacheCancion(actual);
+
+        actualizarMediaSession();
+    }
+
+});
+
+/* ============================================================
+   CROSSFADE BÁSICO
+============================================================ */
+
+let crossfadeActivo =
+    configuracion.crossfade || false;
+
+function activarCrossfade(){
+
+    crossfadeActivo =
+        !crossfadeActivo;
+
+    configuracion.crossfade =
+        crossfadeActivo;
+
+    guardarEstado();
+
+    toast(
+        crossfadeActivo
+        ? "Crossfade activado."
+        : "Crossfade desactivado."
+    );
+}
+
+audio.addEventListener("timeupdate",()=>{
+
+    if(
+        !crossfadeActivo ||
+        !audio.duration
+    ) return;
+
+    const restante =
+        audio.duration-audio.currentTime;
+
+    if(
+        restante < 4 &&
+        restante > 3.8
+    ){
+
+        audio.volume *= .75;
+    }
+});
+
+/* ============================================================
+   MODO SIN PAUSAS
+============================================================ */
+
+function modoSinPausas(){
+
+    configuracion.gapless =
+        !configuracion.gapless;
+
+    guardarEstado();
+
+    toast(
+        configuracion.gapless
+        ? "Modo sin pausas activado."
+        : "Modo sin pausas desactivado."
+    );
+}
+
+/* ============================================================
+   EXPORTAR PLAYLIST
+============================================================ */
+
+function exportarPlaylist(id){
+
+    const p =
+        playlists.find(
+            x=>String(x.id)===String(id)
+        );
+
+    if(!p) return;
+
+    const data = {
+
+        nombre:p.nombre,
+
+        descripcion:p.descripcion,
+
+        canciones:p.canciones
+            .map(obtenerCancion)
+            .filter(Boolean)
+            .map(c=>({
+                id:c.id,
+                titulo:c.titulo,
+                artista:c.artista,
+                url_mp3:c.url_mp3
+            }))
+    };
+
+    const blob =
+        new Blob(
+            [JSON.stringify(data,null,2)],
+            {type:"application/json"}
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href=url;
+
+    a.download =
+        `${p.nombre.replace(/\s+/g,"-")}.json`;
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+/* ============================================================
+   CONTROL DE ESTADO DE DISPONIBILIDAD
+============================================================ */
+
+async function verificarDisponibilidad(c){
+
+    if(!c?.url_mp3) return false;
+
+    try{
+
+        const response =
+            await fetch(
+                c.url_mp3,
+                {
+                    method:"HEAD",
+                    mode:"cors"
+                }
+            );
+
+        return response.ok;
+
+    }catch(e){
+
+        return false;
+    }
+}
+
+/* ============================================================
+   PREVISUALIZACIÓN
+============================================================ */
+
+function preview30(id){
+
+    const c =
+        obtenerCancion(id);
+
+    if(!c) return;
+
+    reproducir(c);
+
+    audio.addEventListener(
+        "timeupdate",
+        function detener(){
+
+            if(audio.currentTime>=30){
+
+                audio.pause();
+
+                audio.removeEventListener(
+                    "timeupdate",
+                    detener
+                );
+
+                toast(
+                    "Fin de previsualización."
+                );
+            }
+        }
+    );
+}
+
+/* ============================================================
+   FAVORITOS / ETIQUETAS
+============================================================ */
+
+function agregarEtiqueta(id){
+
+    const key =
+        `ggc_music_tags_${id}`;
+
+    const tags =
+        JSON.parse(
+            localStorage.getItem(key)||"[]"
+        );
+
+    const tag =
+        prompt(
+            "Nueva etiqueta:"
+        );
+
+    if(!tag) return;
+
+    if(!tags.includes(tag)){
+        tags.push(tag);
+    }
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(tags)
+    );
+
+    toast("Etiqueta añadida.");
+}
+
+/* ============================================================
+   SISTEMA SOCIAL LOCAL
+============================================================ */
+
+function reaccionarCancion(id,reaccion){
+
+    localStorage.setItem(
+        `ggc_music_reaction_${id}`,
+        reaccion
+    );
+
+    toast(`Reacción guardada: ${reaccion}`);
+}
+
+function comentarioCancion(id){
+
+    const comentario =
+        prompt(
+            "Escribe tu comentario:"
+        );
+
+    if(!comentario) return;
+
+    const key =
+        `ggc_music_comments_${id}`;
+
+    const comentarios =
+        JSON.parse(
+            localStorage.getItem(key)||"[]"
+        );
+
+    comentarios.push({
+        comentario,
+        fecha:new Date().toISOString()
+    });
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(comentarios)
+    );
+
+    toast("Comentario guardado localmente.");
+}
+
+/* ============================================================
+   PERFIL LOCAL
+============================================================ */
+
+function abrirPerfil(){
+
+    const nombre =
+        localStorage.getItem(
+            "ggc_music_username"
+        ) || "Usuario GGC";
+
+    abrirModal(
+        "👤 Perfil musical",
+        `
+        <div class="formGroup">
+            <label>Nombre de usuario</label>
+            <input id="profileName"
+                class="formInput"
+                value="${escapeHTML(nombre)}">
+        </div>
+
+        <div class="formGroup">
+            <label>Avatar URL</label>
+            <input id="profileAvatar"
+                class="formInput"
+                value="${escapeHTML(
+                    localStorage.getItem("ggc_music_avatar")||""
+                )}">
+        </div>
+
+        <button class="primary"
+            onclick="
+                localStorage.setItem(
+                    'ggc_music_username',
+                    document.getElementById('profileName').value
+                );
+                localStorage.setItem(
+                    'ggc_music_avatar',
+                    document.getElementById('profileAvatar').value
+                );
+                toast('Perfil actualizado.');
+                cerrarModal();
+            ">
+            Guardar perfil
+        </button>
+        `
+    );
+}
+
+/* ============================================================
+   FUNCIÓN RADIO
+============================================================ */
+
+function iniciarRadio(){
+
+    if(!actual){
+
+        sorprendeme();
+
+        return;
+    }
+
+    const similares =
+        canciones.filter(c=>
+            c.id!==actual.id &&
+            (
+                c.artista===actual.artista ||
+                c.genero===actual.genero
+            )
+        );
+
+    cola =
+        similares
+        .sort(()=>Math.random()-.5)
+        .map(c=>c.id);
+
+    guardarEstado();
+
+    toast(
+        "📻 Radio automática creada."
+    );
+
+    siguiente();
+}
+
+/* ============================================================
+   MIX PERSONALIZADO
+============================================================ */
+
+function crearMix(){
+
+    const lista =
+        [...canciones]
+        .sort(
+            (a,b)=>
+                obtenerReproducciones(b.id) -
+                obtenerReproducciones(a.id)
+        )
+        .slice(0,20)
+        .map(c=>c.id);
+
+    const p = {
+
+        id:crypto.randomUUID(),
+
+        nombre:"Mi Mix GGC",
+
+        descripcion:
+            "Mix personalizado generado por GGC Music.",
+
+        portada:
+            portada(obtenerCancion(lista[0])),
+
+        canciones:lista,
+
+        created_at:
+            new Date().toISOString(),
+
+        updated_at:
+            new Date().toISOString()
+    };
+
+    playlists.push(p);
+
+    guardarEstado();
+
+    toast("✨ Mix personalizado creado.");
+}
+
+/* ============================================================
+   EVENTO VISIBILIDAD
+============================================================ */
+
+document.addEventListener(
+    "visibilitychange",
+    ()=>{
+
+        if(document.hidden){
+
+            guardarEstado();
+        }
+    }
+);
+
+/* ============================================================
+   INICIALIZACIÓN
+============================================================ */
+
+cargarConfiguracion();
+
+cargarCanciones();
+
+renderTodo();
+
+</script>
+
+</body>
+</html>
