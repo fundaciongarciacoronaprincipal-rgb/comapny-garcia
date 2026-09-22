@@ -1,0 +1,15 @@
+{
+  "name": "GGC Music",
+  "short_name": "GGC Music",
+  "description": "Reproductor musical de Grupo García Corona.",
+  "lang": "es-MX",
+  "dir": "ltr",
+  "start_url": "./1.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#030711",
+  "background_color": "#030711",
+  "categories": ["music", "entertainment"],
+  "prefer_related_applications": false
+}
