@@ -26,7 +26,6 @@
     --verde:#159b70;
     --rojo:#dc4b40;
     --amarillo:#e89b18;
-    --fondo:#eef4f9;
     --texto:#24384c;
 }
 
@@ -49,9 +48,9 @@ body{
     color:var(--texto);
 }
 
-/* ==============================
-   ENCABEZADO
-============================== */
+/* =========================
+   HEADER
+========================= */
 
 header{
     background:
@@ -96,8 +95,8 @@ header{
     height:50px;
 
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
 
     border-radius:14px;
 
@@ -156,12 +155,13 @@ header{
     color:var(--azul);
 }
 
-/* ==============================
+/* =========================
    CONTENEDOR
-============================== */
+========================= */
 
 .container{
     max-width:1000px;
+
     margin:35px auto;
 
     padding:
@@ -176,9 +176,9 @@ header{
     display:block;
 }
 
-/* ==============================
-   TARJETA
-============================== */
+/* =========================
+   CARD
+========================= */
 
 .card{
     background:white;
@@ -214,9 +214,9 @@ header{
     line-height:1.6;
 }
 
-/* ==============================
-   ESTADO
-============================== */
+/* =========================
+   STATUS
+========================= */
 
 .status{
     display:flex;
@@ -274,9 +274,9 @@ header{
     background:var(--amarillo);
 }
 
-/* ==============================
+/* =========================
    INPUT
-============================== */
+========================= */
 
 .input-group{
     margin-bottom:20px;
@@ -324,9 +324,9 @@ input[type="text"]:focus{
         0 0 0 4px rgba(33,150,243,.1);
 }
 
-/* ==============================
+/* =========================
    BOTONES
-============================== */
+========================= */
 
 .primary-btn{
     height:52px;
@@ -395,9 +395,9 @@ input[type="text"]:focus{
     cursor:pointer;
 }
 
-/* ==============================
+/* =========================
    RESULTADO
-============================== */
+========================= */
 
 .result{
     display:none;
@@ -442,17 +442,19 @@ input[type="text"]:focus{
 
 .result h3{
     font-size:19px;
+
     margin-bottom:9px;
 }
 
 .result p{
     font-size:14px;
+
     line-height:1.7;
 }
 
-/* ==============================
+/* =========================
    CAMARA
-============================== */
+========================= */
 
 .camera-box{
     position:relative;
@@ -506,17 +508,19 @@ video{
 
 .camera-placeholder .icon{
     font-size:52px;
+
     margin-bottom:12px;
 }
 
 .camera-placeholder p{
     font-size:14px;
+
     line-height:1.6;
 }
 
-/* ==============================
-   MARCO ESCANEO
-============================== */
+/* =========================
+   MARCO
+========================= */
 
 .scan-frame{
     position:absolute;
@@ -576,9 +580,9 @@ video{
 
 }
 
-/* ==============================
+/* =========================
    BOTONES CAMARA
-============================== */
+========================= */
 
 .camera-buttons{
     display:flex;
@@ -592,6 +596,7 @@ video{
 
 .change-camera{
     flex:1;
+
     min-width:180px;
 }
 
@@ -599,9 +604,9 @@ video{
     flex:0 0 auto;
 }
 
-/* ==============================
-   INFORMACION
-============================== */
+/* =========================
+   INFO
+========================= */
 
 .info-box{
     margin-top:20px;
@@ -622,9 +627,9 @@ video{
     line-height:1.7;
 }
 
-/* ==============================
+/* =========================
    ACTIVIDAD
-============================== */
+========================= */
 
 .activity{
     margin-top:25px;
@@ -681,9 +686,9 @@ video{
     white-space:nowrap;
 }
 
-/* ==============================
+/* =========================
    FOOTER
-============================== */
+========================= */
 
 footer{
     text-align:center;
@@ -696,9 +701,9 @@ footer{
     font-size:12px;
 }
 
-/* ==============================
+/* =========================
    MOVIL
-============================== */
+========================= */
 
 @media(max-width:760px){
 
@@ -766,11 +771,6 @@ footer{
 
 <body>
 
-
-<!-- ==================================
-     ENCABEZADO
-================================== -->
-
 <header>
 
 <div class="header-inner">
@@ -795,7 +795,6 @@ Sistema de Apoyo y Gestión Escolar
 
 </div>
 
-
 <nav class="menu">
 
 <button
@@ -806,7 +805,6 @@ onclick="mostrarSeccion('usb')">
 ⌨️ Escáner USB
 
 </button>
-
 
 <button
 id="btnCamara"
@@ -826,16 +824,15 @@ onclick="mostrarSeccion('camara')">
 <main class="container">
 
 
-<!-- ==================================
+<!-- =====================================
      USB
-================================== -->
+===================================== -->
 
 <section
 id="seccionUSB"
 class="section active">
 
 <div class="card">
-
 
 <div class="card-header">
 
@@ -870,7 +867,6 @@ Sistema listo para registrar asistencia
 Matrícula / Código
 </label>
 
-
 <div class="input-row">
 
 <input
@@ -879,7 +875,6 @@ type="text"
 autocomplete="off"
 autofocus
 placeholder="Escanea o escribe el código">
-
 
 <button
 class="primary-btn"
@@ -919,7 +914,6 @@ class="result">
 Actividad reciente
 </h3>
 
-
 <div
 id="logUSB"
 class="log">
@@ -936,23 +930,20 @@ Aún no hay registros de asistencia.
 
 </div>
 
-
 </div>
 
 </section>
 
 
-
-<!-- ==================================
+<!-- =====================================
      CAMARA
-================================== -->
+===================================== -->
 
 <section
 id="seccionCamara"
 class="section">
 
 <div class="card">
-
 
 <div class="card-header">
 
@@ -1052,9 +1043,9 @@ Cámara:
 La cámara trasera se utilizará automáticamente
 cuando el dispositivo permita identificarla.
 
-Puedes utilizar el botón
+El botón
 <strong>🔄 Cambiar cámara</strong>
-para cambiar entre las cámaras disponibles.
+permite alternar entre las cámaras disponibles.
 
 </div>
 
@@ -1064,7 +1055,6 @@ para cambiar entre las cámaras disponibles.
 <h3>
 Actividad reciente
 </h3>
-
 
 <div
 id="logCamara"
@@ -1081,7 +1071,6 @@ Aún no hay registros de asistencia.
 </div>
 
 </div>
-
 
 </div>
 
@@ -1100,9 +1089,9 @@ OFTV No. 0216 "Francisco Villa"
 
 <script>
 
-/* ==================================================
+/* =================================================
    SUPABASE
-================================================== */
+================================================= */
 
 const SUPABASE_URL =
 "https://nlpdpvjtdxknhvgqbfls.supabase.co";
@@ -1118,9 +1107,9 @@ window.supabase.createClient(
 );
 
 
-/* ==================================================
+/* =================================================
    VARIABLES
-================================================== */
+================================================= */
 
 let codeReader = null;
 
@@ -1139,9 +1128,9 @@ let ultimoCodigo = "";
 let ultimoEscaneo = 0;
 
 
-/* ==================================================
+/* =================================================
    CAMBIAR SECCION
-================================================== */
+================================================= */
 
 function mostrarSeccion(seccion){
 
@@ -1152,7 +1141,6 @@ function mostrarSeccion(seccion){
     document
         .getElementById("seccionCamara")
         .classList.remove("active");
-
 
     document
         .getElementById("btnUSB")
@@ -1216,9 +1204,9 @@ function mostrarSeccion(seccion){
 }
 
 
-/* ==================================================
-   INPUT USB
-================================================== */
+/* =================================================
+   USB
+================================================= */
 
 const scanner =
 document.getElementById("scanner");
@@ -1239,14 +1227,6 @@ scanner.addEventListener(
     }
 );
 
-
-/*
-   NO MODIFICAMOS LA MATRICULA
-   PARA LA CONSULTA.
-
-   Esto es importante porque el código
-   que llega del lector debe conservarse.
-*/
 
 async function procesarCodigoUSB(){
 
@@ -1332,9 +1312,9 @@ async function procesarCodigoUSB(){
 }
 
 
-/* ==================================================
+/* =================================================
    CAMARA
-================================================== */
+================================================= */
 
 async function iniciarCamara(){
 
@@ -1354,7 +1334,7 @@ async function iniciarCamara(){
             "camara",
             "error",
             "❌ Error",
-            "No se pudo cargar el lector de códigos."
+            "No se pudo cargar el lector."
         );
 
         return;
@@ -1388,10 +1368,6 @@ async function iniciarCamara(){
 
         }
 
-
-        /*
-           Intentar encontrar cámara trasera.
-        */
 
         let indiceTrasera =
             camarasDisponibles.findIndex(
@@ -1453,9 +1429,9 @@ async function iniciarCamara(){
 }
 
 
-/* ==================================================
-   INICIAR CAMARA POR INDICE
-================================================== */
+/* =================================================
+   CAMARA POR INDICE
+================================================= */
 
 async function iniciarCamaraPorIndice(indice){
 
@@ -1494,7 +1470,6 @@ async function iniciarCamaraPorIndice(indice){
                     error
                 ) => {
 
-
                     if(!resultado){
 
                         return;
@@ -1518,11 +1493,6 @@ async function iniciarCamaraPorIndice(indice){
                     const ahora =
                         Date.now();
 
-
-                    /*
-                       Evitar que la misma lectura
-                       se procese muchas veces.
-                    */
 
                     if(
                         codigo === ultimoCodigo &&
@@ -1592,9 +1562,9 @@ async function iniciarCamaraPorIndice(indice){
 }
 
 
-/* ==================================================
+/* =================================================
    CAMBIAR CAMARA
-================================================== */
+================================================= */
 
 async function cambiarCamara(){
 
@@ -1675,9 +1645,9 @@ async function cambiarCamara(){
 }
 
 
-/* ==================================================
-   PROCESAR CODIGO CAMARA
-================================================== */
+/* =================================================
+   PROCESAR CAMARA
+================================================= */
 
 async function procesarCodigoCamara(codigo){
 
@@ -1741,19 +1711,14 @@ async function procesarCodigoCamara(codigo){
 }
 
 
-/* ==================================================
-   FUNCION PRINCIPAL
-================================================== */
+/* =================================================
+   REGISTRAR ASISTENCIA
+================================================= */
 
 async function registrarAsistencia(
     codigo,
     origen
 ){
-
-    /*
-       Conservamos exactamente el código
-       recibido por USB o cámara.
-    */
 
     const matricula =
         String(codigo).trim();
@@ -1766,17 +1731,15 @@ async function registrarAsistencia(
     }
 
 
-    /*
-       FECHA LOCAL
-    */
-
-    const hoy =
+    const fechaHoy =
         obtenerFechaLocal();
 
 
-    /* ==================================================
-       1. BUSCAR ALUMNO
-    ================================================== */
+    /*
+       =================================================
+       BUSCAR ALUMNO
+       =================================================
+    */
 
     const respuestaAlumno =
         await supabaseClient
@@ -1789,33 +1752,27 @@ async function registrarAsistencia(
             .limit(1);
 
 
-    const alumno =
-        respuestaAlumno.data;
-
-    const errorAlumno =
-        respuestaAlumno.error;
-
-
-    if(errorAlumno){
+    if(respuestaAlumno.error){
 
         console.error(
-            "ERROR CONSULTANDO ALUMNOS:",
-            errorAlumno
+            "ERROR ALUMNOS:",
+            respuestaAlumno.error
         );
 
-        throw errorAlumno;
+        throw respuestaAlumno.error;
 
     }
 
 
+    const alumnos =
+        respuestaAlumno.data || [];
+
+
     /*
-       Si no encontramos alumno.
+       ALUMNO NO ENCONTRADO
     */
 
-    if(
-        !alumno ||
-        alumno.length === 0
-    ){
+    if(alumnos.length === 0){
 
         mostrarResultado(
             origen,
@@ -1852,31 +1809,28 @@ async function registrarAsistencia(
     }
 
 
-    /*
-       Primer alumno encontrado.
-    */
-
-    const datosAlumno =
-        alumno[0];
+    const alumno =
+        alumnos[0];
 
 
     /*
-       Obtener nombre sin depender
-       de un único nombre de columna.
+       OBTENER NOMBRE
     */
 
     const nombreAlumno =
-        datosAlumno.nombre_completo ||
-        datosAlumno.nombre ||
-        datosAlumno.nombres ||
-        datosAlumno.nombreCompleto ||
-        datosAlumno.nombre_alumno ||
+        alumno.nombre_completo ||
+        alumno.nombre ||
+        alumno.nombres ||
+        alumno.nombreCompleto ||
+        alumno.nombre_alumno ||
         "Alumno";
 
 
-    /* ==================================================
-       2. BUSCAR ASISTENCIA DEL DIA
-    ================================================== */
+    /*
+       =================================================
+       BUSCAR ASISTENCIA DE HOY
+       =================================================
+    */
 
     const respuestaAsistencia =
         await supabaseClient
@@ -1888,62 +1842,67 @@ async function registrarAsistencia(
             )
             .eq(
                 "fecha",
-                hoy
+                fechaHoy
             )
             .limit(1);
 
 
-    const registrosAsistencia =
-        respuestaAsistencia.data;
-
-    const errorAsistencia =
-        respuestaAsistencia.error;
-
-
-    if(errorAsistencia){
+    if(respuestaAsistencia.error){
 
         console.error(
-            "ERROR CONSULTANDO ASISTENCIAS:",
-            errorAsistencia
+            "ERROR ASISTENCIAS:",
+            respuestaAsistencia.error
         );
 
-        throw errorAsistencia;
+        throw respuestaAsistencia.error;
 
     }
 
 
+    const registros =
+        respuestaAsistencia.data || [];
+
+
     const asistencia =
-        registrosAsistencia &&
-        registrosAsistencia.length > 0
-            ? registrosAsistencia[0]
+        registros.length > 0
+            ? registros[0]
             : null;
 
 
-    /* ==================================================
-       3. NO EXISTE ASISTENCIA
-    ================================================== */
+    /*
+       =================================================
+       PRIMER ESCANEO
+       REGISTRAR ENTRADA
+       =================================================
+    */
 
     if(!asistencia){
 
-        const horaEntrada =
-            obtenerHoraLocal();
+        const timestampEntrada =
+            obtenerTimestampLocal();
 
 
         const registroNuevo = {
 
             alumno_id:
-                datosAlumno.id,
+                alumno.id,
 
             matricula:
                 matricula,
 
             fecha:
-                hoy,
+                fechaHoy,
 
             hora_entrada:
-                horaEntrada
+                timestampEntrada
 
         };
+
+
+        console.log(
+            "INSERTANDO:",
+            registroNuevo
+        );
 
 
         const respuestaInsert =
@@ -1957,7 +1916,7 @@ async function registrarAsistencia(
         if(respuestaInsert.error){
 
             console.error(
-                "ERROR INSERTANDO ASISTENCIA:",
+                "ERROR INSERT:",
                 respuestaInsert.error
             );
 
@@ -1992,7 +1951,9 @@ async function registrarAsistencia(
 
             Hora de entrada:
             <strong>
-                ${horaEntrada}
+                ${formatearTimestamp(
+                    timestampEntrada
+                )}
             </strong>
             `
         );
@@ -2017,23 +1978,21 @@ async function registrarAsistencia(
     }
 
 
-    /* ==================================================
-       4. EXISTE ENTRADA PERO NO SALIDA
-    ================================================== */
+    /*
+       =================================================
+       SEGUNDO ESCANEO
+       REGISTRAR SALIDA
+       =================================================
+    */
 
     if(
         asistencia.hora_entrada &&
         !asistencia.hora_salida
     ){
 
-        const horaSalida =
-            obtenerHoraLocal();
+        const timestampSalida =
+            obtenerTimestampLocal();
 
-
-        /*
-           Utilizamos el ID del registro
-           para actualizar únicamente ese registro.
-        */
 
         if(
             asistencia.id === undefined ||
@@ -2041,7 +2000,7 @@ async function registrarAsistencia(
         ){
 
             throw new Error(
-                "El registro de asistencia no contiene la columna id."
+                "El registro de asistencia no tiene una columna id."
             );
 
         }
@@ -2053,7 +2012,7 @@ async function registrarAsistencia(
                 .update({
 
                     hora_salida:
-                        horaSalida
+                        timestampSalida
 
                 })
                 .eq(
@@ -2065,7 +2024,7 @@ async function registrarAsistencia(
         if(respuestaUpdate.error){
 
             console.error(
-                "ERROR REGISTRANDO SALIDA:",
+                "ERROR UPDATE:",
                 respuestaUpdate.error
             );
 
@@ -2094,14 +2053,18 @@ async function registrarAsistencia(
 
             Entrada:
             <strong>
-                ${escaparHTML(asistencia.hora_entrada)}
+                ${formatearTimestamp(
+                    asistencia.hora_entrada
+                )}
             </strong>
 
             <br>
 
             Salida:
             <strong>
-                ${horaSalida}
+                ${formatearTimestamp(
+                    timestampSalida
+                )}
             </strong>
             `
         );
@@ -2126,9 +2089,12 @@ async function registrarAsistencia(
     }
 
 
-    /* ==================================================
-       5. ENTRADA Y SALIDA YA REGISTRADAS
-    ================================================== */
+    /*
+       =================================================
+       TERCER ESCANEO
+       YA ESTA COMPLETO
+       =================================================
+    */
 
     if(
         asistencia.hora_entrada &&
@@ -2160,14 +2126,18 @@ async function registrarAsistencia(
 
             Entrada:
             <strong>
-                ${escaparHTML(asistencia.hora_entrada)}
+                ${formatearTimestamp(
+                    asistencia.hora_entrada
+                )}
             </strong>
 
             <br>
 
             Salida:
             <strong>
-                ${escaparHTML(asistencia.hora_salida)}
+                ${formatearTimestamp(
+                    asistencia.hora_salida
+                )}
             </strong>
             `
         );
@@ -2195,9 +2165,185 @@ async function registrarAsistencia(
 }
 
 
-/* ==================================================
+/* =================================================
+   TIMESTAMP LOCAL
+================================================= */
+
+function obtenerTimestampLocal(){
+
+    const fecha =
+        new Date();
+
+
+    const año =
+        fecha.getFullYear();
+
+
+    const mes =
+        String(
+            fecha.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const dia =
+        String(
+            fecha.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const horas =
+        String(
+            fecha.getHours()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const minutos =
+        String(
+            fecha.getMinutes()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const segundos =
+        String(
+            fecha.getSeconds()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    /*
+       Formato compatible con timestamp:
+       
+       YYYY-MM-DD HH:mm:ss
+    */
+
+    return (
+        año +
+        "-" +
+        mes +
+        "-" +
+        dia +
+        " " +
+        horas +
+        ":" +
+        minutos +
+        ":" +
+        segundos
+    );
+
+}
+
+
+/* =================================================
+   FECHA
+================================================= */
+
+function obtenerFechaLocal(){
+
+    const fecha =
+        new Date();
+
+
+    const año =
+        fecha.getFullYear();
+
+
+    const mes =
+        String(
+            fecha.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const dia =
+        String(
+            fecha.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return (
+        año +
+        "-" +
+        mes +
+        "-" +
+        dia
+    );
+
+}
+
+
+/* =================================================
+   FORMATEAR TIMESTAMP
+================================================= */
+
+function formatearTimestamp(valor){
+
+    if(!valor){
+
+        return "No registrado";
+
+    }
+
+
+    const texto =
+        String(valor);
+
+
+    /*
+       Si Supabase devuelve:
+
+       2026-09-24T14:38:32
+       
+       o:
+
+       2026-09-24 14:38:32
+    */
+
+    const parteHora =
+        texto
+            .replace("T"," ")
+            .substring(
+                11,
+                19
+            );
+
+
+    if(
+        /^\d{2}:\d{2}:\d{2}$/
+            .test(parteHora)
+    ){
+
+        return parteHora;
+
+    }
+
+
+    return texto;
+
+}
+
+
+/* =================================================
    DETENER ZXING
-================================================== */
+================================================= */
 
 function detenerControlesZXing(){
 
@@ -2266,9 +2412,9 @@ function detenerControlesZXing(){
 }
 
 
-/* ==================================================
+/* =================================================
    DETENER CAMARA
-================================================== */
+================================================= */
 
 function detenerCamara(){
 
@@ -2298,14 +2444,14 @@ function detenerCamara(){
 }
 
 
-/* ==================================================
+/* =================================================
    ERROR CAMARA
-================================================== */
+================================================= */
 
 function manejarErrorCamara(error){
 
     console.error(
-        "ERROR DE CAMARA:",
+        "ERROR CAMARA:",
         error
     );
 
@@ -2393,9 +2539,9 @@ function manejarErrorCamara(error){
 }
 
 
-/* ==================================================
+/* =================================================
    STATUS
-================================================== */
+================================================= */
 
 function actualizarStatus(
     origen,
@@ -2441,9 +2587,9 @@ function actualizarStatus(
 }
 
 
-/* ==================================================
+/* =================================================
    RESULTADO
-================================================== */
+================================================= */
 
 function mostrarResultado(
     origen,
@@ -2491,9 +2637,9 @@ function mostrarResultado(
 }
 
 
-/* ==================================================
+/* =================================================
    ACTIVIDAD
-================================================== */
+================================================= */
 
 function agregarLog(
     origen,
@@ -2567,52 +2713,9 @@ function agregarLog(
 }
 
 
-/* ==================================================
-   FECHA
-================================================== */
-
-function obtenerFechaLocal(){
-
-    const fecha =
-        new Date();
-
-
-    const año =
-        fecha.getFullYear();
-
-
-    const mes =
-        String(
-            fecha.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const dia =
-        String(
-            fecha.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return (
-        año +
-        "-" +
-        mes +
-        "-" +
-        dia
-    );
-
-}
-
-
-/* ==================================================
+/* =================================================
    HORA
-================================================== */
+================================================= */
 
 function obtenerHoraLocal(){
 
@@ -2658,9 +2761,9 @@ function obtenerHoraLocal(){
 }
 
 
-/* ==================================================
+/* =================================================
    ESCAPAR HTML
-================================================== */
+================================================= */
 
 function escaparHTML(texto){
 
@@ -2679,9 +2782,9 @@ function escaparHTML(texto){
 }
 
 
-/* ==================================================
+/* =================================================
    ERROR SUPABASE
-================================================== */
+================================================= */
 
 function obtenerMensajeError(error){
 
@@ -2746,7 +2849,7 @@ function obtenerMensajeError(error){
     if(!mensaje){
 
         mensaje =
-            "Supabase rechazó la consulta.";
+            "Supabase rechazó la operación.";
 
     }
 
@@ -2756,9 +2859,9 @@ function obtenerMensajeError(error){
 }
 
 
-/* ==================================================
+/* =================================================
    INICIO
-================================================== */
+================================================= */
 
 window.addEventListener(
     "load",
@@ -2772,9 +2875,9 @@ window.addEventListener(
 );
 
 
-/* ==================================================
-   CERRAR PAGINA
-================================================== */
+/* =================================================
+   SALIR
+================================================= */
 
 window.addEventListener(
     "beforeunload",
