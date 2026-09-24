@@ -49,7 +49,9 @@ body{
     color:var(--texto);
 }
 
-/* HEADER */
+/* ==============================
+   ENCABEZADO
+============================== */
 
 header{
     background:
@@ -154,11 +156,12 @@ header{
     color:var(--azul);
 }
 
-/* CONTENEDOR */
+/* ==============================
+   CONTENEDOR
+============================== */
 
 .container{
     max-width:1000px;
-
     margin:35px auto;
 
     padding:
@@ -173,7 +176,9 @@ header{
     display:block;
 }
 
-/* CARD */
+/* ==============================
+   TARJETA
+============================== */
 
 .card{
     background:white;
@@ -209,7 +214,9 @@ header{
     line-height:1.6;
 }
 
-/* STATUS */
+/* ==============================
+   ESTADO
+============================== */
 
 .status{
     display:flex;
@@ -267,7 +274,9 @@ header{
     background:var(--amarillo);
 }
 
-/* INPUT */
+/* ==============================
+   INPUT
+============================== */
 
 .input-group{
     margin-bottom:20px;
@@ -315,7 +324,9 @@ input[type="text"]:focus{
         0 0 0 4px rgba(33,150,243,.1);
 }
 
-/* BOTONES */
+/* ==============================
+   BOTONES
+============================== */
 
 .primary-btn{
     height:52px;
@@ -339,9 +350,6 @@ input[type="text"]:focus{
     font-weight:bold;
 
     cursor:pointer;
-
-    box-shadow:
-        0 5px 14px rgba(13,71,120,.2);
 }
 
 .primary-btn:hover{
@@ -387,7 +395,9 @@ input[type="text"]:focus{
     cursor:pointer;
 }
 
-/* RESULTADO */
+/* ==============================
+   RESULTADO
+============================== */
 
 .result{
     display:none;
@@ -432,17 +442,17 @@ input[type="text"]:focus{
 
 .result h3{
     font-size:19px;
-
     margin-bottom:9px;
 }
 
 .result p{
     font-size:14px;
-
     line-height:1.7;
 }
 
-/* CAMARA */
+/* ==============================
+   CAMARA
+============================== */
 
 .camera-box{
     position:relative;
@@ -496,17 +506,17 @@ video{
 
 .camera-placeholder .icon{
     font-size:52px;
-
     margin-bottom:12px;
 }
 
 .camera-placeholder p{
     font-size:14px;
-
     line-height:1.6;
 }
 
-/* MARCO DE ESCANEO */
+/* ==============================
+   MARCO ESCANEO
+============================== */
 
 .scan-frame{
     position:absolute;
@@ -566,7 +576,9 @@ video{
 
 }
 
-/* BOTONES CAMARA */
+/* ==============================
+   BOTONES CAMARA
+============================== */
 
 .camera-buttons{
     display:flex;
@@ -580,7 +592,6 @@ video{
 
 .change-camera{
     flex:1;
-
     min-width:180px;
 }
 
@@ -588,7 +599,9 @@ video{
     flex:0 0 auto;
 }
 
-/* INFORMACION */
+/* ==============================
+   INFORMACION
+============================== */
 
 .info-box{
     margin-top:20px;
@@ -609,7 +622,9 @@ video{
     line-height:1.7;
 }
 
-/* ACTIVIDAD */
+/* ==============================
+   ACTIVIDAD
+============================== */
 
 .activity{
     margin-top:25px;
@@ -666,7 +681,9 @@ video{
     white-space:nowrap;
 }
 
-/* FOOTER */
+/* ==============================
+   FOOTER
+============================== */
 
 footer{
     text-align:center;
@@ -679,7 +696,9 @@ footer{
     font-size:12px;
 }
 
-/* MOVIL */
+/* ==============================
+   MOVIL
+============================== */
 
 @media(max-width:760px){
 
@@ -747,112 +766,126 @@ footer{
 
 <body>
 
+
+<!-- ==================================
+     ENCABEZADO
+================================== -->
+
 <header>
 
 <div class="header-inner">
 
-    <div class="brand">
+<div class="brand">
 
-        <div class="brand-icon">
-            📚
-        </div>
+<div class="brand-icon">
+📚
+</div>
 
-        <div>
+<div>
 
-            <h1>
-                Control de Asistencia
-            </h1>
+<h1>
+Control de Asistencia
+</h1>
 
-            <p>
-                Sistema de Apoyo y Gestión Escolar
-            </p>
+<p>
+Sistema de Apoyo y Gestión Escolar
+</p>
 
-        </div>
+</div>
 
-    </div>
+</div>
 
-    <nav class="menu">
 
-        <button
-            id="btnUSB"
-            class="active"
-            onclick="mostrarSeccion('usb')">
+<nav class="menu">
 
-            ⌨️ Escáner USB
+<button
+id="btnUSB"
+class="active"
+onclick="mostrarSeccion('usb')">
 
-        </button>
+⌨️ Escáner USB
 
-        <button
-            id="btnCamara"
-            onclick="mostrarSeccion('camara')">
+</button>
 
-            📷 Escanear con cámara
 
-        </button>
+<button
+id="btnCamara"
+onclick="mostrarSeccion('camara')">
 
-    </nav>
+📷 Escanear con cámara
+
+</button>
+
+</nav>
 
 </div>
 
 </header>
 
+
 <main class="container">
 
-<!-- ========================= -->
-<!-- ESCANER USB -->
-<!-- ========================= -->
+
+<!-- ==================================
+     USB
+================================== -->
 
 <section
-    id="seccionUSB"
-    class="section active">
+id="seccionUSB"
+class="section active">
 
 <div class="card">
+
 
 <div class="card-header">
 
 <h2>
-    Registro mediante escáner USB
+Registro mediante escáner USB
 </h2>
 
 <p>
-    Conecta el lector de códigos de barras
-    o escribe directamente la matrícula del alumno.
+Conecta el lector de códigos de barras
+o escribe directamente la matrícula del alumno.
 </p>
 
 </div>
 
+
 <div
-    id="statusUSB"
-    class="status">
+id="statusUSB"
+class="status">
 
 <span class="status-dot"></span>
 
 <span id="statusUSBText">
-    Sistema listo para registrar asistencia
+Sistema listo para registrar asistencia
 </span>
 
 </div>
 
+
 <div class="input-group">
 
 <label for="scanner">
-    Matrícula / Código
+Matrícula / Código
 </label>
+
 
 <div class="input-row">
 
 <input
-    id="scanner"
-    type="text"
-    autocomplete="off"
-    autofocus
-    placeholder="Escanea o escribe el código">
+id="scanner"
+type="text"
+autocomplete="off"
+autofocus
+placeholder="Escanea o escribe el código">
+
 
 <button
-    class="primary-btn"
-    onclick="procesarCodigoUSB()">
+class="primary-btn"
+onclick="procesarCodigoUSB()">
 
-    Registrar
+Registrar
 
 </button>
 
@@ -860,10 +893,11 @@ footer{
 
 </div>
 
+
 <div class="info-box">
 
 <strong>
-    Escáner USB:
+Escáner USB:
 </strong>
 
 Coloca el cursor en el campo y escanea
@@ -872,25 +906,28 @@ la tecla ENTER enviada por el lector.
 
 </div>
 
+
 <div
-    id="resultadoUSB"
-    class="result">
+id="resultadoUSB"
+class="result">
 </div>
+
 
 <div class="activity">
 
 <h3>
-    Actividad reciente
+Actividad reciente
 </h3>
 
+
 <div
-    id="logUSB"
-    class="log">
+id="logUSB"
+class="log">
 
 <div class="log-item">
 
 <span class="log-message">
-    Aún no hay registros de asistencia.
+Aún no hay registros de asistencia.
 </span>
 
 </div>
@@ -898,133 +935,145 @@ la tecla ENTER enviada por el lector.
 </div>
 
 </div>
+
 
 </div>
 
 </section>
 
 
-<!-- ========================= -->
-<!-- CAMARA -->
-<!-- ========================= -->
+
+<!-- ==================================
+     CAMARA
+================================== -->
 
 <section
-    id="seccionCamara"
-    class="section">
+id="seccionCamara"
+class="section">
 
 <div class="card">
+
 
 <div class="card-header">
 
 <h2>
-    Escanear con cámara
+Escanear con cámara
 </h2>
 
 <p>
-    La cámara trasera se iniciará automáticamente.
-    Apunta el dispositivo hacia el código QR
-    o código de barras del alumno.
+La cámara trasera se iniciará automáticamente.
+Apunta el dispositivo hacia el código QR
+o código de barras del alumno.
 </p>
 
 </div>
 
+
 <div
-    id="statusCamara"
-    class="status">
+id="statusCamara"
+class="status">
 
 <span class="status-dot"></span>
 
 <span id="statusCamaraText">
-    Cámara preparada
+Cámara preparada
 </span>
 
 </div>
 
+
 <div class="camera-box">
 
 <video
-    id="video"
-    autoplay
-    muted
-    playsinline>
+id="video"
+autoplay
+muted
+playsinline>
 </video>
 
+
 <div
-    id="cameraPlaceholder"
-    class="camera-placeholder">
+id="cameraPlaceholder"
+class="camera-placeholder">
 
 <div class="icon">
-    📷
+📷
 </div>
 
 <p>
-    La cámara se iniciará automáticamente.
+La cámara se iniciará automáticamente.
 </p>
 
 </div>
 
+
 <div
-    id="scanFrame"
-    class="scan-frame">
+id="scanFrame"
+class="scan-frame">
 </div>
 
 </div>
+
 
 <div class="camera-buttons">
 
 <button
-    id="btnCambiarCamara"
-    class="secondary-btn change-camera"
-    onclick="cambiarCamara()">
+class="secondary-btn change-camera"
+onclick="cambiarCamara()">
 
-    🔄 Cambiar cámara
+🔄 Cambiar cámara
 
 </button>
+
 
 <button
-    class="danger-btn stop-camera"
-    onclick="detenerCamara()">
+class="danger-btn stop-camera"
+onclick="detenerCamara()">
 
-    ■ Detener
+■ Detener
 
 </button>
 
 </div>
 
+
 <div
-    id="resultadoCamara"
-    class="result">
+id="resultadoCamara"
+class="result">
 </div>
+
 
 <div class="info-box">
 
 <strong>
-    Cámara:
+Cámara:
 </strong>
 
 La cámara trasera se utilizará automáticamente
 cuando el dispositivo permita identificarla.
 
-El botón
+Puedes utilizar el botón
 <strong>🔄 Cambiar cámara</strong>
-permite alternar entre las cámaras disponibles.
+para cambiar entre las cámaras disponibles.
 
 </div>
+
 
 <div class="activity">
 
 <h3>
-    Actividad reciente
+Actividad reciente
 </h3>
 
+
 <div
-    id="logCamara"
-    class="log">
+id="logCamara"
+class="log">
 
 <div class="log-item">
 
 <span class="log-message">
-    Aún no hay registros de asistencia.
+Aún no hay registros de asistencia.
 </span>
 
 </div>
@@ -1032,12 +1081,14 @@ permite alternar entre las cámaras disponibles.
 </div>
 
 </div>
+
 
 </div>
 
 </section>
 
 </main>
+
 
 <footer>
 
@@ -1049,15 +1100,16 @@ OFTV No. 0216 "Francisco Villa"
 
 <script>
 
-/* =========================================
+/* ==================================================
    SUPABASE
-========================================= */
+================================================== */
 
 const SUPABASE_URL =
 "https://nlpdpvjtdxknhvgqbfls.supabase.co";
 
 const SUPABASE_KEY =
 "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
+
 
 const supabaseClient =
 window.supabase.createClient(
@@ -1066,9 +1118,9 @@ window.supabase.createClient(
 );
 
 
-/* =========================================
+/* ==================================================
    VARIABLES
-========================================= */
+================================================== */
 
 let codeReader = null;
 
@@ -1076,9 +1128,9 @@ let cameraControls = null;
 
 let camaraActiva = false;
 
-let camaraActual = 0;
-
 let camarasDisponibles = [];
+
+let camaraActual = 0;
 
 let procesandoCodigo = false;
 
@@ -1087,9 +1139,9 @@ let ultimoCodigo = "";
 let ultimoEscaneo = 0;
 
 
-/* =========================================
+/* ==================================================
    CAMBIAR SECCION
-========================================= */
+================================================== */
 
 function mostrarSeccion(seccion){
 
@@ -1100,6 +1152,7 @@ function mostrarSeccion(seccion){
     document
         .getElementById("seccionCamara")
         .classList.remove("active");
+
 
     document
         .getElementById("btnUSB")
@@ -1120,15 +1173,20 @@ function mostrarSeccion(seccion){
             .getElementById("btnUSB")
             .classList.add("active");
 
+
         detenerCamara();
 
-        setTimeout(() => {
 
-            document
-                .getElementById("scanner")
-                .focus();
+        setTimeout(
+            () => {
 
-        },200);
+                document
+                    .getElementById("scanner")
+                    .focus();
+
+            },
+            200
+        );
 
     }
 
@@ -1142,6 +1200,7 @@ function mostrarSeccion(seccion){
         document
             .getElementById("btnCamara")
             .classList.add("active");
+
 
         if(!camaraActiva){
 
@@ -1157,25 +1216,12 @@ function mostrarSeccion(seccion){
 }
 
 
-/* =========================================
-   ESCANER USB
-========================================= */
+/* ==================================================
+   INPUT USB
+================================================== */
 
 const scanner =
 document.getElementById("scanner");
-
-
-scanner.addEventListener(
-    "input",
-    function(){
-
-        this.value =
-            this.value
-                .replace(/[^0-9]/g,"-")
-                .replace(/-+/g,"-");
-
-    }
-);
 
 
 scanner.addEventListener(
@@ -1194,6 +1240,14 @@ scanner.addEventListener(
 );
 
 
+/*
+   NO MODIFICAMOS LA MATRICULA
+   PARA LA CONSULTA.
+
+   Esto es importante porque el código
+   que llega del lector debe conservarse.
+*/
+
 async function procesarCodigoUSB(){
 
     if(procesandoCodigo){
@@ -1202,8 +1256,10 @@ async function procesarCodigoUSB(){
 
     }
 
+
     const codigo =
         scanner.value.trim();
+
 
     if(!codigo){
 
@@ -1211,20 +1267,23 @@ async function procesarCodigoUSB(){
             "usb",
             "warning",
             "⚠️ Código vacío",
-            "Ingresa una matrícula."
+            "Ingresa o escanea una matrícula."
         );
 
         return;
 
     }
 
+
     procesandoCodigo = true;
+
 
     actualizarStatus(
         "usb",
         "warning",
         "Consultando alumno..."
     );
+
 
     try{
 
@@ -1237,28 +1296,33 @@ async function procesarCodigoUSB(){
     catch(error){
 
         console.error(
-            "ERROR COMPLETO:",
+            "ERROR SUPABASE:",
             error
         );
+
 
         mostrarResultado(
             "usb",
             "error",
-            "❌ Error de consulta",
+            "❌ Error al consultar Supabase",
             obtenerMensajeError(error)
         );
+
 
         actualizarStatus(
             "usb",
             "error",
-            "Error al consultar Supabase"
+            "No se pudo consultar Supabase"
         );
 
     }
 
+
     procesandoCodigo = false;
 
+
     scanner.value = "";
+
 
     setTimeout(
         () => scanner.focus(),
@@ -1268,9 +1332,9 @@ async function procesarCodigoUSB(){
 }
 
 
-/* =========================================
+/* ==================================================
    CAMARA
-========================================= */
+================================================== */
 
 async function iniciarCamara(){
 
@@ -1280,22 +1344,17 @@ async function iniciarCamara(){
 
     }
 
+
     if(
         typeof ZXingBrowser ===
         "undefined"
     ){
 
-        actualizarStatus(
-            "camara",
-            "error",
-            "No se pudo cargar el lector"
-        );
-
         mostrarResultado(
             "camara",
             "error",
             "❌ Error",
-            "No se pudo cargar el sistema de escaneo."
+            "No se pudo cargar el lector de códigos."
         );
 
         return;
@@ -1308,7 +1367,7 @@ async function iniciarCamara(){
         actualizarStatus(
             "camara",
             "warning",
-            "Iniciando cámara trasera..."
+            "Iniciando cámara..."
         );
 
 
@@ -1330,6 +1389,10 @@ async function iniciarCamara(){
         }
 
 
+        /*
+           Intentar encontrar cámara trasera.
+        */
+
         let indiceTrasera =
             camarasDisponibles.findIndex(
                 camara => {
@@ -1340,11 +1403,17 @@ async function iniciarCamara(){
                             ""
                         ).toLowerCase();
 
+
                     return (
+
                         nombre.includes("back") ||
+
                         nombre.includes("rear") ||
+
                         nombre.includes("trasera") ||
+
                         nombre.includes("environment")
+
                     );
 
                 }
@@ -1374,16 +1443,19 @@ async function iniciarCamara(){
             error
         );
 
-        manejarErrorCamara(error);
+
+        manejarErrorCamara(
+            error
+        );
 
     }
 
 }
 
 
-/* =========================================
-   INICIAR CAMARA
-========================================= */
+/* ==================================================
+   INICIAR CAMARA POR INDICE
+================================================== */
 
 async function iniciarCamaraPorIndice(indice){
 
@@ -1412,13 +1484,6 @@ async function iniciarCamaraPorIndice(indice){
             .BrowserMultiFormatReader();
 
 
-    actualizarStatus(
-        "camara",
-        "warning",
-        "Activando cámara..."
-    );
-
-
     cameraControls =
         await codeReader
             .decodeFromVideoDevice(
@@ -1429,6 +1494,7 @@ async function iniciarCamaraPorIndice(indice){
                     error
                 ) => {
 
+
                     if(!resultado){
 
                         return;
@@ -1437,16 +1503,30 @@ async function iniciarCamaraPorIndice(indice){
 
 
                     const codigo =
-                        resultado.getText();
+                        resultado
+                            .getText()
+                            .trim();
+
+
+                    if(!codigo){
+
+                        return;
+
+                    }
 
 
                     const ahora =
                         Date.now();
 
 
+                    /*
+                       Evitar que la misma lectura
+                       se procese muchas veces.
+                    */
+
                     if(
                         codigo === ultimoCodigo &&
-                        ahora - ultimoEscaneo < 3000
+                        ahora - ultimoEscaneo < 3500
                     ){
 
                         return;
@@ -1512,9 +1592,9 @@ async function iniciarCamaraPorIndice(indice){
 }
 
 
-/* =========================================
+/* ==================================================
    CAMBIAR CAMARA
-========================================= */
+================================================== */
 
 async function cambiarCamara(){
 
@@ -1534,6 +1614,7 @@ async function cambiarCamara(){
 
 
         if(
+            !camarasDisponibles ||
             camarasDisponibles.length < 2
         ){
 
@@ -1580,20 +1661,23 @@ async function cambiarCamara(){
     catch(error){
 
         console.error(
-            "ERROR CAMBIANDO CAMARA:",
+            "ERROR CAMBIO CAMARA:",
             error
         );
 
-        manejarErrorCamara(error);
+
+        manejarErrorCamara(
+            error
+        );
 
     }
 
 }
 
 
-/* =========================================
-   PROCESAR CAMARA
-========================================= */
+/* ==================================================
+   PROCESAR CODIGO CAMARA
+================================================== */
 
 async function procesarCodigoCamara(codigo){
 
@@ -1623,7 +1707,7 @@ async function procesarCodigoCamara(codigo){
         mostrarResultado(
             "camara",
             "error",
-            "❌ Error de consulta",
+            "❌ Error al consultar Supabase",
             obtenerMensajeError(error)
         );
 
@@ -1631,7 +1715,7 @@ async function procesarCodigoCamara(codigo){
         actualizarStatus(
             "camara",
             "error",
-            "Error al consultar Supabase"
+            "No se pudo consultar Supabase"
         );
 
     }
@@ -1657,31 +1741,44 @@ async function procesarCodigoCamara(codigo){
 }
 
 
-/* =========================================
-   REGISTRAR ASISTENCIA
-========================================= */
+/* ==================================================
+   FUNCION PRINCIPAL
+================================================== */
 
 async function registrarAsistencia(
     codigo,
     origen
 ){
 
+    /*
+       Conservamos exactamente el código
+       recibido por USB o cámara.
+    */
+
     const matricula =
         String(codigo).trim();
 
+
+    if(!matricula){
+
+        return;
+
+    }
+
+
+    /*
+       FECHA LOCAL
+    */
 
     const hoy =
         obtenerFechaLocal();
 
 
-    /*
+    /* ==================================================
        1. BUSCAR ALUMNO
-    */
+    ================================================== */
 
-    const {
-        data: alumno,
-        error: errorAlumno
-    } =
+    const respuestaAlumno =
         await supabaseClient
             .from("alumnos")
             .select("*")
@@ -1689,13 +1786,20 @@ async function registrarAsistencia(
                 "matricula",
                 matricula
             )
-            .maybeSingle();
+            .limit(1);
+
+
+    const alumno =
+        respuestaAlumno.data;
+
+    const errorAlumno =
+        respuestaAlumno.error;
 
 
     if(errorAlumno){
 
         console.error(
-            "ERROR TABLA ALUMNOS:",
+            "ERROR CONSULTANDO ALUMNOS:",
             errorAlumno
         );
 
@@ -1705,18 +1809,21 @@ async function registrarAsistencia(
 
 
     /*
-       ALUMNO NO EXISTE
+       Si no encontramos alumno.
     */
 
-    if(!alumno){
+    if(
+        !alumno ||
+        alumno.length === 0
+    ){
 
         mostrarResultado(
             origen,
             "error",
             "❌ Alumno no encontrado",
             `
-            No existe un alumno registrado con
-            la matrícula:
+            No existe un alumno registrado
+            con la matrícula:
 
             <br>
 
@@ -1746,25 +1853,32 @@ async function registrarAsistencia(
 
 
     /*
-       NOMBRE
+       Primer alumno encontrado.
     */
 
-    const nombreAlumno =
-        alumno.nombre_completo ||
-        alumno.nombre ||
-        alumno.nombres ||
-        alumno.nombreCompleto ||
-        "Alumno";
+    const datosAlumno =
+        alumno[0];
 
 
     /*
-       2. BUSCAR ASISTENCIA DEL DIA
+       Obtener nombre sin depender
+       de un único nombre de columna.
     */
 
-    const {
-        data: asistencias,
-        error: errorAsistencia
-    } =
+    const nombreAlumno =
+        datosAlumno.nombre_completo ||
+        datosAlumno.nombre ||
+        datosAlumno.nombres ||
+        datosAlumno.nombreCompleto ||
+        datosAlumno.nombre_alumno ||
+        "Alumno";
+
+
+    /* ==================================================
+       2. BUSCAR ASISTENCIA DEL DIA
+    ================================================== */
+
+    const respuestaAsistencia =
         await supabaseClient
             .from("asistencias")
             .select("*")
@@ -1776,19 +1890,20 @@ async function registrarAsistencia(
                 "fecha",
                 hoy
             )
-            .order(
-                "id",
-                {
-                    ascending:false
-                }
-            )
             .limit(1);
+
+
+    const registrosAsistencia =
+        respuestaAsistencia.data;
+
+    const errorAsistencia =
+        respuestaAsistencia.error;
 
 
     if(errorAsistencia){
 
         console.error(
-            "ERROR TABLA ASISTENCIAS:",
+            "ERROR CONSULTANDO ASISTENCIAS:",
             errorAsistencia
         );
 
@@ -1798,15 +1913,15 @@ async function registrarAsistencia(
 
 
     const asistencia =
-        asistencias &&
-        asistencias.length > 0
-            ? asistencias[0]
+        registrosAsistencia &&
+        registrosAsistencia.length > 0
+            ? registrosAsistencia[0]
             : null;
 
 
-    /*
-       3. PRIMER REGISTRO
-    */
+    /* ==================================================
+       3. NO EXISTE ASISTENCIA
+    ================================================== */
 
     if(!asistencia){
 
@@ -1814,10 +1929,10 @@ async function registrarAsistencia(
             obtenerHoraLocal();
 
 
-        const nuevoRegistro = {
+        const registroNuevo = {
 
             alumno_id:
-                alumno.id,
+                datosAlumno.id,
 
             matricula:
                 matricula,
@@ -1831,24 +1946,22 @@ async function registrarAsistencia(
         };
 
 
-        const {
-            error: errorInsert
-        } =
+        const respuestaInsert =
             await supabaseClient
                 .from("asistencias")
                 .insert(
-                    nuevoRegistro
+                    registroNuevo
                 );
 
 
-        if(errorInsert){
+        if(respuestaInsert.error){
 
             console.error(
-                "ERROR INSERT ASISTENCIA:",
-                errorInsert
+                "ERROR INSERTANDO ASISTENCIA:",
+                respuestaInsert.error
             );
 
-            throw errorInsert;
+            throw respuestaInsert.error;
 
         }
 
@@ -1904,9 +2017,9 @@ async function registrarAsistencia(
     }
 
 
-    /*
+    /* ==================================================
        4. EXISTE ENTRADA PERO NO SALIDA
-    */
+    ================================================== */
 
     if(
         asistencia.hora_entrada &&
@@ -1917,9 +2030,24 @@ async function registrarAsistencia(
             obtenerHoraLocal();
 
 
-        const {
-            error: errorUpdate
-        } =
+        /*
+           Utilizamos el ID del registro
+           para actualizar únicamente ese registro.
+        */
+
+        if(
+            asistencia.id === undefined ||
+            asistencia.id === null
+        ){
+
+            throw new Error(
+                "El registro de asistencia no contiene la columna id."
+            );
+
+        }
+
+
+        const respuestaUpdate =
             await supabaseClient
                 .from("asistencias")
                 .update({
@@ -1934,14 +2062,14 @@ async function registrarAsistencia(
                 );
 
 
-        if(errorUpdate){
+        if(respuestaUpdate.error){
 
             console.error(
-                "ERROR UPDATE SALIDA:",
-                errorUpdate
+                "ERROR REGISTRANDO SALIDA:",
+                respuestaUpdate.error
             );
 
-            throw errorUpdate;
+            throw respuestaUpdate.error;
 
         }
 
@@ -1971,13 +2099,7 @@ async function registrarAsistencia(
 
             <br>
 
-            <strong>
-                Salida registrada
-            </strong>
-
-            <br>
-
-            Hora de salida:
+            Salida:
             <strong>
                 ${horaSalida}
             </strong>
@@ -2004,9 +2126,9 @@ async function registrarAsistencia(
     }
 
 
-    /*
-       5. YA TIENE ENTRADA Y SALIDA
-    */
+    /* ==================================================
+       5. ENTRADA Y SALIDA YA REGISTRADAS
+    ================================================== */
 
     if(
         asistencia.hora_entrada &&
@@ -2073,9 +2195,9 @@ async function registrarAsistencia(
 }
 
 
-/* =========================================
+/* ==================================================
    DETENER ZXING
-========================================= */
+================================================== */
 
 function detenerControlesZXing(){
 
@@ -2144,15 +2266,17 @@ function detenerControlesZXing(){
 }
 
 
-/* =========================================
+/* ==================================================
    DETENER CAMARA
-========================================= */
+================================================== */
 
 function detenerCamara(){
 
     detenerControlesZXing();
 
-    camaraActiva = false;
+
+    camaraActiva =
+        false;
 
 
     document
@@ -2174,19 +2298,20 @@ function detenerCamara(){
 }
 
 
-/* =========================================
+/* ==================================================
    ERROR CAMARA
-========================================= */
+================================================== */
 
 function manejarErrorCamara(error){
 
     console.error(
-        "ERROR CAMARA:",
+        "ERROR DE CAMARA:",
         error
     );
 
 
-    camaraActiva = false;
+    camaraActiva =
+        false;
 
 
     document
@@ -2210,12 +2335,12 @@ function manejarErrorCamara(error){
     ){
 
         mensaje =
-            "Debes permitir el acceso a la cámara para este sitio.";
+            "Debes permitir el acceso a la cámara.";
 
     }
 
 
-    if(
+    else if(
         error &&
         error.name ===
         "NotFoundError"
@@ -2227,7 +2352,7 @@ function manejarErrorCamara(error){
     }
 
 
-    if(
+    else if(
         error &&
         error.name ===
         "NotReadableError"
@@ -2239,7 +2364,7 @@ function manejarErrorCamara(error){
     }
 
 
-    if(
+    else if(
         error &&
         error.message ===
         "NO_CAMERA"
@@ -2251,13 +2376,6 @@ function manejarErrorCamara(error){
     }
 
 
-    actualizarStatus(
-        "camara",
-        "error",
-        "No fue posible iniciar la cámara"
-    );
-
-
     mostrarResultado(
         "camara",
         "error",
@@ -2265,12 +2383,19 @@ function manejarErrorCamara(error){
         mensaje
     );
 
+
+    actualizarStatus(
+        "camara",
+        "error",
+        "Cámara no disponible"
+    );
+
 }
 
 
-/* =========================================
+/* ==================================================
    STATUS
-========================================= */
+================================================== */
 
 function actualizarStatus(
     origen,
@@ -2316,9 +2441,9 @@ function actualizarStatus(
 }
 
 
-/* =========================================
+/* ==================================================
    RESULTADO
-========================================= */
+================================================== */
 
 function mostrarResultado(
     origen,
@@ -2366,9 +2491,9 @@ function mostrarResultado(
 }
 
 
-/* =========================================
+/* ==================================================
    ACTIVIDAD
-========================================= */
+================================================== */
 
 function agregarLog(
     origen,
@@ -2442,9 +2567,9 @@ function agregarLog(
 }
 
 
-/* =========================================
-   FECHA LOCAL
-========================================= */
+/* ==================================================
+   FECHA
+================================================== */
 
 function obtenerFechaLocal(){
 
@@ -2458,7 +2583,7 @@ function obtenerFechaLocal(){
 
     const mes =
         String(
-            fecha.getMonth()+1
+            fecha.getMonth() + 1
         ).padStart(
             2,
             "0"
@@ -2485,9 +2610,9 @@ function obtenerFechaLocal(){
 }
 
 
-/* =========================================
-   HORA LOCAL
-========================================= */
+/* ==================================================
+   HORA
+================================================== */
 
 function obtenerHoraLocal(){
 
@@ -2533,9 +2658,9 @@ function obtenerHoraLocal(){
 }
 
 
-/* =========================================
+/* ==================================================
    ESCAPAR HTML
-========================================= */
+================================================== */
 
 function escaparHTML(texto){
 
@@ -2554,72 +2679,90 @@ function escaparHTML(texto){
 }
 
 
-/* =========================================
-   MENSAJE DE ERROR SUPABASE
-========================================= */
+/* ==================================================
+   ERROR SUPABASE
+================================================== */
 
 function obtenerMensajeError(error){
 
     if(!error){
 
-        return "Ocurrió un error desconocido.";
+        return `
+            No fue posible completar la consulta.
+        `;
 
     }
 
 
+    let mensaje = "";
+
+
     if(error.message){
 
-        return `
-            ${escaparHTML(error.message)}
-        `;
+        mensaje +=
+            "<strong>" +
+            escaparHTML(
+                error.message
+            ) +
+            "</strong>";
 
     }
 
 
     if(error.details){
 
-        return `
-            ${escaparHTML(error.details)}
-        `;
+        mensaje +=
+            "<br>" +
+            escaparHTML(
+                error.details
+            );
 
     }
 
 
     if(error.hint){
 
-        return `
-            ${escaparHTML(error.hint)}
-        `;
+        mensaje +=
+            "<br>" +
+            escaparHTML(
+                error.hint
+            );
 
     }
 
 
-    return `
-        No fue posible completar la consulta.
-    `;
+    if(error.code){
+
+        mensaje +=
+            "<br><small>Código: " +
+            escaparHTML(
+                error.code
+            ) +
+            "</small>";
+
+    }
+
+
+    if(!mensaje){
+
+        mensaje =
+            "Supabase rechazó la consulta.";
+
+    }
+
+
+    return mensaje;
 
 }
 
 
-/* =========================================
+/* ==================================================
    INICIO
-========================================= */
+================================================== */
 
 window.addEventListener(
     "load",
     () => {
-
-        if(
-            typeof ZXingBrowser ===
-            "undefined"
-        ){
-
-            console.error(
-                "ZXingBrowser no está disponible."
-            );
-
-        }
-
 
         document
             .getElementById("scanner")
@@ -2629,9 +2772,9 @@ window.addEventListener(
 );
 
 
-/* =========================================
-   SALIR
-========================================= */
+/* ==================================================
+   CERRAR PAGINA
+================================================== */
 
 window.addEventListener(
     "beforeunload",
