@@ -48,9 +48,7 @@ body{
     color:var(--texto);
 }
 
-/* =========================
-   HEADER
-========================= */
+/* ================= HEADER ================= */
 
 header{
     background:
@@ -155,9 +153,7 @@ header{
     color:var(--azul);
 }
 
-/* =========================
-   CONTENEDOR
-========================= */
+/* ================= CONTENEDOR ================= */
 
 .container{
     max-width:1000px;
@@ -175,10 +171,6 @@ header{
 .section.active{
     display:block;
 }
-
-/* =========================
-   CARD
-========================= */
 
 .card{
     background:white;
@@ -214,9 +206,7 @@ header{
     line-height:1.6;
 }
 
-/* =========================
-   STATUS
-========================= */
+/* ================= STATUS ================= */
 
 .status{
     display:flex;
@@ -274,9 +264,7 @@ header{
     background:var(--amarillo);
 }
 
-/* =========================
-   INPUT
-========================= */
+/* ================= INPUT ================= */
 
 .input-group{
     margin-bottom:20px;
@@ -315,6 +303,10 @@ input[type="text"]{
     outline:none;
 
     font-size:18px;
+
+    font-weight:bold;
+
+    letter-spacing:.5px;
 }
 
 input[type="text"]:focus{
@@ -323,10 +315,6 @@ input[type="text"]:focus{
     box-shadow:
         0 0 0 4px rgba(33,150,243,.1);
 }
-
-/* =========================
-   BOTONES
-========================= */
 
 .primary-btn{
     height:52px;
@@ -350,11 +338,15 @@ input[type="text"]:focus{
     font-weight:bold;
 
     cursor:pointer;
+
+    transition:.2s;
 }
 
 .primary-btn:hover{
     transform:translateY(-1px);
 }
+
+/* ================= BOTONES ================= */
 
 .secondary-btn{
     border:
@@ -395,9 +387,7 @@ input[type="text"]:focus{
     cursor:pointer;
 }
 
-/* =========================
-   RESULTADO
-========================= */
+/* ================= RESULTADO ================= */
 
 .result{
     display:none;
@@ -452,9 +442,7 @@ input[type="text"]:focus{
     line-height:1.7;
 }
 
-/* =========================
-   CAMARA
-========================= */
+/* ================= CAMARA ================= */
 
 .camera-box{
     position:relative;
@@ -518,10 +506,6 @@ video{
     line-height:1.6;
 }
 
-/* =========================
-   MARCO
-========================= */
-
 .scan-frame{
     position:absolute;
 
@@ -580,10 +564,6 @@ video{
 
 }
 
-/* =========================
-   BOTONES CAMARA
-========================= */
-
 .camera-buttons{
     display:flex;
 
@@ -604,9 +584,7 @@ video{
     flex:0 0 auto;
 }
 
-/* =========================
-   INFO
-========================= */
+/* ================= INFO ================= */
 
 .info-box{
     margin-top:20px;
@@ -627,9 +605,7 @@ video{
     line-height:1.7;
 }
 
-/* =========================
-   ACTIVIDAD
-========================= */
+/* ================= ACTIVIDAD ================= */
 
 .activity{
     margin-top:25px;
@@ -686,9 +662,7 @@ video{
     white-space:nowrap;
 }
 
-/* =========================
-   FOOTER
-========================= */
+/* ================= FOOTER ================= */
 
 footer{
     text-align:center;
@@ -701,9 +675,7 @@ footer{
     font-size:12px;
 }
 
-/* =========================
-   MOVIL
-========================= */
+/* ================= RESPONSIVE ================= */
 
 @media(max-width:760px){
 
@@ -823,10 +795,9 @@ onclick="mostrarSeccion('camara')">
 
 <main class="container">
 
-
-<!-- =====================================
-     USB
-===================================== -->
+<!-- =================================================
+     ESCANER USB
+================================================= -->
 
 <section
 id="seccionUSB"
@@ -841,8 +812,8 @@ Registro mediante escáner USB
 </h2>
 
 <p>
-Conecta el lector de códigos de barras
-o escribe directamente la matrícula del alumno.
+Escanea la matrícula del alumno con un lector
+USB o escríbela directamente.
 </p>
 
 </div>
@@ -864,7 +835,7 @@ Sistema listo para registrar asistencia
 <div class="input-group">
 
 <label for="scanner">
-Matrícula / Código
+Matrícula del alumno
 </label>
 
 <div class="input-row">
@@ -873,8 +844,9 @@ Matrícula / Código
 id="scanner"
 type="text"
 autocomplete="off"
+inputmode="text"
 autofocus
-placeholder="Escanea o escribe el código">
+placeholder="Ejemplo: 123456789-0">
 
 <button
 class="primary-btn"
@@ -891,13 +863,22 @@ Registrar
 
 <div class="info-box">
 
-<strong>
-Escáner USB:
-</strong>
+<strong>Formato de matrícula:</strong>
 
-Coloca el cursor en el campo y escanea
-el código. El sistema detectará automáticamente
-la tecla ENTER enviada por el lector.
+123456789-0
+
+<br>
+
+El sistema acepta únicamente números y el
+guion <strong>-</strong>.
+
+<br><br>
+
+<strong>Escáner USB:</strong>
+
+Conecta el lector, coloca el cursor en el campo
+y escanea. La mayoría de lectores envían
+automáticamente la tecla ENTER al terminar.
 
 </div>
 
@@ -935,9 +916,9 @@ Aún no hay registros de asistencia.
 </section>
 
 
-<!-- =====================================
+<!-- =================================================
      CAMARA
-===================================== -->
+================================================= -->
 
 <section
 id="seccionCamara"
@@ -952,9 +933,9 @@ Escanear con cámara
 </h2>
 
 <p>
-La cámara trasera se iniciará automáticamente.
-Apunta el dispositivo hacia el código QR
-o código de barras del alumno.
+La cámara se iniciará automáticamente.
+Apunta hacia el código QR o código de barras
+del alumno.
 </p>
 
 </div>
@@ -1036,16 +1017,14 @@ class="result">
 
 <div class="info-box">
 
-<strong>
-Cámara:
-</strong>
+<strong>Cámara:</strong>
 
 La cámara trasera se utilizará automáticamente
 cuando el dispositivo permita identificarla.
 
 El botón
 <strong>🔄 Cambiar cámara</strong>
-permite alternar entre las cámaras disponibles.
+permite cambiar entre las cámaras disponibles.
 
 </div>
 
@@ -1098,7 +1077,6 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
 "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
-
 
 const supabaseClient =
 window.supabase.createClient(
@@ -1205,11 +1183,76 @@ function mostrarSeccion(seccion){
 
 
 /* =================================================
-   USB
+   NORMALIZAR MATRICULA
+================================================= */
+
+function normalizarMatricula(valor){
+
+    return String(valor || "")
+        .trim()
+        .replace(/[^0-9-]/g, "");
+
+}
+
+
+/* =================================================
+   VALIDAR MATRICULA
+================================================= */
+
+function validarMatricula(matricula){
+
+    return /^\d{9}-\d$/.test(
+        matricula
+    );
+
+}
+
+
+/* =================================================
+   ESCANER USB
 ================================================= */
 
 const scanner =
 document.getElementById("scanner");
+
+
+scanner.addEventListener(
+    "input",
+    function(){
+
+        const posicion =
+            scanner.selectionStart;
+
+        const valorOriginal =
+            scanner.value;
+
+        const valorLimpio =
+            normalizarMatricula(
+                valorOriginal
+            );
+
+        if(
+            valorOriginal !==
+            valorLimpio
+        ){
+
+            scanner.value =
+                valorLimpio;
+
+            try{
+
+                scanner.setSelectionRange(
+                    valorLimpio.length,
+                    valorLimpio.length
+                );
+
+            }
+            catch(error){}
+
+        }
+
+    }
+);
 
 
 scanner.addEventListener(
@@ -1228,6 +1271,10 @@ scanner.addEventListener(
 );
 
 
+/* =================================================
+   PROCESAR USB
+================================================= */
+
 async function procesarCodigoUSB(){
 
     if(procesandoCodigo){
@@ -1237,8 +1284,18 @@ async function procesarCodigoUSB(){
     }
 
 
-    const codigo =
-        scanner.value.trim();
+    let codigo =
+        scanner.value;
+
+
+    codigo =
+        normalizarMatricula(
+            codigo
+        );
+
+
+    scanner.value =
+        codigo;
 
 
     if(!codigo){
@@ -1246,8 +1303,8 @@ async function procesarCodigoUSB(){
         mostrarResultado(
             "usb",
             "warning",
-            "⚠️ Código vacío",
-            "Ingresa o escanea una matrícula."
+            "⚠️ Matrícula vacía",
+            "Escanea una matrícula."
         );
 
         return;
@@ -1255,13 +1312,57 @@ async function procesarCodigoUSB(){
     }
 
 
-    procesandoCodigo = true;
+    if(!validarMatricula(codigo)){
+
+        mostrarResultado(
+            "usb",
+            "warning",
+            "⚠️ Matrícula no válida",
+            `
+            La matrícula debe tener exactamente
+            este formato:
+
+            <br><br>
+
+            <strong>
+            123456789-0
+            </strong>
+
+            <br><br>
+
+            El código recibido fue:
+
+            <br>
+
+            <strong>
+            ${escaparHTML(codigo)}
+            </strong>
+            `
+        );
+
+
+        actualizarStatus(
+            "usb",
+            "warning",
+            "Matrícula no válida"
+        );
+
+
+        scanner.select();
+
+        return;
+
+    }
+
+
+    procesandoCodigo =
+        true;
 
 
     actualizarStatus(
         "usb",
         "warning",
-        "Consultando alumno..."
+        "Consultando matrícula " + codigo + "..."
     );
 
 
@@ -1298,14 +1399,20 @@ async function procesarCodigoUSB(){
     }
 
 
-    procesandoCodigo = false;
+    procesandoCodigo =
+        false;
 
 
-    scanner.value = "";
+    scanner.value =
+        "";
 
 
     setTimeout(
-        () => scanner.focus(),
+        () => {
+
+            scanner.focus();
+
+        },
         150
     );
 
@@ -1334,7 +1441,7 @@ async function iniciarCamara(){
             "camara",
             "error",
             "❌ Error",
-            "No se pudo cargar el lector."
+            "No se pudo cargar el lector de códigos."
         );
 
         return;
@@ -1398,7 +1505,8 @@ async function iniciarCamara(){
 
         if(indiceTrasera < 0){
 
-            indiceTrasera = 0;
+            indiceTrasera =
+                0;
 
         }
 
@@ -1430,7 +1538,7 @@ async function iniciarCamara(){
 
 
 /* =================================================
-   CAMARA POR INDICE
+   INICIAR CAMARA POR INDICE
 ================================================= */
 
 async function iniciarCamaraPorIndice(indice){
@@ -1477,10 +1585,16 @@ async function iniciarCamaraPorIndice(indice){
                     }
 
 
-                    const codigo =
+                    const codigoOriginal =
                         resultado
                             .getText()
                             .trim();
+
+
+                    const codigo =
+                        normalizarMatricula(
+                            codigoOriginal
+                        );
 
 
                     if(!codigo){
@@ -1540,17 +1654,20 @@ async function iniciarCamaraPorIndice(indice){
             );
 
 
-    camaraActiva = true;
+    camaraActiva =
+        true;
 
 
     document
         .getElementById("cameraPlaceholder")
-        .style.display = "none";
+        .style.display =
+        "none";
 
 
     document
         .getElementById("scanFrame")
-        .style.display = "block";
+        .style.display =
+        "block";
 
 
     actualizarStatus(
@@ -1608,12 +1725,14 @@ async function cambiarCamara(){
             camarasDisponibles.length
         ){
 
-            camaraActual = 0;
+            camaraActual =
+                0;
 
         }
 
 
-        camaraActiva = false;
+        camaraActiva =
+            false;
 
 
         actualizarStatus(
@@ -1651,10 +1770,51 @@ async function cambiarCamara(){
 
 async function procesarCodigoCamara(codigo){
 
+    codigo =
+        normalizarMatricula(
+            codigo
+        );
+
+
+    if(
+        !validarMatricula(codigo)
+    ){
+
+        mostrarResultado(
+            "camara",
+            "warning",
+            "⚠️ Matrícula no válida",
+            `
+            El código escaneado no tiene el formato
+            de matrícula:
+
+            <br><br>
+
+            <strong>
+            123456789-0
+            </strong>
+
+            <br><br>
+
+            Código detectado:
+
+            <br>
+
+            <strong>
+            ${escaparHTML(codigo)}
+            </strong>
+            `
+        );
+
+        return;
+
+    }
+
+
     actualizarStatus(
         "camara",
         "warning",
-        "Consultando alumno..."
+        "Consultando matrícula..."
     );
 
 
@@ -1721,12 +1881,18 @@ async function registrarAsistencia(
 ){
 
     const matricula =
-        String(codigo).trim();
+        normalizarMatricula(
+            codigo
+        );
 
 
-    if(!matricula){
+    if(
+        !validarMatricula(matricula)
+    ){
 
-        return;
+        throw new Error(
+            "La matrícula no tiene el formato 123456789-0."
+        );
 
     }
 
@@ -1735,11 +1901,9 @@ async function registrarAsistencia(
         obtenerFechaLocal();
 
 
-    /*
-       =================================================
+    /* =============================================
        BUSCAR ALUMNO
-       =================================================
-    */
+    ============================================= */
 
     const respuestaAlumno =
         await supabaseClient
@@ -1754,11 +1918,6 @@ async function registrarAsistencia(
 
     if(respuestaAlumno.error){
 
-        console.error(
-            "ERROR ALUMNOS:",
-            respuestaAlumno.error
-        );
-
         throw respuestaAlumno.error;
 
     }
@@ -1768,11 +1927,9 @@ async function registrarAsistencia(
         respuestaAlumno.data || [];
 
 
-    /*
-       ALUMNO NO ENCONTRADO
-    */
-
-    if(alumnos.length === 0){
+    if(
+        alumnos.length === 0
+    ){
 
         mostrarResultado(
             origen,
@@ -1782,10 +1939,10 @@ async function registrarAsistencia(
             No existe un alumno registrado
             con la matrícula:
 
-            <br>
+            <br><br>
 
             <strong>
-                ${escaparHTML(matricula)}
+            ${escaparHTML(matricula)}
             </strong>
             `
         );
@@ -1813,10 +1970,6 @@ async function registrarAsistencia(
         alumnos[0];
 
 
-    /*
-       OBTENER NOMBRE
-    */
-
     const nombreAlumno =
         alumno.nombre_completo ||
         alumno.nombre ||
@@ -1826,11 +1979,9 @@ async function registrarAsistencia(
         "Alumno";
 
 
-    /*
-       =================================================
+    /* =============================================
        BUSCAR ASISTENCIA DE HOY
-       =================================================
-    */
+    ============================================= */
 
     const respuestaAsistencia =
         await supabaseClient
@@ -1849,11 +2000,6 @@ async function registrarAsistencia(
 
     if(respuestaAsistencia.error){
 
-        console.error(
-            "ERROR ASISTENCIAS:",
-            respuestaAsistencia.error
-        );
-
         throw respuestaAsistencia.error;
 
     }
@@ -1869,12 +2015,9 @@ async function registrarAsistencia(
             : null;
 
 
-    /*
-       =================================================
-       PRIMER ESCANEO
-       REGISTRAR ENTRADA
-       =================================================
-    */
+    /* =============================================
+       PRIMER ESCANEO = ENTRADA
+    ============================================= */
 
     if(!asistencia){
 
@@ -1900,7 +2043,7 @@ async function registrarAsistencia(
 
 
         console.log(
-            "INSERTANDO:",
+            "INSERTANDO ASISTENCIA:",
             registroNuevo
         );
 
@@ -1915,11 +2058,6 @@ async function registrarAsistencia(
 
         if(respuestaInsert.error){
 
-            console.error(
-                "ERROR INSERT:",
-                respuestaInsert.error
-            );
-
             throw respuestaInsert.error;
 
         }
@@ -1931,29 +2069,27 @@ async function registrarAsistencia(
             "✅ Alumno encontrado",
             `
             <strong>
-                ${escaparHTML(nombreAlumno)}
+            ${escaparHTML(nombreAlumno)}
             </strong>
 
-            <br>
+            <br><br>
 
             Matrícula:
             <strong>
-                ${escaparHTML(matricula)}
+            ${escaparHTML(matricula)}
             </strong>
 
             <br><br>
 
             <strong>
-                Asistencia registrada
+            Asistencia registrada
             </strong>
 
             <br>
 
             Hora de entrada:
             <strong>
-                ${formatearTimestamp(
-                    timestampEntrada
-                )}
+            ${formatearTimestamp(timestampEntrada)}
             </strong>
             `
         );
@@ -1978,12 +2114,9 @@ async function registrarAsistencia(
     }
 
 
-    /*
-       =================================================
-       SEGUNDO ESCANEO
-       REGISTRAR SALIDA
-       =================================================
-    */
+    /* =============================================
+       SEGUNDO ESCANEO = SALIDA
+    ============================================= */
 
     if(
         asistencia.hora_entrada &&
@@ -2000,7 +2133,7 @@ async function registrarAsistencia(
         ){
 
             throw new Error(
-                "El registro de asistencia no tiene una columna id."
+                "El registro de asistencia no contiene la columna id."
             );
 
         }
@@ -2023,11 +2156,6 @@ async function registrarAsistencia(
 
         if(respuestaUpdate.error){
 
-            console.error(
-                "ERROR UPDATE:",
-                respuestaUpdate.error
-            );
-
             throw respuestaUpdate.error;
 
         }
@@ -2039,32 +2167,32 @@ async function registrarAsistencia(
             "🟢 Salida registrada",
             `
             <strong>
-                ${escaparHTML(nombreAlumno)}
+            ${escaparHTML(nombreAlumno)}
             </strong>
 
-            <br>
+            <br><br>
 
             Matrícula:
             <strong>
-                ${escaparHTML(matricula)}
+            ${escaparHTML(matricula)}
             </strong>
 
             <br><br>
 
             Entrada:
             <strong>
-                ${formatearTimestamp(
-                    asistencia.hora_entrada
-                )}
+            ${formatearTimestamp(
+                asistencia.hora_entrada
+            )}
             </strong>
 
             <br>
 
             Salida:
             <strong>
-                ${formatearTimestamp(
-                    timestampSalida
-                )}
+            ${formatearTimestamp(
+                timestampSalida
+            )}
             </strong>
             `
         );
@@ -2089,12 +2217,9 @@ async function registrarAsistencia(
     }
 
 
-    /*
-       =================================================
-       TERCER ESCANEO
-       YA ESTA COMPLETO
-       =================================================
-    */
+    /* =============================================
+       TERCER ESCANEO = COMPLETO
+    ============================================= */
 
     if(
         asistencia.hora_entrada &&
@@ -2107,14 +2232,14 @@ async function registrarAsistencia(
             "⚠️ Registro completo",
             `
             <strong>
-                ${escaparHTML(nombreAlumno)}
+            ${escaparHTML(nombreAlumno)}
             </strong>
 
-            <br>
+            <br><br>
 
             Matrícula:
             <strong>
-                ${escaparHTML(matricula)}
+            ${escaparHTML(matricula)}
             </strong>
 
             <br><br>
@@ -2126,18 +2251,18 @@ async function registrarAsistencia(
 
             Entrada:
             <strong>
-                ${formatearTimestamp(
-                    asistencia.hora_entrada
-                )}
+            ${formatearTimestamp(
+                asistencia.hora_entrada
+            )}
             </strong>
 
             <br>
 
             Salida:
             <strong>
-                ${formatearTimestamp(
-                    asistencia.hora_salida
-                )}
+            ${formatearTimestamp(
+                asistencia.hora_salida
+            )}
             </strong>
             `
         );
@@ -2161,6 +2286,49 @@ async function registrarAsistencia(
         return;
 
     }
+
+}
+
+
+/* =================================================
+   FECHA LOCAL
+================================================= */
+
+function obtenerFechaLocal(){
+
+    const fecha =
+        new Date();
+
+
+    const año =
+        fecha.getFullYear();
+
+
+    const mes =
+        String(
+            fecha.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const dia =
+        String(
+            fecha.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return (
+        año +
+        "-" +
+        mes +
+        "-" +
+        dia
+    );
 
 }
 
@@ -2224,12 +2392,6 @@ function obtenerTimestampLocal(){
         );
 
 
-    /*
-       Formato compatible con timestamp:
-       
-       YYYY-MM-DD HH:mm:ss
-    */
-
     return (
         año +
         "-" +
@@ -2242,49 +2404,6 @@ function obtenerTimestampLocal(){
         minutos +
         ":" +
         segundos
-    );
-
-}
-
-
-/* =================================================
-   FECHA
-================================================= */
-
-function obtenerFechaLocal(){
-
-    const fecha =
-        new Date();
-
-
-    const año =
-        fecha.getFullYear();
-
-
-    const mes =
-        String(
-            fecha.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const dia =
-        String(
-            fecha.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return (
-        año +
-        "-" +
-        mes +
-        "-" +
-        dia
     );
 
 }
@@ -2304,34 +2423,21 @@ function formatearTimestamp(valor){
 
 
     const texto =
-        String(valor);
-
-
-    /*
-       Si Supabase devuelve:
-
-       2026-09-24T14:38:32
-       
-       o:
-
-       2026-09-24 14:38:32
-    */
-
-    const parteHora =
-        texto
-            .replace("T"," ")
-            .substring(
-                11,
-                19
+        String(valor)
+            .replace(
+                "T",
+                " "
             );
 
 
     if(
-        /^\d{2}:\d{2}:\d{2}$/
-            .test(parteHora)
+        texto.length >= 19
     ){
 
-        return parteHora;
+        return texto.substring(
+            11,
+            19
+        );
 
     }
 
@@ -2367,7 +2473,8 @@ function detenerControlesZXing(){
     }
 
 
-    cameraControls = null;
+    cameraControls =
+        null;
 
 
     try{
@@ -2391,7 +2498,9 @@ function detenerControlesZXing(){
 
 
     const video =
-        document.getElementById("video");
+        document.getElementById(
+            "video"
+        );
 
 
     if(
@@ -2405,7 +2514,9 @@ function detenerControlesZXing(){
                 track => track.stop()
             );
 
-        video.srcObject = null;
+
+        video.srcObject =
+            null;
 
     }
 
@@ -2426,13 +2537,19 @@ function detenerCamara(){
 
 
     document
-        .getElementById("cameraPlaceholder")
-        .style.display = "flex";
+        .getElementById(
+            "cameraPlaceholder"
+        )
+        .style.display =
+        "flex";
 
 
     document
-        .getElementById("scanFrame")
-        .style.display = "none";
+        .getElementById(
+            "scanFrame"
+        )
+        .style.display =
+        "none";
 
 
     actualizarStatus(
@@ -2461,13 +2578,19 @@ function manejarErrorCamara(error){
 
 
     document
-        .getElementById("cameraPlaceholder")
-        .style.display = "flex";
+        .getElementById(
+            "cameraPlaceholder"
+        )
+        .style.display =
+        "flex";
 
 
     document
-        .getElementById("scanFrame")
-        .style.display = "none";
+        .getElementById(
+            "scanFrame"
+        )
+        .style.display =
+        "none";
 
 
     let mensaje =
@@ -2614,11 +2737,11 @@ function mostrarResultado(
     elemento.innerHTML =
         `
         <h3>
-            ${titulo}
+        ${titulo}
         </h3>
 
         <p>
-            ${mensaje}
+        ${mensaje}
         </p>
         `;
 
@@ -2663,7 +2786,9 @@ function agregarLog(
     if(
         items.length === 1 &&
         items[0]
-            .querySelector(".log-message")
+            .querySelector(
+                ".log-message"
+            )
             ?.textContent
             .includes(
                 "Aún no hay registros"
@@ -2688,11 +2813,11 @@ function agregarLog(
     item.innerHTML =
         `
         <span class="log-message">
-            ${escaparHTML(mensaje)}
+        ${escaparHTML(mensaje)}
         </span>
 
         <span class="log-time">
-            ${obtenerHoraLocal()}
+        ${obtenerHoraLocal()}
         </span>
         `;
 
@@ -2791,7 +2916,7 @@ function obtenerMensajeError(error){
     if(!error){
 
         return `
-            No fue posible completar la consulta.
+        No fue posible completar la operación.
         `;
 
     }
@@ -2867,9 +2992,13 @@ window.addEventListener(
     "load",
     () => {
 
-        document
-            .getElementById("scanner")
-            .focus();
+        const campo =
+            document.getElementById(
+                "scanner"
+            );
+
+
+        campo.focus();
 
     }
 );
