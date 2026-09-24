@@ -23,7 +23,6 @@
     --azul2:#0d4778;
     --azul3:#176da8;
     --azul4:#2196f3;
-    --cyan:#00c8e8;
     --verde:#159b70;
     --rojo:#dc4b40;
     --amarillo:#e89b18;
@@ -49,9 +48,9 @@ body{
 }
 
 
-/* =========================
-   HEADER
-========================= */
+/* =========================================
+   ENCABEZADO
+========================================= */
 
 header{
     background:
@@ -62,11 +61,10 @@ header{
             #125b91
         );
     color:white;
-    box-shadow:
-        0 5px 22px rgba(0,0,0,.18);
+    box-shadow:0 5px 22px rgba(0,0,0,.18);
     position:sticky;
     top:0;
-    z-index:100;
+    z-index:1000;
 }
 
 .header-inner{
@@ -108,9 +106,9 @@ header{
 }
 
 
-/* =========================
-   MENU
-========================= */
+/* =========================================
+   MENÚ
+========================================= */
 
 .menu{
     display:flex;
@@ -139,9 +137,9 @@ header{
 }
 
 
-/* =========================
+/* =========================================
    CONTENEDOR
-========================= */
+========================================= */
 
 .container{
     max-width:1000px;
@@ -150,9 +148,9 @@ header{
 }
 
 
-/* =========================
+/* =========================================
    SECCIONES
-========================= */
+========================================= */
 
 .section{
     display:none;
@@ -163,9 +161,9 @@ header{
 }
 
 
-/* =========================
-   CARD
-========================= */
+/* =========================================
+   TARJETA
+========================================= */
 
 .card{
     background:white;
@@ -193,9 +191,9 @@ header{
 }
 
 
-/* =========================
-   STATUS
-========================= */
+/* =========================================
+   ESTADO
+========================================= */
 
 .status{
     display:flex;
@@ -245,9 +243,9 @@ header{
 }
 
 
-/* =========================
-   INPUT USB
-========================= */
+/* =========================================
+   ESCÁNER USB
+========================================= */
 
 .input-group{
     margin-bottom:20px;
@@ -304,6 +302,11 @@ input[type="text"]:focus{
     transform:translateY(-1px);
 }
 
+
+/* =========================================
+   BOTONES
+========================================= */
+
 .secondary-btn{
     border:1px solid #d6e1eb;
     background:#f7fafc;
@@ -329,9 +332,9 @@ input[type="text"]:focus{
 }
 
 
-/* =========================
+/* =========================================
    RESULTADO
-========================= */
+========================================= */
 
 .result{
     display:none;
@@ -373,9 +376,9 @@ input[type="text"]:focus{
 }
 
 
-/* =========================
-   CAMERA
-========================= */
+/* =========================================
+   CÁMARA
+========================================= */
 
 .camera-box{
     position:relative;
@@ -419,9 +422,9 @@ video{
 }
 
 
-/* =========================
-   MARCO DEL ESCANEO
-========================= */
+/* =========================================
+   MARCO DE ESCANEO
+========================================= */
 
 .scan-frame{
     position:absolute;
@@ -447,8 +450,7 @@ video{
     top:50%;
     height:2px;
     background:#00e5ff;
-    box-shadow:
-        0 0 10px #00e5ff;
+    box-shadow:0 0 10px #00e5ff;
     animation:scannerLine 2s infinite ease-in-out;
 }
 
@@ -465,9 +467,9 @@ video{
 }
 
 
-/* =========================
-   BOTONES CÁMARA
-========================= */
+/* =========================================
+   BOTONES DE CÁMARA
+========================================= */
 
 .camera-buttons{
     display:flex;
@@ -486,9 +488,9 @@ video{
 }
 
 
-/* =========================
-   INFO
-========================= */
+/* =========================================
+   INFORMACIÓN
+========================================= */
 
 .info-box{
     margin-top:20px;
@@ -502,9 +504,9 @@ video{
 }
 
 
-/* =========================
+/* =========================================
    ACTIVIDAD
-========================= */
+========================================= */
 
 .activity{
     margin-top:25px;
@@ -547,9 +549,9 @@ video{
 }
 
 
-/* =========================
+/* =========================================
    FOOTER
-========================= */
+========================================= */
 
 footer{
     text-align:center;
@@ -559,9 +561,9 @@ footer{
 }
 
 
-/* =========================
+/* =========================================
    RESPONSIVE
-========================= */
+========================================= */
 
 @media(max-width:760px){
 
@@ -630,6 +632,10 @@ footer{
 <body>
 
 
+<!-- =====================================================
+     ENCABEZADO
+===================================================== -->
+
 <header>
 
     <div class="header-inner">
@@ -687,7 +693,7 @@ footer{
 
 
 <!-- =====================================================
-     USB
+     SECCIÓN USB
 ===================================================== -->
 
 <section
@@ -783,11 +789,7 @@ footer{
                 <div class="log-item">
 
                     <span class="log-message">
-                        Sistema iniciado correctamente.
-                    </span>
-
-                    <span class="log-time">
-                        Ahora
+                        Aún no hay registros de asistencia.
                     </span>
 
                 </div>
@@ -803,7 +805,7 @@ footer{
 
 
 <!-- =====================================================
-     CÁMARA
+     SECCIÓN CÁMARA
 ===================================================== -->
 
 <section
@@ -820,8 +822,8 @@ footer{
 
             <p>
                 La cámara trasera se iniciará automáticamente.
-                Apunta el teléfono hacia el código QR o código
-                de barras del alumno.
+                Apunta el dispositivo hacia el código QR o
+                código de barras del alumno.
             </p>
 
         </div>
@@ -909,10 +911,10 @@ footer{
                 Cámara:
             </strong>
 
-            Al entrar en esta sección se intentará iniciar
-            automáticamente la cámara trasera. Utiliza
-            <strong>🔄 Cambiar cámara</strong> para pasar
-            entre las cámaras disponibles.
+            La cámara trasera se utiliza automáticamente
+            cuando el dispositivo permite identificarla.
+            El botón <strong>🔄 Cambiar cámara</strong>
+            permite alternar entre las cámaras disponibles.
 
         </div>
 
@@ -930,11 +932,7 @@ footer{
                 <div class="log-item">
 
                     <span class="log-message">
-                        Cámara preparada.
-                    </span>
-
-                    <span class="log-time">
-                        Ahora
+                        Aún no hay registros de asistencia.
                     </span>
 
                 </div>
@@ -948,6 +946,7 @@ footer{
 </section>
 
 </main>
+
 
 
 <footer>
@@ -1060,7 +1059,7 @@ function mostrarSeccion(seccion){
 
 
         /*
-            Iniciar automáticamente.
+            La cámara inicia automáticamente.
         */
 
         if(!camaraActiva){
@@ -1078,7 +1077,7 @@ function mostrarSeccion(seccion){
 
 
 /* =========================================================
-   USB
+   ESCÁNER USB
 ========================================================= */
 
 const scanner =
@@ -1090,8 +1089,8 @@ scanner.addEventListener(
     function(){
 
         /*
-            Todo carácter que no sea número
-            se convierte en -
+            Cualquier carácter que no sea número
+            se transforma en "-"
         */
 
         this.value =
@@ -1199,7 +1198,7 @@ async function procesarCodigoUSB(){
 
 
 /* =========================================================
-   CÁMARA
+   INICIAR CÁMARA
 ========================================================= */
 
 async function iniciarCamara(){
@@ -1226,7 +1225,7 @@ async function iniciarCamara(){
             "camara",
             "error",
             "❌ Error del lector",
-            "No se pudo cargar ZXing. Recarga la página."
+            "No se pudo cargar el sistema de escaneo."
         );
 
         return;
@@ -1242,10 +1241,6 @@ async function iniciarCamara(){
             "Iniciando cámara trasera..."
         );
 
-
-        /*
-            Obtener cámaras.
-        */
 
         camarasDisponibles =
             await ZXingBrowser
@@ -1292,8 +1287,8 @@ async function iniciarCamara(){
 
 
         /*
-            Si no se identifica por nombre,
-            usamos la primera cámara.
+            Si no se puede identificar,
+            utilizar la primera.
         */
 
         if(indiceTrasera < 0){
@@ -1318,7 +1313,6 @@ async function iniciarCamara(){
             "Error cámara:",
             error
         );
-
 
         manejarErrorCamara(error);
 
@@ -1386,14 +1380,13 @@ async function iniciarCamaraPorIndice(indice){
                         resultado.getText();
 
 
-                    /*
-                        Evitar que el mismo código
-                        se procese muchas veces seguidas.
-                    */
-
                     const ahora =
                         Date.now();
 
+
+                    /*
+                        Evitar lectura duplicada.
+                    */
 
                     if(
                         codigo === ultimoCodigo &&
@@ -1460,16 +1453,6 @@ async function iniciarCamaraPorIndice(indice){
         "Cámara activa · Escaneando..."
     );
 
-
-    agregarLog(
-        "camara",
-        "📷 Cámara activa: " +
-        (
-            camara.label ||
-            "Cámara"
-        )
-    );
-
 }
 
 
@@ -1483,11 +1466,6 @@ async function cambiarCamara(){
         !camarasDisponibles ||
         camarasDisponibles.length < 2
     ){
-
-        /*
-            Si todavía no conocemos las cámaras,
-            intentamos obtenerlas.
-        */
 
         try{
 
@@ -1515,7 +1493,7 @@ async function cambiarCamara(){
         mostrarResultado(
             "camara",
             "warning",
-            "⚠️ Solo hay una cámara",
+            "⚠️ No hay otra cámara",
             "Este dispositivo solamente tiene una cámara disponible."
         );
 
@@ -1524,11 +1502,8 @@ async function cambiarCamara(){
     }
 
 
-    /*
-        Pasar a la siguiente cámara.
-    */
-
     camaraActual++;
+
 
     if(
         camaraActual >=
@@ -1556,24 +1531,6 @@ async function cambiarCamara(){
             camaraActual
         );
 
-
-        mostrarResultado(
-            "camara",
-            "success",
-            "📷 Cámara cambiada",
-            `
-            Ahora utilizando:
-            <strong>
-            ${escaparHTML(
-                camarasDisponibles[
-                    camaraActual
-                ].label ||
-                "Cámara seleccionada"
-            )}
-            </strong>
-            `
-        );
-
     }
     catch(error){
 
@@ -1587,7 +1544,7 @@ async function cambiarCamara(){
 
 
 /* =========================================================
-   PROCESAR CÓDIGO CÁMARA
+   PROCESAR CÓDIGO DE CÁMARA
 ========================================================= */
 
 async function procesarCodigoCamara(codigo){
@@ -1595,13 +1552,7 @@ async function procesarCodigoCamara(codigo){
     actualizarStatus(
         "camara",
         "warning",
-        "Código detectado · Consultando alumno..."
-    );
-
-
-    agregarLog(
-        "camara",
-        "🔎 Código detectado: " + codigo
+        "Consultando alumno..."
     );
 
 
@@ -1620,10 +1571,9 @@ async function procesarCodigoCamara(codigo){
         mostrarResultado(
             "camara",
             "error",
-            "❌ Error de conexión",
+            "❌ Error",
             "No fue posible consultar al alumno."
         );
-
 
         actualizarStatus(
             "camara",
@@ -1633,11 +1583,6 @@ async function procesarCodigoCamara(codigo){
 
     }
 
-
-    /*
-        Después de procesar vuelve
-        al estado de escaneo.
-    */
 
     setTimeout(
         () => {
@@ -1672,9 +1617,9 @@ async function registrarAsistencia(
         obtenerFechaLocal();
 
 
-    /*
-        1. BUSCAR ALUMNO
-    */
+    /* =========================================
+       BUSCAR ALUMNO
+    ========================================= */
 
     const {
         data: alumno,
@@ -1694,9 +1639,9 @@ async function registrarAsistencia(
     }
 
 
-    /*
-        ALUMNO NO ENCONTRADO
-    */
+    /* =========================================
+       ALUMNO NO ENCONTRADO
+    ========================================= */
 
     if(!alumno){
 
@@ -1707,6 +1652,7 @@ async function registrarAsistencia(
             `
             No existe un alumno registrado con
             la matrícula:
+
             <strong>
                 ${escaparHTML(codigo)}
             </strong>
@@ -1721,10 +1667,14 @@ async function registrarAsistencia(
         );
 
 
+        /*
+            ÚNICO evento que entra
+            en actividad reciente.
+        */
+
         agregarLog(
             origen,
-            "❌ Alumno no encontrado: " +
-            codigo
+            "❌ Alumno no encontrado"
         );
 
 
@@ -1733,24 +1683,20 @@ async function registrarAsistencia(
     }
 
 
-    /*
-        ALUMNO ENCONTRADO
-    */
+    /* =========================================
+       OBTENER NOMBRE
+    ========================================= */
 
-    agregarLog(
-        origen,
-        "👤 Alumno encontrado: " +
-        (
-            alumno.nombre_completo ||
-            alumno.nombre ||
-            codigo
-        )
-    );
+    const nombreAlumno =
+        alumno.nombre_completo ||
+        alumno.nombre ||
+        alumno.nombres ||
+        "Alumno";
 
 
-    /*
-        2. BUSCAR ASISTENCIA DE HOY
-    */
+    /* =========================================
+       BUSCAR ASISTENCIA DEL DÍA
+    ========================================= */
 
     const {
         data: asistencia,
@@ -1778,10 +1724,10 @@ async function registrarAsistencia(
     }
 
 
-    /*
-        3. NO EXISTE ASISTENCIA
-           = REGISTRAR ENTRADA
-    */
+    /* =========================================
+       PRIMER ESCANEO
+       REGISTRAR ASISTENCIA
+    ========================================= */
 
     if(!asistencia){
 
@@ -1824,13 +1770,7 @@ async function registrarAsistencia(
             "✅ Alumno encontrado",
             `
             <strong>
-                ${
-                    escaparHTML(
-                        alumno.nombre_completo ||
-                        alumno.nombre ||
-                        "Alumno"
-                    )
-                }
+                ${escaparHTML(nombreAlumno)}
             </strong>
 
             <br>
@@ -1840,7 +1780,7 @@ async function registrarAsistencia(
                 ${escaparHTML(codigo)}
             </strong>
 
-            <br>
+            <br><br>
 
             <strong>
                 Asistencia registrada
@@ -1848,7 +1788,7 @@ async function registrarAsistencia(
 
             <br>
 
-            Entrada:
+            Hora de entrada:
             <strong>
                 ${horaEntrada}
             </strong>
@@ -1859,16 +1799,19 @@ async function registrarAsistencia(
         actualizarStatus(
             origen,
             "success",
-            "Alumno encontrado · Asistencia registrada"
+            "Asistencia registrada"
         );
 
 
+        /*
+            ACTIVIDAD:
+            SOLO asistencia.
+        */
+
         agregarLog(
             origen,
-            "🟢 Asistencia registrada: " +
-            codigo +
-            " · " +
-            horaEntrada
+            "✅ Asistencia registrada a " +
+            nombreAlumno
         );
 
 
@@ -1877,11 +1820,10 @@ async function registrarAsistencia(
     }
 
 
-    /*
-        4. YA EXISTE ENTRADA
-           PERO NO SALIDA
-           = REGISTRAR SALIDA
-    */
+    /* =========================================
+       SEGUNDO ESCANEO
+       REGISTRAR SALIDA
+    ========================================= */
 
     if(
         asistencia.hora_entrada &&
@@ -1922,13 +1864,7 @@ async function registrarAsistencia(
             "✅ Alumno encontrado",
             `
             <strong>
-                ${
-                    escaparHTML(
-                        alumno.nombre_completo ||
-                        alumno.nombre ||
-                        "Alumno"
-                    )
-                }
+                ${escaparHTML(nombreAlumno)}
             </strong>
 
             <br>
@@ -1940,9 +1876,8 @@ async function registrarAsistencia(
 
             <br><br>
 
-            Asistencia:
             <strong>
-                Registrada
+                Asistencia registrada
             </strong>
 
             <br>
@@ -1954,15 +1889,15 @@ async function registrarAsistencia(
 
             <br>
 
-            Salida:
-            <strong>
-                ${horaSalida}
-            </strong>
-
-            <br><br>
-
             <strong>
                 Salida registrada
+            </strong>
+
+            <br>
+
+            Hora de salida:
+            <strong>
+                ${horaSalida}
             </strong>
             `
         );
@@ -1971,16 +1906,19 @@ async function registrarAsistencia(
         actualizarStatus(
             origen,
             "success",
-            "Alumno encontrado · Salida registrada"
+            "Salida registrada"
         );
 
 
+        /*
+            ACTIVIDAD:
+            SOLO salida.
+        */
+
         agregarLog(
             origen,
-            "🔵 Salida registrada: " +
-            codigo +
-            " · " +
-            horaSalida
+            "🟢 Salida registrada a " +
+            nombreAlumno
         );
 
 
@@ -1989,10 +1927,10 @@ async function registrarAsistencia(
     }
 
 
-    /*
-        5. YA TIENE ENTRADA Y SALIDA
-           = TODO COMPLETO
-    */
+    /* =========================================
+       TERCER ESCANEO
+       TODO YA REGISTRADO
+    ========================================= */
 
     if(
         asistencia.hora_entrada &&
@@ -2005,13 +1943,7 @@ async function registrarAsistencia(
             "✅ Alumno encontrado",
             `
             <strong>
-                ${
-                    escaparHTML(
-                        alumno.nombre_completo ||
-                        alumno.nombre ||
-                        "Alumno"
-                    )
-                }
+                ${escaparHTML(nombreAlumno)}
             </strong>
 
             <br>
@@ -2051,10 +1983,16 @@ async function registrarAsistencia(
         );
 
 
+        /*
+            ACTIVIDAD:
+            SOLO mensaje final.
+        */
+
         agregarLog(
             origen,
-            "✅ Asistencia completa: " +
-            codigo
+            "⚠️ " +
+            nombreAlumno +
+            " ya registró su asistencia y salida"
         );
 
 
@@ -2066,7 +2004,7 @@ async function registrarAsistencia(
 
 
 /* =========================================================
-   DETENER CONTROLES ZXING
+   DETENER ZXING
 ========================================================= */
 
 function detenerControlesZXing(){
@@ -2198,21 +2136,18 @@ function manejarErrorCamara(error){
 
     if(
         error &&
-        error.name ===
-        "NotAllowedError"
+        error.name === "NotAllowedError"
     ){
 
         mensaje =
-            "El navegador bloqueó el acceso a la cámara. " +
-            "Permite el acceso a la cámara para este sitio.";
+            "Debes permitir el acceso a la cámara para este sitio.";
 
     }
 
 
     if(
         error &&
-        error.name ===
-        "NotFoundError"
+        error.name === "NotFoundError"
     ){
 
         mensaje =
@@ -2223,8 +2158,7 @@ function manejarErrorCamara(error){
 
     if(
         error &&
-        error.name ===
-        "NotReadableError"
+        error.name === "NotReadableError"
     ){
 
         mensaje =
@@ -2235,20 +2169,7 @@ function manejarErrorCamara(error){
 
     if(
         error &&
-        error.name ===
-        "NotAllowedError"
-    ){
-
-        mensaje =
-            "Debes permitir el acceso a la cámara.";
-
-    }
-
-
-    if(
-        error &&
-        error.message ===
-        "NO_CAMERA"
+        error.message === "NO_CAMERA"
     ){
 
         mensaje =
@@ -2355,11 +2276,6 @@ function mostrarResultado(
         `;
 
 
-    /*
-        No ocultar inmediatamente
-        los resultados de asistencia.
-    */
-
     setTimeout(
         () => {
 
@@ -2375,7 +2291,7 @@ function mostrarResultado(
 
 
 /* =========================================================
-   LOG
+   ACTIVIDAD RECIENTE
 ========================================================= */
 
 function agregarLog(
@@ -2391,8 +2307,47 @@ function agregarLog(
         );
 
 
+    /*
+        Si aparece el mensaje inicial,
+        eliminarlo.
+    */
+
+    const primerMensaje =
+        log.querySelector(
+            ".mensaje-vacio"
+        );
+
+
+    /*
+        También eliminamos el texto inicial
+        antiguo si existe.
+    */
+
+    const items =
+        log.querySelectorAll(
+            ".log-item"
+        );
+
+
+    if(
+        items.length === 1 &&
+        items[0]
+            .querySelector(".log-message")
+            ?.textContent
+            .includes(
+                "Aún no hay registros"
+            )
+    ){
+
+        items[0].remove();
+
+    }
+
+
     const item =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     item.className =
@@ -2413,6 +2368,10 @@ function agregarLog(
 
     log.prepend(item);
 
+
+    /*
+        Máximo 20 movimientos.
+    */
 
     while(
         log.children.length > 20
@@ -2540,7 +2499,7 @@ function escaparHTML(texto){
 
 
 /* =========================================================
-   INICIALIZAR
+   INICIO
 ========================================================= */
 
 window.addEventListener(
@@ -2568,7 +2527,7 @@ window.addEventListener(
 
 
 /* =========================================================
-   AL SALIR
+   CERRAR PÁGINA
 ========================================================= */
 
 window.addEventListener(
