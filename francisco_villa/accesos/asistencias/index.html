@@ -1,0 +1,2396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Control de Asistencia | OFTV No. 0216</title>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- ZXing Browser -->
+<script src="https://unpkg.com/@zxing/browser@0.2.1"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --azul:#0b2a4a;
+    --azul2:#123f68;
+    --azul3:#1769aa;
+    --azul4:#2196f3;
+    --cyan:#00bcd4;
+    --blanco:#ffffff;
+    --gris:#eef3f8;
+    --texto:#1d2b3a;
+    --verde:#16a085;
+    --rojo:#e74c3c;
+    --amarillo:#f39c12;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(circle at top right, rgba(33,150,243,.15), transparent 35%),
+        linear-gradient(135deg,#eef4f9,#dce8f2);
+    min-height:100vh;
+    color:var(--texto);
+}
+
+/* HEADER */
+
+header{
+    background:linear-gradient(135deg,#071d35,#0d355a,#125b91);
+    color:white;
+    box-shadow:0 5px 20px rgba(0,0,0,.18);
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.header-inner{
+    max-width:1200px;
+    margin:auto;
+    padding:18px 25px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.brand-icon{
+    width:52px;
+    height:52px;
+    border-radius:14px;
+    background:rgba(255,255,255,.13);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px;
+    border:1px solid rgba(255,255,255,.2);
+}
+
+.brand h1{
+    font-size:20px;
+    font-weight:700;
+}
+
+.brand p{
+    font-size:12px;
+    opacity:.75;
+    margin-top:4px;
+}
+
+/* MENU */
+
+.menu{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.menu button{
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.08);
+    color:white;
+    padding:11px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+    transition:.25s;
+}
+
+.menu button:hover{
+    background:rgba(255,255,255,.18);
+}
+
+.menu button.active{
+    background:white;
+    color:#0b2a4a;
+}
+
+/* CONTENEDOR */
+
+.container{
+    max-width:1000px;
+    margin:35px auto;
+    padding:0 20px 40px;
+}
+
+/* SECCIONES */
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+/* CARD */
+
+.card{
+    background:white;
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 12px 35px rgba(17,48,78,.12);
+    border:1px solid rgba(13,53,90,.08);
+}
+
+.card-header{
+    margin-bottom:25px;
+}
+
+.card-header h2{
+    color:var(--azul);
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.card-header p{
+    color:#68798b;
+    font-size:14px;
+    line-height:1.5;
+}
+
+/* STATUS */
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 16px;
+    border-radius:12px;
+    background:#eef4f9;
+    margin-bottom:22px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.status-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#95a5a6;
+}
+
+.status.success{
+    background:#eaf8f3;
+    color:#087f5b;
+}
+
+.status.success .status-dot{
+    background:#16a085;
+}
+
+.status.error{
+    background:#fceceb;
+    color:#b83227;
+}
+
+.status.error .status-dot{
+    background:#e74c3c;
+}
+
+.status.warning{
+    background:#fff6e6;
+    color:#a76500;
+}
+
+.status.warning .status-dot{
+    background:#f39c12;
+}
+
+/* INPUT */
+
+.input-group{
+    margin-bottom:20px;
+}
+
+.input-group label{
+    display:block;
+    font-weight:700;
+    font-size:14px;
+    color:var(--azul);
+    margin-bottom:9px;
+}
+
+.input-row{
+    display:flex;
+    gap:10px;
+}
+
+input[type="text"]{
+    width:100%;
+    height:52px;
+    border:2px solid #dce5ed;
+    border-radius:12px;
+    padding:0 16px;
+    font-size:18px;
+    outline:none;
+    transition:.2s;
+    color:#172b3f;
+}
+
+input[type="text"]:focus{
+    border-color:var(--azul4);
+    box-shadow:0 0 0 4px rgba(33,150,243,.10);
+}
+
+.primary-btn{
+    border:none;
+    background:linear-gradient(135deg,#0d4778,#1677bd);
+    color:white;
+    border-radius:12px;
+    padding:0 22px;
+    min-width:145px;
+    height:52px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.2s;
+    box-shadow:0 5px 14px rgba(13,71,120,.2);
+}
+
+.primary-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 7px 18px rgba(13,71,120,.28);
+}
+
+.primary-btn:active{
+    transform:translateY(0);
+}
+
+.secondary-btn{
+    border:1px solid #d6e1eb;
+    background:#f7fafc;
+    color:#29445e;
+    border-radius:11px;
+    padding:12px 17px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.secondary-btn:hover{
+    background:#edf3f8;
+}
+
+.danger-btn{
+    border:none;
+    background:#e74c3c;
+    color:white;
+    border-radius:11px;
+    padding:12px 17px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* INFO */
+
+.info-box{
+    margin-top:22px;
+    padding:17px;
+    border-left:4px solid var(--azul4);
+    background:#f1f7fc;
+    border-radius:8px;
+    font-size:13px;
+    line-height:1.6;
+    color:#52677b;
+}
+
+/* RESULTADO */
+
+.result{
+    margin-top:20px;
+    padding:20px;
+    border-radius:15px;
+    display:none;
+}
+
+.result.show{
+    display:block;
+}
+
+.result.success{
+    background:#eaf8f3;
+    border:1px solid #bce8d9;
+}
+
+.result.error{
+    background:#fff0ef;
+    border:1px solid #f1c2be;
+}
+
+.result.warning{
+    background:#fff7e8;
+    border:1px solid #f1d59c;
+}
+
+.result h3{
+    margin-bottom:8px;
+    font-size:18px;
+}
+
+.result p{
+    line-height:1.6;
+    font-size:14px;
+}
+
+/* CAMERA */
+
+.camera-controls{
+    display:grid;
+    grid-template-columns:1fr auto auto;
+    gap:10px;
+    margin-bottom:18px;
+}
+
+select{
+    width:100%;
+    height:48px;
+    border:2px solid #dce5ed;
+    border-radius:11px;
+    background:white;
+    padding:0 13px;
+    font-size:14px;
+    color:#263f56;
+    outline:none;
+}
+
+select:focus{
+    border-color:var(--azul4);
+}
+
+.camera-box{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/10;
+    min-height:300px;
+    background:#07131f;
+    border-radius:18px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:4px solid #dbe6ef;
+}
+
+video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.camera-placeholder{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    color:#b8c7d5;
+    gap:10px;
+    text-align:center;
+    padding:30px;
+    z-index:2;
+}
+
+.camera-placeholder .icon{
+    font-size:48px;
+}
+
+.camera-placeholder p{
+    font-size:14px;
+    line-height:1.5;
+}
+
+.scan-frame{
+    position:absolute;
+    width:55%;
+    height:34%;
+    left:22.5%;
+    top:33%;
+    border:3px solid rgba(0,229,255,.95);
+    border-radius:14px;
+    box-shadow:
+        0 0 0 9999px rgba(0,0,0,.20),
+        0 0 22px rgba(0,229,255,.45);
+    z-index:3;
+    pointer-events:none;
+    display:none;
+}
+
+.scan-frame::after{
+    content:"";
+    position:absolute;
+    left:4%;
+    right:4%;
+    height:2px;
+    top:50%;
+    background:#00e5ff;
+    box-shadow:0 0 10px #00e5ff;
+    animation:scan 2s infinite ease-in-out;
+}
+
+@keyframes scan{
+    0%,100%{
+        transform:translateY(-55px);
+    }
+    50%{
+        transform:translateY(55px);
+    }
+}
+
+.camera-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+    flex-wrap:wrap;
+}
+
+/* ACTIVIDAD */
+
+.activity{
+    margin-top:25px;
+}
+
+.activity h3{
+    color:var(--azul);
+    font-size:17px;
+    margin-bottom:12px;
+}
+
+.log{
+    max-height:230px;
+    overflow-y:auto;
+    border:1px solid #e2e9ef;
+    border-radius:13px;
+    background:#fafcfe;
+}
+
+.log-item{
+    padding:12px 15px;
+    border-bottom:1px solid #e9eef3;
+    font-size:13px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.log-item:last-child{
+    border-bottom:none;
+}
+
+.log-time{
+    color:#7d8d9d;
+    white-space:nowrap;
+}
+
+.log-message{
+    flex:1;
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    color:#748596;
+    font-size:12px;
+    padding:0 20px 25px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:760px){
+
+    .header-inner{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .brand{
+        justify-content:center;
+    }
+
+    .menu{
+        justify-content:center;
+    }
+
+    .menu button{
+        flex:1;
+        min-width:140px;
+    }
+
+    .card{
+        padding:20px;
+        border-radius:17px;
+    }
+
+    .input-row{
+        flex-direction:column;
+    }
+
+    .primary-btn{
+        width:100%;
+    }
+
+    .camera-controls{
+        grid-template-columns:1fr;
+    }
+
+    .camera-box{
+        min-height:250px;
+        aspect-ratio:4/3;
+    }
+}
+
+@media(max-width:450px){
+
+    .brand h1{
+        font-size:17px;
+    }
+
+    .brand-icon{
+        width:45px;
+        height:45px;
+        font-size:23px;
+    }
+
+    .card-header h2{
+        font-size:21px;
+    }
+
+    .menu button{
+        font-size:12px;
+        min-width:120px;
+        padding:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-inner">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                📚
+            </div>
+
+            <div>
+                <h1>Control de Asistencia</h1>
+                <p>Sistema de Apoyo y Gestión Escolar</p>
+            </div>
+
+        </div>
+
+        <nav class="menu">
+
+            <button
+                id="btnUSB"
+                class="active"
+                onclick="mostrarSeccion('usb')">
+                ⌨️ Escáner USB
+            </button>
+
+            <button
+                id="btnCamara"
+                onclick="mostrarSeccion('camara')">
+                📷 Escanear con cámara
+            </button>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <!-- ========================= -->
+    <!-- ESCÁNER USB -->
+    <!-- ========================= -->
+
+    <section
+        id="seccionUSB"
+        class="section active">
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>Registro mediante escáner USB</h2>
+
+                <p>
+                    Conecta el lector de códigos de barras o utiliza el teclado
+                    para ingresar la matrícula del alumno.
+                </p>
+
+            </div>
+
+
+            <div
+                id="statusUSB"
+                class="status">
+
+                <span class="status-dot"></span>
+
+                <span id="statusUSBText">
+                    Sistema listo para registrar asistencia
+                </span>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="scanner">
+                    Matrícula / Código
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="text"
+                        id="scanner"
+                        autocomplete="off"
+                        autofocus
+                        placeholder="Escanea o escribe el código">
+
+                    <button
+                        class="primary-btn"
+                        onclick="procesarCodigoUSB()">
+
+                        Registrar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <strong>Uso del escáner:</strong><br>
+
+                Coloca el cursor en el campo y escanea el código.
+                El sistema procesará automáticamente el código cuando
+                el lector USB envíe la tecla ENTER.
+
+            </div>
+
+
+            <div
+                id="resultadoUSB"
+                class="result">
+
+            </div>
+
+
+            <div class="activity">
+
+                <h3>Actividad reciente</h3>
+
+                <div
+                    id="logUSB"
+                    class="log">
+
+                    <div class="log-item">
+
+                        <span class="log-message">
+                            Sistema iniciado correctamente.
+                        </span>
+
+                        <span class="log-time">
+                            Ahora
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================= -->
+    <!-- CÁMARA -->
+    <!-- ========================= -->
+
+    <section
+        id="seccionCamara"
+        class="section">
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h2>Escanear con cámara</h2>
+
+                <p>
+                    Utiliza la cámara del teléfono, computadora o dispositivo
+                    para leer códigos QR y códigos de barras.
+                </p>
+
+            </div>
+
+
+            <div
+                id="statusCamara"
+                class="status">
+
+                <span class="status-dot"></span>
+
+                <span id="statusCamaraText">
+                    Cámara detenida
+                </span>
+
+            </div>
+
+
+            <div class="camera-controls">
+
+                <select id="cameraSelect">
+
+                    <option value="">
+                        Selecciona una cámara
+                    </option>
+
+                </select>
+
+                <button
+                    class="primary-btn"
+                    id="btnIniciarCamara"
+                    onclick="iniciarCamara()">
+
+                    ▶ Iniciar cámara
+
+                </button>
+
+                <button
+                    class="danger-btn"
+                    id="btnDetenerCamara"
+                    onclick="detenerCamara()"
+                    style="display:none;">
+
+                    ■ Detener
+
+                </button>
+
+            </div>
+
+
+            <div class="camera-box">
+
+                <video
+                    id="video"
+                    autoplay
+                    muted
+                    playsinline>
+                </video>
+
+
+                <div
+                    id="cameraPlaceholder"
+                    class="camera-placeholder">
+
+                    <div class="icon">
+                        📷
+                    </div>
+
+                    <p>
+                        Presiona <strong>Iniciar cámara</strong><br>
+                        para comenzar el escaneo.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="scanFrame"
+                    class="scan-frame">
+                </div>
+
+            </div>
+
+
+            <div class="camera-buttons">
+
+                <button
+                    class="secondary-btn"
+                    onclick="actualizarCamaras()">
+
+                    🔄 Actualizar cámaras
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="resultadoCamara"
+                class="result">
+
+            </div>
+
+
+            <div class="info-box">
+
+                <strong>Escaneo compatible:</strong><br>
+
+                El sistema utiliza ZXing para detectar códigos QR
+                y diferentes formatos de códigos de barras.
+                En teléfonos intentará utilizar la cámara trasera
+                cuando el dispositivo la proporcione.
+
+            </div>
+
+
+            <div class="activity">
+
+                <h3>Actividad reciente</h3>
+
+                <div
+                    id="logCamara"
+                    class="log">
+
+                    <div class="log-item">
+
+                        <span class="log-message">
+                            Cámara preparada.
+                        </span>
+
+                        <span class="log-time">
+                            Ahora
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    OFTV No. 0216 "Francisco Villa" · Sistema de Apoyo y Gestión Escolar
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://nlpdpvjtdxknhvgqbfls.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let codeReader = null;
+let cameraControls = null;
+let procesandoCodigo = false;
+let camaraActiva = false;
+
+
+/* =========================================================
+   CAMBIO DE SECCIÓN
+========================================================= */
+
+function mostrarSeccion(seccion){
+
+    const usb =
+        document.getElementById("seccionUSB");
+
+    const camara =
+        document.getElementById("seccionCamara");
+
+    const btnUSB =
+        document.getElementById("btnUSB");
+
+    const btnCamara =
+        document.getElementById("btnCamara");
+
+
+    usb.classList.remove("active");
+    camara.classList.remove("active");
+
+    btnUSB.classList.remove("active");
+    btnCamara.classList.remove("active");
+
+
+    if(seccion === "usb"){
+
+        usb.classList.add("active");
+        btnUSB.classList.add("active");
+
+        detenerCamara();
+
+        setTimeout(() => {
+
+            document
+                .getElementById("scanner")
+                .focus();
+
+        },100);
+
+    }
+
+
+    if(seccion === "camara"){
+
+        camara.classList.add("active");
+        btnCamara.classList.add("active");
+
+    }
+
+}
+
+
+/* =========================================================
+   NORMALIZACIÓN DEL ESCÁNER USB
+========================================================= */
+
+const scanner =
+    document.getElementById("scanner");
+
+
+scanner.addEventListener("input", function(){
+
+    let valor = this.value;
+
+    /*
+        Todo carácter que NO sea número
+        se convierte en "-"
+    */
+
+    valor = valor.replace(/[^0-9]/g, "-");
+
+    /*
+        Evita varios guiones consecutivos
+    */
+
+    valor = valor.replace(/-+/g, "-");
+
+    this.value = valor;
+
+});
+
+
+/* =========================================================
+   ENTER DEL ESCÁNER
+========================================================= */
+
+scanner.addEventListener("keydown", function(event){
+
+    if(event.key === "Enter"){
+
+        event.preventDefault();
+
+        procesarCodigoUSB();
+
+    }
+
+});
+
+
+/* =========================================================
+   PROCESAR USB
+========================================================= */
+
+async function procesarCodigoUSB(){
+
+    if(procesandoCodigo){
+        return;
+    }
+
+
+    let codigo =
+        document.getElementById("scanner").value.trim();
+
+
+    if(!codigo){
+
+        mostrarResultado(
+            "usb",
+            "warning",
+            "⚠️ Código vacío",
+            "Escanea o escribe una matrícula para continuar."
+        );
+
+        return;
+
+    }
+
+
+    procesandoCodigo = true;
+
+
+    actualizarStatus(
+        "usb",
+        "warning",
+        "Consultando información del alumno..."
+    );
+
+
+    try{
+
+        await registrarAsistencia(codigo,"usb");
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        mostrarResultado(
+            "usb",
+            "error",
+            "❌ Error",
+            "Ocurrió un problema al procesar la asistencia."
+        );
+
+        actualizarStatus(
+            "usb",
+            "error",
+            "Ocurrió un error al registrar."
+        );
+
+    }
+
+
+    procesandoCodigo = false;
+
+
+    setTimeout(() => {
+
+        document
+            .getElementById("scanner")
+            .focus();
+
+    },100);
+
+}
+
+
+/* =========================================================
+   REGISTRAR ASISTENCIA
+========================================================= */
+
+async function registrarAsistencia(codigo, origen){
+
+    const hoy =
+        obtenerFechaLocal();
+
+
+    /*
+        Buscar alumno por matrícula
+    */
+
+    const {
+        data: alumno,
+        error: errorAlumno
+    } = await supabaseClient
+        .from("alumnos")
+        .select("*")
+        .eq("matricula",codigo)
+        .maybeSingle();
+
+
+    if(errorAlumno){
+
+        throw errorAlumno;
+
+    }
+
+
+    if(!alumno){
+
+        mostrarResultado(
+            origen,
+            "error",
+            "❌ Alumno no encontrado",
+            "No se encontró ningún alumno con la matrícula: <strong>" +
+            escaparHTML(codigo) +
+            "</strong>"
+        );
+
+
+        actualizarStatus(
+            origen,
+            "error",
+            "Matrícula no encontrada"
+        );
+
+
+        agregarLog(
+            origen,
+            "❌ Matrícula no encontrada: " + codigo
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        Buscar asistencia del día
+    */
+
+    const {
+        data: asistencia,
+        error: errorAsistencia
+    } = await supabaseClient
+        .from("asistencias")
+        .select("*")
+        .eq("matricula",codigo)
+        .eq("fecha",hoy)
+        .order("id",{ascending:false})
+        .limit(1)
+        .maybeSingle();
+
+
+    if(errorAsistencia){
+
+        throw errorAsistencia;
+
+    }
+
+
+    /*
+        No existe asistencia:
+        registrar entrada
+    */
+
+    if(!asistencia){
+
+        const horaEntrada =
+            obtenerHoraLocal();
+
+
+        const {
+            error
+        } = await supabaseClient
+            .from("asistencias")
+            .insert({
+
+                alumno_id: alumno.id,
+                matricula: codigo,
+                fecha: hoy,
+                hora_entrada: horaEntrada
+
+            });
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        mostrarResultado(
+            origen,
+            "success",
+            "✅ Entrada registrada",
+            `
+            <strong>${escaparHTML(
+                alumno.nombre_completo ||
+                alumno.nombre ||
+                "Alumno"
+            )}</strong><br>
+
+            Matrícula:
+            <strong>${escaparHTML(codigo)}</strong><br>
+
+            Fecha:
+            ${hoy}<br>
+
+            Hora de entrada:
+            <strong>${horaEntrada}</strong>
+            `
+        );
+
+
+        actualizarStatus(
+            origen,
+            "success",
+            "Entrada registrada correctamente"
+        );
+
+
+        agregarLog(
+            origen,
+            "🟢 Entrada: " +
+            (alumno.nombre_completo || alumno.nombre || codigo) +
+            " · " +
+            horaEntrada
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        Existe asistencia pero no salida:
+        registrar salida
+    */
+
+    if(!asistencia.hora_salida){
+
+        const horaSalida =
+            obtenerHoraLocal();
+
+
+        const {
+            error
+        } = await supabaseClient
+            .from("asistencias")
+            .update({
+
+                hora_salida: horaSalida
+
+            })
+            .eq("id",asistencia.id);
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        mostrarResultado(
+            origen,
+            "success",
+            "✅ Salida registrada",
+            `
+            <strong>${escaparHTML(
+                alumno.nombre_completo ||
+                alumno.nombre ||
+                "Alumno"
+            )}</strong><br>
+
+            Matrícula:
+            <strong>${escaparHTML(codigo)}</strong><br>
+
+            Hora de salida:
+            <strong>${horaSalida}</strong>
+            `
+        );
+
+
+        actualizarStatus(
+            origen,
+            "success",
+            "Salida registrada correctamente"
+        );
+
+
+        agregarLog(
+            origen,
+            "🔵 Salida: " +
+            (alumno.nombre_completo || alumno.nombre || codigo) +
+            " · " +
+            horaSalida
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+        Entrada y salida ya registradas
+    */
+
+    mostrarResultado(
+        origen,
+        "warning",
+        "⚠️ Asistencia ya completa",
+        `
+        <strong>${escaparHTML(
+            alumno.nombre_completo ||
+            alumno.nombre ||
+            "Alumno"
+        )}</strong><br>
+
+        Matrícula:
+        <strong>${escaparHTML(codigo)}</strong><br>
+
+        Entrada:
+        ${asistencia.hora_entrada || "--"}<br>
+
+        Salida:
+        ${asistencia.hora_salida || "--"}
+        `
+    );
+
+
+    actualizarStatus(
+        origen,
+        "warning",
+        "La asistencia de hoy ya está completa"
+    );
+
+
+    agregarLog(
+        origen,
+        "⚠️ Asistencia ya completa: " + codigo
+    );
+
+}
+
+
+/* =========================================================
+   FECHA LOCAL
+========================================================= */
+
+function obtenerFechaLocal(){
+
+    const fecha = new Date();
+
+    const año =
+        fecha.getFullYear();
+
+    const mes =
+        String(fecha.getMonth()+1)
+        .padStart(2,"0");
+
+    const dia =
+        String(fecha.getDate())
+        .padStart(2,"0");
+
+    return `${año}-${mes}-${dia}`;
+
+}
+
+
+/* =========================================================
+   HORA LOCAL
+========================================================= */
+
+function obtenerHoraLocal(){
+
+    const fecha = new Date();
+
+    const horas =
+        String(fecha.getHours())
+        .padStart(2,"0");
+
+    const minutos =
+        String(fecha.getMinutes())
+        .padStart(2,"0");
+
+    const segundos =
+        String(fecha.getSeconds())
+        .padStart(2,"0");
+
+    return `${horas}:${minutos}:${segundos}`;
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function actualizarStatus(origen,tipo,mensaje){
+
+    const elemento =
+        document.getElementById(
+            origen === "usb"
+            ? "statusUSB"
+            : "statusCamara"
+        );
+
+    const texto =
+        document.getElementById(
+            origen === "usb"
+            ? "statusUSBText"
+            : "statusCamaraText"
+        );
+
+
+    elemento.classList.remove(
+        "success",
+        "error",
+        "warning"
+    );
+
+
+    if(tipo){
+
+        elemento.classList.add(tipo);
+
+    }
+
+
+    texto.textContent = mensaje;
+
+}
+
+
+/* =========================================================
+   RESULTADO
+========================================================= */
+
+function mostrarResultado(
+    origen,
+    tipo,
+    titulo,
+    mensaje
+){
+
+    const elemento =
+        document.getElementById(
+            origen === "usb"
+            ? "resultadoUSB"
+            : "resultadoCamara"
+        );
+
+
+    elemento.className =
+        "result show " + tipo;
+
+
+    elemento.innerHTML = `
+        <h3>${titulo}</h3>
+        <p>${mensaje}</p>
+    `;
+
+
+    setTimeout(() => {
+
+        elemento.classList.remove("show");
+
+    },8000);
+
+}
+
+
+/* =========================================================
+   LOG
+========================================================= */
+
+function agregarLog(origen,mensaje){
+
+    const log =
+        document.getElementById(
+            origen === "usb"
+            ? "logUSB"
+            : "logCamara"
+        );
+
+
+    const item =
+        document.createElement("div");
+
+    item.className = "log-item";
+
+
+    item.innerHTML = `
+        <span class="log-message">
+            ${escaparHTML(mensaje)}
+        </span>
+
+        <span class="log-time">
+            ${obtenerHoraLocal()}
+        </span>
+    `;
+
+
+    log.prepend(item);
+
+
+    while(log.children.length > 20){
+
+        log.removeChild(log.lastChild);
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPAR HTML
+========================================================= */
+
+function escaparHTML(texto){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        String(texto);
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
+   COMPROBAR ZXING
+========================================================= */
+
+function comprobarZXing(){
+
+    if(
+        typeof ZXingBrowser === "undefined"
+    ){
+
+        actualizarStatus(
+            "camara",
+            "error",
+            "No se pudo cargar el lector de códigos."
+        );
+
+
+        mostrarResultado(
+            "camara",
+            "error",
+            "❌ Error del lector",
+            `
+            No se pudo cargar el módulo de escaneo.
+            <br><br>
+            Verifica que el dispositivo tenga conexión a Internet
+            y vuelve a cargar la página.
+            `
+        );
+
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   ACTUALIZAR LISTA DE CÁMARAS
+========================================================= */
+
+async function actualizarCamaras(){
+
+    if(!comprobarZXing()){
+        return;
+    }
+
+
+    const select =
+        document.getElementById("cameraSelect");
+
+
+    try{
+
+        const dispositivos =
+            await ZXingBrowser.BrowserCodeReader
+                .listVideoInputDevices();
+
+
+        const valorAnterior =
+            select.value;
+
+
+        select.innerHTML = "";
+
+
+        if(!dispositivos || dispositivos.length === 0){
+
+            select.innerHTML = `
+                <option value="">
+                    No se encontraron cámaras
+                </option>
+            `;
+
+
+            actualizarStatus(
+                "camara",
+                "warning",
+                "No se encontraron cámaras disponibles."
+            );
+
+
+            return;
+
+        }
+
+
+        dispositivos.forEach(
+            (dispositivo,index) => {
+
+                const option =
+                    document.createElement("option");
+
+
+                option.value =
+                    dispositivo.deviceId;
+
+
+                let nombre =
+                    dispositivo.label ||
+                    `Cámara ${index + 1}`;
+
+
+                option.textContent =
+                    nombre;
+
+
+                select.appendChild(option);
+
+            }
+        );
+
+
+        /*
+            Intentar conservar la cámara anterior
+        */
+
+        if(valorAnterior){
+
+            const existe =
+                [...select.options]
+                .some(
+                    option =>
+                    option.value === valorAnterior
+                );
+
+
+            if(existe){
+
+                select.value =
+                    valorAnterior;
+
+            }
+
+        }
+
+
+        /*
+            Si no existe una selección,
+            intentar elegir cámara trasera.
+        */
+
+        if(!select.value){
+
+            const trasera =
+                dispositivos.find(
+                    dispositivo => {
+
+                        const nombre =
+                            (
+                                dispositivo.label ||
+                                ""
+                            ).toLowerCase();
+
+                        return (
+                            nombre.includes("back") ||
+                            nombre.includes("rear") ||
+                            nombre.includes("trasera") ||
+                            nombre.includes("environment")
+                        );
+
+                    }
+                );
+
+
+            if(trasera){
+
+                select.value =
+                    trasera.deviceId;
+
+            }
+            else{
+
+                select.selectedIndex = 0;
+
+            }
+
+        }
+
+
+        actualizarStatus(
+            "camara",
+            null,
+            dispositivos.length +
+            " cámara(s) disponible(s)"
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Error al listar cámaras:",
+            error
+        );
+
+
+        mostrarResultado(
+            "camara",
+            "error",
+            "❌ No se pudieron obtener las cámaras",
+            `
+            El navegador no permitió consultar las cámaras.
+            Comprueba los permisos de cámara del sitio.
+            `
+        );
+
+
+        actualizarStatus(
+            "camara",
+            "error",
+            "No se pudieron consultar las cámaras."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   INICIAR CÁMARA
+========================================================= */
+
+async function iniciarCamara(){
+
+    if(camaraActiva){
+        return;
+    }
+
+
+    if(!comprobarZXing()){
+        return;
+    }
+
+
+    const video =
+        document.getElementById("video");
+
+    const placeholder =
+        document.getElementById("cameraPlaceholder");
+
+    const frame =
+        document.getElementById("scanFrame");
+
+
+    const select =
+        document.getElementById("cameraSelect");
+
+
+    try{
+
+        actualizarStatus(
+            "camara",
+            "warning",
+            "Solicitando acceso a la cámara..."
+        );
+
+
+        /*
+            Si todavía no tenemos cámaras listadas,
+            las consultamos primero.
+        */
+
+        if(
+            !select.value
+        ){
+
+            await actualizarCamaras();
+
+        }
+
+
+        const deviceId =
+            select.value;
+
+
+        codeReader =
+            new ZXingBrowser.BrowserMultiFormatReader();
+
+
+        /*
+            Si existe una cámara seleccionada,
+            ZXing utiliza directamente ese dispositivo.
+        */
+
+        if(deviceId){
+
+            cameraControls =
+                await codeReader
+                    .decodeFromVideoDevice(
+                        deviceId,
+                        video,
+                        async (
+                            resultado,
+                            error
+                        ) => {
+
+                            if(resultado){
+
+                                const codigo =
+                                    resultado.getText();
+
+
+                                if(
+                                    procesandoCodigo
+                                ){
+
+                                    return;
+
+                                }
+
+
+                                procesandoCodigo =
+                                    true;
+
+
+                                await procesarCodigoCamara(
+                                    codigo
+                                );
+
+
+                                procesandoCodigo =
+                                    false;
+
+                            }
+
+                        }
+                    );
+
+        }
+        else{
+
+            /*
+                Sin cámara seleccionada,
+                intentar cámara trasera.
+            */
+
+            cameraControls =
+                await codeReader
+                    .decodeFromConstraints(
+                        {
+                            video:{
+                                facingMode:{
+                                    ideal:"environment"
+                                }
+                            },
+                            audio:false
+                        },
+                        video,
+                        async (
+                            resultado,
+                            error
+                        ) => {
+
+                            if(resultado){
+
+                                const codigo =
+                                    resultado.getText();
+
+
+                                if(
+                                    procesandoCodigo
+                                ){
+
+                                    return;
+
+                                }
+
+
+                                procesandoCodigo =
+                                    true;
+
+
+                                await procesarCodigoCamara(
+                                    codigo
+                                );
+
+
+                                procesandoCodigo =
+                                    false;
+
+                            }
+
+                        }
+                    );
+
+        }
+
+
+        camaraActiva = true;
+
+
+        placeholder.style.display =
+            "none";
+
+
+        frame.style.display =
+            "block";
+
+
+        document
+            .getElementById("btnIniciarCamara")
+            .style.display = "none";
+
+
+        document
+            .getElementById("btnDetenerCamara")
+            .style.display = "block";
+
+
+        actualizarStatus(
+            "camara",
+            "success",
+            "Cámara activa · Escaneando..."
+        );
+
+
+        agregarLog(
+            "camara",
+            "📷 Cámara iniciada correctamente."
+        );
+
+
+        /*
+            Actualizar nombres de cámaras
+            después de obtener permiso.
+        */
+
+        setTimeout(
+            actualizarCamaras,
+            700
+        );
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Error iniciando cámara:",
+            error
+        );
+
+
+        camaraActiva = false;
+
+
+        placeholder.style.display =
+            "flex";
+
+
+        frame.style.display =
+            "none";
+
+
+        document
+            .getElementById("btnIniciarCamara")
+            .style.display = "block";
+
+
+        document
+            .getElementById("btnDetenerCamara")
+            .style.display = "none";
+
+
+        actualizarStatus(
+            "camara",
+            "error",
+            "No fue posible iniciar la cámara."
+        );
+
+
+        let mensaje =
+            "El navegador no pudo iniciar la cámara.";
+
+
+        if(
+            error &&
+            error.name === "NotAllowedError"
+        ){
+
+            mensaje =
+                "El permiso de cámara fue rechazado. " +
+                "Permite el acceso a la cámara para este sitio.";
+
+        }
+
+
+        if(
+            error &&
+            error.name === "NotFoundError"
+        ){
+
+            mensaje =
+                "No se encontró ninguna cámara disponible.";
+
+        }
+
+
+        if(
+            error &&
+            error.name === "NotReadableError"
+        ){
+
+            mensaje =
+                "La cámara está siendo utilizada por otra aplicación.";
+
+        }
+
+
+        if(
+            error &&
+            error.name === "OverconstrainedError"
+        ){
+
+            mensaje =
+                "La cámara seleccionada no está disponible. " +
+                "Selecciona otra cámara.";
+
+        }
+
+
+        mostrarResultado(
+            "camara",
+            "error",
+            "❌ No se pudo iniciar la cámara",
+            mensaje
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PROCESAR CÓDIGO DE CÁMARA
+========================================================= */
+
+async function procesarCodigoCamara(codigo){
+
+    if(!codigo){
+        return;
+    }
+
+
+    actualizarStatus(
+        "camara",
+        "warning",
+        "Código detectado · Consultando alumno..."
+    );
+
+
+    agregarLog(
+        "camara",
+        "📷 Código detectado: " + codigo
+    );
+
+
+    try{
+
+        await registrarAsistencia(
+            codigo,
+            "camara"
+        );
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+
+        mostrarResultado(
+            "camara",
+            "error",
+            "❌ Error",
+            "No fue posible registrar la asistencia."
+        );
+
+
+        actualizarStatus(
+            "camara",
+            "error",
+            "Error al registrar asistencia."
+        );
+
+    }
+
+
+    /*
+        Esperar un momento antes de permitir
+        detectar otro código.
+    */
+
+    setTimeout(() => {
+
+        if(camaraActiva){
+
+            actualizarStatus(
+                "camara",
+                "success",
+                "Cámara activa · Escaneando..."
+            );
+
+        }
+
+    },1800);
+
+}
+
+
+/* =========================================================
+   DETENER CÁMARA
+========================================================= */
+
+function detenerCamara(){
+
+    try{
+
+        if(
+            cameraControls &&
+            typeof cameraControls.stop === "function"
+        ){
+
+            cameraControls.stop();
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "Error deteniendo controles:",
+            error
+        );
+
+    }
+
+
+    cameraControls = null;
+
+
+    try{
+
+        if(
+            codeReader &&
+            typeof codeReader.reset === "function"
+        ){
+
+            codeReader.reset();
+
+        }
+
+    }
+    catch(error){
+
+        console.error(
+            "Error reiniciando ZXing:",
+            error
+        );
+
+    }
+
+
+    const video =
+        document.getElementById("video");
+
+
+    /*
+        Por seguridad detener cualquier
+        stream que haya quedado activo.
+    */
+
+    if(video && video.srcObject){
+
+        const tracks =
+            video.srcObject.getTracks();
+
+        tracks.forEach(
+            track => track.stop()
+        );
+
+        video.srcObject = null;
+
+    }
+
+
+    camaraActiva = false;
+
+
+    document
+        .getElementById("cameraPlaceholder")
+        .style.display = "flex";
+
+
+    document
+        .getElementById("scanFrame")
+        .style.display = "none";
+
+
+    document
+        .getElementById("btnIniciarCamara")
+        .style.display = "block";
+
+
+    document
+        .getElementById("btnDetenerCamara")
+        .style.display = "none";
+
+
+    actualizarStatus(
+        "camara",
+        null,
+        "Cámara detenida"
+    );
+
+}
+
+
+/* =========================================================
+   CAMBIO MANUAL DE CÁMARA
+========================================================= */
+
+document
+    .getElementById("cameraSelect")
+    .addEventListener(
+        "change",
+        async function(){
+
+            if(!camaraActiva){
+                return;
+            }
+
+
+            detenerCamara();
+
+
+            await new Promise(
+                resolve =>
+                setTimeout(resolve,300)
+            );
+
+
+            iniciarCamara();
+
+        }
+    );
+
+
+/* =========================================================
+   AL CARGAR
+========================================================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        /*
+            Comprobar que ZXing realmente
+            se haya cargado.
+        */
+
+        if(
+            typeof ZXingBrowser === "undefined"
+        ){
+
+            console.error(
+                "ZXingBrowser no está disponible."
+            );
+
+
+            actualizarStatus(
+                "camara",
+                "error",
+                "No se cargó el lector de códigos."
+            );
+
+        }
+
+
+        /*
+            Mantener USB preparado
+        */
+
+        setTimeout(
+            () => {
+
+                document
+                    .getElementById("scanner")
+                    .focus();
+
+            },
+            300
+        );
+
+    }
+);
+
+
+/* =========================================================
+   LIMPIEZA AL CERRAR / CAMBIAR PÁGINA
+========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    () => {
+
+        detenerCamara();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
