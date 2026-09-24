@@ -33,6 +33,7 @@
 body{
     font-family:Arial,Helvetica,sans-serif;
     min-height:100vh;
+
     background:
         radial-gradient(
             circle at top right,
@@ -44,13 +45,11 @@ body{
             #eef4f9,
             #dce8f2
         );
+
     color:var(--texto);
 }
 
-
-/* =========================================
-   ENCABEZADO
-========================================= */
+/* HEADER */
 
 header{
     background:
@@ -60,8 +59,12 @@ header{
             #0b3154,
             #125b91
         );
+
     color:white;
-    box-shadow:0 5px 22px rgba(0,0,0,.18);
+
+    box-shadow:
+        0 5px 22px rgba(0,0,0,.18);
+
     position:sticky;
     top:0;
     z-index:1000;
@@ -70,10 +73,13 @@ header{
 .header-inner{
     max-width:1200px;
     margin:auto;
+
     padding:17px 22px;
+
     display:flex;
     align-items:center;
     justify-content:space-between;
+
     gap:20px;
 }
 
@@ -86,12 +92,19 @@ header{
 .brand-icon{
     width:50px;
     height:50px;
+
     display:flex;
     justify-content:center;
     align-items:center;
+
     border-radius:14px;
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.18);
+
+    background:
+        rgba(255,255,255,.12);
+
+    border:
+        1px solid rgba(255,255,255,.18);
+
     font-size:26px;
 }
 
@@ -105,11 +118,6 @@ header{
     margin-top:4px;
 }
 
-
-/* =========================================
-   MENÚ
-========================================= */
-
 .menu{
     display:flex;
     gap:8px;
@@ -117,18 +125,28 @@ header{
 
 .menu button{
     color:white;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.18);
+
+    background:
+        rgba(255,255,255,.08);
+
+    border:
+        1px solid rgba(255,255,255,.18);
+
     border-radius:10px;
+
     padding:11px 16px;
+
     font-size:14px;
     font-weight:bold;
+
     cursor:pointer;
+
     transition:.2s;
 }
 
 .menu button:hover{
-    background:rgba(255,255,255,.17);
+    background:
+        rgba(255,255,255,.17);
 }
 
 .menu button.active{
@@ -136,21 +154,16 @@ header{
     color:var(--azul);
 }
 
-
-/* =========================================
-   CONTENEDOR
-========================================= */
+/* CONTENEDOR */
 
 .container{
     max-width:1000px;
+
     margin:35px auto;
-    padding:0 20px 40px;
+
+    padding:
+        0 20px 40px;
 }
-
-
-/* =========================================
-   SECCIONES
-========================================= */
 
 .section{
     display:none;
@@ -160,18 +173,20 @@ header{
     display:block;
 }
 
-
-/* =========================================
-   TARJETA
-========================================= */
+/* CARD */
 
 .card{
     background:white;
+
     border-radius:22px;
+
     padding:30px;
+
     box-shadow:
         0 12px 35px rgba(17,48,78,.12);
-    border:1px solid rgba(13,53,90,.08);
+
+    border:
+        1px solid rgba(13,53,90,.08);
 }
 
 .card-header{
@@ -180,29 +195,36 @@ header{
 
 .card-header h2{
     color:var(--azul);
+
     font-size:25px;
+
     margin-bottom:8px;
 }
 
 .card-header p{
     color:#68798b;
+
     font-size:14px;
+
     line-height:1.6;
 }
 
-
-/* =========================================
-   ESTADO
-========================================= */
+/* STATUS */
 
 .status{
     display:flex;
     align-items:center;
+
     gap:10px;
+
     padding:13px 16px;
+
     border-radius:12px;
+
     background:#eef4f9;
+
     margin-bottom:22px;
+
     font-size:14px;
     font-weight:bold;
 }
@@ -210,8 +232,11 @@ header{
 .status-dot{
     width:10px;
     height:10px;
+
     min-width:10px;
+
     border-radius:50%;
+
     background:#94a3af;
 }
 
@@ -242,10 +267,7 @@ header{
     background:var(--amarillo);
 }
 
-
-/* =========================================
-   ESCÁNER USB
-========================================= */
+/* INPUT */
 
 .input-group{
     margin-bottom:20px;
@@ -253,9 +275,13 @@ header{
 
 .input-group label{
     display:block;
+
     color:var(--azul);
+
     font-weight:bold;
+
     font-size:14px;
+
     margin-bottom:9px;
 }
 
@@ -266,34 +292,54 @@ header{
 
 input[type="text"]{
     flex:1;
+
     height:52px;
-    border:2px solid #dce5ed;
+
+    border:
+        2px solid #dce5ed;
+
     border-radius:12px;
-    padding:0 16px;
+
+    padding:
+        0 16px;
+
     outline:none;
+
     font-size:18px;
 }
 
 input[type="text"]:focus{
     border-color:var(--azul4);
+
     box-shadow:
         0 0 0 4px rgba(33,150,243,.1);
 }
 
+/* BOTONES */
+
 .primary-btn{
     height:52px;
+
     border:0;
+
     border-radius:12px;
-    padding:0 22px;
+
+    padding:
+        0 22px;
+
     background:
         linear-gradient(
             135deg,
             #0d4778,
             #1677bd
         );
+
     color:white;
+
     font-weight:bold;
+
     cursor:pointer;
+
     box-shadow:
         0 5px 14px rgba(13,71,120,.2);
 }
@@ -302,18 +348,21 @@ input[type="text"]:focus{
     transform:translateY(-1px);
 }
 
-
-/* =========================================
-   BOTONES
-========================================= */
-
 .secondary-btn{
-    border:1px solid #d6e1eb;
+    border:
+        1px solid #d6e1eb;
+
     background:#f7fafc;
+
     color:#29445e;
+
     border-radius:11px;
-    padding:12px 18px;
+
+    padding:
+        12px 18px;
+
     font-weight:bold;
+
     cursor:pointer;
 }
 
@@ -323,23 +372,30 @@ input[type="text"]:focus{
 
 .danger-btn{
     border:0;
+
     background:var(--rojo);
+
     color:white;
+
     border-radius:11px;
-    padding:12px 18px;
+
+    padding:
+        12px 18px;
+
     font-weight:bold;
+
     cursor:pointer;
 }
 
-
-/* =========================================
-   RESULTADO
-========================================= */
+/* RESULTADO */
 
 .result{
     display:none;
+
     margin-top:20px;
+
     padding:21px;
+
     border-radius:15px;
 }
 
@@ -349,109 +405,153 @@ input[type="text"]:focus{
 
 .result.success{
     background:#eaf8f3;
-    border:1px solid #bce8d9;
+
+    border:
+        1px solid #bce8d9;
+
     color:#126c51;
 }
 
 .result.error{
     background:#fff0ef;
-    border:1px solid #f1c2be;
+
+    border:
+        1px solid #f1c2be;
+
     color:#a62d25;
 }
 
 .result.warning{
     background:#fff7e8;
-    border:1px solid #efd79f;
+
+    border:
+        1px solid #efd79f;
+
     color:#8b5b00;
 }
 
 .result h3{
     font-size:19px;
+
     margin-bottom:9px;
 }
 
 .result p{
     font-size:14px;
+
     line-height:1.7;
 }
 
-
-/* =========================================
-   CÁMARA
-========================================= */
+/* CAMARA */
 
 .camera-box{
     position:relative;
+
     width:100%;
+
     aspect-ratio:16/10;
+
     min-height:340px;
+
     overflow:hidden;
+
     border-radius:20px;
+
     background:#06131f;
-    border:4px solid #dbe6ef;
+
+    border:
+        4px solid #dbe6ef;
 }
 
 video{
     width:100%;
     height:100%;
+
     display:block;
+
     object-fit:cover;
 }
 
 .camera-placeholder{
     position:absolute;
+
     inset:0;
+
     z-index:2;
+
     display:flex;
+
     flex-direction:column;
+
     justify-content:center;
+
     align-items:center;
+
     text-align:center;
+
     color:#b8c7d5;
+
     padding:30px;
 }
 
 .camera-placeholder .icon{
     font-size:52px;
+
     margin-bottom:12px;
 }
 
 .camera-placeholder p{
     font-size:14px;
+
     line-height:1.6;
 }
 
-
-/* =========================================
-   MARCO DE ESCANEO
-========================================= */
+/* MARCO DE ESCANEO */
 
 .scan-frame{
     position:absolute;
+
     z-index:5;
+
     width:58%;
     height:35%;
+
     left:21%;
     top:32.5%;
-    border:3px solid #00e5ff;
+
+    border:
+        3px solid #00e5ff;
+
     border-radius:14px;
+
     display:none;
+
     box-shadow:
         0 0 0 9999px rgba(0,0,0,.22),
         0 0 25px rgba(0,229,255,.5);
+
     pointer-events:none;
 }
 
 .scan-frame::after{
     content:"";
+
     position:absolute;
+
     left:5%;
     right:5%;
+
     top:50%;
+
     height:2px;
+
     background:#00e5ff;
-    box-shadow:0 0 10px #00e5ff;
-    animation:scannerLine 2s infinite ease-in-out;
+
+    box-shadow:
+        0 0 10px #00e5ff;
+
+    animation:
+        scannerLine 2s infinite ease-in-out;
 }
 
 @keyframes scannerLine{
@@ -466,20 +566,21 @@ video{
 
 }
 
-
-/* =========================================
-   BOTONES DE CÁMARA
-========================================= */
+/* BOTONES CAMARA */
 
 .camera-buttons{
     display:flex;
+
     gap:10px;
+
     flex-wrap:wrap;
+
     margin-top:15px;
 }
 
 .change-camera{
     flex:1;
+
     min-width:180px;
 }
 
@@ -487,26 +588,28 @@ video{
     flex:0 0 auto;
 }
 
-
-/* =========================================
-   INFORMACIÓN
-========================================= */
+/* INFORMACION */
 
 .info-box{
     margin-top:20px;
+
     padding:17px;
+
     background:#f1f7fc;
-    border-left:4px solid var(--azul4);
+
+    border-left:
+        4px solid var(--azul4);
+
     border-radius:8px;
+
     color:#52677b;
+
     font-size:13px;
+
     line-height:1.7;
 }
 
-
-/* =========================================
-   ACTIVIDAD
-========================================= */
+/* ACTIVIDAD */
 
 .activity{
     margin-top:25px;
@@ -514,24 +617,38 @@ video{
 
 .activity h3{
     color:var(--azul);
+
     font-size:17px;
+
     margin-bottom:12px;
 }
 
 .log{
     max-height:240px;
+
     overflow-y:auto;
-    border:1px solid #e2e9ef;
+
+    border:
+        1px solid #e2e9ef;
+
     border-radius:13px;
+
     background:#fafcfe;
 }
 
 .log-item{
     display:flex;
+
     gap:10px;
+
     justify-content:space-between;
-    padding:12px 15px;
-    border-bottom:1px solid #e9eef3;
+
+    padding:
+        12px 15px;
+
+    border-bottom:
+        1px solid #e9eef3;
+
     font-size:13px;
 }
 
@@ -545,25 +662,24 @@ video{
 
 .log-time{
     color:#7d8d9d;
+
     white-space:nowrap;
 }
 
-
-/* =========================================
-   FOOTER
-========================================= */
+/* FOOTER */
 
 footer{
     text-align:center;
-    padding:0 20px 25px;
+
+    padding:
+        0 20px 25px;
+
     color:#748596;
+
     font-size:12px;
 }
 
-
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* MOVIL */
 
 @media(max-width:760px){
 
@@ -631,355 +747,328 @@ footer{
 
 <body>
 
-
-<!-- =====================================================
-     ENCABEZADO
-===================================================== -->
-
 <header>
 
-    <div class="header-inner">
+<div class="header-inner">
 
-        <div class="brand">
+    <div class="brand">
 
-            <div class="brand-icon">
-                📚
-            </div>
+        <div class="brand-icon">
+            📚
+        </div>
 
-            <div>
+        <div>
 
-                <h1>
-                    Control de Asistencia
-                </h1>
+            <h1>
+                Control de Asistencia
+            </h1>
 
-                <p>
-                    Sistema de Apoyo y Gestión Escolar
-                </p>
-
-            </div>
+            <p>
+                Sistema de Apoyo y Gestión Escolar
+            </p>
 
         </div>
 
-
-        <nav class="menu">
-
-            <button
-                id="btnUSB"
-                class="active"
-                onclick="mostrarSeccion('usb')">
-
-                ⌨️ Escáner USB
-
-            </button>
-
-
-            <button
-                id="btnCamara"
-                onclick="mostrarSeccion('camara')">
-
-                📷 Escanear con cámara
-
-            </button>
-
-        </nav>
-
     </div>
+
+    <nav class="menu">
+
+        <button
+            id="btnUSB"
+            class="active"
+            onclick="mostrarSeccion('usb')">
+
+            ⌨️ Escáner USB
+
+        </button>
+
+        <button
+            id="btnCamara"
+            onclick="mostrarSeccion('camara')">
+
+            📷 Escanear con cámara
+
+        </button>
+
+    </nav>
+
+</div>
 
 </header>
 
-
-
 <main class="container">
 
-
-<!-- =====================================================
-     SECCIÓN USB
-===================================================== -->
+<!-- ========================= -->
+<!-- ESCANER USB -->
+<!-- ========================= -->
 
 <section
     id="seccionUSB"
     class="section active">
 
-    <div class="card">
+<div class="card">
 
-        <div class="card-header">
+<div class="card-header">
 
-            <h2>
-                Registro mediante escáner USB
-            </h2>
+<h2>
+    Registro mediante escáner USB
+</h2>
 
-            <p>
-                Conecta el lector de códigos de barras o
-                escribe directamente la matrícula del alumno.
-            </p>
+<p>
+    Conecta el lector de códigos de barras
+    o escribe directamente la matrícula del alumno.
+</p>
 
-        </div>
+</div>
 
+<div
+    id="statusUSB"
+    class="status">
 
-        <div
-            id="statusUSB"
-            class="status">
+<span class="status-dot"></span>
 
-            <span class="status-dot"></span>
+<span id="statusUSBText">
+    Sistema listo para registrar asistencia
+</span>
 
-            <span id="statusUSBText">
-                Sistema listo para registrar asistencia
-            </span>
+</div>
 
-        </div>
+<div class="input-group">
 
+<label for="scanner">
+    Matrícula / Código
+</label>
 
-        <div class="input-group">
+<div class="input-row">
 
-            <label for="scanner">
-                Matrícula / Código
-            </label>
+<input
+    id="scanner"
+    type="text"
+    autocomplete="off"
+    autofocus
+    placeholder="Escanea o escribe el código">
 
-            <div class="input-row">
+<button
+    class="primary-btn"
+    onclick="procesarCodigoUSB()">
 
-                <input
-                    id="scanner"
-                    type="text"
-                    autocomplete="off"
-                    autofocus
-                    placeholder="Escanea o escribe el código">
+    Registrar
 
-                <button
-                    class="primary-btn"
-                    onclick="procesarCodigoUSB()">
+</button>
 
-                    Registrar
+</div>
 
-                </button>
+</div>
 
-            </div>
+<div class="info-box">
 
-        </div>
+<strong>
+    Escáner USB:
+</strong>
 
+Coloca el cursor en el campo y escanea
+el código. El sistema detectará automáticamente
+la tecla ENTER enviada por el lector.
 
-        <div class="info-box">
+</div>
 
-            <strong>
-                Escáner USB:
-            </strong>
+<div
+    id="resultadoUSB"
+    class="result">
+</div>
 
-            Coloca el cursor en el campo y escanea
-            el código. El sistema detectará automáticamente
-            la tecla ENTER enviada por el lector.
+<div class="activity">
 
-        </div>
+<h3>
+    Actividad reciente
+</h3>
 
+<div
+    id="logUSB"
+    class="log">
 
-        <div
-            id="resultadoUSB"
-            class="result">
-        </div>
+<div class="log-item">
 
+<span class="log-message">
+    Aún no hay registros de asistencia.
+</span>
 
-        <div class="activity">
+</div>
 
-            <h3>
-                Actividad reciente
-            </h3>
+</div>
 
-            <div
-                id="logUSB"
-                class="log">
+</div>
 
-                <div class="log-item">
-
-                    <span class="log-message">
-                        Aún no hay registros de asistencia.
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 
-
-<!-- =====================================================
-     SECCIÓN CÁMARA
-===================================================== -->
+<!-- ========================= -->
+<!-- CAMARA -->
+<!-- ========================= -->
 
 <section
     id="seccionCamara"
     class="section">
 
-    <div class="card">
+<div class="card">
 
-        <div class="card-header">
+<div class="card-header">
 
-            <h2>
-                Escanear con cámara
-            </h2>
+<h2>
+    Escanear con cámara
+</h2>
 
-            <p>
-                La cámara trasera se iniciará automáticamente.
-                Apunta el dispositivo hacia el código QR o
-                código de barras del alumno.
-            </p>
+<p>
+    La cámara trasera se iniciará automáticamente.
+    Apunta el dispositivo hacia el código QR
+    o código de barras del alumno.
+</p>
 
-        </div>
+</div>
 
+<div
+    id="statusCamara"
+    class="status">
 
-        <div
-            id="statusCamara"
-            class="status">
+<span class="status-dot"></span>
 
-            <span class="status-dot"></span>
+<span id="statusCamaraText">
+    Cámara preparada
+</span>
 
-            <span id="statusCamaraText">
-                Cámara preparada
-            </span>
+</div>
 
-        </div>
+<div class="camera-box">
 
+<video
+    id="video"
+    autoplay
+    muted
+    playsinline>
+</video>
 
-        <div class="camera-box">
+<div
+    id="cameraPlaceholder"
+    class="camera-placeholder">
 
-            <video
-                id="video"
-                autoplay
-                muted
-                playsinline>
-            </video>
+<div class="icon">
+    📷
+</div>
 
+<p>
+    La cámara se iniciará automáticamente.
+</p>
 
-            <div
-                id="cameraPlaceholder"
-                class="camera-placeholder">
+</div>
 
-                <div class="icon">
-                    📷
-                </div>
+<div
+    id="scanFrame"
+    class="scan-frame">
+</div>
 
-                <p>
-                    La cámara se iniciará automáticamente.
-                </p>
+</div>
 
-            </div>
+<div class="camera-buttons">
 
+<button
+    id="btnCambiarCamara"
+    class="secondary-btn change-camera"
+    onclick="cambiarCamara()">
 
-            <div
-                id="scanFrame"
-                class="scan-frame">
-            </div>
+    🔄 Cambiar cámara
 
-        </div>
+</button>
 
+<button
+    class="danger-btn stop-camera"
+    onclick="detenerCamara()">
 
-        <div class="camera-buttons">
+    ■ Detener
 
-            <button
-                id="btnCambiarCamara"
-                class="secondary-btn change-camera"
-                onclick="cambiarCamara()">
+</button>
 
-                🔄 Cambiar cámara
+</div>
 
-            </button>
+<div
+    id="resultadoCamara"
+    class="result">
+</div>
 
+<div class="info-box">
 
-            <button
-                id="btnDetenerCamara"
-                class="danger-btn stop-camera"
-                onclick="detenerCamara()">
+<strong>
+    Cámara:
+</strong>
 
-                ■ Detener
+La cámara trasera se utilizará automáticamente
+cuando el dispositivo permita identificarla.
 
-            </button>
+El botón
+<strong>🔄 Cambiar cámara</strong>
+permite alternar entre las cámaras disponibles.
 
-        </div>
+</div>
 
+<div class="activity">
 
-        <div
-            id="resultadoCamara"
-            class="result">
-        </div>
+<h3>
+    Actividad reciente
+</h3>
 
+<div
+    id="logCamara"
+    class="log">
 
-        <div class="info-box">
+<div class="log-item">
 
-            <strong>
-                Cámara:
-            </strong>
+<span class="log-message">
+    Aún no hay registros de asistencia.
+</span>
 
-            La cámara trasera se utiliza automáticamente
-            cuando el dispositivo permite identificarla.
-            El botón <strong>🔄 Cambiar cámara</strong>
-            permite alternar entre las cámaras disponibles.
+</div>
 
-        </div>
+</div>
 
+</div>
 
-        <div class="activity">
-
-            <h3>
-                Actividad reciente
-            </h3>
-
-            <div
-                id="logCamara"
-                class="log">
-
-                <div class="log-item">
-
-                    <span class="log-message">
-                        Aún no hay registros de asistencia.
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 </main>
 
-
-
 <footer>
 
-    OFTV No. 0216 "Francisco Villa"
-    · Sistema de Apoyo y Gestión Escolar
+OFTV No. 0216 "Francisco Villa"
+· Sistema de Apoyo y Gestión Escolar
 
 </footer>
 
 
-
 <script>
 
-/* =========================================================
+/* =========================================
    SUPABASE
-========================================================= */
+========================================= */
 
 const SUPABASE_URL =
-    "https://nlpdpvjtdxknhvgqbfls.supabase.co";
+"https://nlpdpvjtdxknhvgqbfls.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
+"sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 
-/* =========================================================
+/* =========================================
    VARIABLES
-========================================================= */
+========================================= */
 
 let codeReader = null;
 
@@ -998,9 +1087,9 @@ let ultimoCodigo = "";
 let ultimoEscaneo = 0;
 
 
-/* =========================================================
-   CAMBIAR SECCIÓN
-========================================================= */
+/* =========================================
+   CAMBIAR SECCION
+========================================= */
 
 function mostrarSeccion(seccion){
 
@@ -1011,7 +1100,6 @@ function mostrarSeccion(seccion){
     document
         .getElementById("seccionCamara")
         .classList.remove("active");
-
 
     document
         .getElementById("btnUSB")
@@ -1032,9 +1120,7 @@ function mostrarSeccion(seccion){
             .getElementById("btnUSB")
             .classList.add("active");
 
-
         detenerCamara();
-
 
         setTimeout(() => {
 
@@ -1057,11 +1143,6 @@ function mostrarSeccion(seccion){
             .getElementById("btnCamara")
             .classList.add("active");
 
-
-        /*
-            La cámara inicia automáticamente.
-        */
-
         if(!camaraActiva){
 
             setTimeout(
@@ -1076,22 +1157,17 @@ function mostrarSeccion(seccion){
 }
 
 
-/* =========================================================
-   ESCÁNER USB
-========================================================= */
+/* =========================================
+   ESCANER USB
+========================================= */
 
 const scanner =
-    document.getElementById("scanner");
+document.getElementById("scanner");
 
 
 scanner.addEventListener(
     "input",
     function(){
-
-        /*
-            Cualquier carácter que no sea número
-            se transforma en "-"
-        */
 
         this.value =
             this.value
@@ -1126,10 +1202,8 @@ async function procesarCodigoUSB(){
 
     }
 
-
     const codigo =
         scanner.value.trim();
-
 
     if(!codigo){
 
@@ -1144,16 +1218,13 @@ async function procesarCodigoUSB(){
 
     }
 
-
     procesandoCodigo = true;
-
 
     actualizarStatus(
         "usb",
         "warning",
         "Consultando alumno..."
     );
-
 
     try{
 
@@ -1165,29 +1236,29 @@ async function procesarCodigoUSB(){
     }
     catch(error){
 
-        console.error(error);
+        console.error(
+            "ERROR COMPLETO:",
+            error
+        );
 
         mostrarResultado(
             "usb",
             "error",
-            "❌ Error",
-            "No fue posible consultar al alumno."
+            "❌ Error de consulta",
+            obtenerMensajeError(error)
         );
 
         actualizarStatus(
             "usb",
             "error",
-            "Error de conexión"
+            "Error al consultar Supabase"
         );
 
     }
 
-
     procesandoCodigo = false;
 
-
     scanner.value = "";
-
 
     setTimeout(
         () => scanner.focus(),
@@ -1197,9 +1268,9 @@ async function procesarCodigoUSB(){
 }
 
 
-/* =========================================================
-   INICIAR CÁMARA
-========================================================= */
+/* =========================================
+   CAMARA
+========================================= */
 
 async function iniciarCamara(){
 
@@ -1209,7 +1280,6 @@ async function iniciarCamara(){
 
     }
 
-
     if(
         typeof ZXingBrowser ===
         "undefined"
@@ -1218,13 +1288,13 @@ async function iniciarCamara(){
         actualizarStatus(
             "camara",
             "error",
-            "No se pudo cargar el lector."
+            "No se pudo cargar el lector"
         );
 
         mostrarResultado(
             "camara",
             "error",
-            "❌ Error del lector",
+            "❌ Error",
             "No se pudo cargar el sistema de escaneo."
         );
 
@@ -1260,10 +1330,6 @@ async function iniciarCamara(){
         }
 
 
-        /*
-            Buscar cámara trasera.
-        */
-
         let indiceTrasera =
             camarasDisponibles.findIndex(
                 camara => {
@@ -1273,7 +1339,6 @@ async function iniciarCamara(){
                             camara.label ||
                             ""
                         ).toLowerCase();
-
 
                     return (
                         nombre.includes("back") ||
@@ -1285,11 +1350,6 @@ async function iniciarCamara(){
                 }
             );
 
-
-        /*
-            Si no se puede identificar,
-            utilizar la primera.
-        */
 
         if(indiceTrasera < 0){
 
@@ -1310,7 +1370,7 @@ async function iniciarCamara(){
     catch(error){
 
         console.error(
-            "Error cámara:",
+            "ERROR CAMARA:",
             error
         );
 
@@ -1321,9 +1381,9 @@ async function iniciarCamara(){
 }
 
 
-/* =========================================================
-   INICIAR CÁMARA POR ÍNDICE
-========================================================= */
+/* =========================================
+   INICIAR CAMARA
+========================================= */
 
 async function iniciarCamaraPorIndice(indice){
 
@@ -1383,10 +1443,6 @@ async function iniciarCamaraPorIndice(indice){
                     const ahora =
                         Date.now();
 
-
-                    /*
-                        Evitar lectura duplicada.
-                    */
 
                     if(
                         codigo === ultimoCodigo &&
@@ -1456,18 +1512,18 @@ async function iniciarCamaraPorIndice(indice){
 }
 
 
-/* =========================================================
-   CAMBIAR CÁMARA
-========================================================= */
+/* =========================================
+   CAMBIAR CAMARA
+========================================= */
 
 async function cambiarCamara(){
 
-    if(
-        !camarasDisponibles ||
-        camarasDisponibles.length < 2
-    ){
+    try{
 
-        try{
+        if(
+            !camarasDisponibles ||
+            camarasDisponibles.length < 2
+        ){
 
             camarasDisponibles =
                 await ZXingBrowser
@@ -1475,56 +1531,45 @@ async function cambiarCamara(){
                     .listVideoInputDevices();
 
         }
-        catch(error){
 
-            manejarErrorCamara(error);
+
+        if(
+            camarasDisponibles.length < 2
+        ){
+
+            mostrarResultado(
+                "camara",
+                "warning",
+                "⚠️ No hay otra cámara",
+                "Este dispositivo solamente tiene una cámara disponible."
+            );
 
             return;
 
         }
 
-    }
+
+        camaraActual++;
 
 
-    if(
-        camarasDisponibles.length < 2
-    ){
+        if(
+            camaraActual >=
+            camarasDisponibles.length
+        ){
 
-        mostrarResultado(
-            "camara",
-            "warning",
-            "⚠️ No hay otra cámara",
-            "Este dispositivo solamente tiene una cámara disponible."
-        );
+            camaraActual = 0;
 
-        return;
-
-    }
+        }
 
 
-    camaraActual++;
+        camaraActiva = false;
 
-
-    if(
-        camaraActual >=
-        camarasDisponibles.length
-    ){
-
-        camaraActual = 0;
-
-    }
-
-
-    try{
 
         actualizarStatus(
             "camara",
             "warning",
             "Cambiando cámara..."
         );
-
-
-        camaraActiva = false;
 
 
         await iniciarCamaraPorIndice(
@@ -1534,7 +1579,10 @@ async function cambiarCamara(){
     }
     catch(error){
 
-        console.error(error);
+        console.error(
+            "ERROR CAMBIANDO CAMARA:",
+            error
+        );
 
         manejarErrorCamara(error);
 
@@ -1543,9 +1591,9 @@ async function cambiarCamara(){
 }
 
 
-/* =========================================================
-   PROCESAR CÓDIGO DE CÁMARA
-========================================================= */
+/* =========================================
+   PROCESAR CAMARA
+========================================= */
 
 async function procesarCodigoCamara(codigo){
 
@@ -1566,19 +1614,24 @@ async function procesarCodigoCamara(codigo){
     }
     catch(error){
 
-        console.error(error);
+        console.error(
+            "ERROR CONSULTA CAMARA:",
+            error
+        );
+
 
         mostrarResultado(
             "camara",
             "error",
-            "❌ Error",
-            "No fue posible consultar al alumno."
+            "❌ Error de consulta",
+            obtenerMensajeError(error)
         );
+
 
         actualizarStatus(
             "camara",
             "error",
-            "Error al consultar alumno"
+            "Error al consultar Supabase"
         );
 
     }
@@ -1604,22 +1657,26 @@ async function procesarCodigoCamara(codigo){
 }
 
 
-/* =========================================================
+/* =========================================
    REGISTRAR ASISTENCIA
-========================================================= */
+========================================= */
 
 async function registrarAsistencia(
     codigo,
     origen
 ){
 
+    const matricula =
+        String(codigo).trim();
+
+
     const hoy =
         obtenerFechaLocal();
 
 
-    /* =========================================
-       BUSCAR ALUMNO
-    ========================================= */
+    /*
+       1. BUSCAR ALUMNO
+    */
 
     const {
         data: alumno,
@@ -1628,20 +1685,28 @@ async function registrarAsistencia(
         await supabaseClient
             .from("alumnos")
             .select("*")
-            .eq("matricula",codigo)
+            .eq(
+                "matricula",
+                matricula
+            )
             .maybeSingle();
 
 
     if(errorAlumno){
+
+        console.error(
+            "ERROR TABLA ALUMNOS:",
+            errorAlumno
+        );
 
         throw errorAlumno;
 
     }
 
 
-    /* =========================================
-       ALUMNO NO ENCONTRADO
-    ========================================= */
+    /*
+       ALUMNO NO EXISTE
+    */
 
     if(!alumno){
 
@@ -1653,8 +1718,10 @@ async function registrarAsistencia(
             No existe un alumno registrado con
             la matrícula:
 
+            <br>
+
             <strong>
-                ${escaparHTML(codigo)}
+                ${escaparHTML(matricula)}
             </strong>
             `
         );
@@ -1667,11 +1734,6 @@ async function registrarAsistencia(
         );
 
 
-        /*
-            ÚNICO evento que entra
-            en actividad reciente.
-        */
-
         agregarLog(
             origen,
             "❌ Alumno no encontrado"
@@ -1683,51 +1745,68 @@ async function registrarAsistencia(
     }
 
 
-    /* =========================================
-       OBTENER NOMBRE
-    ========================================= */
+    /*
+       NOMBRE
+    */
 
     const nombreAlumno =
         alumno.nombre_completo ||
         alumno.nombre ||
         alumno.nombres ||
+        alumno.nombreCompleto ||
         "Alumno";
 
 
-    /* =========================================
-       BUSCAR ASISTENCIA DEL DÍA
-    ========================================= */
+    /*
+       2. BUSCAR ASISTENCIA DEL DIA
+    */
 
     const {
-        data: asistencia,
+        data: asistencias,
         error: errorAsistencia
     } =
         await supabaseClient
             .from("asistencias")
             .select("*")
-            .eq("matricula",codigo)
-            .eq("fecha",hoy)
+            .eq(
+                "matricula",
+                matricula
+            )
+            .eq(
+                "fecha",
+                hoy
+            )
             .order(
                 "id",
                 {
                     ascending:false
                 }
             )
-            .limit(1)
-            .maybeSingle();
+            .limit(1);
 
 
     if(errorAsistencia){
+
+        console.error(
+            "ERROR TABLA ASISTENCIAS:",
+            errorAsistencia
+        );
 
         throw errorAsistencia;
 
     }
 
 
-    /* =========================================
-       PRIMER ESCANEO
-       REGISTRAR ASISTENCIA
-    ========================================= */
+    const asistencia =
+        asistencias &&
+        asistencias.length > 0
+            ? asistencias[0]
+            : null;
+
+
+    /*
+       3. PRIMER REGISTRO
+    */
 
     if(!asistencia){
 
@@ -1735,31 +1814,41 @@ async function registrarAsistencia(
             obtenerHoraLocal();
 
 
+        const nuevoRegistro = {
+
+            alumno_id:
+                alumno.id,
+
+            matricula:
+                matricula,
+
+            fecha:
+                hoy,
+
+            hora_entrada:
+                horaEntrada
+
+        };
+
+
         const {
-            error
+            error: errorInsert
         } =
             await supabaseClient
                 .from("asistencias")
-                .insert({
-
-                    alumno_id:
-                        alumno.id,
-
-                    matricula:
-                        codigo,
-
-                    fecha:
-                        hoy,
-
-                    hora_entrada:
-                        horaEntrada
-
-                });
+                .insert(
+                    nuevoRegistro
+                );
 
 
-        if(error){
+        if(errorInsert){
 
-            throw error;
+            console.error(
+                "ERROR INSERT ASISTENCIA:",
+                errorInsert
+            );
+
+            throw errorInsert;
 
         }
 
@@ -1777,7 +1866,7 @@ async function registrarAsistencia(
 
             Matrícula:
             <strong>
-                ${escaparHTML(codigo)}
+                ${escaparHTML(matricula)}
             </strong>
 
             <br><br>
@@ -1803,11 +1892,6 @@ async function registrarAsistencia(
         );
 
 
-        /*
-            ACTIVIDAD:
-            SOLO asistencia.
-        */
-
         agregarLog(
             origen,
             "✅ Asistencia registrada a " +
@@ -1820,10 +1904,9 @@ async function registrarAsistencia(
     }
 
 
-    /* =========================================
-       SEGUNDO ESCANEO
-       REGISTRAR SALIDA
-    ========================================= */
+    /*
+       4. EXISTE ENTRADA PERO NO SALIDA
+    */
 
     if(
         asistencia.hora_entrada &&
@@ -1835,7 +1918,7 @@ async function registrarAsistencia(
 
 
         const {
-            error
+            error: errorUpdate
         } =
             await supabaseClient
                 .from("asistencias")
@@ -1851,9 +1934,14 @@ async function registrarAsistencia(
                 );
 
 
-        if(error){
+        if(errorUpdate){
 
-            throw error;
+            console.error(
+                "ERROR UPDATE SALIDA:",
+                errorUpdate
+            );
+
+            throw errorUpdate;
 
         }
 
@@ -1861,7 +1949,7 @@ async function registrarAsistencia(
         mostrarResultado(
             origen,
             "success",
-            "✅ Alumno encontrado",
+            "🟢 Salida registrada",
             `
             <strong>
                 ${escaparHTML(nombreAlumno)}
@@ -1871,20 +1959,14 @@ async function registrarAsistencia(
 
             Matrícula:
             <strong>
-                ${escaparHTML(codigo)}
+                ${escaparHTML(matricula)}
             </strong>
 
             <br><br>
 
-            <strong>
-                Asistencia registrada
-            </strong>
-
-            <br>
-
             Entrada:
             <strong>
-                ${asistencia.hora_entrada}
+                ${escaparHTML(asistencia.hora_entrada)}
             </strong>
 
             <br>
@@ -1910,11 +1992,6 @@ async function registrarAsistencia(
         );
 
 
-        /*
-            ACTIVIDAD:
-            SOLO salida.
-        */
-
         agregarLog(
             origen,
             "🟢 Salida registrada a " +
@@ -1927,10 +2004,9 @@ async function registrarAsistencia(
     }
 
 
-    /* =========================================
-       TERCER ESCANEO
-       TODO YA REGISTRADO
-    ========================================= */
+    /*
+       5. YA TIENE ENTRADA Y SALIDA
+    */
 
     if(
         asistencia.hora_entrada &&
@@ -1939,8 +2015,8 @@ async function registrarAsistencia(
 
         mostrarResultado(
             origen,
-            "success",
-            "✅ Alumno encontrado",
+            "warning",
+            "⚠️ Registro completo",
             `
             <strong>
                 ${escaparHTML(nombreAlumno)}
@@ -1950,27 +2026,26 @@ async function registrarAsistencia(
 
             Matrícula:
             <strong>
-                ${escaparHTML(codigo)}
+                ${escaparHTML(matricula)}
             </strong>
 
             <br><br>
 
-            <strong>
-                Asistencia y salida ya registradas
-            </strong>
+            Este alumno ya registró
+            su asistencia y salida.
 
-            <br>
+            <br><br>
 
             Entrada:
             <strong>
-                ${asistencia.hora_entrada}
+                ${escaparHTML(asistencia.hora_entrada)}
             </strong>
 
             <br>
 
             Salida:
             <strong>
-                ${asistencia.hora_salida}
+                ${escaparHTML(asistencia.hora_salida)}
             </strong>
             `
         );
@@ -1978,15 +2053,10 @@ async function registrarAsistencia(
 
         actualizarStatus(
             origen,
-            "success",
+            "warning",
             "Asistencia y salida ya registradas"
         );
 
-
-        /*
-            ACTIVIDAD:
-            SOLO mensaje final.
-        */
 
         agregarLog(
             origen,
@@ -2003,9 +2073,9 @@ async function registrarAsistencia(
 }
 
 
-/* =========================================================
+/* =========================================
    DETENER ZXING
-========================================================= */
+========================================= */
 
 function detenerControlesZXing(){
 
@@ -2074,14 +2144,13 @@ function detenerControlesZXing(){
 }
 
 
-/* =========================================================
-   DETENER CÁMARA
-========================================================= */
+/* =========================================
+   DETENER CAMARA
+========================================= */
 
 function detenerCamara(){
 
     detenerControlesZXing();
-
 
     camaraActiva = false;
 
@@ -2099,20 +2168,20 @@ function detenerCamara(){
     actualizarStatus(
         "camara",
         null,
-        "Cámara detenida"
+        "Cámara preparada"
     );
 
 }
 
 
-/* =========================================================
-   ERROR DE CÁMARA
-========================================================= */
+/* =========================================
+   ERROR CAMARA
+========================================= */
 
 function manejarErrorCamara(error){
 
     console.error(
-        "Error de cámara:",
+        "ERROR CAMARA:",
         error
     );
 
@@ -2136,7 +2205,8 @@ function manejarErrorCamara(error){
 
     if(
         error &&
-        error.name === "NotAllowedError"
+        error.name ===
+        "NotAllowedError"
     ){
 
         mensaje =
@@ -2147,7 +2217,8 @@ function manejarErrorCamara(error){
 
     if(
         error &&
-        error.name === "NotFoundError"
+        error.name ===
+        "NotFoundError"
     ){
 
         mensaje =
@@ -2158,7 +2229,8 @@ function manejarErrorCamara(error){
 
     if(
         error &&
-        error.name === "NotReadableError"
+        error.name ===
+        "NotReadableError"
     ){
 
         mensaje =
@@ -2169,7 +2241,8 @@ function manejarErrorCamara(error){
 
     if(
         error &&
-        error.message === "NO_CAMERA"
+        error.message ===
+        "NO_CAMERA"
     ){
 
         mensaje =
@@ -2195,9 +2268,9 @@ function manejarErrorCamara(error){
 }
 
 
-/* =========================================================
+/* =========================================
    STATUS
-========================================================= */
+========================================= */
 
 function actualizarStatus(
     origen,
@@ -2230,7 +2303,9 @@ function actualizarStatus(
 
     if(tipo){
 
-        status.classList.add(tipo);
+        status.classList.add(
+            tipo
+        );
 
     }
 
@@ -2241,9 +2316,9 @@ function actualizarStatus(
 }
 
 
-/* =========================================================
+/* =========================================
    RESULTADO
-========================================================= */
+========================================= */
 
 function mostrarResultado(
     origen,
@@ -2261,7 +2336,8 @@ function mostrarResultado(
 
 
     elemento.className =
-        "result show " + tipo;
+        "result show " +
+        tipo;
 
 
     elemento.innerHTML =
@@ -2290,9 +2366,9 @@ function mostrarResultado(
 }
 
 
-/* =========================================================
-   ACTIVIDAD RECIENTE
-========================================================= */
+/* =========================================
+   ACTIVIDAD
+========================================= */
 
 function agregarLog(
     origen,
@@ -2306,22 +2382,6 @@ function agregarLog(
                 : "logCamara"
         );
 
-
-    /*
-        Si aparece el mensaje inicial,
-        eliminarlo.
-    */
-
-    const primerMensaje =
-        log.querySelector(
-            ".mensaje-vacio"
-        );
-
-
-    /*
-        También eliminamos el texto inicial
-        antiguo si existe.
-    */
 
     const items =
         log.querySelectorAll(
@@ -2369,10 +2429,6 @@ function agregarLog(
     log.prepend(item);
 
 
-    /*
-        Máximo 20 movimientos.
-    */
-
     while(
         log.children.length > 20
     ){
@@ -2386,9 +2442,9 @@ function agregarLog(
 }
 
 
-/* =========================================================
-   FECHA
-========================================================= */
+/* =========================================
+   FECHA LOCAL
+========================================= */
 
 function obtenerFechaLocal(){
 
@@ -2429,9 +2485,9 @@ function obtenerFechaLocal(){
 }
 
 
-/* =========================================================
-   HORA
-========================================================= */
+/* =========================================
+   HORA LOCAL
+========================================= */
 
 function obtenerHoraLocal(){
 
@@ -2477,9 +2533,9 @@ function obtenerHoraLocal(){
 }
 
 
-/* =========================================================
+/* =========================================
    ESCAPAR HTML
-========================================================= */
+========================================= */
 
 function escaparHTML(texto){
 
@@ -2498,9 +2554,56 @@ function escaparHTML(texto){
 }
 
 
-/* =========================================================
+/* =========================================
+   MENSAJE DE ERROR SUPABASE
+========================================= */
+
+function obtenerMensajeError(error){
+
+    if(!error){
+
+        return "Ocurrió un error desconocido.";
+
+    }
+
+
+    if(error.message){
+
+        return `
+            ${escaparHTML(error.message)}
+        `;
+
+    }
+
+
+    if(error.details){
+
+        return `
+            ${escaparHTML(error.details)}
+        `;
+
+    }
+
+
+    if(error.hint){
+
+        return `
+            ${escaparHTML(error.hint)}
+        `;
+
+    }
+
+
+    return `
+        No fue posible completar la consulta.
+    `;
+
+}
+
+
+/* =========================================
    INICIO
-========================================================= */
+========================================= */
 
 window.addEventListener(
     "load",
@@ -2526,9 +2629,9 @@ window.addEventListener(
 );
 
 
-/* =========================================================
-   CERRAR PÁGINA
-========================================================= */
+/* =========================================
+   SALIR
+========================================= */
 
 window.addEventListener(
     "beforeunload",
