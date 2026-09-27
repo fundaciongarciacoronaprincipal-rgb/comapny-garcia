@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Estado del Sistema | Gestión y Apoyo Escolar</title>
+
+<style>
+
+:root{
+    --azul:#0b1f3a;
+    --azul2:#12345a;
+    --azul3:#2563eb;
+    --azul4:#38bdf8;
+    --verde:#16a34a;
+    --rojo:#dc2626;
+    --amarillo:#f59e0b;
+    --fondo:#eef3f8;
+    --blanco:#ffffff;
+    --texto:#0f172a;
+    --texto2:#64748b;
+    --borde:#e2e8f0;
+    --sombra:0 12px 35px rgba(15,23,42,.08);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(37,99,235,.08),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fafc 0%,
+            #eef3f8 100%
+        );
+    color:var(--texto);
+    padding:25px;
+}
+
+.contenedor{
+    width:100%;
+    max-width:1250px;
+    margin:auto;
+}
+
+/* ================================
+   ENCABEZADO
+================================ */
+
+.encabezado{
+    position:relative;
+    overflow:hidden;
+    background:
+        linear-gradient(
+            135deg,
+            #07182e,
+            #0b1f3a 55%,
+            #123c68
+        );
+    color:white;
+    border-radius:24px;
+    padding:32px;
+    margin-bottom:24px;
+    box-shadow:
+        0 18px 45px rgba(11,31,58,.18);
+}
+
+.encabezado::before{
+    content:"";
+    position:absolute;
+    width:300px;
+    height:300px;
+    border-radius:50%;
+    background:rgba(56,189,248,.10);
+    right:-100px;
+    top:-150px;
+}
+
+.encabezado::after{
+    content:"";
+    position:absolute;
+    width:200px;
+    height:200px;
+    border-radius:50%;
+    background:rgba(37,99,235,.12);
+    left:-80px;
+    bottom:-120px;
+}
+
+.encabezado-contenido{
+    position:relative;
+    z-index:2;
+}
+
+.etiqueta{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.12);
+    padding:7px 12px;
+    border-radius:50px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.8px;
+    margin-bottom:15px;
+}
+
+.punto{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 10px #22c55e;
+}
+
+.encabezado h1{
+    font-size:clamp(27px,4vw,42px);
+    letter-spacing:-1px;
+    margin-bottom:8px;
+}
+
+.encabezado p{
+    color:#cbd5e1;
+    font-size:15px;
+}
+
+.subtitulo{
+    margin-top:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    color:#94a3b8;
+}
+
+/* ================================
+   GRID
+================================ */
+
+.grid{
+    display:grid;
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(270px,1fr)
+        );
+    gap:18px;
+}
+
+/* ================================
+   TARJETAS
+================================ */
+
+.tarjeta{
+    position:relative;
+    background:var(--blanco);
+    border:1px solid rgba(226,232,240,.8);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:var(--sombra);
+    overflow:hidden;
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+.tarjeta:hover{
+    transform:translateY(-3px);
+    box-shadow:
+        0 18px 40px rgba(15,23,42,.12);
+    border-color:#cbd5e1;
+}
+
+.tarjeta::after{
+    content:"";
+    position:absolute;
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:rgba(37,99,235,.04);
+    right:-25px;
+    top:-25px;
+}
+
+.icono{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eff6ff;
+    color:var(--azul3);
+    font-size:20px;
+    margin-bottom:14px;
+}
+
+.tarjeta h3{
+    font-size:13px;
+    font-weight:700;
+    color:var(--texto2);
+    text-transform:uppercase;
+    letter-spacing:.6px;
+    margin-bottom:9px;
+}
+
+.valor{
+    font-size:27px;
+    line-height:1.2;
+    font-weight:800;
+    color:var(--texto);
+}
+
+.info{
+    margin-top:8px;
+    color:var(--texto2);
+    font-size:13px;
+    line-height:1.5;
+}
+
+.activo{
+    color:var(--verde);
+}
+
+.inactivo{
+    color:var(--rojo);
+}
+
+/* ================================
+   ALMACENAMIENTO
+================================ */
+
+.barra{
+    width:100%;
+    height:12px;
+    background:#e2e8f0;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:17px;
+}
+
+.progreso{
+    width:0%;
+    height:100%;
+    border-radius:20px;
+    background:
+        linear-gradient(
+            90deg,
+            #2563eb,
+            #38bdf8
+        );
+    transition:width 1s ease;
+}
+
+.porcentaje{
+    display:flex;
+    justify-content:space-between;
+    margin-top:9px;
+    font-size:12px;
+    color:#64748b;
+}
+
+/* ================================
+   ESTADO
+================================ */
+
+.estado{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:5px;
+    padding:8px 13px;
+    border-radius:50px;
+    background:#ecfdf5;
+    color:#15803d;
+    font-size:13px;
+    font-weight:800;
+}
+
+.estado-punto{
+    width:8px;
+    height:8px;
+    background:#22c55e;
+    border-radius:50%;
+}
+
+/* ================================
+   CUENTA REGRESIVA
+================================ */
+
+.tarjeta-actualizacion{
+    grid-column:span 2;
+    background:
+        linear-gradient(
+            135deg,
+            #0b1f3a,
+            #12345a
+        );
+    color:white;
+    border:none;
+}
+
+.tarjeta-actualizacion::after{
+    background:rgba(56,189,248,.08);
+}
+
+.tarjeta-actualizacion .icono{
+    background:rgba(255,255,255,.10);
+    color:#7dd3fc;
+}
+
+.tarjeta-actualizacion h3{
+    color:#94a3b8;
+}
+
+.tarjeta-actualizacion .valor{
+    color:white;
+}
+
+.tarjeta-actualizacion .info{
+    color:#94a3b8;
+}
+
+.contador{
+    font-size:
+        clamp(25px,4vw,38px);
+    font-weight:900;
+    letter-spacing:1px;
+    margin-top:5px;
+}
+
+.contador-completo{
+    color:#fbbf24 !important;
+}
+
+.boton-actualizacion{
+    display:none;
+    border:none;
+    outline:none;
+    margin-top:18px;
+    padding:12px 18px;
+    border-radius:12px;
+    background:#22c55e;
+    color:white;
+    font-size:14px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.2s;
+    box-shadow:
+        0 8px 20px rgba(34,197,94,.25);
+}
+
+.boton-actualizacion:hover{
+    background:#16a34a;
+    transform:translateY(-2px);
+}
+
+.boton-actualizacion:active{
+    transform:scale(.98);
+}
+
+/* ================================
+   PAGO
+================================ */
+
+.separador{
+    border:none;
+    border-top:1px solid var(--borde);
+    margin:18px 0;
+}
+
+.etiqueta-pequena{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+    color:#94a3b8;
+    font-weight:800;
+}
+
+/* ================================
+   INFORMACION
+================================ */
+
+.footer{
+    margin-top:24px;
+    background:white;
+    border:1px solid rgba(226,232,240,.8);
+    padding:25px;
+    border-radius:20px;
+    box-shadow:var(--sombra);
+}
+
+.footer-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.footer h2{
+    font-size:20px;
+    color:var(--texto);
+}
+
+.footer-descripcion{
+    color:var(--texto2);
+    font-size:13px;
+    margin-top:4px;
+}
+
+.badge{
+    background:#eff6ff;
+    color:#2563eb;
+    border-radius:50px;
+    padding:7px 11px;
+    font-size:11px;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.tabla-contenedor{
+    width:100%;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+td{
+    padding:14px 10px;
+    border-bottom:1px solid #eef2f7;
+    font-size:13px;
+}
+
+td:first-child{
+    color:#64748b;
+    font-weight:600;
+    width:45%;
+}
+
+td:last-child{
+    color:#0f172a;
+    font-weight:700;
+}
+
+tr:last-child td{
+    border-bottom:none;
+}
+
+/* ================================
+   PIE
+================================ */
+
+.pie{
+    text-align:center;
+    padding:24px 10px 5px;
+    color:#94a3b8;
+    font-size:11px;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media(max-width:800px){
+
+    body{
+        padding:14px;
+    }
+
+    .encabezado{
+        padding:25px 20px;
+        border-radius:20px;
+    }
+
+    .tarjeta-actualizacion{
+        grid-column:span 1;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .tarjeta{
+        padding:20px;
+    }
+
+    .footer{
+        padding:20px;
+    }
+
+    .footer-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    td{
+        padding:12px 7px;
+    }
+
+    td:first-child{
+        width:48%;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<!-- ================================
+     ENCABEZADO
+================================= -->
+
+<header class="encabezado">
+
+
+<div class="encabezado-contenido">
+
+    <div class="etiqueta">
+        <span class="punto"></span>
+        SISTEMA OPERATIVO
+    </div>
+
+    <h1>Estado del Sistema</h1>
+
+    <p>
+        Monitoreo general de recursos, servicios y disponibilidad
+    </p>
+
+    <div class="subtitulo">
+        Gestión y Apoyo Escolar
+        <span>•</span>
+        Panel de supervisión
+    </div>
+
+</div>
+
+
+</header>
+
+<!-- ================================
+     TARJETAS PRINCIPALES
+================================= -->
+
+<div class="grid">
+
+
+<!-- ALMACENAMIENTO ASIGNADO -->
+
+<div class="tarjeta">
+
+    <div class="icono">▣</div>
+
+    <h3>
+        Almacenamiento asignado
+    </h3>
+
+    <div
+        class="valor"
+        id="almacenamientoAsignado"
+    >
+        2 GB
+    </div>
+
+    <div class="info">
+        Capacidad total disponible para el sistema.
+    </div>
+
+</div>
+
+
+<!-- ALMACENAMIENTO DISPONIBLE -->
+
+<div class="tarjeta">
+
+    <div class="icono">◈</div>
+
+    <h3>
+        Almacenamiento disponible
+    </h3>
+
+    <div
+        class="valor"
+        id="almacenamientoDisponible"
+    >
+        1.55 GB
+    </div>
+
+    <div class="info">
+        Espacio disponible actualmente.
+    </div>
+
+</div>
+
+
+<!-- ALMACENAMIENTO CONSUMIDO -->
+
+<div class="tarjeta">
+
+    <div class="icono">◉</div>
+
+    <h3>
+        Almacenamiento consumido
+    </h3>
+
+    <div
+        class="valor"
+        id="almacenamientoConsumido"
+    >
+        0.45 GB
+    </div>
+
+    <div class="info">
+        Espacio utilizado actualmente.
+    </div>
+
+</div>
+
+
+<!-- USO DE ALMACENAMIENTO -->
+
+<div class="tarjeta">
+
+    <div class="icono">▥</div>
+
+    <h3>
+        Uso de almacenamiento
+    </h3>
+
+    <div
+        class="valor"
+        id="textoPorcentaje"
+    >
+        22.5%
+    </div>
+
+    <div class="barra">
+        <div
+            class="progreso"
+            id="barraProgreso"
+        ></div>
+    </div>
+
+    <div class="porcentaje">
+
+        <span>
+            Utilizado
+        </span>
+
+        <span>
+            2 GB máximo
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- ESTADO DEL SISTEMA -->
+
+<div class="tarjeta">
+
+    <div class="icono">✓</div>
+
+    <h3>
+        Estado del sistema
+    </h3>
+
+    <div class="estado">
+
+        <span class="estado-punto"></span>
+
+        ACTIVO
+
+    </div>
+
+    <div class="info">
+        Los servicios principales se encuentran disponibles.
+    </div>
+
+</div>
+
+
+<!-- MOTIVO -->
+
+<div class="tarjeta">
+
+    <div class="icono">i</div>
+
+    <h3>
+        Motivo del estado
+    </h3>
+
+    <div class="info">
+        Todos los servicios operan correctamente.
+        No se detectan incidencias actuales.
+    </div>
+
+</div>
+
+
+<!-- ACTUALIZACIÓN -->
+
+<div class="tarjeta tarjeta-actualizacion">
+
+    <div class="icono">↻</div>
+
+    <h3>
+        Próxima actualización
+    </h3>
+
+    <div
+        class="valor contador"
+        id="contadorActualizacion"
+    >
+        70d 00h 00m 00s
+    </div>
+
+    <div
+        class="info"
+        id="textoActualizacion"
+    >
+        Tiempo restante para realizar la actualización del sistema.
+    </div>
+
+    <button
+        class="boton-actualizacion"
+        id="botonActualizacion"
+        onclick="realizarActualizacion()"
+    >
+        ✓ Actualización realizada
+    </button>
+
+</div>
+
+
+<!-- MANTENIMIENTO -->
+
+<div class="tarjeta">
+
+    <div class="icono">⚙</div>
+
+    <h3>
+        Mantenimiento
+    </h3>
+
+    <div class="valor">
+        Programado
+    </div>
+
+    <div class="info">
+        El mantenimiento se realizará conforme al calendario
+        operativo del sistema.
+    </div>
+
+</div>
+
+
+<!-- PAGO -->
+
+<div class="tarjeta">
+
+    <div class="icono">₽</div>
+
+    <h3>
+        Próximo pago
+    </h3>
+
+    <div
+        class="valor"
+        id="fechaPago"
+    >
+        Cargando...
+    </div>
+
+    <div class="info">
+        Pago programado el día 1 de cada mes.
+    </div>
+
+    <hr class="separador">
+
+    <div class="etiqueta-pequena">
+        Tiempo restante
+    </div>
+
+    <div
+        class="valor"
+        id="contadorPago"
+        style="font-size:20px;margin-top:6px;"
+    >
+        00d 00h 00m 00s
+    </div>
+
+</div>
+
+
+</div>
+
+<!-- ================================
+     INFORMACIÓN ADICIONAL
+================================= -->
+
+<section class="footer">
+
+
+<div class="footer-header">
+
+    <div>
+
+        <h2>
+            Información del Sistema
+        </h2>
+
+        <div class="footer-descripcion">
+            Datos técnicos y operativos registrados actualmente.
+        </div>
+
+    </div>
+
+    <div class="badge">
+        INFORMACIÓN TÉCNICA
+    </div>
+
+</div>
+
+
+<div class="tabla-contenedor">
+
+    <table>
+
+        <tr>
+            <td>Nombre del Sistema</td>
+            <td>GESTIÓN Y APOYO ESCOLAR</td>
+        </tr>
+
+        <tr>
+            <td>Versión</td>
+            <td>V0.0.9</td>
+        </tr>
+
+        <tr>
+            <td>Última Actualización</td>
+            <td>01 Junio 2026</td>
+        </tr>
+
+        <tr>
+            <td>Tiempo de Actividad</td>
+            <td>128 días</td>
+        </tr>
+
+        <tr>
+            <td>Estado de Base de Datos</td>
+            <td>Operativa</td>
+        </tr>
+
+        <tr>
+            <td>Estado de Red</td>
+            <td>Conectada</td>
+        </tr>
+
+        <tr>
+            <td>Respaldos</td>
+            <td>Automáticos cada 24 horas</td>
+        </tr>
+
+        <tr>
+            <td>Último Respaldo</td>
+            <td>16 Junio 2026 - 08:30 AM</td>
+        </tr>
+
+        <tr>
+            <td>Seguridad</td>
+            <td>Protección Activa</td>
+        </tr>
+
+        <tr>
+            <td>Licencia</td>
+            <td>Vigente</td>
+        </tr>
+
+        <tr>
+            <td>Expiración de Licencia</td>
+            <td>31 Diciembre 2027</td>
+        </tr>
+
+        <tr>
+            <td>Servidor Principal</td>
+            <td>En Línea</td>
+        </tr>
+
+        <tr>
+            <td>Servidor Secundario</td>
+            <td>En Espera</td>
+        </tr>
+
+        <tr>
+            <td>CPU Utilizado</td>
+            <td>43%</td>
+        </tr>
+
+        <tr>
+            <td>RAM Utilizada</td>
+            <td>58%</td>
+        </tr>
+
+        <tr>
+            <td>Temperatura del Sistema</td>
+            <td>41°C</td>
+        </tr>
+
+        <tr>
+            <td>ID del Sistema</td>
+            <td>NXD-2026-001</td>
+        </tr>
+
+    </table>
+
+</div>
+
+
+</section>
+
+<div class="pie">
+
+
+Gestión y Apoyo Escolar
+•
+Panel de Estado del Sistema
+•
+2026
+
+
+</div>
+
+</div>
+
+<script>
+
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
+
+const ALMACENAMIENTO_TOTAL = 2;
+const ALMACENAMIENTO_CONSUMIDO = 0.45;
+
+/*
+   1680 horas = 70 días
+*/
+const HORAS_ACTUALIZACION = 1680;
+
+const DURACION_ACTUALIZACION =
+    HORAS_ACTUALIZACION *
+    60 *
+    60 *
+    1000;
+
+
+/* =====================================================
+   ALMACENAMIENTO
+===================================================== */
+
+function actualizarAlmacenamiento(){
+
+    const asignado =
+        ALMACENAMIENTO_TOTAL;
+
+    const consumido =
+        ALMACENAMIENTO_CONSUMIDO;
+
+    const disponible =
+        asignado - consumido;
+
+    const porcentaje =
+        (consumido / asignado) * 100;
+
+
+    document.getElementById(
+        "almacenamientoAsignado"
+    ).innerText =
+        asignado.toFixed(0) + " GB";
+
+
+    document.getElementById(
+        "almacenamientoConsumido"
+    ).innerText =
+        consumido.toFixed(2) + " GB";
+
+
+    document.getElementById(
+        "almacenamientoDisponible"
+    ).innerText =
+        disponible.toFixed(2) + " GB";
+
+
+    document.getElementById(
+        "textoPorcentaje"
+    ).innerText =
+        porcentaje.toFixed(1) + "%";
+
+
+    document.getElementById(
+        "barraProgreso"
+    ).style.width =
+        porcentaje + "%";
+
+}
+
+
+/* =====================================================
+   CUENTA REGRESIVA DE ACTUALIZACIÓN
+===================================================== */
+
+/*
+   La fecha de inicio se guarda en localStorage.
+
+   Esto significa que:
+
+   - cerrar la página NO reinicia el contador
+   - recargar la página NO reinicia el contador
+   - abrirla otro día mantiene el tiempo correcto
+*/
+
+const CLAVE_ACTUALIZACION =
+    "ggc_fecha_inicio_actualizacion";
+
+
+function obtenerInicioActualizacion(){
+
+    let inicio =
+        localStorage.getItem(
+            CLAVE_ACTUALIZACION
+        );
+
+
+    if(!inicio){
+
+        inicio =
+            Date.now();
+
+        localStorage.setItem(
+            CLAVE_ACTUALIZACION,
+            inicio
+        );
+
+    }
+
+
+    return parseInt(inicio);
+
+}
+
+
+function iniciarContadorActualizacion(){
+
+    function actualizar(){
+
+        const inicio =
+            obtenerInicioActualizacion();
+
+        const ahora =
+            Date.now();
+
+        const transcurrido =
+            ahora - inicio;
+
+        let restante =
+            DURACION_ACTUALIZACION -
+            transcurrido;
+
+
+        /*
+           Cuando termina
+        */
+
+        if(restante <= 0){
+
+            restante = 0;
+
+            mostrarActualizacionPendiente();
+
+            return;
+
+        }
+
+
+        const dias =
+            Math.floor(
+                restante /
+                (1000 * 60 * 60 * 24)
+            );
+
+
+        const horas =
+            Math.floor(
+                (
+                    restante %
+                    (1000 * 60 * 60 * 24)
+                ) /
+                (1000 * 60 * 60)
+            );
+
+
+        const minutos =
+            Math.floor(
+                (
+                    restante %
+                    (1000 * 60 * 60)
+                ) /
+                (1000 * 60)
+            );
+
+
+        const segundos =
+            Math.floor(
+                (
+                    restante %
+                    (1000 * 60)
+                ) /
+                1000
+            );
+
+
+        document.getElementById(
+            "contadorActualizacion"
+        ).innerText =
+
+            dias + "d " +
+
+            String(horas).padStart(2,"0") +
+            "h " +
+
+            String(minutos).padStart(2,"0") +
+            "m " +
+
+            String(segundos).padStart(2,"0") +
+            "s";
+
+
+        document.getElementById(
+            "contadorActualizacion"
+        ).classList.remove(
+            "contador-completo"
+        );
+
+    }
+
+
+    actualizar();
+
+    setInterval(
+        actualizar,
+        1000
+    );
+
+}
+
+
+/* =====================================================
+   ACTUALIZACIÓN COMPLETADA
+===================================================== */
+
+function mostrarActualizacionPendiente(){
+
+    const contador =
+        document.getElementById(
+            "contadorActualizacion"
+        );
+
+    const texto =
+        document.getElementById(
+            "textoActualizacion"
+        );
+
+    const boton =
+        document.getElementById(
+            "botonActualizacion"
+        );
+
+
+    contador.innerText =
+        "00d 00h 00m 00s";
+
+
+    contador.classList.add(
+        "contador-completo"
+    );
+
+
+    texto.innerText =
+        "La actualización debe realizarse para continuar con el ciclo operativo.";
+
+
+    boton.style.display =
+        "inline-flex";
+
+}
+
+
+function realizarActualizacion(){
+
+    /*
+       Al presionar el botón:
+
+       1. Se registra una nueva fecha.
+       2. Comienza nuevamente el periodo de 1680 horas.
+       3. El botón desaparece.
+    */
+
+    localStorage.setItem(
+        CLAVE_ACTUALIZACION,
+        Date.now()
+    );
+
+
+    const boton =
+        document.getElementById(
+            "botonActualizacion"
+        );
+
+    const contador =
+        document.getElementById(
+            "contadorActualizacion"
+        );
+
+    const texto =
+        document.getElementById(
+            "textoActualizacion"
+        );
+
+
+    boton.style.display =
+        "none";
+
+
+    contador.classList.remove(
+        "contador-completo"
+    );
+
+
+    texto.innerText =
+        "Actualización registrada correctamente. Comienza un nuevo periodo de 1680 horas.";
+
+}
+
+
+/* =====================================================
+   CONTADOR DE PAGO
+===================================================== */
+
+function iniciarContadorPago(){
+
+    function actualizar(){
+
+        const ahora =
+            new Date();
+
+
+        let proximoPago =
+            new Date(
+                ahora.getFullYear(),
+                ahora.getMonth(),
+                1,
+                0,
+                0,
+                0
+            );
+
+
+        if(
+            ahora >=
+            proximoPago
+        ){
+
+            proximoPago =
+                new Date(
+                    ahora.getFullYear(),
+                    ahora.getMonth() + 1,
+                    1,
+                    0,
+                    0,
+                    0
+                );
+
+        }
+
+
+        const opciones = {
+
+            day:"2-digit",
+            month:"long",
+            year:"numeric"
+
+        };
+
+
+        document.getElementById(
+            "fechaPago"
+        ).innerText =
+
+            proximoPago.toLocaleDateString(
+                "es-MX",
+                opciones
+            );
+
+
+        const diferencia =
+            proximoPago.getTime() -
+            ahora.getTime();
+
+
+        const dias =
+            Math.floor(
+                diferencia /
+                (1000 * 60 * 60 * 24)
+            );
+
+
+        const horas =
+            Math.floor(
+                (
+                    diferencia %
+                    (1000 * 60 * 60 * 24)
+                ) /
+                (1000 * 60 * 60)
+            );
+
+
+        const minutos =
+            Math.floor(
+                (
+                    diferencia %
+                    (1000 * 60 * 60)
+                ) /
+                (1000 * 60)
+            );
+
+
+        const segundos =
+            Math.floor(
+                (
+                    diferencia %
+                    (1000 * 60)
+                ) /
+                1000
+            );
+
+
+        document.getElementById(
+            "contadorPago"
+        ).innerText =
+
+            String(dias).padStart(2,"0") +
+            "d " +
+
+            String(horas).padStart(2,"0") +
+            "h " +
+
+            String(minutos).padStart(2,"0") +
+            "m " +
+
+            String(segundos).padStart(2,"0") +
+            "s";
+
+    }
+
+
+    actualizar();
+
+    setInterval(
+        actualizar,
+        1000
+    );
+
+}
+
+
+/* =====================================================
+   INICIAR SISTEMA
+===================================================== */
+
+actualizarAlmacenamiento();
+
+iniciarContadorActualizacion();
+
+iniciarContadorPago();
+
+</script>
+
+</body>
+</html>
