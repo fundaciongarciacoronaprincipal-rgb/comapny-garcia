@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios - Oftv No. 0216 Francisco Villa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #fff3f3;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23e0c8c8" opacity="0.4"/></svg>');
+            padding: 20px;
+        }
+
+        .contenedor-principal {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .cabecera {
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #4a7c59;
+            object-fit: cover;
+        }
+
+        .titulo-escuela {
+            color: #2c3e50;
+        }
+
+        .titulo-escuela h2 {
+            font-size: 1.2rem;
+            color: #34495e;
+            margin: 5px 0;
+        }
+
+        .clave {
+            font-size: 0.95rem;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .titulo-horarios {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #5b2c6f;
+            margin: 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #82b76c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .contenedor-dias {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .tarjeta-dia {
+            background: #fff;
+            border-radius: 16px;
+            border: 2px solid #b4d79e;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+
+        .nombre-dia {
+            background: linear-gradient(90deg, #a2d57c, #82c55c);
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .contenido-horario {
+            padding: 15px;
+        }
+
+        .asignatura {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .fila-horario {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin: 4px 0;
+            background-color: #f4f9f4;
+        }
+
+        .arbol {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 100px;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .arbol { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor-principal">
+        <!-- Cabecera con Logo y Datos de la Escuela -->
+        <div class="cabecera">
+            <img src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png" 
+                 alt="Logo Oftv No. 0216 Francisco Villa" class="logo">
+            <div class="titulo-escuela">
+                <h1>Oftv No. 0216 Francisco Villa</h1>
+                <p class="clave">Clave de Centro de Trabajo: 15ETV0217V</p>
+            </div>
+        </div>
+
+        <!-- Título de Horarios -->
+        <h1 class="titulo-horarios">
+            📚 HORARIOS
+        </h1>
+
+        <!-- Contenedor de Tarjetas -->
+        <div class="contenedor-dias">
+            
+            <!-- LUNES -->
+            <div class="tarjeta-dia">
+                <div class="nombre-dia">LUNES</div>
+                <div class="contenido-horario">
+                    <div class="asignatura">COMPUTACIÓN</div>
+                    <div class="fila-horario"><span>1C</span><span>8:00 - 9:30</span></div>
+                </div>
+            </div>
+
+            <!-- MARTES -->
+            <div class="tarjeta-dia">
+                <div class="nombre-dia">MARTES</div>
+                <div class="contenido-horario">
+                    <div class="asignatura">EDUCACIÓN FÍSICA</div>
+                    <div class="fila-horario"><span>1A</span><span>8:00 - 8:40</span></div>
+                    <div class="fila-horario"><span>2A</span><span>8:41 - 9:20</span></div>
+                    <div class="fila-horario"><span>3A</span><span>9:21 - 10:00</span></div>
+                    <div class="fila-horario"><span>1B</span><span>10:00 - 10:40</span></div>
+                    <div class="fila-horario"><span>2B</span><span>10:41 - 11:20</span></div>
+                    <div class="fila-horario"><span>3B</span><span>11:41 - 12:20</span></div>
+                    <div class="fila-horario"><span>1C</span><span>12:21 - 13:00</span></div>
+                </div>
+            </div>
+
+            <!-- MIÉRCOLES -->
+            <div class="tarjeta-dia">
+                <div class="nombre-dia">MIÉRCOLES</div>
+                <div class="contenido-horario">
+                    <div class="asignatura">COMPUTACIÓN</div>
+                    <div class="fila-horario"><span>1B</span><span>8:00 - 9:30</span></div>
+                    <div class="fila-horario"><span>2B</span><span>9:31 - 11:00</span></div>
+                    <div class="fila-horario"><span>3B</span><span>11:21 - 12:50</span></div>
+                </div>
+            </div>
+
+            <!-- JUEVES -->
+            <div class="tarjeta-dia">
+                <div class="nombre-dia">JUEVES</div>
+                <div class="contenido-horario">
+                    <div class="asignatura">EDUCACIÓN FÍSICA</div>
+                    <div class="fila-horario"><span>1A</span><span>8:00 - 8:40</span></div>
+                    <div class="fila-horario"><span>2A</span><span>8:41 - 9:20</span></div>
+                    <div class="fila-horario"><span>3A</span><span>9:21 - 10:00</span></div>
+                    <div class="fila-horario"><span>1B</span><span>10:00 - 10:40</span></div>
+                    <div class="fila-horario"><span>2B</span><span>10:41 - 11:20</span></div>
+                    <div class="fila-horario"><span>3B</span><span>11:41 - 12:20</span></div>
+                    <div class="fila-horario"><span>1C</span><span>12:21 - 13:00</span></div>
+                </div>
+            </div>
+
+            <!-- VIERNES -->
+            <div class="tarjeta-dia">
+                <div class="nombre-dia">VIERNES</div>
+                <div class="contenido-horario">
+                    <div class="asignatura">COMPUTACIÓN</div>
+                    <div class="fila-horario"><span>1A</span><span>8:00 - 9:30</span></div>
+                    <div class="fila-horario"><span>2A</span><span>9:31 - 11:00</span></div>
+                    <div class="fila-horario"><span>3A</span><span>11:21 - 12:50</span></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Árbol decorativo -->
+        <div class="arbol">🌳</div>
+    </div>
+
+<footer>
+     <p><small>&copy; 2026 CORPORATIVO NEXEL DIJITAL. - Todos los derechos reservados. 
+<br>
+Empresa supervisada, administrada y operada bajo GRUPO GARCIA CORONA
+<br>
+Al continuar con el uso de esta plataforma usted esta de acuerdo en haver leido nuestros Terminos y condiciones, politica de privacidad y declaracion de accecibilidad </small></p>
+</footer>
+</body>
+</html>
