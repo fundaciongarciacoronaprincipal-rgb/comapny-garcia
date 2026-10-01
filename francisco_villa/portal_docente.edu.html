@@ -10,8 +10,16 @@
 
 <style>
 
+/* =========================================================
+   ESTILOS GENERALES DEL PORTAL
+========================================================= */
+
 *{
     box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
@@ -35,7 +43,7 @@ header{
 
 .container{
     width:95%;
-    max-width:1200px;
+    max-width:1250px;
     margin:auto;
     padding:20px;
 }
@@ -92,11 +100,21 @@ button:hover{
     background:#3498db;
 }
 
+.btn-purple{
+    background:#8e44ad;
+}
+
+.btn-dark{
+    background:#34495e;
+}
+
 .hidden{
     display:none !important;
 }
 
-/* ================= CONTRASEÑA ================= */
+/* =========================================================
+   CONTRASEÑA
+========================================================= */
 
 .password-container{
     position:relative;
@@ -119,7 +137,9 @@ button:hover{
     font-size:13px;
 }
 
-/* ================= RECORDAR ================= */
+/* =========================================================
+   RECORDAR
+========================================================= */
 
 .recordar{
     display:flex;
@@ -134,7 +154,9 @@ button:hover{
     margin:0;
 }
 
-/* ================= DOCENTE ================= */
+/* =========================================================
+   INFORMACIÓN DOCENTE
+========================================================= */
 
 .docente-info{
     background:rgba(0,0,0,.7);
@@ -148,7 +170,9 @@ button:hover{
     margin-top:0;
 }
 
-/* ================= MENU ================= */
+/* =========================================================
+   MENÚ PRINCIPAL
+========================================================= */
 
 .menu{
     background:rgba(0,0,0,.75);
@@ -163,11 +187,13 @@ button:hover{
 .menu button{
     width:auto;
     flex:1;
-    min-width:150px;
+    min-width:180px;
     margin:0;
 }
 
-/* ================= SECCIONES ================= */
+/* =========================================================
+   SECCIONES
+========================================================= */
 
 .section{
     margin-top:20px;
@@ -182,7 +208,9 @@ button:hover{
     margin-top:0;
 }
 
-/* ================= CAPTURA ================= */
+/* =========================================================
+   CAPTURA
+========================================================= */
 
 .captura-grid{
     display:grid;
@@ -210,7 +238,9 @@ button:hover{
     margin-top:10px;
 }
 
-/* ================= TABLAS ================= */
+/* =========================================================
+   TABLAS
+========================================================= */
 
 .table-container{
     width:100%;
@@ -240,22 +270,9 @@ tr:hover{
     background:rgba(255,255,255,.08);
 }
 
-/* ================= COLORES ================= */
-
-.nota-roja{
-    color:#ff6b6b;
-    font-weight:bold;
-}
-
-.nota-amarilla{
-    color:#f1c40f;
-    font-weight:bold;
-}
-
-.nota-verde{
-    color:#2ecc71;
-    font-weight:bold;
-}
+/* =========================================================
+   MENSAJES
+========================================================= */
 
 .mensaje{
     padding:15px;
@@ -264,7 +281,637 @@ tr:hover{
     margin-top:10px;
 }
 
-/* ================= RESPONSIVE ================= */
+/* =========================================================
+   ALUMNOS COMPLETOS
+========================================================= */
+
+.alumnos-completos-info{
+    background:rgba(52,152,219,.2);
+    border:1px solid rgba(52,152,219,.5);
+    border-radius:10px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+.nombre-alumno{
+    font-weight:bold;
+}
+
+/* =========================================================
+   CONTENEDORES INTEGRADOS
+========================================================= */
+
+.integrado{
+    background:#fff;
+    color:#172033;
+    border-radius:18px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.integrado *{
+    box-sizing:border-box;
+}
+
+/* =========================================================
+   HORARIOS
+========================================================= */
+
+.horarios-wrapper{
+    background:#fff3f3;
+    color:#2c3e50;
+    padding:20px;
+    min-height:500px;
+}
+
+.horarios-cabecera{
+    text-align:center;
+    margin-bottom:25px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.horarios-logo{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    border:3px solid #4a7c59;
+    object-fit:cover;
+    background:#fff;
+}
+
+.horarios-titulo h1{
+    font-size:1.4rem;
+    margin-bottom:4px;
+}
+
+.horarios-clave{
+    font-size:.95rem;
+    color:#555;
+    font-weight:600;
+}
+
+.menu-horarios{
+    background:#fff;
+    border-radius:12px;
+    border:2px solid #b4d79e;
+    box-shadow:0 4px 8px rgba(0,0,0,.08);
+    padding:10px;
+    margin-bottom:25px;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.boton-horarios{
+    padding:10px 25px;
+    border:none;
+    border-radius:8px;
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+    width:auto;
+    margin:0;
+}
+
+.boton-horarios.activo{
+    background:linear-gradient(90deg,#a2d57c,#82c55c);
+    color:#2c3e50;
+}
+
+.boton-horarios.inactivo{
+    background:#f4f9f4;
+    color:#555;
+    border:1px solid #d4e6d4;
+}
+
+.boton-horarios:hover{
+    transform:translateY(-2px);
+}
+
+.horarios-seccion{
+    display:none;
+}
+
+.horarios-seccion.visible{
+    display:block;
+}
+
+.titulo-horarios{
+    text-align:center;
+    font-size:2rem;
+    color:#5b2c6f;
+    margin:20px 0;
+    padding-bottom:10px;
+    border-bottom:3px solid #82b76c;
+}
+
+.contenedor-dias{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+}
+
+.tarjeta-dia{
+    background:#fff;
+    border-radius:16px;
+    border:2px solid #b4d79e;
+    overflow:hidden;
+    box-shadow:0 4px 8px rgba(0,0,0,.08);
+}
+
+.nombre-dia{
+    background:linear-gradient(90deg,#a2d57c,#82c55c);
+    color:#2c3e50;
+    font-weight:bold;
+    font-size:1.1rem;
+    padding:12px;
+    text-align:center;
+}
+
+.contenido-horario{
+    padding:18px;
+}
+
+.asignatura{
+    font-weight:bold;
+    color:#2980b9;
+    margin-bottom:12px;
+    font-size:1rem;
+    padding-bottom:6px;
+    border-bottom:1px dashed #d4e6d4;
+}
+
+.fila-horario{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 12px;
+    border-radius:6px;
+    margin:4px 0;
+    background:#f4f9f4;
+}
+
+/* =========================================================
+   PLANEACIÓN
+========================================================= */
+
+.contenedor-fechas{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.tarjeta-mes{
+    background:#fff;
+    border-radius:16px;
+    border:2px solid #b4d79e;
+    overflow:hidden;
+    box-shadow:0 4px 8px rgba(0,0,0,.08);
+}
+
+.nombre-mes{
+    background:linear-gradient(90deg,#a2d57c,#82c55c);
+    color:#2c3e50;
+    font-weight:bold;
+    font-size:1.1rem;
+    padding:12px;
+    text-align:center;
+}
+
+.contenido-fechas{
+    padding:18px;
+}
+
+.fila-fecha{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 12px;
+    border-radius:6px;
+    margin:6px 0;
+    background:#f4f9f4;
+}
+
+.indicador{
+    width:20px;
+    height:20px;
+    border-radius:4px;
+    flex-shrink:0;
+}
+
+.indicador.tiempo{
+    background:#a2d57c;
+}
+
+.indicador.destiempo{
+    background:#f9c784;
+}
+
+.indicador.no{
+    background:#e87070;
+}
+
+.leyenda{
+    margin-top:30px;
+    background:#fff;
+    border-radius:16px;
+    border:2px solid #b4d79e;
+    padding:20px;
+    box-shadow:0 4px 8px rgba(0,0,0,.08);
+}
+
+.leyenda h3{
+    text-align:center;
+    color:#5b2c6f;
+    margin-bottom:15px;
+}
+
+.elemento-leyenda{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:6px 10px;
+    margin:4px 0;
+}
+
+.arbol{
+    text-align:right;
+    font-size:2.5rem;
+    opacity:.8;
+    padding-top:15px;
+}
+
+.horarios-footer{
+    text-align:center;
+    margin-top:35px;
+    padding:20px;
+    color:#555;
+    border-top:1px solid #e0d0d0;
+    font-size:.85rem;
+}
+
+/* =========================================================
+   CALENDARIO ESCOLAR
+========================================================= */
+
+.calendario-wrapper{
+    background:#f5f7fa;
+    color:#172033;
+    padding:20px;
+}
+
+.calendario-contenido{
+    background:#fff;
+    border-radius:22px;
+    box-shadow:0 12px 35px rgba(0,0,0,.10);
+    overflow:hidden;
+    padding:28px;
+}
+
+.cal-row{
+    display:flex;
+    flex-wrap:wrap;
+    margin-left:-12px;
+    margin-right:-12px;
+}
+
+.cal-col{
+    padding:0 12px;
+}
+
+.cal-col-12{
+    width:100%;
+}
+
+.cal-col-9{
+    width:75%;
+}
+
+.cal-col-6{
+    width:50%;
+}
+
+.cal-col-4{
+    width:33.333333%;
+}
+
+.cal-col-3{
+    width:25%;
+}
+
+.cal-text-center{
+    text-align:center;
+}
+
+.cal-basica{
+    margin-top:.5em;
+}
+
+.cal-basica span{
+    font-weight:800;
+    font-size:1.35em;
+    display:block;
+}
+
+.cal-basica p{
+    font-size:.85em;
+    line-height:1.5;
+}
+
+.cal-plecadorada{
+    padding:1em 1.5em;
+    margin-bottom:2em;
+}
+
+.cal-dias{
+    color:#fff;
+    background:#b8892e;
+    margin:0;
+    padding:.45em;
+    border-radius:12px;
+    text-align:center;
+    font-size:1.45em;
+    font-weight:800;
+}
+
+.calendario-wrapper h1{
+    color:#681a3b;
+    font-size:2.4em;
+    margin:25px 0 10px;
+    line-height:1.05;
+}
+
+.calendario-wrapper h1 span{
+    color:#9b2247;
+    font-size:1.05em;
+}
+
+.calendar{
+    display:flex;
+    flex-wrap:wrap;
+    line-height:1;
+    padding:0 1em;
+}
+
+.month{
+    margin-bottom:3em;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    z-index:1;
+}
+
+.month-header{
+    background:#b8892e;
+    color:#fff;
+    text-align:justify;
+    padding:.55em 1em;
+    font-weight:700;
+    font-size:1.1em;
+    margin:-.2em -.3em .2em;
+    border-radius:10px;
+    box-shadow:0 .25em .3em rgba(0,0,0,.22);
+}
+
+.days-header,
+.days{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+}
+
+.days-header div{
+    background:#f1e3b6;
+    font-weight:bold;
+    text-align:center;
+    padding:.5em;
+}
+
+.day{
+    text-align:center;
+    padding:.5em;
+    position:relative;
+    min-height:31px;
+}
+
+.inicio-clases,
+.fin-clases{
+    background:#2867a3;
+    color:white;
+    border-radius:4px;
+}
+
+.suspension{
+    background:#111;
+    color:white;
+    border-radius:50%;
+    height:1.8em;
+    width:1.8em;
+    margin:0 auto;
+    padding:.45em 0 0;
+}
+
+.jornada-concientizacion{
+    border:3px solid #111;
+    border-radius:50%;
+    height:1.8em;
+    width:1.8em;
+    margin:0 auto;
+    padding-top:.3em;
+}
+
+.receso-clases{
+    background:#245b4d;
+    color:white;
+}
+
+.cte-intensivo{
+    background:#60113d;
+    color:white;
+}
+
+.cte-ordinario{
+    background:#b77687;
+    color:white;
+}
+
+.evaluacion{
+    border:3px dashed #111;
+}
+
+.preinscripciones{
+    border:3px solid #a11f41;
+}
+
+.inter{
+    border-left:none;
+    border-right:none;
+    padding:calc(.5em - 3px);
+}
+
+.start{
+    border-right:none;
+    padding:calc(.5em - 3px) .5em;
+}
+
+.end{
+    border-left:none;
+    padding:calc(.5em - 3px) .5em;
+}
+
+.interup{
+    border-left:none;
+    border-right:none;
+    border-bottom:none;
+    padding:calc(.5em - 3px);
+}
+
+.interdown{
+    border-left:none;
+    border-right:none;
+    border-top:none;
+    padding:calc(.5em - 3px);
+}
+
+.vacaciones{
+    background:#b9b9bb;
+}
+
+.registro-calificaciones{
+    background:#47bfee;
+    color:#fff;
+}
+
+.negritas{
+    font-weight:bold;
+}
+
+.acotaciones{
+    padding:0 1.5em;
+    font-size:.82em;
+}
+
+.acotaciones h3{
+    font-size:1.35em;
+    color:#0b1f3a;
+}
+
+.acotaciones ul{
+    list-style:none;
+    padding:0;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:.8em 1.5em;
+}
+
+.acotaciones li{
+    line-height:1.4;
+    display:flex;
+    align-items:center;
+}
+
+.acotaciones .cuadrito{
+    display:inline-block;
+    width:2em;
+    text-align:center;
+    margin-right:.65em;
+    height:1.5em;
+    flex:none;
+}
+
+.acotaciones .circulito{
+    width:1.5em;
+}
+
+.cuadrito{
+    display:inline-block;
+    width:3em;
+    text-align:center;
+    margin-right:.5em;
+    height:2em;
+}
+
+.circulito{
+    width:2.5em;
+    height:2.5em;
+    padding:0;
+}
+
+.borde{
+    width:calc(3em - 6px);
+}
+
+/* =========================================================
+   BUZÓN
+========================================================= */
+
+.buzon-wrapper{
+    background:#fff;
+    color:#222;
+    border-radius:15px;
+    overflow:hidden;
+}
+
+.buzon-header{
+    background:linear-gradient(135deg,#123f6d,#19a7ce);
+    color:white;
+    text-align:center;
+    padding:30px 20px;
+}
+
+.buzon-header h2{
+    margin:0 0 10px;
+}
+
+.buzon-contenido{
+    padding:25px;
+    text-align:center;
+}
+
+.buzon-icono{
+    font-size:60px;
+    margin-bottom:15px;
+}
+
+.buzon-contenido p{
+    color:#555;
+    line-height:1.6;
+}
+
+.buzon-boton{
+    display:inline-block;
+    background:#19a7ce;
+    color:white;
+    text-decoration:none;
+    padding:14px 28px;
+    border-radius:8px;
+    font-weight:bold;
+    margin-top:15px;
+    transition:.2s;
+}
+
+.buzon-boton:hover{
+    transform:scale(1.03);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:900px){
+
+    .cal-col-4,
+    .cal-col-3,
+    .cal-col-6,
+    .cal-col-9{
+        width:50%;
+    }
+
+}
 
 @media(max-width:700px){
 
@@ -282,6 +929,68 @@ tr:hover{
 
 }
 
+@media(max-width:600px){
+
+    .horarios-wrapper{
+        padding:12px;
+    }
+
+    .menu-horarios{
+        flex-direction:column;
+    }
+
+    .boton-horarios{
+        width:100%;
+    }
+
+    .titulo-horarios{
+        font-size:1.6rem;
+    }
+
+    .calendario-wrapper{
+        padding:10px 6px;
+    }
+
+    .calendario-contenido{
+        padding:14px 8px;
+        border-radius:14px;
+    }
+
+    .cal-col-4,
+    .cal-col-3,
+    .cal-col-6,
+    .cal-col-9{
+        width:100%;
+    }
+
+    .calendario-wrapper h1{
+        font-size:2em;
+        text-align:center;
+    }
+
+    .cal-basica span{
+        font-size:1.05em;
+    }
+
+    .calendar{
+        padding:0;
+    }
+
+    .day{
+        padding:.42em .15em;
+        font-size:.88em;
+    }
+
+    .acotaciones{
+        padding:0 .4em;
+    }
+
+    .acotaciones ul{
+        grid-template-columns:1fr;
+    }
+
+}
+
 </style>
 </head>
 
@@ -293,9 +1002,9 @@ tr:hover{
 
 <div class="container">
 
-<!-- ===================================================== -->
-<!-- LOGIN -->
-<!-- ===================================================== -->
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
 <div id="loginBox" class="card">
 
@@ -303,16 +1012,12 @@ tr:hover{
 
     <h3>Iniciar Sesión</h3>
 
-    <!-- NUMERO DE SERVIDOR -->
-
     <input
         id="servidor"
         type="text"
         placeholder="Número de servidor"
         autocomplete="username"
     >
-
-    <!-- CONTRASEÑA -->
 
     <div class="password-container">
 
@@ -334,8 +1039,6 @@ tr:hover{
 
     </div>
 
-    <!-- RECORDAR DATOS -->
-
     <label class="recordar">
 
         <input
@@ -354,9 +1057,9 @@ tr:hover{
 </div>
 
 
-<!-- ===================================================== -->
-<!-- PANEL DOCENTE -->
-<!-- ===================================================== -->
+<!-- =====================================================
+     PANEL DOCENTE
+===================================================== -->
 
 <div id="panel" class="hidden">
 
@@ -373,9 +1076,9 @@ tr:hover{
     </div>
 
 
-    <!-- ================================================= -->
-    <!-- MENU -->
-    <!-- ================================================= -->
+    <!-- =================================================
+         MENÚ PRINCIPAL
+    ================================================= -->
 
     <div class="menu">
 
@@ -387,16 +1090,16 @@ tr:hover{
             👨‍🎓 Alumnos Completos
         </button>
 
-        <button onclick="mostrarSeccion('buenos')">
-            🟢 Alumnos Buenos
+        <button onclick="mostrarSeccion('horarios')">
+            🕐 Horarios y Reportes de Entrega de Planeaciones
         </button>
 
-        <button onclick="mostrarSeccion('regulares')">
-            🟡 Alumnos Regulares
+        <button onclick="mostrarSeccion('calendario')">
+            📅 Calendario Escolar
         </button>
 
-        <button onclick="mostrarSeccion('irregulares')">
-            🔴 Alumnos Irregulares
+        <button onclick="mostrarSeccion('buzon')">
+            📝 Buzón Anónimo
         </button>
 
         <button
@@ -409,9 +1112,9 @@ tr:hover{
     </div>
 
 
-    <!-- ================================================= -->
-    <!-- CAPTURA -->
-    <!-- ================================================= -->
+    <!-- =================================================
+         CAPTURA DE EVALUACIONES
+    ================================================= -->
 
     <div id="seccionCaptura" class="section">
 
@@ -538,9 +1241,9 @@ tr:hover{
     </div>
 
 
-    <!-- ================================================= -->
-    <!-- COMPLETOS -->
-    <!-- ================================================= -->
+    <!-- =================================================
+         ALUMNOS COMPLETOS
+    ================================================= -->
 
     <div
         id="seccionCompletos"
@@ -549,10 +1252,15 @@ tr:hover{
 
         <h2>👨‍🎓 Alumnos Completos</h2>
 
-        <p>
-            Alumnos con promedio general de
-            <strong>8.0 a 10</strong>.
-        </p>
+        <div class="alumnos-completos-info">
+
+            <strong>Alumnos del grupo:</strong>
+
+            Aquí aparecen todos los alumnos que actualmente
+            se encuentran disponibles en el selector de
+            "Captura de Evaluaciones" para tu grado y grupo.
+
+        </div>
 
         <div
             id="tablaCompletos"
@@ -562,74 +1270,1413 @@ tr:hover{
     </div>
 
 
-    <!-- ================================================= -->
-    <!-- BUENOS -->
-    <!-- ================================================= -->
+    <!-- =================================================
+         HORARIOS Y PLANEACIONES
+    ================================================= -->
 
     <div
-        id="seccionBuenos"
+        id="seccionHorarios"
         class="section hidden"
     >
 
-        <h2>🟢 Alumnos Buenos</h2>
+        <h2>🕐 Horarios y Reportes de Entrega de Planeaciones</h2>
 
-        <p>
-            Alumnos con promedio general de
-            <strong>8.0 a 10</strong>.
-        </p>
+        <div class="integrado">
 
-        <div
-            id="tablaBuenos"
-            class="table-container"
-        ></div>
+            <div class="horarios-wrapper">
+
+                <div class="horarios-cabecera">
+
+                    <img
+                        src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
+                        alt="Logo OFTV No. 0216 Francisco Villa"
+                        class="horarios-logo"
+                    >
+
+                    <div class="horarios-titulo">
+
+                        <h1>
+                            OFTV No. 0216 Francisco Villa
+                        </h1>
+
+                        <p class="horarios-clave">
+                            Clave de Centro de Trabajo: 15ETV0217V
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <nav class="menu-horarios">
+
+                    <button
+                        id="btnHorarios"
+                        class="boton-horarios activo"
+                        onclick="mostrarModuloHorarios('horarios')"
+                    >
+                        📚 Horarios
+                    </button>
+
+                    <button
+                        id="btnPlaneacion"
+                        class="boton-horarios inactivo"
+                        onclick="mostrarModuloHorarios('planeacion')"
+                    >
+                        📋 Entrega de Planeación
+                    </button>
+
+                </nav>
+
+
+                <!-- HORARIOS -->
+
+                <div
+                    id="moduloHorarios"
+                    class="horarios-seccion visible"
+                >
+
+                    <h1 class="titulo-horarios">
+                        📚 HORARIOS
+                    </h1>
+
+                    <div class="contenedor-dias">
+
+
+                        <!-- LUNES -->
+
+                        <div class="tarjeta-dia">
+
+                            <div class="nombre-dia">
+                                LUNES
+                            </div>
+
+                            <div class="contenido-horario">
+
+                                <div class="asignatura">
+                                    COMPUTACIÓN
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>1° C</span>
+                                    <span>8:00 — 9:30</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MARTES -->
+
+                        <div class="tarjeta-dia">
+
+                            <div class="nombre-dia">
+                                MARTES
+                            </div>
+
+                            <div class="contenido-horario">
+
+                                <div class="asignatura">
+                                    EDUCACIÓN FÍSICA
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>1° A</span>
+                                    <span>8:00 — 8:40</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>2° A</span>
+                                    <span>8:41 — 9:20</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>3° A</span>
+                                    <span>9:21 — 10:00</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>1° B</span>
+                                    <span>10:00 — 10:40</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>2° B</span>
+                                    <span>10:41 — 11:20</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>3° B</span>
+                                    <span>11:41 — 12:20</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>1° C</span>
+                                    <span>12:21 — 13:00</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MIÉRCOLES -->
+
+                        <div class="tarjeta-dia">
+
+                            <div class="nombre-dia">
+                                MIÉRCOLES
+                            </div>
+
+                            <div class="contenido-horario">
+
+                                <div class="asignatura">
+                                    COMPUTACIÓN
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>1° B</span>
+                                    <span>8:00 — 9:30</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>2° B</span>
+                                    <span>9:31 — 11:00</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>3° B</span>
+                                    <span>11:21 — 12:50</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- JUEVES -->
+
+                        <div class="tarjeta-dia">
+
+                            <div class="nombre-dia">
+                                JUEVES
+                            </div>
+
+                            <div class="contenido-horario">
+
+                                <div class="asignatura">
+                                    EDUCACIÓN FÍSICA
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>1° A</span>
+                                    <span>8:00 — 8:40</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>2° A</span>
+                                    <span>8:41 — 9:20</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>3° A</span>
+                                    <span>9:21 — 10:00</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>1° B</span>
+                                    <span>10:00 — 10:40</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>2° B</span>
+                                    <span>10:41 — 11:20</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>3° B</span>
+                                    <span>11:41 — 12:20</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>1° C</span>
+                                    <span>12:21 — 13:00</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- VIERNES -->
+
+                        <div class="tarjeta-dia">
+
+                            <div class="nombre-dia">
+                                VIERNES
+                            </div>
+
+                            <div class="contenido-horario">
+
+                                <div class="asignatura">
+                                    COMPUTACIÓN
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>1° A</span>
+                                    <span>8:00 — 9:30</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>2° A</span>
+                                    <span>9:31 — 11:00</span>
+                                </div>
+
+                                <div class="fila-horario">
+                                    <span>3° A</span>
+                                    <span>11:21 — 12:50</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PLANEACIÓN -->
+
+                <div
+                    id="moduloPlaneacion"
+                    class="horarios-seccion"
+                >
+
+                    <h1 class="titulo-horarios">
+                        📋 ENTREGA DE PLANEACIÓN
+                    </h1>
+
+                    <div class="contenedor-fechas">
+
+
+                        <div class="tarjeta-mes">
+
+                            <div class="nombre-mes">
+                                OCTUBRE
+                            </div>
+
+                            <div class="contenido-fechas">
+
+                                <div class="fila-fecha">
+                                    <span class="indicador tiempo"></span>
+                                    <span>09 de Octubre</span>
+                                </div>
+
+                                <div class="fila-fecha">
+                                    <span class="indicador destiempo"></span>
+                                    <span>12 de Octubre</span>
+                                </div>
+
+                                <div class="fila-fecha">
+                                    <span class="indicador no"></span>
+                                    <span>13 y 14 de Octubre</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="tarjeta-mes">
+
+                            <div class="nombre-mes">
+                                OCTUBRE
+                            </div>
+
+                            <div class="contenido-fechas">
+
+                                <div class="fila-fecha">
+                                    <span class="indicador tiempo"></span>
+                                    <span>19 de Octubre</span>
+                                </div>
+
+                                <div class="fila-fecha">
+                                    <span class="indicador destiempo"></span>
+                                    <span>20 de Octubre</span>
+                                </div>
+
+                                <div class="fila-fecha">
+                                    <span class="indicador no"></span>
+                                    <span>21 de Octubre</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="tarjeta-mes">
+
+                            <div class="nombre-mes">
+                                NOVIEMBRE
+                            </div>
+
+                            <div class="contenido-fechas">
+
+                                <div class="fila-fecha">
+                                    <span class="indicador tiempo"></span>
+                                    <span>03 de Noviembre</span>
+                                </div>
+
+                                <div class="fila-fecha">
+                                    <span class="indicador destiempo"></span>
+                                    <span>04 de Noviembre</span>
+                                </div>
+
+                                <div class="fila-fecha">
+                                    <span class="indicador no"></span>
+                                    <span>05 de Noviembre</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="tarjeta-mes">
+
+                            <div class="nombre-mes">
+                                NOVIEMBRE
+                            </div>
+
+                            <div class="contenido-fechas">
+
+                                <div class="fila-fecha">
+                                    <span class="indicador tiempo"></span>
+                                    <span>03 de Noviembre</span>
+                                </div>
+
+                                <div class="fila-fecha">
+                                    <span class="indicador destiempo"></span>
+                                    <span>04 de Noviembre</span>
+                                </div>
+
+                                <div class="fila-fecha">
+                                    <span class="indicador no"></span>
+                                    <span>05 de Noviembre</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="leyenda">
+
+                        <h3>
+                            LEYENDA
+                        </h3>
+
+                        <div class="elemento-leyenda">
+                            <span class="indicador tiempo"></span>
+                            <span><strong>A TIEMPO</strong></span>
+                        </div>
+
+                        <div class="elemento-leyenda">
+                            <span class="indicador destiempo"></span>
+                            <span><strong>DESTIEMPO</strong></span>
+                        </div>
+
+                        <div class="elemento-leyenda">
+                            <span class="indicador no"></span>
+                            <span><strong>NO ENTREGÓ</strong></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="arbol">
+                    🌳
+                </div>
+
+
+                <div class="horarios-footer">
+
+                    © 2026 CORPORATIVO NEXEL DIGITAL. —
+                    Todos los derechos reservados.
+
+                    <br>
+
+                    Empresa supervisada, administrada y operada
+                    bajo GRUPO GARCÍA CORONA.
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 
-    <!-- ================================================= -->
-    <!-- REGULARES -->
-    <!-- ================================================= -->
+    <!-- =================================================
+         CALENDARIO ESCOLAR
+    ================================================= -->
 
     <div
-        id="seccionRegulares"
+        id="seccionCalendario"
         class="section hidden"
     >
 
-        <h2>🟡 Alumnos Regulares</h2>
+        <h2>📅 Calendario Escolar</h2>
 
-        <p>
-            Alumnos con promedio general de
-            <strong>6.0 a 7.9</strong>.
-        </p>
+        <div class="integrado">
 
-        <div
-            id="tablaRegulares"
-            class="table-container"
-        ></div>
+            <div class="calendario-wrapper">
+
+                <div class="calendario-contenido">
+
+                    <div class="cal-row">
+
+                        <div class="cal-col cal-col-6"></div>
+
+                        <div class="cal-col cal-col-6">
+
+                            <h1>
+                                Calendario Escolar
+                                <br>
+                                <span>2026-2027</span>
+                            </h1>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="cal-row">
+
+                        <div class="cal-col cal-col-9 cal-text-center">
+
+                            <div class="cal-basica">
+
+                                <span>
+                                    EDUCACIÓN PREESCOLAR, PRIMARIA Y SECUNDARIA
+                                </span>
+
+                                <p>
+                                    Vigente para las escuelas públicas y particulares
+                                    incorporadas al Sistema Educativo Nacional en los
+                                    Estados Unidos Mexicanos.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="cal-col cal-col-3">
+
+                            <div class="cal-plecadorada">
+
+                                <p class="cal-dias">
+                                    185 DÍAS
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="calendar">
+
+
+                        <!-- AGOSTO -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Agosto 2026
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                                <span class="day receso-clases">1</span>
+                                <span class="day receso-clases">2</span>
+                                <span class="day receso-clases">3</span>
+                                <span class="day receso-clases">4</span>
+                                <span class="day receso-clases">5</span>
+                                <span class="day receso-clases">6</span>
+                                <span class="day receso-clases">7</span>
+                                <span class="day receso-clases">8</span>
+                                <span class="day receso-clases">9</span>
+                                <span class="day receso-clases">10</span>
+                                <span class="day receso-clases">11</span>
+                                <span class="day receso-clases">12</span>
+                                <span class="day receso-clases">13</span>
+                                <span class="day receso-clases">14</span>
+                                <span class="day receso-clases">15</span>
+                                <span class="day receso-clases">16</span>
+                                <span class="day receso-clases">17</span>
+                                <span class="day receso-clases">18</span>
+                                <span class="day receso-clases">19</span>
+                                <span class="day receso-clases">20</span>
+                                <span class="day receso-clases">21</span>
+                                <span class="day receso-clases">22</span>
+                                <span class="day receso-clases">23</span>
+                                <span class="day cte-intensivo">24</span>
+                                <span class="day cte-intensivo">25</span>
+                                <span class="day cte-intensivo">26</span>
+                                <span class="day cte-intensivo">27</span>
+                                <span class="day cte-intensivo">28</span>
+                                <span class="day receso-clases">29</span>
+                                <span class="day receso-clases">30</span>
+                                <span class="day inicio-clases">31</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- SEPTIEMBRE -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Septiembre 2026
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+                                <span></span>
+
+                                <span class="day">1</span>
+                                <span class="day">2</span>
+                                <span class="day">3</span>
+                                <span class="day">4</span>
+                                <span class="day">5</span>
+                                <span class="day">6</span>
+                                <span class="day jornada-concientizacion">7</span>
+                                <span class="day">8</span>
+                                <span class="day">9</span>
+                                <span class="day">10</span>
+                                <span class="day">11</span>
+                                <span class="day">12</span>
+                                <span class="day">13</span>
+                                <span class="day">14</span>
+                                <span class="day negritas">15</span>
+                                <span class="day suspension">16</span>
+                                <span class="day">17</span>
+                                <span class="day">18</span>
+                                <span class="day">19</span>
+                                <span class="day">20</span>
+                                <span class="day">21</span>
+                                <span class="day">22</span>
+                                <span class="day">23</span>
+                                <span class="day">24</span>
+                                <span class="day cte-ordinario">25</span>
+                                <span class="day">26</span>
+                                <span class="day">27</span>
+                                <span class="day">28</span>
+                                <span class="day">29</span>
+                                <span class="day">30</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- OCTUBRE -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Octubre 2026
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                                <span class="day">1</span>
+                                <span class="day">2</span>
+                                <span class="day">3</span>
+                                <span class="day">4</span>
+                                <span class="day">5</span>
+                                <span class="day">6</span>
+                                <span class="day">7</span>
+                                <span class="day">8</span>
+                                <span class="day">9</span>
+                                <span class="day">10</span>
+                                <span class="day">11</span>
+                                <span class="day">12</span>
+                                <span class="day">13</span>
+                                <span class="day">14</span>
+                                <span class="day">15</span>
+                                <span class="day">16</span>
+                                <span class="day">17</span>
+                                <span class="day">18</span>
+                                <span class="day">19</span>
+                                <span class="day">20</span>
+                                <span class="day">21</span>
+                                <span class="day">22</span>
+                                <span class="day">23</span>
+                                <span class="day">24</span>
+                                <span class="day">25</span>
+                                <span class="day">26</span>
+                                <span class="day">27</span>
+                                <span class="day">28</span>
+                                <span class="day">29</span>
+                                <span class="day cte-ordinario">30</span>
+                                <span class="day">31</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- NOVIEMBRE -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Noviembre 2026
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span class="day">1</span>
+                                <span class="day suspension">2</span>
+                                <span class="day">3</span>
+                                <span class="day">4</span>
+                                <span class="day">5</span>
+                                <span class="day">6</span>
+                                <span class="day">7</span>
+                                <span class="day">8</span>
+                                <span class="day">9</span>
+                                <span class="day">10</span>
+                                <span class="day">11</span>
+                                <span class="day">12</span>
+                                <span class="day registro-calificaciones">13</span>
+                                <span class="day">14</span>
+                                <span class="day">15</span>
+                                <span class="day suspension">16</span>
+                                <span class="day">17</span>
+                                <span class="day">18</span>
+                                <span class="day">19</span>
+                                <span class="day negritas">20</span>
+                                <span class="day">21</span>
+                                <span class="day">22</span>
+                                <span class="day evaluacion start">23</span>
+                                <span class="day evaluacion inter">24</span>
+                                <span class="day evaluacion inter">25</span>
+                                <span class="day evaluacion end">26</span>
+                                <span class="day cte-ordinario">27</span>
+                                <span class="day">28</span>
+                                <span class="day">29</span>
+                                <span class="day">30</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DICIEMBRE -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Diciembre 2026
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+                                <span></span>
+
+                                <span class="day">1</span>
+                                <span class="day">2</span>
+                                <span class="day">3</span>
+                                <span class="day">4</span>
+                                <span class="day">5</span>
+                                <span class="day">6</span>
+                                <span class="day">7</span>
+                                <span class="day">8</span>
+                                <span class="day">9</span>
+                                <span class="day">10</span>
+                                <span class="day">11</span>
+                                <span class="day">12</span>
+                                <span class="day">13</span>
+                                <span class="day">14</span>
+                                <span class="day">15</span>
+                                <span class="day">16</span>
+                                <span class="day">17</span>
+                                <span class="day">18</span>
+                                <span class="day">19</span>
+                                <span class="day">20</span>
+                                <span class="day vacaciones">21</span>
+                                <span class="day vacaciones">22</span>
+                                <span class="day vacaciones">23</span>
+                                <span class="day vacaciones">24</span>
+                                <span class="day suspension">25</span>
+                                <span class="day">26</span>
+                                <span class="day">27</span>
+                                <span class="day vacaciones">28</span>
+                                <span class="day vacaciones">29</span>
+                                <span class="day vacaciones">30</span>
+                                <span class="day vacaciones">31</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ENERO -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Enero 2027
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                                <span class="day suspension">1</span>
+                                <span class="day">2</span>
+                                <span class="day">3</span>
+                                <span class="day vacaciones">4</span>
+                                <span class="day vacaciones">5</span>
+                                <span class="day suspension">6</span>
+                                <span class="day">7</span>
+                                <span class="day">8</span>
+                                <span class="day">9</span>
+                                <span class="day">10</span>
+                                <span class="day">11</span>
+                                <span class="day">12</span>
+                                <span class="day">13</span>
+                                <span class="day">14</span>
+                                <span class="day">15</span>
+                                <span class="day">16</span>
+                                <span class="day">17</span>
+                                <span class="day">18</span>
+                                <span class="day">19</span>
+                                <span class="day">20</span>
+                                <span class="day">21</span>
+                                <span class="day">22</span>
+                                <span class="day">23</span>
+                                <span class="day">24</span>
+                                <span class="day">25</span>
+                                <span class="day">26</span>
+                                <span class="day">27</span>
+                                <span class="day">28</span>
+                                <span class="day cte-ordinario">29</span>
+                                <span class="day">30</span>
+                                <span class="day">31</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- FEBRERO -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Febrero 2027
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+
+                                <span class="day suspension">1</span>
+
+                                <span class="day preinscripciones start">2</span>
+                                <span class="day preinscripciones interup">3</span>
+                                <span class="day preinscripciones interup">4</span>
+                                <span class="day preinscripciones end">5</span>
+
+                                <span class="day">6</span>
+                                <span class="day">7</span>
+
+                                <span class="day preinscripciones start">8</span>
+                                <span class="day preinscripciones interdown">9</span>
+                                <span class="day preinscripciones interdown">10</span>
+                                <span class="day preinscripciones interdown">11</span>
+                                <span class="day preinscripciones end">12</span>
+
+                                <span class="day">13</span>
+                                <span class="day">14</span>
+                                <span class="day">15</span>
+                                <span class="day">16</span>
+                                <span class="day">17</span>
+                                <span class="day">18</span>
+                                <span class="day">19</span>
+                                <span class="day">20</span>
+                                <span class="day">21</span>
+                                <span class="day">22</span>
+                                <span class="day">23</span>
+                                <span class="day negritas">24</span>
+                                <span class="day">25</span>
+                                <span class="day cte-ordinario">26</span>
+                                <span class="day">27</span>
+                                <span class="day">28</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MARZO -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Marzo 2027
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+
+                                <span class="day">1</span>
+                                <span class="day">2</span>
+                                <span class="day">3</span>
+                                <span class="day">4</span>
+                                <span class="day registro-calificaciones">5</span>
+                                <span class="day">6</span>
+                                <span class="day">7</span>
+                                <span class="day">8</span>
+                                <span class="day">9</span>
+                                <span class="day">10</span>
+                                <span class="day">11</span>
+                                <span class="day">12</span>
+                                <span class="day">13</span>
+                                <span class="day">14</span>
+                                <span class="day suspension">15</span>
+                                <span class="day evaluacion start">16</span>
+                                <span class="day evaluacion inter">17</span>
+                                <span class="day evaluacion inter">18</span>
+                                <span class="day evaluacion end negritas">19</span>
+                                <span class="day">20</span>
+                                <span class="day negritas">21</span>
+                                <span class="day vacaciones">22</span>
+                                <span class="day vacaciones">23</span>
+                                <span class="day vacaciones">24</span>
+                                <span class="day vacaciones">25</span>
+                                <span class="day vacaciones">26</span>
+                                <span class="day">27</span>
+                                <span class="day">28</span>
+                                <span class="day vacaciones">29</span>
+                                <span class="day vacaciones">30</span>
+                                <span class="day vacaciones">31</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ABRIL -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Abril 2027
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                                <span class="day vacaciones">1</span>
+                                <span class="day vacaciones">2</span>
+                                <span class="day">3</span>
+                                <span class="day">4</span>
+                                <span class="day">5</span>
+                                <span class="day">6</span>
+                                <span class="day">7</span>
+                                <span class="day">8</span>
+                                <span class="day">9</span>
+                                <span class="day">10</span>
+                                <span class="day">11</span>
+                                <span class="day">12</span>
+                                <span class="day">13</span>
+                                <span class="day">14</span>
+                                <span class="day">15</span>
+                                <span class="day">16</span>
+                                <span class="day">17</span>
+                                <span class="day">18</span>
+                                <span class="day">19</span>
+                                <span class="day">20</span>
+                                <span class="day">21</span>
+                                <span class="day">22</span>
+                                <span class="day">23</span>
+                                <span class="day">24</span>
+                                <span class="day">25</span>
+                                <span class="day">26</span>
+                                <span class="day">27</span>
+                                <span class="day">28</span>
+                                <span class="day negritas">29</span>
+                                <span class="day cte-ordinario">30</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MAYO -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Mayo 2027
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                                <span class="day negritas">1</span>
+                                <span class="day">2</span>
+                                <span class="day">3</span>
+                                <span class="day negritas">4</span>
+                                <span class="day suspension negritas">5</span>
+                                <span class="day">6</span>
+                                <span class="day">7</span>
+                                <span class="day">8</span>
+                                <span class="day">9</span>
+                                <span class="day">10</span>
+                                <span class="day">11</span>
+                                <span class="day">12</span>
+                                <span class="day">13</span>
+                                <span class="day">14</span>
+                                <span class="day negritas">15</span>
+                                <span class="day">16</span>
+                                <span class="day">17</span>
+                                <span class="day">18</span>
+                                <span class="day">19</span>
+                                <span class="day">20</span>
+                                <span class="day">21</span>
+                                <span class="day">22</span>
+                                <span class="day">23</span>
+                                <span class="day">24</span>
+                                <span class="day">25</span>
+                                <span class="day">26</span>
+                                <span class="day">27</span>
+                                <span class="day cte-ordinario">28</span>
+                                <span class="day">29</span>
+                                <span class="day">30</span>
+                                <span class="day">31</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- JUNIO -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Junio 2027
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+                                <span></span>
+
+                                <span class="day">1</span>
+                                <span class="day">2</span>
+                                <span class="day">3</span>
+                                <span class="day">4</span>
+                                <span class="day">5</span>
+                                <span class="day">6</span>
+                                <span class="day">7</span>
+                                <span class="day">8</span>
+                                <span class="day">9</span>
+                                <span class="day">10</span>
+                                <span class="day">11</span>
+                                <span class="day">12</span>
+                                <span class="day">13</span>
+                                <span class="day">14</span>
+                                <span class="day">15</span>
+                                <span class="day">16</span>
+                                <span class="day">17</span>
+                                <span class="day">18</span>
+                                <span class="day">19</span>
+                                <span class="day">20</span>
+                                <span class="day">21</span>
+                                <span class="day">22</span>
+                                <span class="day">23</span>
+                                <span class="day">24</span>
+                                <span class="day cte-ordinario">25</span>
+                                <span class="day">26</span>
+                                <span class="day">27</span>
+                                <span class="day">28</span>
+                                <span class="day">29</span>
+                                <span class="day">30</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- JULIO -->
+
+                        <div class="month cal-col cal-col-4">
+
+                            <div class="month-header">
+                                Julio 2027
+                            </div>
+
+                            <div class="days-header">
+                                <div>D</div>
+                                <div>L</div>
+                                <div>M</div>
+                                <div>M</div>
+                                <div>J</div>
+                                <div>V</div>
+                                <div>S</div>
+                            </div>
+
+                            <div class="days">
+
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+
+                                <span class="day">1</span>
+                                <span class="day registro-calificaciones">2</span>
+                                <span class="day">3</span>
+                                <span class="day">4</span>
+                                <span class="day">5</span>
+                                <span class="day">6</span>
+                                <span class="day">7</span>
+                                <span class="day evaluacion start">8</span>
+                                <span class="day fin-clases evaluacion end">9</span>
+
+                                <span class="day receso-clases">10</span>
+                                <span class="day receso-clases">11</span>
+                                <span class="day receso-clases">12</span>
+                                <span class="day receso-clases">13</span>
+                                <span class="day receso-clases">14</span>
+                                <span class="day receso-clases">15</span>
+                                <span class="day receso-clases">16</span>
+                                <span class="day receso-clases">17</span>
+                                <span class="day receso-clases">18</span>
+                                <span class="day receso-clases">19</span>
+                                <span class="day receso-clases">20</span>
+                                <span class="day receso-clases">21</span>
+                                <span class="day receso-clases">22</span>
+                                <span class="day receso-clases">23</span>
+                                <span class="day receso-clases">24</span>
+                                <span class="day receso-clases">25</span>
+                                <span class="day receso-clases">26</span>
+                                <span class="day receso-clases">27</span>
+                                <span class="day receso-clases">28</span>
+                                <span class="day receso-clases">29</span>
+                                <span class="day receso-clases">30</span>
+                                <span class="day receso-clases">31</span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACOTACIONES -->
+
+                    <div class="cal-row">
+
+                        <div class="cal-col cal-col-12">
+
+                            <div class="acotaciones">
+
+                                <h3>
+                                    Acotaciones
+                                </h3>
+
+                                <ul>
+
+                                    <li>
+                                        <div class="day cuadrito inicio-clases"></div>
+                                        INICIO DE CLASES DEL CICLO ESCOLAR 2026–2027
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito fin-clases"></div>
+                                        FIN DE CLASES DEL CICLO ESCOLAR 2026–2027
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito suspension circulito"></div>
+                                        SUSPENSIÓN DE LABORES DOCENTES
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito jornada-concientizacion circulito"></div>
+                                        JORNADA DE CONCIENTIZACIÓN SOBRE LA GRAVEDAD DEL ABUSO SEXUAL Y EL MALTRATO INFANTIL
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito receso-clases"></div>
+                                        RECESO DE CLASES
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito cte-intensivo"></div>
+                                        CONSEJO TÉCNICO ESCOLAR FASE INTENSIVA
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito cte-ordinario"></div>
+                                        CONSEJO TÉCNICO ESCOLAR SESIÓN ORDINARIA
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito evaluacion borde"></div>
+                                        REGISTRO Y COMUNICACIÓN DE LOS RESULTADOS DE LA EVALUACIÓN
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito vacaciones"></div>
+                                        VACACIONES
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito preinscripciones borde"></div>
+                                        PREINSCRIPCIÓN A PREESCOLAR, PRIMER GRADO DE PRIMARIA Y PRIMER GRADO DE SECUNDARIA PARA EL CICLO ESCOLAR 2027-2028
+                                    </li>
+
+                                    <li>
+                                        <div class="day cuadrito registro-calificaciones"></div>
+                                        REGISTRO DE CALIFICACIONES
+                                    </li>
+
+                                    <li>
+                                        <span class="negritas">
+                                            Negrillas:
+                                        </span>
+                                        Señalan días conmemorativos o de reflexión.
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 
-    <!-- ================================================= -->
-    <!-- IRREGULARES -->
-    <!-- ================================================= -->
+    <!-- =================================================
+         BUZÓN ANÓNIMO
+    ================================================= -->
 
     <div
-        id="seccionIrregulares"
+        id="seccionBuzon"
         class="section hidden"
     >
 
-        <h2>🔴 Alumnos Irregulares</h2>
+        <h2>📝 Buzón Anónimo</h2>
 
-        <p>
-            Alumnos con promedio general
-            menor a <strong>6.0</strong>.
-        </p>
+        <div class="buzon-wrapper">
 
-        <div
-            id="tablaIrregulares"
-            class="table-container"
-        ></div>
+            <div class="buzon-header">
+
+                <div class="buzon-icono">
+                    📬
+                </div>
+
+                <h2>
+                    Buzón Anónimo
+                </h2>
+
+                <p>
+                    Espacio para enviar comentarios,
+                    sugerencias o situaciones de manera anónima.
+                </p>
+
+            </div>
+
+            <div class="buzon-contenido">
+
+                <p>
+                    Tu mensaje será enviado mediante el formulario
+                    destinado para este propósito.
+                </p>
+
+                <p>
+                    No es necesario proporcionar tus datos personales
+                    para utilizar el buzón.
+                </p>
+
+                <a
+                    class="buzon-boton"
+                    href="https://companygarciacorona.com.mx/francisco_villa/forms.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    📝 Abrir Buzón Anónimo
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -640,9 +2687,9 @@ tr:hover{
 
 <script>
 
-/* ========================================================= */
-/* SUPABASE */
-/* ========================================================= */
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const supabaseClient = supabase.createClient(
 
@@ -653,9 +2700,9 @@ const supabaseClient = supabase.createClient(
 );
 
 
-/* ========================================================= */
-/* VARIABLES */
-/* ========================================================= */
+/* =========================================================
+   VARIABLES
+========================================================= */
 
 let docenteActual = null;
 
@@ -666,11 +2713,11 @@ let materiasGlobal = [];
 let evaluacionesGlobal = [];
 
 
-/* ========================================================= */
-/* RECORDAR DATOS */
-/* ========================================================= */
+/* =========================================================
+   RECORDAR DATOS
+========================================================= */
 
-window.addEventListener("DOMContentLoaded", function(){
+window.addEventListener("DOMContentLoaded",function(){
 
     const servidorGuardado =
         localStorage.getItem(
@@ -704,9 +2751,9 @@ window.addEventListener("DOMContentLoaded", function(){
 });
 
 
-/* ========================================================= */
-/* MOSTRAR / OCULTAR CONTRASEÑA */
-/* ========================================================= */
+/* =========================================================
+   MOSTRAR / OCULTAR PASSWORD
+========================================================= */
 
 function mostrarOcultarPassword(){
 
@@ -721,33 +2768,40 @@ function mostrarOcultarPassword(){
 
         password.type = "text";
 
-        boton.innerHTML = "🙈 Ocultar";
+        boton.innerHTML =
+            "🙈 Ocultar";
 
     }else{
 
         password.type = "password";
 
-        boton.innerHTML = "👁️ Mostrar";
+        boton.innerHTML =
+            "👁️ Mostrar";
 
     }
 
 }
 
 
-/* ========================================================= */
-/* LOGIN */
-/* ========================================================= */
+/* =========================================================
+   LOGIN
+========================================================= */
 
 async function login(){
 
     const servidor =
-        document.getElementById("servidor").value.trim();
+        document.getElementById("servidor")
+        .value
+        .trim();
 
     const password =
-        document.getElementById("password").value.trim();
+        document.getElementById("password")
+        .value
+        .trim();
 
     const recordar =
-        document.getElementById("recordarDatos").checked;
+        document.getElementById("recordarDatos")
+        .checked;
 
 
     if(!servidor || !password){
@@ -761,7 +2815,7 @@ async function login(){
     }
 
 
-    /* ================= RECORDAR ================= */
+    /* RECORDAR */
 
     if(recordar){
 
@@ -788,18 +2842,24 @@ async function login(){
     }
 
 
-    /* ================= CONSULTA ================= */
+    /* CONSULTA */
 
-    const { data, error } =
+    const {data,error} =
         await supabaseClient
 
         .from("docentes")
 
         .select("*")
 
-        .eq("numero_servidor", servidor)
+        .eq(
+            "numero_servidor",
+            servidor
+        )
 
-        .eq("password", password);
+        .eq(
+            "password",
+            password
+        );
 
 
     if(error){
@@ -827,7 +2887,8 @@ async function login(){
     }
 
 
-    docenteActual = data[0];
+    docenteActual =
+        data[0];
 
 
     document
@@ -858,9 +2919,9 @@ async function login(){
 }
 
 
-/* ========================================================= */
-/* CARGAR DATOS */
-/* ========================================================= */
+/* =========================================================
+   CARGAR DATOS
+========================================================= */
 
 async function cargarDatos(){
 
@@ -875,13 +2936,13 @@ async function cargarDatos(){
 }
 
 
-/* ========================================================= */
-/* CARGAR ALUMNOS */
-/* ========================================================= */
+/* =========================================================
+   CARGAR ALUMNOS
+========================================================= */
 
 async function cargarAlumnos(){
 
-    const { data, error } =
+    const {data,error} =
         await supabaseClient
 
         .from("alumnos")
@@ -919,7 +2980,8 @@ async function cargarAlumnos(){
     }
 
 
-    alumnosGlobal = data || [];
+    alumnosGlobal =
+        data || [];
 
 
     const alumnoSel =
@@ -949,16 +3011,16 @@ async function cargarAlumnos(){
 }
 
 
-/* ========================================================= */
-/* CARGAR MATERIAS */
-/* ========================================================= */
+/* =========================================================
+   CARGAR MATERIAS
+========================================================= */
 
 function cargarMaterias(){
 
     materiasGlobal = [];
 
 
-    for(let i = 1; i <= 10; i++){
+    for(let i = 1;i <= 10;i++){
 
         const nombreMateria =
             docenteActual[
@@ -1006,13 +3068,13 @@ function cargarMaterias(){
 }
 
 
-/* ========================================================= */
-/* CARGAR EVALUACIONES */
-/* ========================================================= */
+/* =========================================================
+   CARGAR EVALUACIONES
+========================================================= */
 
 async function cargarEvaluaciones(){
 
-    const { data, error } =
+    const {data,error} =
         await supabaseClient
 
         .from("evaluaciones")
@@ -1043,14 +3105,14 @@ async function cargarEvaluaciones(){
         data || [];
 
 
-    actualizarTablasAlumnos();
+    actualizarTablaAlumnos();
 
 }
 
 
-/* ========================================================= */
-/* CAMBIO DE ALUMNO */
-/* ========================================================= */
+/* =========================================================
+   CAMBIO DE ALUMNO
+========================================================= */
 
 document
     .getElementById("alumnoSelect")
@@ -1060,9 +3122,9 @@ document
     );
 
 
-/* ========================================================= */
-/* CAMBIO DE MATERIA */
-/* ========================================================= */
+/* =========================================================
+   CAMBIO DE MATERIA
+========================================================= */
 
 document
     .getElementById("materiaSelect")
@@ -1072,9 +3134,9 @@ document
     );
 
 
-/* ========================================================= */
-/* CARGAR EVALUACIÓN */
-/* ========================================================= */
+/* =========================================================
+   CARGAR EVALUACIÓN SELECCIONADA
+========================================================= */
 
 function cargarEvaluacionSeleccionada(){
 
@@ -1100,17 +3162,6 @@ function cargarEvaluacionSeleccionada(){
         return;
 
     }
-
-
-    /*
-        EL GRUPO NO SE USA PARA BUSCAR.
-
-        Por eso:
-
-        2 A → 2 B
-
-        conserva las calificaciones.
-    */
 
 
     const evaluacion =
@@ -1158,9 +3209,9 @@ function cargarEvaluacionSeleccionada(){
 }
 
 
-/* ========================================================= */
-/* EVENTOS DE CALIFICACIONES */
-/* ========================================================= */
+/* =========================================================
+   EVENTOS DE CALIFICACIONES
+========================================================= */
 
 document
     .getElementById("eva1")
@@ -1186,9 +3237,9 @@ document
     );
 
 
-/* ========================================================= */
-/* CALCULAR PROMEDIO */
-/* ========================================================= */
+/* =========================================================
+   CALCULAR PROMEDIO
+========================================================= */
 
 function calcularPromedio(){
 
@@ -1203,26 +3254,22 @@ function calcularPromedio(){
     ];
 
 
-    /*
-        SOLAMENTE TOMAMOS LOS CAMPOS
-        QUE TENGAN UNA CALIFICACIÓN.
-    */
-
     const calificaciones =
         valores
 
-        .filter(valor => valor !== "")
+        .filter(
+            valor => valor !== ""
+        )
 
-        .map(valor => Number(valor))
+        .map(
+            valor => Number(valor)
+        )
 
-        .filter(valor =>
-            Number.isFinite(valor)
+        .filter(
+            valor =>
+                Number.isFinite(valor)
         );
 
-
-    /*
-        SI NO HAY NINGUNA
-    */
 
     if(calificaciones.length === 0){
 
@@ -1248,9 +3295,9 @@ function calcularPromedio(){
 }
 
 
-/* ========================================================= */
-/* PROMEDIO EN VIVO */
-/* ========================================================= */
+/* =========================================================
+   PROMEDIO EN VIVO
+========================================================= */
 
 function actualizarPromedioVisual(){
 
@@ -1281,9 +3328,9 @@ function actualizarPromedioVisual(){
 }
 
 
-/* ========================================================= */
-/* GUARDAR */
-/* ========================================================= */
+/* =========================================================
+   GUARDAR EVALUACIÓN
+========================================================= */
 
 async function guardarEvaluacion(){
 
@@ -1319,11 +3366,6 @@ async function guardarEvaluacion(){
         document.getElementById("eva3").value
 
     ];
-
-
-    /*
-        AHORA NO ES OBLIGATORIO LLENAR LAS 3.
-    */
 
 
     const hayAlMenosUna =
@@ -1432,11 +3474,12 @@ async function guardarEvaluacion(){
         );
 
 
-    /* ============================================== */
-    /* BUSCAR REGISTRO EXISTENTE */
-    /* ============================================== */
+    /* BUSCAR REGISTRO */
 
-    const { data: existente, error: errorBusqueda } =
+    const {
+        data:existente,
+        error:errorBusqueda
+    } =
         await supabaseClient
 
         .from("evaluaciones")
@@ -1477,26 +3520,29 @@ async function guardarEvaluacion(){
 
     const datos = {
 
-        alumno_id: alumnoId,
+        alumno_id:
+            alumnoId,
 
-        materia: materia,
+        materia:
+            materia,
 
-        evaluacion1: eva1,
+        evaluacion1:
+            eva1,
 
-        evaluacion2: eva2,
+        evaluacion2:
+            eva2,
 
-        evaluacion3: eva3,
+        evaluacion3:
+            eva3,
 
-        promedio_final: promedioFinal,
+        promedio_final:
+            promedioFinal,
 
-        grado: docenteActual.grado,
+        grado:
+            docenteActual.grado,
 
-        /*
-            El grupo se guarda solamente
-            como información del grupo actual.
-        */
-
-        grupo: docenteActual.grupo,
+        grupo:
+            docenteActual.grupo,
 
         updated_at:
             new Date().toISOString()
@@ -1567,22 +3613,16 @@ async function guardarEvaluacion(){
     );
 
 
-    /*
-        RECARGAMOS LOS DATOS PERO
-        NO CAMBIAMOS ALUMNO NI MATERIA.
-    */
-
     await cargarEvaluaciones();
-
 
     cargarEvaluacionSeleccionada();
 
 }
 
 
-/* ========================================================= */
-/* LIMPIAR CAMPOS */
-/* ========================================================= */
+/* =========================================================
+   LIMPIAR CAMPOS
+========================================================= */
 
 function limpiarCampos(actualizar = true){
 
@@ -1602,10 +3642,6 @@ function limpiarCampos(actualizar = true){
 }
 
 
-/* ========================================================= */
-/* LIMPIAR EVALUACIÓN */
-/* ========================================================= */
-
 function limpiarEvaluacion(){
 
     limpiarCampos(true);
@@ -1613,9 +3649,9 @@ function limpiarEvaluacion(){
 }
 
 
-/* ========================================================= */
-/* MENU */
-/* ========================================================= */
+/* =========================================================
+   MOSTRAR SECCIÓN PRINCIPAL
+========================================================= */
 
 function mostrarSeccion(seccion){
 
@@ -1625,21 +3661,25 @@ function mostrarSeccion(seccion){
 
         "seccionCompletos",
 
-        "seccionBuenos",
+        "seccionHorarios",
 
-        "seccionRegulares",
+        "seccionCalendario",
 
-        "seccionIrregulares"
+        "seccionBuzon"
 
     ];
 
 
     secciones.forEach(id => {
 
-        document
-            .getElementById(id)
-            .classList
-            .add("hidden");
+        const elemento =
+            document.getElementById(id);
+
+        if(elemento){
+
+            elemento.classList.add("hidden");
+
+        }
 
     });
 
@@ -1665,119 +3705,59 @@ function mostrarSeccion(seccion){
             .classList
             .remove("hidden");
 
-        generarTabla("completos");
+        actualizarTablaAlumnos();
 
     }
 
 
-    if(seccion === "buenos"){
+    if(seccion === "horarios"){
 
         document
             .getElementById(
-                "seccionBuenos"
+                "seccionHorarios"
             )
             .classList
             .remove("hidden");
-
-        generarTabla("buenos");
 
     }
 
 
-    if(seccion === "regulares"){
+    if(seccion === "calendario"){
 
         document
             .getElementById(
-                "seccionRegulares"
+                "seccionCalendario"
             )
             .classList
             .remove("hidden");
-
-        generarTabla("regulares");
 
     }
 
 
-    if(seccion === "irregulares"){
+    if(seccion === "buzon"){
 
         document
             .getElementById(
-                "seccionIrregulares"
+                "seccionBuzon"
             )
             .classList
             .remove("hidden");
-
-        generarTabla("irregulares");
 
     }
 
 }
 
 
-/* ========================================================= */
-/* ACTUALIZAR TABLAS */
-/* ========================================================= */
+/* =========================================================
+   ALUMNOS COMPLETOS
+========================================================= */
 
-function actualizarTablasAlumnos(){
+function actualizarTablaAlumnos(){
 
-    generarTabla("completos");
-
-    generarTabla("buenos");
-
-    generarTabla("regulares");
-
-    generarTabla("irregulares");
-
-}
-
-
-/* ========================================================= */
-/* GENERAR TABLAS */
-/* ========================================================= */
-
-function generarTabla(tipo){
-
-    let contenedor;
-
-
-    if(tipo === "completos"){
-
-        contenedor =
-            document.getElementById(
-                "tablaCompletos"
-            );
-
-    }
-
-
-    if(tipo === "buenos"){
-
-        contenedor =
-            document.getElementById(
-                "tablaBuenos"
-            );
-
-    }
-
-
-    if(tipo === "regulares"){
-
-        contenedor =
-            document.getElementById(
-                "tablaRegulares"
-            );
-
-    }
-
-
-    if(tipo === "irregulares"){
-
-        contenedor =
-            document.getElementById(
-                "tablaIrregulares"
-            );
-
-    }
+    const contenedor =
+        document.getElementById(
+            "tablaCompletos"
+        );
 
 
     if(!contenedor){
@@ -1787,184 +3767,15 @@ function generarTabla(tipo){
     }
 
 
-    const alumnosConPromedio =
-        alumnosGlobal.map(alumno => {
-
-            const evaluacionesAlumno =
-                evaluacionesGlobal.filter(e =>
-
-                    String(e.alumno_id) ===
-                    String(alumno.id)
-
-                    &&
-
-                    String(e.grado) ===
-                    String(docenteActual.grado)
-
-                );
-
-
-            const promedios =
-                evaluacionesAlumno
-
-                .map(
-                    e => Number(
-                        e.promedio_final
-                    )
-                )
-
-                .filter(
-                    n =>
-                        Number.isFinite(n)
-                );
-
-
-            let promedioGeneral = null;
-
-
-            if(promedios.length > 0){
-
-                const suma =
-                    promedios.reduce(
-                        (a,b) => a + b,
-                        0
-                    );
-
-
-                promedioGeneral =
-                    Number(
-                        (
-                            suma /
-                            promedios.length
-                        ).toFixed(2)
-                    );
-
-            }
-
-
-            return {
-
-                ...alumno,
-
-                promedioGeneral
-
-            };
-
-        });
-
-
-    let filtrados;
-
-
-    /*
-        BUENOS
-        8 A 10
-    */
-
-    if(tipo === "buenos"){
-
-        filtrados =
-            alumnosConPromedio.filter(
-                a =>
-                    a.promedioGeneral !== null &&
-                    a.promedioGeneral >= 8
-            );
-
-    }
-
-
-    /*
-        COMPLETOS
-
-        Aquí se muestran los alumnos
-        que tienen promedio registrado
-        en todas las materias del docente.
-    */
-
-    if(tipo === "completos"){
-
-        filtrados =
-            alumnosConPromedio.filter(alumno => {
-
-                const cantidad =
-                    evaluacionesGlobal.filter(e =>
-
-                        String(e.alumno_id) ===
-                        String(alumno.id)
-
-                        &&
-
-                        String(e.grado) ===
-                        String(docenteActual.grado)
-
-                        &&
-
-                        materiasGlobal.includes(
-                            e.materia
-                        )
-
-                    ).length;
-
-
-                return (
-                    materiasGlobal.length > 0 &&
-                    cantidad >= materiasGlobal.length
-                );
-
-            });
-
-    }
-
-
-    /*
-        REGULARES
-        6 A 7.99
-    */
-
-    if(tipo === "regulares"){
-
-        filtrados =
-            alumnosConPromedio.filter(
-                a =>
-                    a.promedioGeneral !== null &&
-                    a.promedioGeneral >= 6 &&
-                    a.promedioGeneral < 8
-            );
-
-    }
-
-
-    /*
-        IRREGULARES
-        MENOS DE 6
-    */
-
-    if(tipo === "irregulares"){
-
-        filtrados =
-            alumnosConPromedio.filter(
-                a =>
-                    a.promedioGeneral !== null &&
-                    a.promedioGeneral < 6
-            );
-
-    }
-
-
-    filtrados.sort(
-        (a,b) =>
-            (b.promedioGeneral || 0) -
-            (a.promedioGeneral || 0)
-    );
-
-
-    if(filtrados.length === 0){
+    if(!alumnosGlobal ||
+       alumnosGlobal.length === 0){
 
         contenedor.innerHTML = `
 
             <div class="mensaje">
 
-                No hay alumnos en esta categoría.
+                No hay alumnos registrados
+                para este grado y grupo.
 
             </div>
 
@@ -1987,7 +3798,9 @@ function generarTabla(tipo){
 
                     <th>Nombre del alumno</th>
 
-                    <th>Calificación general</th>
+                    <th>Grado</th>
+
+                    <th>Grupo</th>
 
                 </tr>
 
@@ -1998,33 +3811,8 @@ function generarTabla(tipo){
     `;
 
 
-    filtrados.forEach(
+    alumnosGlobal.forEach(
         (alumno,index) => {
-
-            const promedio =
-                alumno.promedioGeneral;
-
-
-            let clase = "";
-
-
-            if(promedio < 6){
-
-                clase =
-                    "nota-roja";
-
-            }else if(promedio < 8){
-
-                clase =
-                    "nota-amarilla";
-
-            }else{
-
-                clase =
-                    "nota-verde";
-
-            }
-
 
             html += `
 
@@ -2034,20 +3822,24 @@ function generarTabla(tipo){
                         ${index + 1}
                     </td>
 
-                    <td>
+                    <td class="nombre-alumno">
+
                         ${escapeHTML(
                             alumno.nombre_completo
                         )}
+
                     </td>
 
-                    <td class="${clase}">
+                    <td>
+                        ${escapeHTML(
+                            alumno.grado
+                        )}
+                    </td>
 
-                        ${
-                            promedio === null
-                            ? "Sin calificación"
-                            : promedio.toFixed(2)
-                        }
-
+                    <td>
+                        ${escapeHTML(
+                            alumno.grupo
+                        )}
                     </td>
 
                 </tr>
@@ -2073,9 +3865,74 @@ function generarTabla(tipo){
 }
 
 
-/* ========================================================= */
-/* CERRAR SESIÓN */
-/* ========================================================= */
+/* =========================================================
+   HORARIOS / PLANEACIÓN
+========================================================= */
+
+function mostrarModuloHorarios(modulo){
+
+    const horarios =
+        document.getElementById(
+            "moduloHorarios"
+        );
+
+    const planeacion =
+        document.getElementById(
+            "moduloPlaneacion"
+        );
+
+    const btnHorarios =
+        document.getElementById(
+            "btnHorarios"
+        );
+
+    const btnPlaneacion =
+        document.getElementById(
+            "btnPlaneacion"
+        );
+
+
+    horarios.classList.remove("visible");
+
+    planeacion.classList.remove("visible");
+
+
+    btnHorarios.classList.remove("activo");
+
+    btnHorarios.classList.add("inactivo");
+
+    btnPlaneacion.classList.remove("activo");
+
+    btnPlaneacion.classList.add("inactivo");
+
+
+    if(modulo === "horarios"){
+
+        horarios.classList.add("visible");
+
+        btnHorarios.classList.add("activo");
+
+        btnHorarios.classList.remove("inactivo");
+
+    }
+
+
+    if(modulo === "planeacion"){
+
+        planeacion.classList.add("visible");
+
+        btnPlaneacion.classList.add("activo");
+
+        btnPlaneacion.classList.remove("inactivo");
+
+    }
+
+}
+
+
+/* =========================================================
+   CERRAR SESIÓN
+========================================================= */
 
 function cerrarSesion(){
 
@@ -2101,22 +3958,32 @@ function cerrarSesion(){
 
 
     /*
-        IMPORTANTE:
+       NO SE BORRA LOCALSTORAGE.
 
-        NO BORRAMOS EL LOCALSTORAGE.
-
-        Así los datos siguen apareciendo
-        al volver a abrir el portal.
+       De esta manera "Recordar datos de acceso"
+       continúa funcionando.
     */
 
+
+    document.getElementById("alumnoSelect").innerHTML =
+        '<option value="">Seleccionar alumno</option>';
+
+
+    document.getElementById("materiaSelect").innerHTML =
+        '<option value="">Seleccionar materia</option>';
+
+
     limpiarCampos(true);
+
+
+    mostrarSeccion("captura");
 
 }
 
 
-/* ========================================================= */
-/* ESCAPE HTML */
-/* ========================================================= */
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHTML(text){
 
@@ -2150,7 +4017,7 @@ function escapeHTML(text){
         .replace(
             /"/g,
             "&quot;"
-        ) 
+        )
 
         .replace(
             /'/g,
