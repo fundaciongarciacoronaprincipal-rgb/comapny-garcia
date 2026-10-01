@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Calendario Escolar 2026-2027">
+<title>Calendario Escolar 2026-2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --vino:#681a3b;
+  --vino2:#9b2247;
+  --dorado:#ac811c;
+  --dorado-claro:#f4eacd;
+  --verde:#1a5a4f;
+  --morado:#60113d;
+  --rosa:#b77687;
+  --gris:#b9b9bb;
+  --azul:#47bfee;
+  --dorado2:#a6802e;
+  --crema:#fffcf3;
+  --sombra:0 12px 35px rgba(0,0,0,.16);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#fffdf8 0%,#f7f2e7 100%);
+  color:#2b2b2b;
+  font-family:'Noto Sans',Arial,Helvetica,sans-serif;
+}
+.page{
+  width:min(1400px,94%);
+  margin:28px auto 50px;
+}
+.wrapper-calendario{
+  background:#fff;
+  box-shadow:var(--sombra);
+  border-radius:18px;
+  padding:28px 28px 36px;
+  overflow:hidden;
+}
+.row{
+  display:flex;
+  flex-wrap:wrap;
+  margin:0 -10px;
+}
+.row>[class*="col-"]{padding:0 10px}
+.col-md-9{width:75%}
+.col-md-6{width:50%}
+.col-md-3{width:25%}
+.col-lg-12{width:100%}
+.text-center{text-align:center}
+h1{
+  margin:5px 0 20px;
+  color:var(--vino);
+  font-size:clamp(2rem,4vw,3.5rem);
+  line-height:.95;
+  font-weight:800;
+  text-align:right;
+}
+h1 span{
+  color:var(--vino2);
+  font-size:1.35em;
+  line-height:.85;
+}
+.basica{
+  margin-top:.8em;
+  font-family:'Noto Sans',Arial,Helvetica,sans-serif;
+}
+.basica span{
+  font-weight:800;
+  font-size:clamp(1.15rem,2.2vw,1.7rem);
+  color:#333;
+}
+.basica p{
+  font-size:.9rem;
+  margin:8px auto 0;
+  max-width:760px;
+  color:#666;
+}
+.plecadorada{
+  padding:1em 0 1em 1.5em;
+  margin-bottom:2em;
+}
+.dias{
+  color:#fff;
+  background:var(--dorado);
+  margin:0;
+  padding:.45em;
+  border-radius:12px;
+  text-align:center;
+  font-size:1.6em;
+  font-weight:800;
+  box-shadow:0 7px 16px rgba(0,0,0,.14);
+}
+.calendar{
+  display:flex;
+  flex-wrap:wrap;
+  line-height:1;
+  padding:20px 0 0;
+}
+.calendar>[class*="col-"]{
+  display:flex;
+  flex-direction:column;
+}
+.month{
+  width:33.333%;
+  padding:0 12px;
+  margin-bottom:42px;
+  position:relative;
+  z-index:1;
+}
+.month::after{
+  content:"";
+  position:absolute;
+  bottom:-10px;
+  left:20%;
+  width:60%;
+  height:2px;
+  border-radius:50%;
+  background:rgba(0,0,0,.35);
+  filter:blur(6px);
+  z-index:-1;
+}
+.month-header{
+  background:var(--dorado);
+  color:#fff;
+  text-align:center;
+  padding:.55em .8em;
+  font-weight:800;
+  font-size:1.15em;
+  margin:-.5em -.3em 0;
+  border-radius:.35em;
+  box-shadow:0 .3em .3em rgba(0,0,0,.33);
+  z-index:10;
+}
+.days-header,.days{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+}
+.days-header div{
+  background:var(--dorado-claro);
+  font-weight:800;
+  text-align:center;
+  padding:.5em;
+  color:#533b06;
+}
+.day{
+  text-align:center;
+  padding:.5em;
+  position:relative;
+  min-height:31px;
+}
+.inicio-clases{
+  background:linear-gradient(135deg,#245b4d,#1a5a4f);
+  color:#fff;
+  border-radius:4px;
+  font-weight:800;
+}
+.fin-clases{
+  background:linear-gradient(135deg,#681a3b,#9b2247);
+  color:#fff;
+  border-radius:4px;
+  font-weight:800;
+}
+.suspension{
+  background:#111;
+  color:#fff;
+  border-radius:50%;
+  height:1.8em;
+  width:1.8em;
+  margin:0 auto;
+  padding:.42em 0 0;
+}
+.jornada-concientizacion{
+  border:3px solid #111;
+  border-radius:50%;
+  height:1.8em;
+  width:1.8em;
+  margin:0 auto;
+  padding-top:.4em;
+}
+.receso-clases{background:var(--verde);color:#fff}
+.cte-intensivo{background:var(--morado);color:#fff}
+.cte-ordinario{background:var(--rosa);color:#fff}
+.evaluacion{border:3px dashed #111}
+.preinscripciones{border:3px solid #a11f41}
+.vacaciones{background:var(--gris)}
+.taller-directores{background:var(--dorado2);color:#fff}
+.taller-docentes{background:#e5d295}
+.registro-calificaciones{background:var(--azul);color:#123}
+.negritas{font-weight:900}
+.day::after{
+  content:"";
+  position:absolute;
+  bottom:2em;
+  left:-3.5em;
+  text-align:center;
+  background:#611232;
+  color:#fff;
+  padding:0;
+  width:0;
+  z-index:100;
+  font-size:.8em;
+  display:none;
+  line-height:1.2;
+  border-radius:5px;
+}
+.day:hover::after{display:block}
+.inicio-clases::after{content:"Inicio de clases"}
+.fin-clases::after{content:"Fin de clases"}
+.receso-clases::after{content:"Receso de clases"}
+.suspension::after{content:"Suspensión de labores docentes"}
+.jornada-concientizacion::after{
+  content:"Jornada de concientización";
+  width:15em;
+  left:-7em;
+}
+.cte-intensivo::after{content:"Consejo técnico escolar fase intensiva"}
+.cte-ordinario::after{content:"Consejo técnico escolar sesión ordinaria"}
+.evaluacion::after{
+  content:"Registro y comunicación de los resultados de la evaluación";
+  width:13em;
+  left:-4.7em;
+}
+.vacaciones::after{content:"Vacaciones";width:6.5em;left:-1.7em}
+.registro-calificaciones::after{content:"Registro de calificaciones"}
+.taller-directores::after{
+  content:"Taller intensivo para personal con funciones de dirección";
+}
+.taller-docentes::after{
+  content:"Taller intensivo para personal docente";
+}
+.preinscripciones::after{
+  content:"Preinscripción a preescolar, primer grado de primaria y primer grado de secundaria";
+  width:15em;
+  left:-6em;
+}
+.inicio-clases::after,.fin-clases::after,.receso-clases::after,.suspension::after,
+.jornada-concientizacion::after,.cte-intensivo::after,.cte-ordinario::after,
+.evaluacion::after,.vacaciones::after,.registro-calificaciones::after,
+.taller-directores::after,.taller-docentes::after,.preinscripciones::after{
+  padding:.5em;
+  box-shadow:.3em .3em .5em rgba(0,0,0,.3);
+}
+.acotaciones{
+  padding:25px 1.5em 0;
+  font-size:.82rem;
+  border-top:1px solid #e5dfd3;
+}
+.acotaciones h2{
+  color:var(--vino);
+  margin:0 0 15px;
+}
+.acotaciones ul{
+  list-style:none;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:.8em 1.2em;
+  margin:0;
+}
+.acotaciones li{display:flex;align-items:center;gap:8px;line-height:1.3}
+.acotaciones .cuadrito{
+  display:inline-block;
+  width:2em;
+  min-width:2em;
+  text-align:center;
+  margin-right:.2em;
+  height:1.5em;
+}
+.acotaciones .circulito{width:1.5em;min-width:1.5em}
+.cuadrito{display:inline-block;width:3em;text-align:center;margin-right:.5em;height:2em}
+.circulito{width:2.5em;height:2.5em;padding:0}
+.acotaciones .inicio-clases,.acotaciones .fin-clases,.acotaciones .receso-clases,
+.acotaciones .cte-intensivo,.acotaciones .cte-ordinario,.acotaciones .vacaciones,
+.acotaciones .taller-directores,.acotaciones .taller-docentes,.acotaciones .registro-calificaciones{
+  border-radius:3px;
+}
+@media(max-width:1000px){
+  .month{width:50%}
+  .acotaciones ul{grid-template-columns:repeat(2,1fr)}
+  .col-md-9,.col-md-3{width:100%}
+  .plecadorada{padding:12px 0 0}
+  h1{text-align:center}
+}
+@media(max-width:650px){
+  .page{width:100%;margin:0}
+  .wrapper-calendario{border-radius:0;padding:20px 10px 28px}
+  .month{width:100%;padding:0 5px}
+  .acotaciones ul{grid-template-columns:1fr}
+  .basica span{font-size:1.15rem}
+  .month-header{font-size:1rem}
+  .day{padding:.42em .2em;min-height:28px}
+  .day::after{display:none!important}
+}
+</style>
+</head>
+<body>
+<main class="page">
+<div class="wrapper-calendario"> <div class="row">  <div class="col-md-6"> <h1>Calendario Escolar<br/><span>2026-2027</span></h1> </div> </div> <div class="row"> <div class="col-md-9 text-center"> <div class="basica"><span>EDUCACIÓN PREESCOLAR, PRIMARIA Y SECUNDARIA</span> <p>Consulta de fechas y actividades del ciclo escolar 2026-2027.</p></div> </div> <div class="col-md-3"> <div class="plecadorada"> <p class="dias h2">185 DÍAS</p> </div> </div> </div> <div class="row"> <div class="col-lg-12"> <div class="calendar" style="font-family: 'Noto Sans', Arial, Helvetica, sans-serif;"> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Agosto 2026</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span></span><span></span><span></span><span></span><span></span><span class="day receso-clases">1</span><span class="day receso-clases">2</span><span class="day receso-clases">3</span><span class="day receso-clases">4</span><span class="day receso-clases">5</span><span class="day receso-clases">6</span><span class="day receso-clases">7</span><span class="day receso-clases">8</span><span class="day receso-clases">9</span><span class="day receso-clases">10</span><span class="day receso-clases">11</span><span class="day receso-clases">12</span><span class="day receso-clases">13</span><span class="day receso-clases">14</span><span class="day receso-clases">15</span><span class="day receso-clases">16</span><span class="day receso-clases">17</span><span class="day receso-clases">18</span><span class="day receso-clases">19</span><span class="day receso-clases">20</span><span class="day receso-clases">21</span><span class="day receso-clases">22</span><span class="day receso-clases">23</span><span class="day cte-intensivo">24</span><span class="day cte-intensivo">25</span><span class="day cte-intensivo">26</span><span class="day cte-intensivo">27</span><span class="day cte-intensivo">28</span><span class="day receso-clases">29</span><span class="day receso-clases">30</span><span class="day inicio-clases">31</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Septiembre 2026</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span></span><span class="day day">1</span><span class="day day">2</span><span class="day day">3</span><span class="day day">4</span><span class="day">5</span><span class="day">6</span><span class="day jornada-concientizacion">7</span><span class="day day">8</span><span class="day day">9</span><span class="day day">10</span><span class="day day">11</span><span class="day">12</span><span class="day">13</span><span class="day day">14</span><span class="day negritas">15</span><span class="day suspension">16</span><span class="day day">17</span><span class="day day">18</span><span class="day">19</span><span class="day">20</span><span class="day day">21</span><span class="day day">22</span><span class="day day">23</span><span class="day day">24</span><span class="day cte-ordinario">25</span><span class="day">26</span><span class="day">27</span><span class="day day">28</span><span class="day day">29</span><span class="day day">30</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Octubre 2026</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span></span><span></span><span></span><span class="day day">1</span><span class="day day">2</span><span class="day">3</span><span class="day">4</span><span class="day day">5</span><span class="day day">6</span><span class="day day">7</span><span class="day day">8</span><span class="day day">9</span><span class="day">10</span><span class="day">11</span><span class="day day">12</span><span class="day day">13</span><span class="day day">14</span><span class="day day">15</span><span class="day day">16</span><span class="day">17</span><span class="day">18</span><span class="day day">19</span><span class="day day">20</span><span class="day day">21</span><span class="day day">22</span><span class="day day">23</span><span class="day">24</span><span class="day">25</span><span class="day day">26</span><span class="day day">27</span><span class="day day">28</span><span class="day day">29</span><span class="day cte-ordinario">30</span><span class="day">31</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Noviembre 2026</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span class="day">1</span><span class="day suspension">2</span><span class="day day">3</span><span class="day day">4</span><span class="day day">5</span><span class="day day">6</span><span class="day">7</span><span class="day">8</span><span class="day day">9</span><span class="day day">10</span><span class="day day">11</span><span class="day day">12</span><span class="day registro-calificaciones">13</span><span class="day">14</span><span class="day">15</span><span class="day suspension">16</span><span class="day day">17</span><span class="day day">18</span><span class="day day">19</span><span class="day negritas">20</span><span class="day">21</span><span class="day">22</span><span class="day evaluacion start">23</span><span class="day evaluacion inter">24</span><span class="day evaluacion inter">25</span><span class="day evaluacion end">26</span><span class="day cte-ordinario">27</span><span class="day">28</span><span class="day">29</span><span class="day day">30</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Diciembre 2026</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span></span><span class="day day">1</span><span class="day day">2</span><span class="day day">3</span><span class="day day">4</span><span class="day">5</span><span class="day">6</span><span class="day day">7</span><span class="day day">8</span><span class="day day">9</span><span class="day day">10</span><span class="day day">11</span><span class="day">12</span><span class="day">13</span><span class="day day">14</span><span class="day day">15</span><span class="day day">16</span><span class="day day">17</span><span class="day day">18</span><span class="day">19</span><span class="day">20</span><span class="day vacaciones">21</span><span class="day vacaciones">22</span><span class="day vacaciones">23</span><span class="day vacaciones">24</span><span class="day suspension">25</span><span class="day">26</span><span class="day">27</span><span class="day vacaciones">28</span><span class="day vacaciones">29</span><span class="day vacaciones">30</span><span class="day vacaciones">31</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Enero 2027</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span></span><span></span><span></span><span></span><span class="day suspension">1</span><span class="day">2</span><span class="day">3</span><span class="day vacaciones">4</span><span class="day vacaciones">5</span><span class="day suspension">6</span><span class="day day">7</span><span class="day day">8</span><span class="day">9</span><span class="day">10</span><span class="day day">11</span><span class="day day">12</span><span class="day day">13</span><span class="day day">14</span><span class="day day">15</span><span class="day">16</span><span class="day">17</span><span class="day day">18</span><span class="day day">19</span><span class="day day">20</span><span class="day day">21</span><span class="day day">22</span><span class="day">23</span><span class="day">24</span><span class="day day">25</span><span class="day day">26</span><span class="day day">27</span><span class="day day">28</span><span class="day cte-ordinario">29</span><span class="day">30</span><span class="day">31</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Febrero 2027</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span class="day suspension">1</span><span class="day preinscripciones start" style="border-bottom: none;">2</span><span class="day preinscripciones interup">3</span><span class="day preinscripciones interup">4</span><span class="day preinscripciones end negritas" style="border-bottom: none;">5</span><span class="day">6</span><span class="day">7</span><span class="day preinscripciones start">8</span><span class="day preinscripciones interdown">9</span><span class="day preinscripciones interdown">10</span><span class="day preinscripciones interdown">11</span><span class="day preinscripciones end" style="border-top: none;">12</span><span class="day">13</span><span class="day">14</span><span class="day day">15</span><span class="day day">16</span><span class="day day">17</span><span class="day day">18</span><span class="day day">19</span><span class="day">20</span><span class="day">21</span><span class="day day">22</span><span class="day day">23</span><span class="day negritas">24</span><span class="day day">25</span><span class="day cte-ordinario">26</span><span class="day">27</span><span class="day">28</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Marzo 2027</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span class="day day">1</span><span class="day day">2</span><span class="day day">3</span><span class="day day">4</span><span class="day registro-calificaciones">5</span><span class="day">6</span><span class="day">7</span><span class="day day">8</span><span class="day day">9</span><span class="day day">10</span><span class="day day">11</span><span class="day day">12</span><span class="day">13</span><span class="day">14</span><span class="day suspension">15</span><span class="day evaluacion start">16</span><span class="day evaluacion inter">17</span><span class="day evaluacion inter">18</span><span class="day evaluacion end negritas">19</span><span class="day">20</span><span class="day negritas">21</span><span class="day vacaciones">22</span><span class="day vacaciones">23</span><span class="day vacaciones">24</span><span class="day vacaciones">25</span><span class="day vacaciones">26</span><span class="day">27</span><span class="day">28</span><span class="day vacaciones">29</span><span class="day vacaciones">30</span><span class="day vacaciones">31</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Abril 2027</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span></span><span></span><span></span><span class="day vacaciones">1</span><span class="day vacaciones">2</span><span class="day">3</span><span class="day">4</span><span class="day day">5</span><span class="day day">6</span><span class="day day">7</span><span class="day day">8</span><span class="day day">9</span><span class="day">10</span><span class="day">11</span><span class="day day">12</span><span class="day day">13</span><span class="day day">14</span><span class="day day">15</span><span class="day day">16</span><span class="day">17</span><span class="day">18</span><span class="day day">19</span><span class="day day">20</span><span class="day day">21</span><span class="day day">22</span><span class="day day">23</span><span class="day">24</span><span class="day">25</span><span class="day day">26</span><span class="day day">27</span><span class="day day">28</span><span class="day negritas">29</span><span class="day cte-ordinario">30</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Mayo 2027</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span></span><span></span><span></span><span></span><span></span><span class="day negritas">1</span><span class="day">2</span><span class="day day">3</span><span class="day negritas">4</span><span class="day suspension negritas">5</span><span class="day day">6</span><span class="day day">7</span><span class="day">8</span><span class="day">9</span><span class="day day">10</span><span class="day day">11</span><span class="day day">12</span><span class="day day">13</span><span class="day day">14</span><span class="day negritas">15</span><span class="day">16</span><span class="day day">17</span><span class="day day">18</span><span class="day day">19</span><span class="day day">20</span><span class="day day">21</span><span class="day">22</span><span class="day">23</span><span class="day day">24</span><span class="day day">25</span><span class="day day">26</span><span class="day day">27</span><span class="day cte-ordinario">28</span><span class="day">29</span><span class="day">30</span><span class="day day">31</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Junio 2027</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span></span><span class="day day">1</span><span class="day day">2</span><span class="day day">3</span><span class="day day">4</span><span class="day">5</span><span class="day">6</span><span class="day day">7</span><span class="day day">8</span><span class="day day">9</span><span class="day day">10</span><span class="day day">11</span><span class="day">12</span><span class="day">13</span><span class="day day">14</span><span class="day day">15</span><span class="day day">16</span><span class="day day">17</span><span class="day day">18</span><span class="day">19</span><span class="day">20</span><span class="day day">21</span><span class="day day">22</span><span class="day day">23</span><span class="day day">24</span><span class="day cte-ordinario">25</span><span class="day">26</span><span class="day">27</span><span class="day day">28</span><span class="day day">29</span><span class="day day">30</span> </div> </div> <div class="month col-md-4 col-sm-6 col-xs-12"> <div class="month-header">Julio 2027</div> <div class="days-header"> <div>D</div> <div>L</div> <div>M</div> <div>M</div> <div>J</div> <div>V</div> <div>S</div> </div> <div class="days"><span></span><span></span><span></span><span></span><span class="day day">1</span><span class="day registro-calificaciones">2</span><span class="day">3</span><span class="day">4</span><span class="day day">5</span><span class="day day">6</span><span class="day day">7</span><span class="day evaluacion start">8</span><span class="day fin-clases evaluacion end">9</span><span class="day receso-clases">10</span><span class="day receso-clases">11</span><span class="day receso-clases">12</span><span class="day receso-clases">13</span><span class="day receso-clases">14</span><span class="day receso-clases">15</span><span class="day receso-clases">16</span><span class="day receso-clases">17</span><span class="day receso-clases">18</span><span class="day receso-clases">19</span><span class="day receso-clases">20</span><span class="day receso-clases">21</span><span class="day receso-clases">22</span><span class="day receso-clases">23</span><span class="day receso-clases">24</span><span class="day receso-clases">25</span><span class="day receso-clases">26</span><span class="day receso-clases">27</span><span class="day receso-clases">28</span><span class="day receso-clases">29</span><span class="day receso-clases">30</span><span class="day receso-clases">31</span> </div> </div> </div> </div> </div> <div class="row"> <div class="col-md-12"> <div class="acotaciones"> <h3>Acotaciones</h3> <ul> <li> <div class="day cuadrito inicio-clases"></div> INICIO DE CLASES DEL CICLO ESCOLAR 2026–2027                </li> <li> <div class="day cuadrito fin-clases"></div> FIN DE CLASES DEL CICLO ESCOLAR 2026–2027                </li> <li> <div class="day cuadrito suspension circulito"></div> SUSPENSIÓN DE LABORES DOCENTES                </li> <li> <div class="day cuadrito jornada-concientizacion circulito" style="transform:scale(.9)"></div> JORNADA                  DE CONCIENTIZACIÓN SOBRE LA GRAVEDAD DEL ABUSO SEXUAL Y EL MALTRATO INFANTIL                </li> <li> <div class="day cuadrito receso-clases"></div> RECESO DE CLASES                </li> <li> <div class="day cuadrito cte-intensivo"></div> CONSEJO TÉCNICO ESCOLAR FASE INTENSIVA                </li> <li> <div class="day cuadrito cte-ordinario"></div> CONSEJO TÉCNICO ESCOLAR SESIÓN ORDINARIA                </li> <li> <div class="day cuadrito evaluacion borde"></div> REGISTRO Y COMUNICACIÓN DE LOS RESULTADOS DE LA                  EVALUACIÓN                </li> <li> <div class="day cuadrito vacaciones"></div> VACACIONES                </li> <li> <div class="day cuadrito preinscripciones borde"></div> PREINSCRIPCIÓN A PREESCOLAR, PRIMER GRADO DE                  PRIMARIA Y PRIMER GRADO DE SECUNDARIA PARA EL CICLO ESCOLAR 2027-2028                </li> <li> <div class="day cuadrito registro-calificaciones"></div> REGISTRO DE CALIFICACIONES                </li> <li><span class="negritas">Negrillas:</span> Señalan días conmemorativos o de reflexión.</li> </ul> </div> </div> </div> <div class="row"> <div class="col-lg-12 text-center" style="font-family: 'Noto Sans', Arial, Helvetica, sans-serif;margin-top:32px"> </div> </div> </div>
+</main>
+</body>
+</html>
