@@ -196,10 +196,14 @@ button:hover{
 ========================================================= */
 
 .section{
+    width:100vw;
+    max-width:none;
     margin-top:20px;
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
     background:rgba(0,0,0,.65);
     padding:20px;
-    border-radius:15px;
+    border-radius:0;
     box-shadow:0 5px 20px rgba(0,0,0,.2);
 }
 
@@ -207,6 +211,48 @@ button:hover{
 .section h3{
     margin-top:0;
 }
+
+
+/* =========================================================
+   SECCIONES WEB A PANTALLA ANCHA
+========================================================= */
+
+.section-web-ancha{
+    width:100vw;
+    max-width:none;
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
+    padding:20px 0 0 0;
+    border-radius:0;
+    box-sizing:border-box;
+}
+
+.section-web-ancha h2{
+    padding:0 20px;
+}
+
+.section-web-ancha .iframe-contenedor{
+    width:100%;
+    margin-top:10px;
+    border-radius:0;
+}
+
+.section-web-ancha .iframe-contenedor iframe{
+    width:100%;
+    min-height:750px;
+    height:750px;
+}
+
+@media(max-width:700px){
+    .section{
+        padding:15px 12px;
+    }
+
+    .section-web-ancha h2{
+        padding:0;
+    }
+}
+
 
 /* =========================================================
    CAPTURA
@@ -899,8 +945,51 @@ tr:hover{
 }
 
 /* =========================================================
+   CONTENIDO WEB INTEGRADO
+========================================================= */
+
+.iframe-contenedor{
+    width:100%;
+    min-height:750px;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.iframe-contenedor iframe{
+    display:block;
+    width:100%;
+    height:750px;
+    min-height:750px;
+    border:0;
+    background:#fff;
+}
+
+.iframe-aviso{
+    margin-top:12px;
+    padding:12px 16px;
+    background:rgba(255,255,255,.10);
+    border-radius:10px;
+    text-align:center;
+    font-size:14px;
+}
+
+.iframe-aviso a{
+    color:#7ee7ff;
+    font-weight:bold;
+    text-decoration:none;
+    margin-left:6px;
+}
+
+.iframe-aviso a:hover{
+    text-decoration:underline;
+}
+
+
+/* =========================================================
    RESPONSIVE
 ========================================================= */
+
 
 @media(max-width:900px){
 
@@ -1091,7 +1180,11 @@ tr:hover{
         </button>
 
         <button onclick="mostrarSeccion('horarios')">
-            🕐 Horarios y Reportes de Entrega de Planeaciones
+            🕐 Horarios
+        </button>
+
+        <button onclick="mostrarSeccion('planeaciones')">
+            📋 Planeaciones
         </button>
 
         <button onclick="mostrarSeccion('calendario')">
@@ -1276,450 +1369,55 @@ tr:hover{
 
     <div
         id="seccionHorarios"
-        class="section hidden"
+        class="section section-web-ancha hidden"
     >
 
-        <h2>🕐 Horarios y Reportes de Entrega de Planeaciones</h2>
-
-        <div class="integrado">
-
-            <div class="horarios-wrapper">
-
-                <div class="horarios-cabecera">
-
-                    <img
-                        src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
-                        alt="Logo OFTV No. 0216 Francisco Villa"
-                        class="horarios-logo"
-                    >
-
-                    <div class="horarios-titulo">
-
-                        <h1>
-                            OFTV No. 0216 Francisco Villa
-                        </h1>
-
-                        <p class="horarios-clave">
-                            Clave de Centro de Trabajo: 15ETV0217V
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <nav class="menu-horarios">
-
-                    <button
-                        id="btnHorarios"
-                        class="boton-horarios activo"
-                        onclick="mostrarModuloHorarios('horarios')"
-                    >
-                        📚 Horarios
-                    </button>
-
-                    <button
-                        id="btnPlaneacion"
-                        class="boton-horarios inactivo"
-                        onclick="mostrarModuloHorarios('planeacion')"
-                    >
-                        📋 Entrega de Planeación
-                    </button>
-
-                </nav>
-
-
-                <!-- HORARIOS -->
-
-                <div
-                    id="moduloHorarios"
-                    class="horarios-seccion visible"
-                >
-
-                    <h1 class="titulo-horarios">
-                        📚 HORARIOS
-                    </h1>
-
-                    <div class="contenedor-dias">
-
-
-                        <!-- LUNES -->
-
-                        <div class="tarjeta-dia">
-
-                            <div class="nombre-dia">
-                                LUNES
-                            </div>
-
-                            <div class="contenido-horario">
-
-                                <div class="asignatura">
-                                    COMPUTACIÓN
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>1° C</span>
-                                    <span>8:00 — 9:30</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- MARTES -->
-
-                        <div class="tarjeta-dia">
-
-                            <div class="nombre-dia">
-                                MARTES
-                            </div>
-
-                            <div class="contenido-horario">
-
-                                <div class="asignatura">
-                                    EDUCACIÓN FÍSICA
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>1° A</span>
-                                    <span>8:00 — 8:40</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>2° A</span>
-                                    <span>8:41 — 9:20</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>3° A</span>
-                                    <span>9:21 — 10:00</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>1° B</span>
-                                    <span>10:00 — 10:40</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>2° B</span>
-                                    <span>10:41 — 11:20</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>3° B</span>
-                                    <span>11:41 — 12:20</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>1° C</span>
-                                    <span>12:21 — 13:00</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- MIÉRCOLES -->
-
-                        <div class="tarjeta-dia">
-
-                            <div class="nombre-dia">
-                                MIÉRCOLES
-                            </div>
-
-                            <div class="contenido-horario">
-
-                                <div class="asignatura">
-                                    COMPUTACIÓN
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>1° B</span>
-                                    <span>8:00 — 9:30</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>2° B</span>
-                                    <span>9:31 — 11:00</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>3° B</span>
-                                    <span>11:21 — 12:50</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- JUEVES -->
-
-                        <div class="tarjeta-dia">
-
-                            <div class="nombre-dia">
-                                JUEVES
-                            </div>
-
-                            <div class="contenido-horario">
-
-                                <div class="asignatura">
-                                    EDUCACIÓN FÍSICA
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>1° A</span>
-                                    <span>8:00 — 8:40</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>2° A</span>
-                                    <span>8:41 — 9:20</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>3° A</span>
-                                    <span>9:21 — 10:00</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>1° B</span>
-                                    <span>10:00 — 10:40</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>2° B</span>
-                                    <span>10:41 — 11:20</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>3° B</span>
-                                    <span>11:41 — 12:20</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>1° C</span>
-                                    <span>12:21 — 13:00</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- VIERNES -->
-
-                        <div class="tarjeta-dia">
-
-                            <div class="nombre-dia">
-                                VIERNES
-                            </div>
-
-                            <div class="contenido-horario">
-
-                                <div class="asignatura">
-                                    COMPUTACIÓN
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>1° A</span>
-                                    <span>8:00 — 9:30</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>2° A</span>
-                                    <span>9:31 — 11:00</span>
-                                </div>
-
-                                <div class="fila-horario">
-                                    <span>3° A</span>
-                                    <span>11:21 — 12:50</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PLANEACIÓN -->
-
-                <div
-                    id="moduloPlaneacion"
-                    class="horarios-seccion"
-                >
-
-                    <h1 class="titulo-horarios">
-                        📋 ENTREGA DE PLANEACIÓN
-                    </h1>
-
-                    <div class="contenedor-fechas">
-
-
-                        <div class="tarjeta-mes">
-
-                            <div class="nombre-mes">
-                                OCTUBRE
-                            </div>
-
-                            <div class="contenido-fechas">
-
-                                <div class="fila-fecha">
-                                    <span class="indicador tiempo"></span>
-                                    <span>09 de Octubre</span>
-                                </div>
-
-                                <div class="fila-fecha">
-                                    <span class="indicador destiempo"></span>
-                                    <span>12 de Octubre</span>
-                                </div>
-
-                                <div class="fila-fecha">
-                                    <span class="indicador no"></span>
-                                    <span>13 y 14 de Octubre</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="tarjeta-mes">
-
-                            <div class="nombre-mes">
-                                OCTUBRE
-                            </div>
-
-                            <div class="contenido-fechas">
-
-                                <div class="fila-fecha">
-                                    <span class="indicador tiempo"></span>
-                                    <span>19 de Octubre</span>
-                                </div>
-
-                                <div class="fila-fecha">
-                                    <span class="indicador destiempo"></span>
-                                    <span>20 de Octubre</span>
-                                </div>
-
-                                <div class="fila-fecha">
-                                    <span class="indicador no"></span>
-                                    <span>21 de Octubre</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="tarjeta-mes">
-
-                            <div class="nombre-mes">
-                                NOVIEMBRE
-                            </div>
-
-                            <div class="contenido-fechas">
-
-                                <div class="fila-fecha">
-                                    <span class="indicador tiempo"></span>
-                                    <span>03 de Noviembre</span>
-                                </div>
-
-                                <div class="fila-fecha">
-                                    <span class="indicador destiempo"></span>
-                                    <span>04 de Noviembre</span>
-                                </div>
-
-                                <div class="fila-fecha">
-                                    <span class="indicador no"></span>
-                                    <span>05 de Noviembre</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="tarjeta-mes">
-
-                            <div class="nombre-mes">
-                                NOVIEMBRE
-                            </div>
-
-                            <div class="contenido-fechas">
-
-                                <div class="fila-fecha">
-                                    <span class="indicador tiempo"></span>
-                                    <span>03 de Noviembre</span>
-                                </div>
-
-                                <div class="fila-fecha">
-                                    <span class="indicador destiempo"></span>
-                                    <span>04 de Noviembre</span>
-                                </div>
-
-                                <div class="fila-fecha">
-                                    <span class="indicador no"></span>
-                                    <span>05 de Noviembre</span>
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="leyenda">
-
-                        <h3>
-                            LEYENDA
-                        </h3>
-
-                        <div class="elemento-leyenda">
-                            <span class="indicador tiempo"></span>
-                            <span><strong>A TIEMPO</strong></span>
-                        </div>
-
-                        <div class="elemento-leyenda">
-                            <span class="indicador destiempo"></span>
-                            <span><strong>DESTIEMPO</strong></span>
-                        </div>
-
-                        <div class="elemento-leyenda">
-                            <span class="indicador no"></span>
-                            <span><strong>NO ENTREGÓ</strong></span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="arbol">
-                    🌳
-                </div>
-
-
-                <div class="horarios-footer">
-
-                    © 2026 CORPORATIVO NEXEL DIGITAL. —
-                    Todos los derechos reservados.
-
-                    <br>
-
-                    Empresa supervisada, administrada y operada
-                    bajo GRUPO GARCÍA CORONA.
-
-                </div>
-
-            </div>
-
+        <h2>🕐 Horarios</h2>
+
+        <div class="integrado iframe-contenedor">
+            <iframe
+                src="https://companygarciacorona.com.mx/francisco_villa/horarios/"
+                title="Horarios OFTV No. 0216 Francisco Villa"
+                loading="lazy"
+                allow="fullscreen"
+            ></iframe>
+        </div>
+
+        <div class="iframe-aviso">
+            Si el contenido no aparece, puedes abrir los horarios directamente.
+            <a href="https://companygarciacorona.com.mx/francisco_villa/horarios/" target="_blank" rel="noopener">
+                Abrir horarios
+            </a>
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         PLANEACIONES
+    ================================================= -->
+
+    <div
+        id="seccionPlaneaciones"
+        class="section section-web-ancha hidden"
+    >
+
+        <h2>📋 Planeaciones</h2>
+
+        <div class="integrado iframe-contenedor">
+            <iframe
+                src="https://companygarciacorona.com.mx/francisco_villa/planeaciones/"
+                title="Planeaciones OFTV No. 0216 Francisco Villa"
+                loading="lazy"
+                allow="fullscreen"
+            ></iframe>
+        </div>
+
+        <div class="iframe-aviso">
+            Si el contenido no aparece, puedes abrir las planeaciones directamente.
+            <a href="https://companygarciacorona.com.mx/francisco_villa/planeaciones/" target="_blank" rel="noopener">
+                Abrir planeaciones
+            </a>
         </div>
 
     </div>
@@ -1731,893 +1429,25 @@ tr:hover{
 
     <div
         id="seccionCalendario"
-        class="section hidden"
+        class="section section-web-ancha hidden"
     >
 
         <h2>📅 Calendario Escolar</h2>
 
-        <div class="integrado">
-
-            <div class="calendario-wrapper">
-
-                <div class="calendario-contenido">
-
-                    <div class="cal-row">
-
-                        <div class="cal-col cal-col-6"></div>
-
-                        <div class="cal-col cal-col-6">
-
-                            <h1>
-                                Calendario Escolar
-                                <br>
-                                <span>2026-2027</span>
-                            </h1>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="cal-row">
-
-                        <div class="cal-col cal-col-9 cal-text-center">
-
-                            <div class="cal-basica">
-
-                                <span>
-                                    EDUCACIÓN PREESCOLAR, PRIMARIA Y SECUNDARIA
-                                </span>
-
-                                <p>
-                                    Vigente para las escuelas públicas y particulares
-                                    incorporadas al Sistema Educativo Nacional en los
-                                    Estados Unidos Mexicanos.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="cal-col cal-col-3">
-
-                            <div class="cal-plecadorada">
-
-                                <p class="cal-dias">
-                                    185 DÍAS
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="calendar">
-
-
-                        <!-- AGOSTO -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Agosto 2026
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-
-                                <span class="day receso-clases">1</span>
-                                <span class="day receso-clases">2</span>
-                                <span class="day receso-clases">3</span>
-                                <span class="day receso-clases">4</span>
-                                <span class="day receso-clases">5</span>
-                                <span class="day receso-clases">6</span>
-                                <span class="day receso-clases">7</span>
-                                <span class="day receso-clases">8</span>
-                                <span class="day receso-clases">9</span>
-                                <span class="day receso-clases">10</span>
-                                <span class="day receso-clases">11</span>
-                                <span class="day receso-clases">12</span>
-                                <span class="day receso-clases">13</span>
-                                <span class="day receso-clases">14</span>
-                                <span class="day receso-clases">15</span>
-                                <span class="day receso-clases">16</span>
-                                <span class="day receso-clases">17</span>
-                                <span class="day receso-clases">18</span>
-                                <span class="day receso-clases">19</span>
-                                <span class="day receso-clases">20</span>
-                                <span class="day receso-clases">21</span>
-                                <span class="day receso-clases">22</span>
-                                <span class="day receso-clases">23</span>
-                                <span class="day cte-intensivo">24</span>
-                                <span class="day cte-intensivo">25</span>
-                                <span class="day cte-intensivo">26</span>
-                                <span class="day cte-intensivo">27</span>
-                                <span class="day cte-intensivo">28</span>
-                                <span class="day receso-clases">29</span>
-                                <span class="day receso-clases">30</span>
-                                <span class="day inicio-clases">31</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- SEPTIEMBRE -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Septiembre 2026
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-                                <span></span>
-
-                                <span class="day">1</span>
-                                <span class="day">2</span>
-                                <span class="day">3</span>
-                                <span class="day">4</span>
-                                <span class="day">5</span>
-                                <span class="day">6</span>
-                                <span class="day jornada-concientizacion">7</span>
-                                <span class="day">8</span>
-                                <span class="day">9</span>
-                                <span class="day">10</span>
-                                <span class="day">11</span>
-                                <span class="day">12</span>
-                                <span class="day">13</span>
-                                <span class="day">14</span>
-                                <span class="day negritas">15</span>
-                                <span class="day suspension">16</span>
-                                <span class="day">17</span>
-                                <span class="day">18</span>
-                                <span class="day">19</span>
-                                <span class="day">20</span>
-                                <span class="day">21</span>
-                                <span class="day">22</span>
-                                <span class="day">23</span>
-                                <span class="day">24</span>
-                                <span class="day cte-ordinario">25</span>
-                                <span class="day">26</span>
-                                <span class="day">27</span>
-                                <span class="day">28</span>
-                                <span class="day">29</span>
-                                <span class="day">30</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- OCTUBRE -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Octubre 2026
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-
-                                <span class="day">1</span>
-                                <span class="day">2</span>
-                                <span class="day">3</span>
-                                <span class="day">4</span>
-                                <span class="day">5</span>
-                                <span class="day">6</span>
-                                <span class="day">7</span>
-                                <span class="day">8</span>
-                                <span class="day">9</span>
-                                <span class="day">10</span>
-                                <span class="day">11</span>
-                                <span class="day">12</span>
-                                <span class="day">13</span>
-                                <span class="day">14</span>
-                                <span class="day">15</span>
-                                <span class="day">16</span>
-                                <span class="day">17</span>
-                                <span class="day">18</span>
-                                <span class="day">19</span>
-                                <span class="day">20</span>
-                                <span class="day">21</span>
-                                <span class="day">22</span>
-                                <span class="day">23</span>
-                                <span class="day">24</span>
-                                <span class="day">25</span>
-                                <span class="day">26</span>
-                                <span class="day">27</span>
-                                <span class="day">28</span>
-                                <span class="day">29</span>
-                                <span class="day cte-ordinario">30</span>
-                                <span class="day">31</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- NOVIEMBRE -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Noviembre 2026
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span class="day">1</span>
-                                <span class="day suspension">2</span>
-                                <span class="day">3</span>
-                                <span class="day">4</span>
-                                <span class="day">5</span>
-                                <span class="day">6</span>
-                                <span class="day">7</span>
-                                <span class="day">8</span>
-                                <span class="day">9</span>
-                                <span class="day">10</span>
-                                <span class="day">11</span>
-                                <span class="day">12</span>
-                                <span class="day registro-calificaciones">13</span>
-                                <span class="day">14</span>
-                                <span class="day">15</span>
-                                <span class="day suspension">16</span>
-                                <span class="day">17</span>
-                                <span class="day">18</span>
-                                <span class="day">19</span>
-                                <span class="day negritas">20</span>
-                                <span class="day">21</span>
-                                <span class="day">22</span>
-                                <span class="day evaluacion start">23</span>
-                                <span class="day evaluacion inter">24</span>
-                                <span class="day evaluacion inter">25</span>
-                                <span class="day evaluacion end">26</span>
-                                <span class="day cte-ordinario">27</span>
-                                <span class="day">28</span>
-                                <span class="day">29</span>
-                                <span class="day">30</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- DICIEMBRE -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Diciembre 2026
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-                                <span></span>
-
-                                <span class="day">1</span>
-                                <span class="day">2</span>
-                                <span class="day">3</span>
-                                <span class="day">4</span>
-                                <span class="day">5</span>
-                                <span class="day">6</span>
-                                <span class="day">7</span>
-                                <span class="day">8</span>
-                                <span class="day">9</span>
-                                <span class="day">10</span>
-                                <span class="day">11</span>
-                                <span class="day">12</span>
-                                <span class="day">13</span>
-                                <span class="day">14</span>
-                                <span class="day">15</span>
-                                <span class="day">16</span>
-                                <span class="day">17</span>
-                                <span class="day">18</span>
-                                <span class="day">19</span>
-                                <span class="day">20</span>
-                                <span class="day vacaciones">21</span>
-                                <span class="day vacaciones">22</span>
-                                <span class="day vacaciones">23</span>
-                                <span class="day vacaciones">24</span>
-                                <span class="day suspension">25</span>
-                                <span class="day">26</span>
-                                <span class="day">27</span>
-                                <span class="day vacaciones">28</span>
-                                <span class="day vacaciones">29</span>
-                                <span class="day vacaciones">30</span>
-                                <span class="day vacaciones">31</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- ENERO -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Enero 2027
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-
-                                <span class="day suspension">1</span>
-                                <span class="day">2</span>
-                                <span class="day">3</span>
-                                <span class="day vacaciones">4</span>
-                                <span class="day vacaciones">5</span>
-                                <span class="day suspension">6</span>
-                                <span class="day">7</span>
-                                <span class="day">8</span>
-                                <span class="day">9</span>
-                                <span class="day">10</span>
-                                <span class="day">11</span>
-                                <span class="day">12</span>
-                                <span class="day">13</span>
-                                <span class="day">14</span>
-                                <span class="day">15</span>
-                                <span class="day">16</span>
-                                <span class="day">17</span>
-                                <span class="day">18</span>
-                                <span class="day">19</span>
-                                <span class="day">20</span>
-                                <span class="day">21</span>
-                                <span class="day">22</span>
-                                <span class="day">23</span>
-                                <span class="day">24</span>
-                                <span class="day">25</span>
-                                <span class="day">26</span>
-                                <span class="day">27</span>
-                                <span class="day">28</span>
-                                <span class="day cte-ordinario">29</span>
-                                <span class="day">30</span>
-                                <span class="day">31</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- FEBRERO -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Febrero 2027
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-
-                                <span class="day suspension">1</span>
-
-                                <span class="day preinscripciones start">2</span>
-                                <span class="day preinscripciones interup">3</span>
-                                <span class="day preinscripciones interup">4</span>
-                                <span class="day preinscripciones end">5</span>
-
-                                <span class="day">6</span>
-                                <span class="day">7</span>
-
-                                <span class="day preinscripciones start">8</span>
-                                <span class="day preinscripciones interdown">9</span>
-                                <span class="day preinscripciones interdown">10</span>
-                                <span class="day preinscripciones interdown">11</span>
-                                <span class="day preinscripciones end">12</span>
-
-                                <span class="day">13</span>
-                                <span class="day">14</span>
-                                <span class="day">15</span>
-                                <span class="day">16</span>
-                                <span class="day">17</span>
-                                <span class="day">18</span>
-                                <span class="day">19</span>
-                                <span class="day">20</span>
-                                <span class="day">21</span>
-                                <span class="day">22</span>
-                                <span class="day">23</span>
-                                <span class="day negritas">24</span>
-                                <span class="day">25</span>
-                                <span class="day cte-ordinario">26</span>
-                                <span class="day">27</span>
-                                <span class="day">28</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- MARZO -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Marzo 2027
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-
-                                <span class="day">1</span>
-                                <span class="day">2</span>
-                                <span class="day">3</span>
-                                <span class="day">4</span>
-                                <span class="day registro-calificaciones">5</span>
-                                <span class="day">6</span>
-                                <span class="day">7</span>
-                                <span class="day">8</span>
-                                <span class="day">9</span>
-                                <span class="day">10</span>
-                                <span class="day">11</span>
-                                <span class="day">12</span>
-                                <span class="day">13</span>
-                                <span class="day">14</span>
-                                <span class="day suspension">15</span>
-                                <span class="day evaluacion start">16</span>
-                                <span class="day evaluacion inter">17</span>
-                                <span class="day evaluacion inter">18</span>
-                                <span class="day evaluacion end negritas">19</span>
-                                <span class="day">20</span>
-                                <span class="day negritas">21</span>
-                                <span class="day vacaciones">22</span>
-                                <span class="day vacaciones">23</span>
-                                <span class="day vacaciones">24</span>
-                                <span class="day vacaciones">25</span>
-                                <span class="day vacaciones">26</span>
-                                <span class="day">27</span>
-                                <span class="day">28</span>
-                                <span class="day vacaciones">29</span>
-                                <span class="day vacaciones">30</span>
-                                <span class="day vacaciones">31</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- ABRIL -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Abril 2027
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-
-                                <span class="day vacaciones">1</span>
-                                <span class="day vacaciones">2</span>
-                                <span class="day">3</span>
-                                <span class="day">4</span>
-                                <span class="day">5</span>
-                                <span class="day">6</span>
-                                <span class="day">7</span>
-                                <span class="day">8</span>
-                                <span class="day">9</span>
-                                <span class="day">10</span>
-                                <span class="day">11</span>
-                                <span class="day">12</span>
-                                <span class="day">13</span>
-                                <span class="day">14</span>
-                                <span class="day">15</span>
-                                <span class="day">16</span>
-                                <span class="day">17</span>
-                                <span class="day">18</span>
-                                <span class="day">19</span>
-                                <span class="day">20</span>
-                                <span class="day">21</span>
-                                <span class="day">22</span>
-                                <span class="day">23</span>
-                                <span class="day">24</span>
-                                <span class="day">25</span>
-                                <span class="day">26</span>
-                                <span class="day">27</span>
-                                <span class="day">28</span>
-                                <span class="day negritas">29</span>
-                                <span class="day cte-ordinario">30</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- MAYO -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Mayo 2027
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-
-                                <span class="day negritas">1</span>
-                                <span class="day">2</span>
-                                <span class="day">3</span>
-                                <span class="day negritas">4</span>
-                                <span class="day suspension negritas">5</span>
-                                <span class="day">6</span>
-                                <span class="day">7</span>
-                                <span class="day">8</span>
-                                <span class="day">9</span>
-                                <span class="day">10</span>
-                                <span class="day">11</span>
-                                <span class="day">12</span>
-                                <span class="day">13</span>
-                                <span class="day">14</span>
-                                <span class="day negritas">15</span>
-                                <span class="day">16</span>
-                                <span class="day">17</span>
-                                <span class="day">18</span>
-                                <span class="day">19</span>
-                                <span class="day">20</span>
-                                <span class="day">21</span>
-                                <span class="day">22</span>
-                                <span class="day">23</span>
-                                <span class="day">24</span>
-                                <span class="day">25</span>
-                                <span class="day">26</span>
-                                <span class="day">27</span>
-                                <span class="day cte-ordinario">28</span>
-                                <span class="day">29</span>
-                                <span class="day">30</span>
-                                <span class="day">31</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- JUNIO -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Junio 2027
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-                                <span></span>
-
-                                <span class="day">1</span>
-                                <span class="day">2</span>
-                                <span class="day">3</span>
-                                <span class="day">4</span>
-                                <span class="day">5</span>
-                                <span class="day">6</span>
-                                <span class="day">7</span>
-                                <span class="day">8</span>
-                                <span class="day">9</span>
-                                <span class="day">10</span>
-                                <span class="day">11</span>
-                                <span class="day">12</span>
-                                <span class="day">13</span>
-                                <span class="day">14</span>
-                                <span class="day">15</span>
-                                <span class="day">16</span>
-                                <span class="day">17</span>
-                                <span class="day">18</span>
-                                <span class="day">19</span>
-                                <span class="day">20</span>
-                                <span class="day">21</span>
-                                <span class="day">22</span>
-                                <span class="day">23</span>
-                                <span class="day">24</span>
-                                <span class="day cte-ordinario">25</span>
-                                <span class="day">26</span>
-                                <span class="day">27</span>
-                                <span class="day">28</span>
-                                <span class="day">29</span>
-                                <span class="day">30</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- JULIO -->
-
-                        <div class="month cal-col cal-col-4">
-
-                            <div class="month-header">
-                                Julio 2027
-                            </div>
-
-                            <div class="days-header">
-                                <div>D</div>
-                                <div>L</div>
-                                <div>M</div>
-                                <div>M</div>
-                                <div>J</div>
-                                <div>V</div>
-                                <div>S</div>
-                            </div>
-
-                            <div class="days">
-
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-
-                                <span class="day">1</span>
-                                <span class="day registro-calificaciones">2</span>
-                                <span class="day">3</span>
-                                <span class="day">4</span>
-                                <span class="day">5</span>
-                                <span class="day">6</span>
-                                <span class="day">7</span>
-                                <span class="day evaluacion start">8</span>
-                                <span class="day fin-clases evaluacion end">9</span>
-
-                                <span class="day receso-clases">10</span>
-                                <span class="day receso-clases">11</span>
-                                <span class="day receso-clases">12</span>
-                                <span class="day receso-clases">13</span>
-                                <span class="day receso-clases">14</span>
-                                <span class="day receso-clases">15</span>
-                                <span class="day receso-clases">16</span>
-                                <span class="day receso-clases">17</span>
-                                <span class="day receso-clases">18</span>
-                                <span class="day receso-clases">19</span>
-                                <span class="day receso-clases">20</span>
-                                <span class="day receso-clases">21</span>
-                                <span class="day receso-clases">22</span>
-                                <span class="day receso-clases">23</span>
-                                <span class="day receso-clases">24</span>
-                                <span class="day receso-clases">25</span>
-                                <span class="day receso-clases">26</span>
-                                <span class="day receso-clases">27</span>
-                                <span class="day receso-clases">28</span>
-                                <span class="day receso-clases">29</span>
-                                <span class="day receso-clases">30</span>
-                                <span class="day receso-clases">31</span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ACOTACIONES -->
-
-                    <div class="cal-row">
-
-                        <div class="cal-col cal-col-12">
-
-                            <div class="acotaciones">
-
-                                <h3>
-                                    Acotaciones
-                                </h3>
-
-                                <ul>
-
-                                    <li>
-                                        <div class="day cuadrito inicio-clases"></div>
-                                        INICIO DE CLASES DEL CICLO ESCOLAR 2026–2027
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito fin-clases"></div>
-                                        FIN DE CLASES DEL CICLO ESCOLAR 2026–2027
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito suspension circulito"></div>
-                                        SUSPENSIÓN DE LABORES DOCENTES
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito jornada-concientizacion circulito"></div>
-                                        JORNADA DE CONCIENTIZACIÓN SOBRE LA GRAVEDAD DEL ABUSO SEXUAL Y EL MALTRATO INFANTIL
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito receso-clases"></div>
-                                        RECESO DE CLASES
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito cte-intensivo"></div>
-                                        CONSEJO TÉCNICO ESCOLAR FASE INTENSIVA
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito cte-ordinario"></div>
-                                        CONSEJO TÉCNICO ESCOLAR SESIÓN ORDINARIA
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito evaluacion borde"></div>
-                                        REGISTRO Y COMUNICACIÓN DE LOS RESULTADOS DE LA EVALUACIÓN
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito vacaciones"></div>
-                                        VACACIONES
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito preinscripciones borde"></div>
-                                        PREINSCRIPCIÓN A PREESCOLAR, PRIMER GRADO DE PRIMARIA Y PRIMER GRADO DE SECUNDARIA PARA EL CICLO ESCOLAR 2027-2028
-                                    </li>
-
-                                    <li>
-                                        <div class="day cuadrito registro-calificaciones"></div>
-                                        REGISTRO DE CALIFICACIONES
-                                    </li>
-
-                                    <li>
-                                        <span class="negritas">
-                                            Negrillas:
-                                        </span>
-                                        Señalan días conmemorativos o de reflexión.
-                                    </li>
-
-                                </ul>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
+        <div class="integrado iframe-contenedor">
+            <iframe
+                src="https://companygarciacorona.com.mx/francisco_villa/calendario_escolar/"
+                title="Calendario Escolar OFTV No. 0216 Francisco Villa"
+                loading="lazy"
+                allow="fullscreen"
+            ></iframe>
+        </div>
+
+        <div class="iframe-aviso">
+            Si el contenido no aparece, puedes abrir el calendario directamente.
+            <a href="https://companygarciacorona.com.mx/francisco_villa/calendario_escolar/" target="_blank" rel="noopener">
+                Abrir calendario escolar
+            </a>
         </div>
 
     </div>
@@ -3663,6 +2493,8 @@ function mostrarSeccion(seccion){
 
         "seccionHorarios",
 
+        "seccionPlaneaciones",
+
         "seccionCalendario",
 
         "seccionBuzon"
@@ -3715,6 +2547,18 @@ function mostrarSeccion(seccion){
         document
             .getElementById(
                 "seccionHorarios"
+            )
+            .classList
+            .remove("hidden");
+
+    }
+
+
+    if(seccion === "planeaciones"){
+
+        document
+            .getElementById(
+                "seccionPlaneaciones"
             )
             .classList
             .remove("hidden");
