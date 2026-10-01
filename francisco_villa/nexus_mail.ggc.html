@@ -3,384 +3,382 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>NexusMail</title>
-
+<title>NexusMail — OFTV No. 0216 "Francisco Villa"</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+:root{
+  --cielo:#B3D9FF;
+  --primario:#0066CC;
+  --secundario:#00B42A;
+  --panel:#FFFFFF;
+  --texto-oscuro:#1D2129;
+  --texto-medio:#4E5969;
+  --texto-claro:#86909C;
+  --borde:#E5E6EB;
+  --nuevo:#E6F2FF;
+  --sombra:0 2px 8px rgba(0,0,0,.08);
+  --sombra-hover:0 4px 16px rgba(0,102,204,.15);
+  --interruptor-fondo:#E5E6EB;
+  --interruptor-activo:#0066CC;
 }
-
+*{margin:0;padding:0;box-sizing:border-box;}
 body{
-  font-family:Arial, Helvetica, sans-serif;
-  background:linear-gradient(270deg,#ff00cc,#3333ff,#00ffcc);
-  background-size:600% 600%;
-  animation:fondo 12s ease infinite;
+  font-family:'Inter',sans-serif;
+  background:var(--cielo);
   min-height:100vh;
-  color:white;
+  color:var(--texto-oscuro);
 }
-
-@keyframes fondo{
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
-}
-
 .container{
-  width:95%;
-  margin:20px auto;
-  padding:3px;
-  border-radius:18px;
-  background:linear-gradient(90deg,red,orange,yellow,green,cyan,blue,violet);
-  background-size:500%;
-  animation:borde 8s linear infinite;
-}
-
-@keyframes borde{
-  0%{background-position:0%;}
-  100%{background-position:500%;}
-}
-
-.app{
-  display:flex;
-  min-height:90vh;
-  background:#0f0f0f;
-  border-radius:15px;
-  overflow:hidden;
-}
-
-/* LOGIN */
-
-.login{
-  width:100%;
-  max-width:400px;
-  margin:80px auto;
-  background:#111;
-  padding:30px;
-  border-radius:15px;
-}
-
-.logo{
-  text-align:center;
-  margin-bottom:20px;
-}
-
-.logo h1{
-  color:#00ffcc;
-  font-size:40px;
-}
-
-.logo p{
-  color:#aaa;
-  margin-top:5px;
-}
-
-input,
-textarea{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:8px;
-  background:#1e1e1e;
-  color:white;
-}
-
-textarea{
-  min-height:120px;
-  resize:vertical;
-}
-
-button{
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  transition:.2s;
-}
-
-button:hover{
-  transform:scale(1.02);
-}
-
-/* MENU */
-
-.menu{
-  width:240px;
-  background:#151515;
-  padding:15px;
-  border-right:1px solid #222;
-}
-
-.menu h2{
-  color:#00ffcc;
-  margin-bottom:20px;
-}
-
-.menu button{
-  width:100%;
-  padding:12px;
-  margin-bottom:10px;
-  background:#1f1f1f;
-  color:white;
-  text-align:left;
-}
-
-.menu button:hover{
-  background:#2a2a2a;
-}
-
-/* CONTENT */
-
-.content{
-  flex:1;
+  max-width:1400px;
+  margin:0 auto;
+  min-height:100vh;
   display:flex;
   flex-direction:column;
-  overflow:hidden;
 }
-
-/* TOPBAR */
-
-.topbar{
+/* CABECERA */
+.header-institucional{
+  background:var(--primario);
+  color:white;
+  padding:14px 24px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:15px;
-  border-bottom:1px solid #222;
-  background:#111;
+  box-shadow:var(--sombra);
 }
-
-.redactarBtn{
-  background:#00ff99;
-  color:black;
-  font-weight:bold;
-  padding:12px 20px;
+.logo-seccion{display:flex;align-items:center;gap:10px;}
+.logo-icon{font-size:26px;}
+.escuela-nombre{font-size:15px;font-weight:600;}
+.escuela-sub{font-size:12px;opacity:.85;font-weight:400;}
+.btn-cerrar-sesion{
+  background:rgba(255,255,255,.2);color:white;border:none;
+  padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;
+  transition:background .2s;
 }
+.btn-cerrar-sesion:hover{background:rgba(255,255,255,.3);}
 
-.tituloVista{
-  font-size:22px;
-  font-weight:bold;
+/* LOGIN */
+.login-pagina{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:40px 20px;
 }
-
-/* LISTA */
-
-.lista{
-  flex:1;
-  overflow:auto;
-  padding:15px;
+.login-card{
+  background:white;padding:40px 32px;border-radius:16px;
+  box-shadow:var(--sombra);width:100%;max-width:420px;
+  border-top:4px solid var(--primario);
 }
-
-.mensaje{
-  background:#1a1a1a;
-  padding:15px;
-  border-radius:10px;
-  margin-bottom:10px;
-  cursor:pointer;
-  border:1px solid #222;
-  transition:.2s;
+.login-titulo{text-align:center;margin-bottom:8px;font-size:26px;font-weight:700;color:var(--primario);}
+.login-subtitulo{text-align:center;color:var(--texto-medio);margin-bottom:32px;font-size:14px;}
+.grupo-input{margin-bottom:20px;}
+label{display:block;margin-bottom:6px;font-weight:500;font-size:14px;color:var(--texto-oscuro);}
+input,textarea{
+  width:100%;padding:12px 16px;border:1px solid var(--borde);
+  border-radius:8px;font-size:15px;transition:all .25s ease;font-family:inherit;
 }
+input:focus,textarea:focus{outline:none;border-color:var(--primario);box-shadow:0 0 0 3px rgba(0,102,204,.15);}
 
-.mensaje:hover{
-  background:#242424;
+/* === INTERRUPTOR RECORDAR === */
+.contenedor-recordar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;padding:4px 0;
 }
-
-.nuevo{
-  font-weight:bold;
-  border-left:5px solid #00ff99;
+.texto-recordar{font-size:14px;color:var(--texto-medio);font-weight:500;}
+.interruptor{
+  position:relative;width:52px;height:28px;cursor:pointer;
 }
-
-.normal{
-  font-weight:normal;
+.interruptor-fondo{
+  width:100%;height:100%;background:var(--interruptor-fondo);
+  border-radius:14px;transition:background .3s ease;
 }
-
-/* DETALLE */
-
-.detalle{
-  display:none;
-  padding:20px;
-  overflow:auto;
+.interruptor-circulo{
+  position:absolute;top:2px;left:2px;width:24px;height:24px;
+  background:white;border-radius:50%;transition:transform .3s ease, box-shadow .2s;
+  box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
+.interruptor.activo .interruptor-fondo{background:var(--interruptor-activo);}
+.interruptor.activo .interruptor-circulo{transform:translateX(24px);}
 
-.detalle h2{
-  margin-bottom:10px;
+.btn{
+  width:100%;padding:13px;border:none;border-radius:8px;font-size:15px;
+  font-weight:600;cursor:pointer;transition:all .2s ease;font-family:inherit;
 }
+.btn-primario{background:var(--primario);color:white;}
+.btn-primario:hover{background:#0052A3;transform:translateY(-1px);box-shadow:var(--sombra-hover);}
 
-.detalle p{
-  margin-bottom:8px;
+/* APP */
+.app{flex:1;display:flex;overflow:hidden;background:var(--panel);box-shadow:var(--sombra);margin:8px;border-radius:12px;}
+/* BARRA LATERAL */
+.sidebar{
+  width:280px;background:white;border-right:1px solid var(--borde);
+  display:flex;flex-direction:column;padding:20px 16px;gap:4px;
 }
-
-/* REDACTAR */
-
-.redactar{
-  display:none;
-  padding:20px;
+.sidebar-titulo{font-size:20px;font-weight:700;color:var(--primario);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.btn-redactar{background:var(--secundario);color:white;margin-bottom:24px;box-shadow:0 2px 6px rgba(0,180,42,.25);}
+.btn-redactar:hover{background:#009A29;transform:translateY(-1px);}
+.btn-menu{
+  background:transparent;color:var(--texto-oscuro);text-align:left;
+  padding:12px 16px;border-radius:8px;margin-bottom:4px;font-weight:500;
+  border:none;cursor:pointer;transition:all .2s;font-size:14px;display:flex;align-items:center;gap:10px;
 }
+.btn-menu:hover, .btn-menu.activo{background:var(--nuevo);color:var(--primario);}
 
-.enviarBtn{
-  background:#00ff99;
-  color:black;
-  padding:12px;
-  margin-top:10px;
-  font-weight:bold;
+/* BUSCADOR */
+.buscador{margin:10px 0 16px;}
+.buscador input{padding:10px 14px;font-size:14px;}
+
+/* FILTROS */
+.seccion-filtros{margin-top:12px;padding-top:12px;border-top:1px solid var(--borde);}
+.seccion-titulo{font-size:13px;color:var(--texto-claro);margin-bottom:10px;font-weight:600;text-transform:uppercase;}
+.filtros-contenedor{margin-bottom:12px;display:flex;flex-wrap:wrap;gap:6px;}
+.filtro-tag{
+  font-size:12px;padding:5px 10px;border-radius:20px;border:1px solid var(--borde);
+  cursor:pointer;transition:all .2s;background:white;color:var(--texto-medio);
 }
+.filtro-tag.activo{background:var(--primario);color:white;border-color:var(--primario);}
+.subfiltros{margin-top:10px;display:none;}
+.subfiltros.mostrar{display:block;}
+.subfiltros-titulo{font-size:12px;color:var(--texto-claro);margin-bottom:6px;}
 
-/* LINKS */
-
-a{
-  color:#00bfff;
-  font-weight:bold;
-  text-decoration:none;
+/* CONTENIDO */
+.contenido{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#F8FBFF;}
+.barra-superior{
+  padding:16px 24px;border-bottom:1px solid var(--borde);
+  display:flex;justify-content:space-between;align-items:center;background:white;
 }
+.vista-titulo{font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px;}
+.area-lista{flex:1;overflow-y:auto;padding:12px;}
 
-a:hover{
-  text-decoration:underline;
+/* MENSAJES */
+.mensaje-fila{
+  background:white;padding:16px 20px;margin-bottom:8px;border-radius:10px;
+  border:1px solid transparent;cursor:pointer;transition:all .2s;
 }
+.mensaje-fila:hover{border-color:var(--primario);box-shadow:var(--sombra);transform:translateX(2px);}
+.mensaje-fila.nuevo{background:var(--nuevo);border-left:3px solid var(--primario);}
+.mensaje-asunto{font-weight:600;font-size:15px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;}
+.mensaje-datos{font-size:13px;color:var(--texto-medio);}
+.etiqueta-nuevo{font-size:10px;background:var(--primario);color:white;padding:2px 6px;border-radius:10px;}
 
-hr{
-  border:none;
-  border-top:1px solid #333;
-  margin:15px 0;
+/* USUARIOS */
+.usuario-fila{
+  background:white;padding:14px 18px;margin-bottom:8px;border-radius:10px;
+  cursor:pointer;transition:all .2s;border-left:3px solid transparent;
 }
+.usuario-fila:hover{border-left-color:var(--primario);box-shadow:var(--sombra);}
+.usuario-nombre{font-weight:600;font-size:15px;margin-bottom:3px;}
+.usuario-correo{font-size:13px;color:var(--texto-medio);}
+.usuario-tipo{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;margin-top:4px;}
+.tipo-alumno{background:#E8FFEA;color:#009A29;}
+.tipo-docente{background:#E8F3FF;color:#0066CC;}
+.tipo-practicas{background:#FFF4E6;color:#FF7D00;}
+.tipo-tutor{background:#F3E8FF;color:#722ED1;}
+
+/* PERFIL USUARIO */
+.perfil-usuario-vista{display:none;flex:1;overflow-y:auto;padding:32px;background:white;}
+.tarjeta-info{background:var(--nuevo);padding:24px;border-radius:12px;margin-bottom:20px;}
+.tarjeta-info h3{font-size:20px;margin-bottom:16px;color:var(--primario);}
+.fila-dato{margin-bottom:10px;}
+.etiqueta-dato{font-weight:600;color:var(--texto-medio);display:inline-block;width:90px;}
+.tutor-bloque{margin-top:16px;padding-top:16px;border-top:1px solid var(--borde);}
+.btn-enviar-mensaje{
+  background:var(--primario);color:white;border:none;padding:12px 24px;
+  border-radius:8px;font-weight:600;cursor:pointer;font-size:15px;margin-top:8px;
+}
+.btn-enviar-mensaje:hover{background:#0052A3;}
+.btn-tutor{background:#722ED1;}
+.btn-tutor:hover{background:#5F24B8;}
+
+/* DETALLE Y REDACTAR */
+.detalle-vista{display:none;flex:1;overflow-y:auto;padding:32px;background:white;}
+.boton-volver{
+  background:transparent;border:none;color:var(--primario);font-weight:600;
+  padding:8px 12px;border-radius:6px;cursor:pointer;margin-bottom:24px;display:flex;align-items:center;gap:6px;transition:background .2s;
+}
+.boton-volver:hover{background:var(--nuevo);}
+.cabecera-mensaje{margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--borde);}
+.cabecera-mensaje h2{font-size:22px;margin-bottom:16px;}
+.meta-fila{margin-bottom:8px;font-size:14px;}
+.meta-etiqueta{color:var(--texto-claro);width:70px;display:inline-block;}
+.cuerpo-mensaje{font-size:15px;line-height:1.8;color:var(--texto-oscuro);white-space:pre-wrap;}
+.redactar-vista{display:none;flex:1;overflow-y:auto;padding:32px;background:white;}
+.redactar-vista h2{font-size:20px;margin-bottom:24px;color:var(--primario);}
+.campo-grupo{margin-bottom:20px;}
+textarea{min-height:200px;resize:vertical;}
+.btn-enviar{background:var(--primario);color:white;width:auto;padding:12px 32px;}
+.btn-enviar:hover{background:#0052A3;}
+
+/* ENLACES E IMÁGENES */
+a{color:var(--primario);text-decoration:none;font-weight:500;}
+a:hover{text-decoration:underline;}
+.img-preview{max-width:280px;border-radius:10px;margin:12px 0;cursor:pointer;transition:transform .2s;}
+.img-preview:hover{transform:scale(1.02);}
 
 /* MODAL */
-
 .modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.8);
-  justify-content:center;
-  align-items:center;
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);justify-content:center;align-items:center;z-index:1000;
 }
+.modal img{max-width:90%;max-height:85vh;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.3);}
 
-.modal img{
-  max-width:90%;
-  max-height:90%;
-  border-radius:10px;
+/* RESPONSIVO */
+@media(max-width:900px){
+  .app{flex-direction:column;margin:0;border-radius:0;}
+  .sidebar{width:100%;flex-direction:column;flex-wrap:nowrap;padding:12px;gap:4px;}
+  .detalle-vista,.redactar-vista,.perfil-usuario-vista{padding:20px 16px;}
+  .header-institucional{flex-direction:column;gap:8px;text-align:center;}
 }
-
-@media(max-width:800px){
-
-  .app{
-    flex-direction:column;
-  }
-
-  .menu{
-    width:100%;
-    border-right:none;
-    border-bottom:1px solid #222;
-  }
-
+@media(max-width:480px){
+  .login-card{padding:30px 20px;}
 }
-
 </style>
 </head>
-
 <body>
 
 <div class="container">
+  <!-- CABECERA -->
+  <header class="header-institucional" id="cabeceraApp" style="display:none;">
+    <div class="logo-seccion">
+      <span class="logo-icon">📧</span>
+      <div>
+        <div class="escuela-nombre">NexusMail</div>
+        <div class="escuela-sub">OFTV No. 0216 "Francisco Villa"</div>
+      </div>
+    </div>
+    <button class="btn-cerrar-sesion" onclick="logout()">🚪 Cerrar sesión</button>
+  </header>
 
-<!-- LOGIN -->
-
-<div id="loginView" class="login">
-
-  <div class="logo">
-    <h1>📧 NexusMail</h1>
-    <p>Sistema escolar</p>
+  <!-- LOGIN -->
+  <div class="login-pagina" id="loginView">
+    <div class="login-card">
+      <h1 class="login-titulo">📧 NexusMail</h1>
+      <p class="login-subtitulo">OFTV No. 0216 "Francisco Villa"</p>
+      <div class="grupo-input">
+        <label for="correo">Correo institucional</label>
+        <input type="text" id="correo" placeholder="ejemplo@oftv0216.edu.mx">
+      </div>
+      <div class="grupo-input">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" placeholder="Tu contraseña">
+      </div>
+      
+      <!-- INTERRUPTOR RECORDAR -->
+      <div class="contenedor-recordar">
+        <span class="texto-recordar">🔒 Recordar mis datos</span>
+        <div class="interruptor" id="interruptorRecordar" onclick="toggleRecordar()">
+          <div class="interruptor-fondo"></div>
+          <div class="interruptor-circulo"></div>
+        </div>
+      </div>
+      
+      <button class="btn btn-primario" onclick="login()">Iniciar sesión</button>
+    </div>
   </div>
 
-  <input type="text" id="correo" placeholder="Correo">
+  <!-- APP PRINCIPAL -->
+  <div class="app" id="appView" style="display:none;">
+    <!-- BARRA LATERAL -->
+    <aside class="sidebar">
+      <div class="sidebar-titulo">📧 NexusMail</div>
+      <button class="btn btn-redactar" onclick="abrirRedactar()">✏️ Redactar mensaje</button>
+      
+      <button class="btn-menu activo" id="btn-bandeja" onclick="cambiarVista('recibidos')">📥 Bandeja de entrada</button>
+      <button class="btn-menu" id="btn-enviados" onclick="cambiarVista('enviados')">📤 Mensajes enviados</button>
+      <button class="btn-menu" id="btn-usuarios" onclick="cambiarVista('usuarios')">👥 Directorio</button>
+      
+      <!-- BUSCADOR -->
+      <div class="buscador" id="buscadorSeccion" style="display:none;">
+        <input type="text" id="inputBuscador" placeholder="🔍 Buscar por nombre o correo..." oninput="aplicarFiltros()">
+      </div>
+      
+      <!-- FILTROS -->
+      <div class="seccion-filtros" id="filtrosSeccion" style="display:none;">
+        <div class="seccion-titulo">Filtrar por tipo</div>
+        <div class="filtros-contenedor">
+          <span class="filtro-tag activo" data-filtro="todos" onclick="toggleFiltro(this)">✅ Todos</span>
+          <span class="filtro-tag activo" data-filtro="alumnos" onclick="toggleFiltro(this)">🎓 Alumnos</span>
+          <span class="filtro-tag activo" data-filtro="docentes" onclick="toggleFiltro(this)">👨‍🏫 Maestros</span>
+          <span class="filtro-tag activo" data-filtro="practicas" onclick="toggleFiltro(this)">📋 Servicio/Prácticas</span>
+          <span class="filtro-tag activo" data-filtro="tutores" onclick="toggleFiltro(this)">👨‍👩‍👧 Tutores</span>
+        </div>
+        
+        <!-- SUBFILTROS DE GRADO Y GRUPO -->
+        <div class="subfiltros" id="subfiltrosGrado">
+          <div class="subfiltros-titulo">📚 Filtrar por grado y grupo</div>
+          <div class="filtros-contenedor" id="contenedorSubfiltros"></div>
+        </div>
+      </div>
+    </aside>
 
-  <input type="password" id="password" placeholder="Contraseña">
-
-  <button onclick="login()" style="width:100%;padding:12px;background:#00ff99;color:black;font-weight:bold;margin-top:15px;">
-    Iniciar sesión
-  </button>
-
-</div>
-
-<!-- APP -->
-
-<div id="appView" class="app" style="display:none;">
-
-  <!-- MENU -->
-
-  <div class="menu">
-
-    <h2>NexusMail</h2>
-
-    <button onclick="cambiarVista('recibidos')">📥 Bandeja de entrada</button>
-
-    <button onclick="cambiarVista('enviados')">📤 Enviados</button>
-
-    <button onclick="logout()">🚪 Cerrar sesión</button>
-
-  </div>
-
-  <!-- CONTENT -->
-
-  <div class="content">
-
-    <!-- TOPBAR -->
-
-    <div class="topbar">
-
-      <div class="tituloVista" id="tituloVista">
-        📥 Bandeja de entrada
+    <!-- CONTENIDO -->
+    <main class="contenido">
+      <div class="barra-superior">
+        <h2 class="vista-titulo" id="tituloVista">📥 Bandeja de entrada</h2>
       </div>
 
-      <button class="redactarBtn" onclick="abrirRedactar()">
-        ✏️ Redactar
-      </button>
+      <!-- LISTA PRINCIPAL -->
+      <div class="area-lista" id="lista"></div>
 
-    </div>
+      <!-- DETALLE MENSAJE -->
+      <div class="detalle-vista" id="detalle">
+        <button class="boton-volver" onclick="volverLista()">⬅ Volver</button>
+        <div class="cabecera-mensaje">
+          <h2 id="detalleAsunto"></h2>
+          <div class="meta-fila"><span class="meta-etiqueta">De:</span><span id="detalleEmisor"></span></div>
+          <div class="meta-fila"><span class="meta-etiqueta">Para:</span><span id="detalleReceptor"></span></div>
+        </div>
+        <div class="cuerpo-mensaje" id="detalleCuerpo"></div>
+      </div>
 
-    <!-- LISTA -->
+      <!-- PERFIL USUARIO -->
+      <div class="perfil-usuario-vista" id="perfilUsuario">
+        <button class="boton-volver" onclick="volverLista()">⬅ Volver al directorio</button>
+        <div class="tarjeta-info">
+          <h3 id="perfilNombre"></h3>
+          <div class="fila-dato"><span class="etiqueta-dato">Correo:</span><span id="perfilCorreo"></span></div>
+          <div class="fila-dato" id="filaGrado"><span class="etiqueta-dato">Grado/Grupo:</span><span id="perfilGrado"></span></div>
+          <div class="fila-dato"><span class="etiqueta-dato">Tipo:</span><span id="perfilTipo"></span></div>
+          
+          <div class="tutor-bloque" id="bloqueTutor" style="display:none;">
+            <div class="fila-dato"><strong>👨‍👩‍👧 Tutor:</strong></div>
+            <div class="fila-dato" style="margin-top:8px;">
+              <span class="etiqueta-dato">Nombre:</span><span id="tutorNombre"></span>
+            </div>
+            <div class="fila-dato">
+              <span class="etiqueta-dato">Correo:</span><span id="tutorCorreo"></span>
+            </div>
+            <button class="btn-enviar-mensaje btn-tutor" id="btnEscribirTutor">✉️ Escribir al tutor</button>
+          </div>
+        </div>
+        <button class="btn-enviar-mensaje" id="btnEnviarA">✏️ Enviar mensaje</button>
+      </div>
 
-    <div id="lista" class="lista"></div>
-
-    <!-- DETALLE -->
-
-    <div id="detalle" class="detalle"></div>
-
-    <!-- REDACTAR -->
-
-    <div id="redactar" class="redactar">
-
-      <h2>Nuevo mensaje</h2>
-
-      <input type="text" id="receptor" placeholder="Destinatario">
-
-      <input type="text" id="asunto" placeholder="Asunto">
-
-      <textarea id="mensaje" placeholder="Escribe tu mensaje..."></textarea>
-
-      <button class="enviarBtn" onclick="enviar()">
-        Enviar mensaje
-      </button>
-
-    </div>
-
+      <!-- REDACTAR -->
+      <div class="redactar-vista" id="redactar">
+        <h2>✏️ Nuevo mensaje</h2>
+        <div class="campo-grupo">
+          <label for="receptor">Destinatario</label>
+          <input type="text" id="receptor" placeholder="correo@ejemplo.com">
+        </div>
+        <div class="campo-grupo">
+          <label for="asunto">Asunto</label>
+          <input type="text" id="asunto" placeholder="Asunto del mensaje">
+        </div>
+        <div class="campo-grupo">
+          <label for="mensaje">Mensaje</label>
+          <textarea id="mensaje" placeholder="Escribe tu mensaje..."></textarea>
+        </div>
+        <button class="btn btn-enviar" onclick="enviar()">📤 Enviar mensaje</button>
+      </div>
+    </main>
   </div>
-
 </div>
 
-</div>
-
-<!-- MODAL -->
-
-<div id="modalImg" class="modal">
-  <img id="imgGrande">
+<!-- MODAL IMAGEN -->
+<div class="modal" id="modalImg" onclick="this.style.display='none';">
+  <img id="imgGrande" alt="Imagen ampliada">
 </div>
 
 <script>
-
-/* SUPABASE */
-
+/* === CONFIGURACIÓN SUPABASE === */
 const supabaseClient = supabase.createClient(
   "https://nlpdpvjtdxknhvgqbfls.supabase.co",
   "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
@@ -389,397 +387,406 @@ const supabaseClient = supabase.createClient(
 let usuarioActual = null;
 let vista = "recibidos";
 let mensajes = [];
+let directorioUsuarios = [];
+let filtrosActivos = { todos:true, alumnos:true, docentes:true, practicas:true, tutores:true };
+let subfiltrosActivos = {};
+let usuarioSeleccionado = null;
+let todosLosGrupos = new Set();
 
-/* LOGIN */
+/* === INTERRUPTOR RECORDAR === */
+function toggleRecordar(){
+  const interruptor = document.getElementById("interruptorRecordar");
+  interruptor.classList.toggle("activo");
+  const activado = interruptor.classList.contains("activo");
+  localStorage.setItem("nexusmail_recordar", activado ? "si" : "no");
+}
 
+/* === CARGAR DATOS RECORDADOS AL INICIAR === */
+window.onload = function(){
+  const recordar = localStorage.getItem("nexusmail_recordar");
+  if(recordar === "si"){
+    document.getElementById("interruptorRecordar").classList.add("activo");
+    const correoGuardado = localStorage.getItem("nexusmail_correo") || "";
+    if(correoGuardado) document.getElementById("correo").value = correoGuardado;
+  }
+};
+
+/* === INICIO DE SESIÓN === */
 async function login(){
-
   const correo = document.getElementById("correo").value.trim();
   const password = document.getElementById("password").value.trim();
+  if(!correo || !password){ alert("⚠️ Ingresa tus datos"); return; }
+
+  // Guardar o borrar según el interruptor
+  const recordarActivo = document.getElementById("interruptorRecordar").classList.contains("activo");
+  if(recordarActivo){
+    localStorage.setItem("nexusmail_correo", correo);
+  }else{
+    localStorage.removeItem("nexusmail_correo");
+    localStorage.setItem("nexusmail_recordar", "no");
+  }
 
   let usuario = null;
-
-  /* DOCENTES */
-
-  const { data: docentes } = await supabaseClient
-    .from("docentes")
-    .select("*")
-    .eq("correo", correo)
-    .eq("password", password);
-
-  if(docentes && docentes.length > 0){
-    usuario = docentes[0];
-  }
-
-  /* SERVICIO PRACTICAS */
+  const { data: docentes } = await supabaseClient.from("docentes").select("*").eq("correo",correo).eq("password",password);
+  if(docentes?.length) usuario = { ...docentes[0], tipo:"docente" };
 
   if(!usuario){
-
-    const { data: practicas } = await supabaseClient
-      .from("servicio_practicas")
-      .select("*")
-      .eq("correo", correo)
-      .eq("password", password);
-
-    if(practicas && practicas.length > 0){
-      usuario = practicas[0];
-    }
-
-  }
-
-  /* ALUMNOS */
-
-  if(!usuario){
-
-    const { data: alumnos1 } = await supabaseClient
-      .from("alumnos")
-      .select("*")
-      .eq("correo_alumno", correo)
-      .eq("password_alumno", password);
-
-    if(alumnos1 && alumnos1.length > 0){
-      usuario = alumnos1[0];
-    }
-
+    const { data: practicas } = await supabaseClient.from("servicio_practicas").select("*").eq("correo",correo).eq("password",password);
+    if(practicas?.length) usuario = { ...practicas[0], tipo:"practicas" };
   }
 
   if(!usuario){
+    const { data: alumnos1 } = await supabaseClient.from("alumnos").select("*").eq("correo_alumno",correo).eq("password_alumno",password);
+    if(alumnos1?.length) usuario = { ...alumnos1[0], tipo:"alumno", correo_real:correo };
+  }
 
-    const { data: alumnos2 } = await supabaseClient
-      .from("alumnos")
-      .select("*")
-      .eq("correo_tutor", correo)
-      .eq("password_tutor", password);
-
-    if(alumnos2 && alumnos2.length > 0){
-      usuario = alumnos2[0];
-    }
-
+  if(!usuario){
+    const { data: alumnos2 } = await supabaseClient.from("alumnos").select("*").eq("correo_tutor",correo).eq("password_tutor",password);
+    if(alumnos2?.length) usuario = { ...alumnos2[0], tipo:"tutor", correo_real:correo };
   }
 
   if(usuario){
-
     usuarioActual = correo;
-
     document.getElementById("loginView").style.display = "none";
+    document.getElementById("cabeceraApp").style.display = "flex";
     document.getElementById("appView").style.display = "flex";
-
-    cargar();
+    
+    await cargar();
+    await cargarDirectorio();
     tiempoReal();
-
   }else{
-
     alert("❌ Credenciales incorrectas");
-
   }
-
 }
 
-/* CARGAR */
-
+/* === CARGAR MENSAJES === */
 async function cargar(){
-
-  const { data } = await supabaseClient
-    .from("mensajes")
-    .select("*")
-    .order("id",{ascending:false});
-
+  const { data } = await supabaseClient.from("mensajes").select("*").order("id",{ascending:false});
   mensajes = data || [];
-
-  mostrar();
-
+  if(vista !== "usuarios") mostrar();
 }
 
-/* TIEMPO REAL */
+/* === CARGAR DIRECTORIO === */
+async function cargarDirectorio(){
+  directorioUsuarios = [];
+  todosLosGrupos.clear();
+  
+  const { data: docentes } = await supabaseClient.from("docentes").select("*");
+  docentes?.forEach(d => directorioUsuarios.push({
+    nombre: d.nombre || d.correo,
+    correo: d.correo,
+    tipo: "Docente",
+    clase: "docentes",
+    grado: "-",
+    grupo: "-",
+    correoTutor: null,
+    nombreTutor: null
+  }));
+  
+  const { data: practicas } = await supabaseClient.from("servicio_practicas").select("*");
+  practicas?.forEach(p => directorioUsuarios.push({
+    nombre: p.nombre || p.correo,
+    correo: p.correo,
+    tipo: "Servicio/Prácticas",
+    clase: "practicas",
+    grado: "-",
+    grupo: "-",
+    correoTutor: null,
+    nombreTutor: null
+  }));
+  
+  const { data: alumnos } = await supabaseClient.from("alumnos").select("*");
+  alumnos?.forEach(a => {
+    if(a.correo_alumno){
+      const grupoCompleto = a.grado && a.grupo ? `${a.grado}° ${a.grupo}` : "Sin grupo";
+      todosLosGrupos.add(grupoCompleto);
+      
+      directorioUsuarios.push({
+        nombre: a.nombre_completo || a.correo_alumno,
+        correo: a.correo_alumno,
+        tipo: "Alumno",
+        clase: "alumnos",
+        grado: a.grado || "-",
+        grupo: a.grupo || "-",
+        grupoCompleto: grupoCompleto,
+        correoTutor: a.correo_tutor || null,
+        nombreTutor: a.nombre_tutor || "No registrado"
+      });
+    }
+    if(a.correo_tutor && a.correo_tutor !== a.correo_alumno){
+      directorioUsuarios.push({
+        nombre: (a.nombre_tutor || "Tutor") + " — " + (a.nombre_completo || "Alumno"),
+        correo: a.correo_tutor,
+        tipo: "Tutor",
+        clase: "tutores",
+        grado: "-",
+        grupo: "-",
+        correoTutor: null,
+        nombreTutor: null
+      });
+    }
+  });
+  
+  generarSubfiltros();
+}
+
+function generarSubfiltros(){
+  const contenedor = document.getElementById("contenedorSubfiltros");
+  contenedor.innerHTML = "";
+  subfiltrosActivos = {};
+  
+  const listaGrupos = Array.from(todosLosGrupos).sort();
+  listaGrupos.forEach(grupo => {
+    subfiltrosActivos[grupo] = true;
+    const span = document.createElement("span");
+    span.className = "filtro-tag activo";
+    span.dataset.subfiltro = grupo;
+    span.textContent = grupo;
+    span.onclick = () => toggleSubfiltro(span);
+    contenedor.appendChild(span);
+  });
+}
+
+function toggleSubfiltro(elemento){
+  const valor = elemento.dataset.subfiltro;
+  subfiltrosActivos[valor] = !subfiltrosActivos[valor];
+  elemento.classList.toggle("activo", subfiltrosActivos[valor]);
+  aplicarFiltros();
+}
+
+function toggleFiltro(elemento){
+  const filtro = elemento.dataset.filtro;
+  filtrosActivos[filtro] = !filtrosActivos[filtro];
+  elemento.classList.toggle("activo", filtrosActivos[filtro]);
+  const subfiltros = document.getElementById("subfiltrosGrado");
+  subfiltros.classList.toggle("mostrar", filtrosActivos.alumnos);
+  aplicarFiltros();
+}
 
 function tiempoReal(){
-
-  supabaseClient
-    .channel("mensajes-tiempo-real")
-    .on(
-      "postgres_changes",
-      {
-        event:"*",
-        schema:"public",
-        table:"mensajes"
-      },
-      () => {
-        cargar();
-      }
-    )
+  supabaseClient.channel("mensajes-tiempo-real")
+    .on("postgres_changes", { event:"*", schema:"public", table:"mensajes" }, () => cargar())
     .subscribe();
-
 }
-
-/* CAMBIAR VISTA */
 
 function cambiarVista(v){
-
   vista = v;
-
+  document.querySelectorAll(".btn-menu").forEach(b=>b.classList.remove("activo"));
+  document.getElementById(`btn-${v === "recibidos" ? "bandeja" : v === "enviados" ? "enviados" : "usuarios"}`).classList.add("activo");
+  
   document.getElementById("detalle").style.display = "none";
   document.getElementById("redactar").style.display = "none";
+  document.getElementById("perfilUsuario").style.display = "none";
   document.getElementById("lista").style.display = "block";
-
-  document.getElementById("tituloVista").innerHTML =
-    vista === "recibidos"
-    ? "📥 Bandeja de entrada"
-    : "📤 Mensajes enviados";
-
-  mostrar();
-
+  
+  const esDirectorio = v === "usuarios";
+  document.getElementById("filtrosSeccion").style.display = esDirectorio ? "block" : "none";
+  document.getElementById("buscadorSeccion").style.display = esDirectorio ? "block" : "none";
+  document.getElementById("subfiltrosGrado").classList.toggle("mostrar", esDirectorio && filtrosActivos.alumnos);
+  
+  const titulos = {
+    recibidos: "📥 Bandeja de entrada",
+    enviados: "📤 Mensajes enviados",
+    usuarios: "👥 Directorio de usuarios"
+  };
+  document.getElementById("tituloVista").textContent = titulos[v];
+  
+  if(esDirectorio){
+    document.getElementById("inputBuscador").value = "";
+    aplicarFiltros();
+  }
 }
 
-/* MOSTRAR */
+function aplicarFiltros(){
+  if(vista !== "usuarios") return;
+  
+  const busqueda = (document.getElementById("inputBuscador")?.value || "").toLowerCase().trim();
+  
+  let filtrados = directorioUsuarios.filter(u => {
+    if(u.correo === usuarioActual) return false;
+    if(busqueda && !u.nombre.toLowerCase().includes(busqueda) && !u.correo.toLowerCase().includes(busqueda)) return false;
+    if(!filtrosActivos.todos && !filtrosActivos[u.clase]) return false;
+    if(u.clase === "alumnos" && Object.keys(subfiltrosActivos).length > 0 && subfiltrosActivos[u.grupoCompleto] === false) return false;
+    return true;
+  });
+  
+  mostrarListaFiltrada(filtrados);
+}
+
+function mostrarListaFiltrada(lista){
+  const contenedor = document.getElementById("lista");
+  contenedor.innerHTML = "";
+  
+  if(!lista.length){
+    contenedor.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--texto-claro);">
+      <div style="font-size:40px;margin-bottom:12px;">🔍</div>
+      <p>No se encontraron usuarios con esos filtros</p>
+    </div>`;
+    return;
+  }
+  
+  lista.forEach(u => {
+    const div = document.createElement("div");
+    div.className = "usuario-fila";
+    div.innerHTML = `
+      <div class="usuario-nombre">${u.nombre}</div>
+      <div class="usuario-correo">${u.correo}</div>
+      <span class="usuario-tipo tipo-${u.clase === 'alumnos' ? 'alumno' : u.clase === 'docentes' ? 'docente' : u.clase === 'tutores' ? 'tutor' : 'practicas'}">${u.tipo}</span>
+    `;
+    div.onclick = () => verPerfilUsuario(u);
+    contenedor.appendChild(div);
+  });
+}
 
 function mostrar(){
-
   const lista = document.getElementById("lista");
-
   lista.innerHTML = "";
-
-  mensajes.forEach(m => {
-
-    if(vista === "recibidos" && m.receptor !== usuarioActual){
-      return;
-    }
-
-    if(vista === "enviados" && m.emisor !== usuarioActual){
-      return;
-    }
-
+  const filtrados = mensajes.filter(m => 
+    vista === "recibidos" ? m.receptor === usuarioActual : m.emisor === usuarioActual
+  );
+  if(!filtrados.length){
+    lista.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--texto-claro);">
+      <div style="font-size:40px;margin-bottom:12px;">📭</div>
+      <p>No hay mensajes aquí</p>
+    </div>`;
+    return;
+  }
+  filtrados.forEach(m => {
     const div = document.createElement("div");
-
-    div.className = m.leido ? "mensaje normal" : "mensaje nuevo";
-
+    div.className = `mensaje-fila ${m.leido ? "" : "nuevo"}`;
     div.innerHTML = `
-      <div>
-        <b>${m.asunto || "(Sin asunto)"}</b>
+      <div class="mensaje-asunto">
+        <span>${m.asunto || "(Sin asunto)"}</span>
+        ${!m.leido && vista==="recibidos" ? '<span class="etiqueta-nuevo">NUEVO</span>' : ""}
       </div>
-
-      <div style="margin-top:5px;color:#aaa;">
-        ${
-          vista === "recibidos"
-          ? "De: " + m.emisor
-          : "Para: " + m.receptor
-        }
+      <div class="mensaje-datos">
+        ${vista==="recibidos"?"De ":"Para "}${vista==="recibidos"?m.emisor:m.receptor}
       </div>
     `;
-
-    div.onclick = () => ver(m);
-
+    div.onclick = () => verMensaje(m);
     lista.appendChild(div);
-
   });
-
 }
 
-/* VER */
-
-async function ver(m){
-
+function verPerfilUsuario(usuario){
+  usuarioSeleccionado = usuario;
   document.getElementById("lista").style.display = "none";
-  document.getElementById("redactar").style.display = "none";
-
-  const detalle = document.getElementById("detalle");
-
-  detalle.style.display = "block";
-
-  detalle.innerHTML = `
-
-    <button onclick="volverLista()" style="padding:10px;background:#00ff99;color:black;font-weight:bold;">
-      ⬅ Volver
-    </button>
-
-    <br><br>
-
-    <h2>${m.asunto || "(Sin asunto)"}</h2>
-
-    <p><b>De:</b> ${m.emisor}</p>
-
-    <p><b>Para:</b> ${m.receptor}</p>
-
-    <hr>
-
-    <div>
-      ${procesarMensaje(m.mensaje)}
-    </div>
-
-  `;
-
-  if(m.receptor === usuarioActual && !m.leido){
-
-    await supabaseClient
-      .from("mensajes")
-      .update({ leido:true })
-      .eq("id",m.id);
-
+  document.getElementById("perfilUsuario").style.display = "block";
+  
+  document.getElementById("perfilNombre").textContent = usuario.nombre;
+  document.getElementById("perfilCorreo").textContent = usuario.correo;
+  document.getElementById("perfilGrado").textContent = usuario.grado !== "-" ? `${usuario.grado}° ${usuario.grupo}` : "No aplica";
+  document.getElementById("perfilTipo").textContent = usuario.tipo;
+  
+  const bloqueTutor = document.getElementById("bloqueTutor");
+  if(usuario.clase === "alumnos" && usuario.correoTutor){
+    bloqueTutor.style.display = "block";
+    document.getElementById("tutorNombre").textContent = usuario.nombreTutor;
+    document.getElementById("tutorCorreo").textContent = usuario.correoTutor;
+    document.getElementById("btnEscribirTutor").onclick = () => {
+      document.getElementById("receptor").value = usuario.correoTutor;
+      abrirRedactar();
+    };
+  }else{
+    bloqueTutor.style.display = "none";
   }
-
+  
+  document.getElementById("btnEnviarA").onclick = () => {
+    document.getElementById("receptor").value = usuario.correo;
+    abrirRedactar();
+  };
 }
 
-/* VOLVER */
+async function verMensaje(m){
+  document.getElementById("lista").style.display = "none";
+  document.getElementById("detalle").style.display = "block";
+  document.getElementById("detalleAsunto").textContent = m.asunto || "(Sin asunto)";
+  document.getElementById("detalleEmisor").textContent = m.emisor;
+  document.getElementById("detalleReceptor").textContent = m.receptor;
+  document.getElementById("detalleCuerpo").innerHTML = procesarMensaje(m.mensaje);
+  
+  if(m.receptor === usuarioActual && !m.leido){
+    await supabaseClient.from("mensajes").update({leido:true}).eq("id",m.id);
+  }
+}
 
 function volverLista(){
-
   document.getElementById("detalle").style.display = "none";
   document.getElementById("redactar").style.display = "none";
+  document.getElementById("perfilUsuario").style.display = "none";
   document.getElementById("lista").style.display = "block";
-
+  usuarioSeleccionado = null;
 }
-
-/* REDACTAR */
 
 function abrirRedactar(){
-
   document.getElementById("lista").style.display = "none";
   document.getElementById("detalle").style.display = "none";
+  document.getElementById("perfilUsuario").style.display = "none";
   document.getElementById("redactar").style.display = "block";
-
+  if(!usuarioSeleccionado){
+    document.getElementById("receptor").value = "";
+  }
+  document.getElementById("asunto").value = "";
+  document.getElementById("mensaje").value = "";
 }
-
-/* VALIDAR DESTINATARIO */
 
 async function existeUsuario(correo){
-
-  const { data: docentes } = await supabaseClient
-    .from("docentes")
-    .select("*")
-    .eq("correo",correo);
-
-  if(docentes.length) return true;
-
-  const { data: practicas } = await supabaseClient
-    .from("servicio_practicas")
-    .select("*")
-    .eq("correo",correo);
-
-  if(practicas.length) return true;
-
-  const { data: alumnos1 } = await supabaseClient
-    .from("alumnos")
-    .select("*")
-    .eq("correo_alumno",correo);
-
-  if(alumnos1.length) return true;
-
-  const { data: alumnos2 } = await supabaseClient
-    .from("alumnos")
-    .select("*")
-    .eq("correo_tutor",correo);
-
-  if(alumnos2.length) return true;
-
+  const tablas = [
+    {t:"docentes",c:"correo"},
+    {t:"servicio_practicas",c:"correo"},
+    {t:"alumnos",c:"correo_alumno"},
+    {t:"alumnos",c:"correo_tutor"}
+  ];
+  for(const {t,c} of tablas){
+    const {data} = await supabaseClient.from(t).select(c).eq(c,correo);
+    if(data?.length) return true;
+  }
   return false;
-
 }
 
-/* ENVIAR */
-
 async function enviar(){
-
   const receptor = document.getElementById("receptor").value.trim();
   const asunto = document.getElementById("asunto").value.trim();
   const mensaje = document.getElementById("mensaje").value.trim();
-
-  if(!receptor || !mensaje){
-
-    alert("Completa los campos");
-    return;
-
-  }
-
+  
+  if(!receptor || !mensaje){ alert("⚠️ Completa destinatario y mensaje"); return; }
+  if(receptor === usuarioActual){ alert("⚠️ No puedes enviarte a ti mismo"); return; }
+  
   const existe = await existeUsuario(receptor);
-
-  if(!existe){
-
-    alert("❌ Destinatario no encontrado");
-    return;
-
-  }
-
-  await supabaseClient
-    .from("mensajes")
-    .insert([{
-
-      emisor:usuarioActual,
-      receptor:receptor,
-      asunto:asunto,
-      mensaje:mensaje,
-      leido:false
-
-    }]);
-
+  if(!existe){ alert("❌ Destinatario no encontrado"); return; }
+  
+  const {error} = await supabaseClient.from("mensajes").insert([{
+    emisor: usuarioActual,
+    receptor: receptor,
+    asunto: asunto || "(Sin asunto)",
+    mensaje: mensaje,
+    leido: false
+  }]);
+  
+  if(error){ alert("❌ Error: " + error.message); return; }
   alert("✅ Mensaje enviado");
-
-  document.getElementById("receptor").value = "";
-  document.getElementById("asunto").value = "";
-  document.getElementById("mensaje").value = "";
-
+  usuarioSeleccionado = null;
   cambiarVista("enviados");
-
 }
-
-/* LINKS */
 
 function procesarMensaje(texto){
-
-  return texto.replace(
-    /(https?:\/\/[^\s]+)/g,
-    function(url){
-
-      if(url.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
-
-        return `
-          <br><br>
-          <img 
-            src="${url}"
-            onclick="verImagen('${url}')"
-            style="max-width:250px;border-radius:10px;cursor:pointer;"
-          >
-          <br><br>
-          <a href="${url}" target="_blank">
-            Abrir imagen
-          </a>
-        `;
-
-      }
-
-      return `
-        <a href="${url}" target="_blank">
-          ${url}
-        </a>
-      `;
-
+  if(!texto) return "<p style='color:var(--texto-claro);font-style:italic;'>Sin contenido</p>";
+  return texto.replace(/(https?:\/\/[^\s]+)/g, url => {
+    if(/\.(jpg|jpeg|png|gif|webp)$/i.test(url)){
+      return `<br><img src="${url}" class="img-preview" onclick="verImagen('${url}')"><br><a href="${url}" target="_blank">Abrir imagen</a><br>`;
     }
-  );
-
+    return `<a href="${url}" target="_blank">${url}</a>`;
+  }).replace(/\n/g,"<br>");
 }
-
-/* IMAGEN */
 
 function verImagen(src){
-
   document.getElementById("modalImg").style.display = "flex";
   document.getElementById("imgGrande").src = src;
-
 }
-
-document.getElementById("modalImg").onclick = () => {
-
-  document.getElementById("modalImg").style.display = "none";
-
-};
-
-/* LOGOUT */
 
 function logout(){
-
-  location.reload();
-
+  if(confirm("¿Cerrar sesión?")) location.reload();
 }
-
 </script>
-
 </body>
 </html>
