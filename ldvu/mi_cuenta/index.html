@@ -1,0 +1,934 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LDVU | Crear cuenta</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    margin:0;
+    min-height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+
+    min-height:100vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    color:#fff;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #174f87 0%,
+            transparent 42%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            #087f9d 0%,
+            transparent 38%
+        ),
+        #071426;
+}
+
+
+/* ==============================
+   CONTENEDOR
+============================== */
+
+.box{
+
+    width:100%;
+    max-width:470px;
+
+    padding:36px;
+
+    border-radius:26px;
+
+    background:rgba(255,255,255,.08);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.45);
+}
+
+
+/* ==============================
+   LOGO
+============================== */
+
+.logo{
+
+    width:82px;
+    height:82px;
+
+    margin:0 auto 18px;
+
+    border-radius:22px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:30px;
+    font-weight:900;
+
+    background:
+        linear-gradient(
+            135deg,
+            #008fc1,
+            #20d8ee
+        );
+
+    box-shadow:
+        0 10px 35px
+        rgba(0,190,240,.25);
+}
+
+
+/* ==============================
+   TITULO
+============================== */
+
+.title{
+
+    text-align:center;
+
+    font-size:28px;
+
+    font-weight:900;
+
+    margin-bottom:8px;
+}
+
+.subtitle{
+
+    text-align:center;
+
+    font-size:14px;
+
+    line-height:1.5;
+
+    opacity:.65;
+
+    margin-bottom:28px;
+}
+
+
+/* ==============================
+   CAMPOS
+============================== */
+
+label{
+
+    display:block;
+
+    margin:16px 0 8px;
+
+    font-size:14px;
+
+    font-weight:800;
+}
+
+input{
+
+    width:100%;
+
+    padding:14px 15px;
+
+    border-radius:12px;
+
+    border:1px solid
+    rgba(255,255,255,.15);
+
+    background:rgba(0,0,0,.2);
+
+    color:#fff;
+
+    outline:none;
+
+    font-size:15px;
+}
+
+input:focus{
+
+    border-color:#28d7ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(40,215,255,.12);
+}
+
+input::placeholder{
+
+    color:rgba(255,255,255,.4);
+}
+
+
+/* ==============================
+   PASSWORD
+============================== */
+
+.password-box{
+
+    position:relative;
+}
+
+.password-box input{
+
+    padding-right:60px;
+}
+
+.show-password{
+
+    position:absolute;
+
+    right:8px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:42px;
+    height:38px;
+
+    border:0;
+
+    border-radius:9px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:16px;
+}
+
+
+/* ==============================
+   REQUISITOS
+============================== */
+
+.requirements{
+
+    margin-top:20px;
+
+    padding:15px;
+
+    border-radius:13px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:1px solid
+        rgba(255,255,255,.07);
+
+    font-size:12px;
+
+    line-height:1.8;
+
+    opacity:.75;
+}
+
+.requirements strong{
+
+    color:#fff;
+}
+
+.requirement{
+
+    margin:2px 0;
+}
+
+.valid{
+
+    color:#7ef0bf;
+}
+
+.invalid{
+
+    color:#ffaaaa;
+}
+
+
+/* ==============================
+   BOTÓN
+============================== */
+
+.create{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:15px;
+
+    border:0;
+
+    border-radius:12px;
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            #008fc1,
+            #18c8e8
+        );
+
+    transition:.2s;
+}
+
+.create:hover{
+
+    transform:translateY(-1px);
+
+    filter:brightness(1.08);
+}
+
+.create:disabled{
+
+    opacity:.5;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+
+/* ==============================
+   MENSAJES
+============================== */
+
+.message{
+
+    display:none;
+
+    margin-top:18px;
+
+    padding:13px 15px;
+
+    border-radius:11px;
+
+    font-size:14px;
+
+    line-height:1.5;
+}
+
+.message.success{
+
+    display:block;
+
+    color:#8ff0c9;
+
+    background:
+        rgba(0,220,150,.1);
+
+    border:1px solid
+        rgba(0,220,150,.25);
+}
+
+.message.error{
+
+    display:block;
+
+    color:#ffb0b0;
+
+    background:
+        rgba(255,70,70,.1);
+
+    border:1px solid
+        rgba(255,70,70,.25);
+}
+
+
+/* ==============================
+   FOOTER
+============================== */
+
+.footer{
+
+    margin-top:25px;
+
+    text-align:center;
+
+    font-size:11px;
+
+    opacity:.4;
+}
+
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media(max-width:520px){
+
+    .box{
+
+        padding:27px 20px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="box">
+
+
+    <div class="logo">
+        LD
+    </div>
+
+
+    <div class="title">
+        Crear cuenta
+    </div>
+
+
+    <div class="subtitle">
+        Administrador de Links de Visualización
+        de Uso Único
+    </div>
+
+
+    <!-- CORREO -->
+
+    <label for="email">
+        Correo electrónico
+    </label>
+
+    <input
+        id="email"
+        type="email"
+        placeholder="correo@ejemplo.com"
+        autocomplete="email"
+    >
+
+
+    <!-- CONTRASEÑA -->
+
+    <label for="password">
+        Contraseña
+    </label>
+
+    <div class="password-box">
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Crea una contraseña"
+            autocomplete="new-password"
+            oninput="validar()"
+        >
+
+        <button
+            class="show-password"
+            type="button"
+            onclick="mostrarPassword()"
+        >
+            👁
+        </button>
+
+    </div>
+
+
+    <!-- CONFIRMAR -->
+
+    <label for="confirmPassword">
+        Confirmar contraseña
+    </label>
+
+    <div class="password-box">
+
+        <input
+            id="confirmPassword"
+            type="password"
+            placeholder="Repite la contraseña"
+            autocomplete="new-password"
+            oninput="validar()"
+        >
+
+        <button
+            class="show-password"
+            type="button"
+            onclick="mostrarConfirmacion()"
+        >
+            👁
+        </button>
+
+    </div>
+
+
+    <!-- REQUISITOS -->
+
+    <div class="requirements">
+
+        <strong>
+            Requisitos de contraseña
+        </strong>
+
+        <div
+            id="length"
+            class="requirement invalid"
+        >
+            ✕ Mínimo 8 caracteres
+        </div>
+
+        <div
+            id="upper"
+            class="requirement invalid"
+        >
+            ✕ Una letra mayúscula
+        </div>
+
+        <div
+            id="number"
+            class="requirement invalid"
+        >
+            ✕ Un número
+        </div>
+
+        <div
+            id="match"
+            class="requirement invalid"
+        >
+            ✕ Las contraseñas coinciden
+        </div>
+
+    </div>
+
+
+    <!-- CREAR -->
+
+    <button
+        id="createButton"
+        class="create"
+        onclick="crearCuenta()"
+    >
+        CREAR CUENTA
+    </button>
+
+
+    <!-- MENSAJE -->
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <div class="footer">
+        LDVU · Grupo García Corona
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================
+   SUPABASE
+========================================= */
+
+const SUPABASE_URL =
+    "https://mxlsbndododfkehgtkeb.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_xaPbqCuMAfk1mUS9ayYEBA_9w8pv1jD";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================
+   MOSTRAR CONTRASEÑA
+========================================= */
+
+function mostrarPassword(){
+
+    const input =
+        document.getElementById(
+            "password"
+        );
+
+    input.type =
+        input.type === "password"
+        ? "text"
+        : "password";
+
+}
+
+
+/* =========================================
+   MOSTRAR CONFIRMACIÓN
+========================================= */
+
+function mostrarConfirmacion(){
+
+    const input =
+        document.getElementById(
+            "confirmPassword"
+        );
+
+    input.type =
+        input.type === "password"
+        ? "text"
+        : "password";
+
+}
+
+
+/* =========================================
+   VALIDAR CONTRASEÑA
+========================================= */
+
+function validar(){
+
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
+
+    const confirm =
+        document.getElementById(
+            "confirmPassword"
+        ).value;
+
+
+    const length =
+        password.length >= 8;
+
+    const upper =
+        /[A-Z]/.test(password);
+
+    const number =
+        /[0-9]/.test(password);
+
+    const match =
+        password.length > 0 &&
+        password === confirm;
+
+
+    actualizar(
+        "length",
+        length,
+        "Mínimo 8 caracteres"
+    );
+
+    actualizar(
+        "upper",
+        upper,
+        "Una letra mayúscula"
+    );
+
+    actualizar(
+        "number",
+        number,
+        "Un número"
+    );
+
+    actualizar(
+        "match",
+        match,
+        "Las contraseñas coinciden"
+    );
+
+
+    return (
+        length &&
+        upper &&
+        number &&
+        match
+    );
+
+}
+
+
+/* =========================================
+   ACTUALIZAR REQUISITO
+========================================= */
+
+function actualizar(
+    id,
+    correcto,
+    texto
+){
+
+    const element =
+        document.getElementById(id);
+
+
+    if(correcto){
+
+        element.className =
+            "requirement valid";
+
+        element.textContent =
+            "✓ " + texto;
+
+    }else{
+
+        element.className =
+            "requirement invalid";
+
+        element.textContent =
+            "✕ " + texto;
+
+    }
+
+}
+
+
+/* =========================================
+   MENSAJE
+========================================= */
+
+function mostrarMensaje(
+    texto,
+    tipo
+){
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+    message.className =
+        "message " + tipo;
+
+    message.textContent =
+        texto;
+
+}
+
+
+/* =========================================
+   CREAR CUENTA
+========================================= */
+
+async function crearCuenta(){
+
+    const email =
+        document.getElementById(
+            "email"
+        ).value.trim();
+
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
+
+    const confirm =
+        document.getElementById(
+            "confirmPassword"
+        ).value;
+
+    const button =
+        document.getElementById(
+            "createButton"
+        );
+
+
+    /* ---------------------------------
+       CORREO
+    --------------------------------- */
+
+    if(!email){
+
+        mostrarMensaje(
+            "Escribe un correo electrónico.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const emailValido =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        .test(email);
+
+
+    if(!emailValido){
+
+        mostrarMensaje(
+            "Escribe un correo electrónico válido.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    /* ---------------------------------
+       CONTRASEÑA
+    --------------------------------- */
+
+    if(!validar()){
+
+        mostrarMensaje(
+            "La contraseña no cumple todos los requisitos.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if(password !== confirm){
+
+        mostrarMensaje(
+            "Las contraseñas no coinciden.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    /* ---------------------------------
+       DESACTIVAR BOTÓN
+    --------------------------------- */
+
+    button.disabled = true;
+
+    button.textContent =
+        "CREANDO CUENTA...";
+
+
+    /* ---------------------------------
+       SUPABASE AUTH
+    --------------------------------- */
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.signUp({
+
+            email:email,
+
+            password:password
+
+        });
+
+
+    /* ---------------------------------
+       ERROR
+    --------------------------------- */
+
+    if(error){
+
+        button.disabled = false;
+
+        button.textContent =
+            "CREAR CUENTA";
+
+
+        let mensaje =
+            error.message;
+
+
+        if(
+            error.message
+            .toLowerCase()
+            .includes("already registered")
+        ){
+
+            mensaje =
+                "Este correo ya tiene una cuenta.";
+
+        }
+
+
+        mostrarMensaje(
+            mensaje,
+            "error"
+        );
+
+        return;
+    }
+
+
+    /* ---------------------------------
+       CUENTA CREADA
+    --------------------------------- */
+
+    button.disabled = false;
+
+    button.textContent =
+        "CUENTA CREADA";
+
+
+    mostrarMensaje(
+        "✓ La cuenta fue creada correctamente. " +
+        "Ya puede utilizarse para iniciar sesión en LDVU.",
+        "success"
+    );
+
+
+    /* ---------------------------------
+       LIMPIAR
+    --------------------------------- */
+
+    document.getElementById(
+        "email"
+    ).value = "";
+
+    document.getElementById(
+        "password"
+    ).value = "";
+
+    document.getElementById(
+        "confirmPassword"
+    ).value = "";
+
+
+    validar();
+
+}
+
+</script>
+
+</body>
+</html>
+```
