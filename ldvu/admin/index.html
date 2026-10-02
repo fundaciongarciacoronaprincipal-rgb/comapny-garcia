@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LDVU | Administrador</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:
+        radial-gradient(circle at top left,#183c70 0%,transparent 40%),
+        radial-gradient(circle at bottom right,#087f9d 0%,transparent 35%),
+        #071426;
+    color:#fff;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.login-box{
+    width:100%;
+    max-width:430px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.15);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-radius:24px;
+    padding:35px;
+    box-shadow:0 25px 70px rgba(0,0,0,.35);
+}
+
+.logo{
+    width:90px;
+    height:90px;
+    border-radius:20px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 20px;
+}
+
+.login-title{
+    text-align:center;
+    font-size:28px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.login-subtitle{
+    text-align:center;
+    opacity:.7;
+    margin-bottom:28px;
+}
+
+/* =========================
+   CAMPOS
+========================= */
+
+label{
+    display:block;
+    margin:15px 0 8px;
+    font-weight:700;
+    font-size:14px;
+}
+
+input{
+    width:100%;
+    padding:14px 15px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.15);
+    background:rgba(0,0,0,.2);
+    color:#fff;
+    outline:none;
+    font-size:15px;
+}
+
+input:focus{
+    border-color:#28d7ff;
+    box-shadow:0 0 0 3px rgba(40,215,255,.12);
+}
+
+input::placeholder{
+    color:rgba(255,255,255,.45);
+}
+
+button{
+    border:0;
+    cursor:pointer;
+    font-weight:800;
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+.btn{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    margin-top:20px;
+    color:#fff;
+    background:linear-gradient(135deg,#008fc1,#18c8e8);
+    font-size:15px;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+    filter:brightness(1.08);
+}
+
+.btn-secondary{
+    background:rgba(255,255,255,.1);
+}
+
+/* =========================
+   ADMIN
+========================= */
+
+.admin{
+    display:none;
+    min-height:100vh;
+}
+
+.header{
+    padding:20px 30px;
+    background:rgba(0,0,0,.22);
+    border-bottom:1px solid rgba(255,255,255,.1);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.header-title{
+    font-size:22px;
+    font-weight:900;
+}
+
+.header-sub{
+    opacity:.6;
+    font-size:13px;
+    margin-top:4px;
+}
+
+.logout{
+    width:auto;
+    margin:0;
+    padding:10px 16px;
+    background:rgba(255,255,255,.1);
+}
+
+.container{
+    width:100%;
+    max-width:1100px;
+    margin:auto;
+    padding:35px 20px 60px;
+}
+
+.card{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:22px;
+    padding:25px;
+    margin-bottom:25px;
+    backdrop-filter:blur(12px);
+}
+
+.card h2{
+    margin:0 0 8px;
+    font-size:21px;
+}
+
+.card p{
+    margin:0 0 20px;
+    opacity:.65;
+}
+
+.publish-row{
+    display:grid;
+    grid-template-columns:1fr 180px;
+    gap:12px;
+}
+
+.publish-row button{
+    margin:0;
+}
+
+/* =========================
+   RESULTADO
+========================= */
+
+.result{
+    display:none;
+    margin-top:20px;
+    padding:18px;
+    border-radius:15px;
+    background:rgba(0,210,255,.08);
+    border:1px solid rgba(0,210,255,.2);
+}
+
+.result-title{
+    font-weight:900;
+    margin-bottom:10px;
+}
+
+.generated{
+    display:flex;
+    gap:10px;
+}
+
+.generated input{
+    flex:1;
+}
+
+.copy{
+    width:auto;
+    margin:0;
+    padding:0 20px;
+}
+
+/* =========================
+   TABLA
+========================= */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:13px 10px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    text-align:left;
+    font-size:14px;
+}
+
+th{
+    opacity:.65;
+    font-size:12px;
+    text-transform:uppercase;
+}
+
+.status{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:800;
+}
+
+.available{
+    background:rgba(0,220,150,.12);
+    color:#55edb5;
+}
+
+.used{
+    background:rgba(255,100,100,.12);
+    color:#ff9999;
+}
+
+.small-link{
+    max-width:300px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    display:block;
+}
+
+/* =========================
+   MENSAJES
+========================= */
+
+.message{
+    margin-top:15px;
+    padding:12px 14px;
+    border-radius:10px;
+    display:none;
+    font-size:14px;
+}
+
+.error{
+    background:rgba(255,70,70,.12);
+    border:1px solid rgba(255,70,70,.25);
+    color:#ffb0b0;
+}
+
+.success{
+    background:rgba(0,220,150,.12);
+    border:1px solid rgba(0,220,150,.25);
+    color:#8ff0c9;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:700px){
+
+    .header{
+        padding:16px;
+    }
+
+    .container{
+        padding:20px 14px 40px;
+    }
+
+    .publish-row{
+        grid-template-columns:1fr;
+    }
+
+    .publish-row button{
+        width:100%;
+    }
+
+    .login-box{
+        padding:25px 20px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =========================
+     LOGIN
+========================= -->
+
+<section id="loginScreen" class="login-screen">
+
+    <div class="login-box">
+
+        <div class="login-title">
+            LDVU
+        </div>
+
+        <div class="login-subtitle">
+            Links de Visualización de Uso Único
+        </div>
+
+        <label>Correo electrónico</label>
+
+        <input
+            id="email"
+            type="email"
+            placeholder="correo@ejemplo.com"
+            autocomplete="username"
+        >
+
+        <label>Contraseña</label>
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Contraseña"
+            autocomplete="current-password"
+        >
+
+        <button
+            class="btn"
+            onclick="login()"
+        >
+            Iniciar sesión
+        </button>
+
+        <div id="loginMessage" class="message error"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ADMINISTRADOR
+========================= -->
+
+<section id="adminScreen" class="admin">
+
+    <header class="header">
+
+        <div>
+
+            <div class="header-title">
+                LDVU | Administrador
+            </div>
+
+            <div
+                id="userEmail"
+                class="header-sub"
+            >
+            </div>
+
+        </div>
+
+        <button
+            class="btn logout"
+            onclick="logout()"
+        >
+            Cerrar sesión
+        </button>
+
+    </header>
+
+
+    <main class="container">
+
+        <!-- PUBLICAR -->
+
+        <div class="card">
+
+            <h2>
+                Publicar nuevo enlace
+            </h2>
+
+            <p>
+                Introduce la dirección de la página que deseas publicar.
+            </p>
+
+            <div class="publish-row">
+
+                <input
+                    id="urlInput"
+                    type="url"
+                    placeholder="https://ejemplo.com"
+                >
+
+                <button
+                    class="btn"
+                    onclick="publicar()"
+                >
+                    PUBLICAR
+                </button>
+
+            </div>
+
+            <div
+                id="publishMessage"
+                class="message"
+            ></div>
+
+
+            <div
+                id="result"
+                class="result"
+            >
+
+                <div class="result-title">
+                    ✓ Enlace generado
+                </div>
+
+                <div class="generated">
+
+                    <input
+                        id="generatedLink"
+                        readonly
+                    >
+
+                    <button
+                        class="btn copy"
+                        onclick="copiarLink()"
+                    >
+                        COPIAR
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HISTORIAL -->
+
+        <div class="card">
+
+            <h2>
+                Enlaces publicados
+            </h2>
+
+            <p>
+                Consulta el estado de los enlaces creados por tu cuenta.
+            </p>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Enlace</th>
+                            <th>Creado</th>
+                            <th>Estado</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="linksTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</section>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://mxlsbndododfkehgtkeb.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_xaPbqCuMAfk1mUS9ayYEBA_9w8pv1jD";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* ==========================================
+   INICIO
+========================================== */
+
+window.addEventListener("DOMContentLoaded", async () => {
+
+    const {
+        data
+    } = await supabaseClient.auth.getSession();
+
+    if(data.session){
+
+        mostrarAdmin(
+            data.session.user
+        );
+
+    }
+
+});
+
+
+/* ==========================================
+   LOGIN
+========================================== */
+
+async function login(){
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const message =
+        document.getElementById("loginMessage");
+
+    message.style.display = "none";
+
+    if(!email || !password){
+
+        message.textContent =
+            "Escribe tu correo y contraseña.";
+
+        message.style.display = "block";
+
+        return;
+    }
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if(error){
+
+        message.textContent =
+            "No se pudo iniciar sesión: " +
+            error.message;
+
+        message.style.display = "block";
+
+        return;
+    }
+
+    mostrarAdmin(data.user);
+
+}
+
+
+/* ==========================================
+   MOSTRAR ADMIN
+========================================== */
+
+async function mostrarAdmin(user){
+
+    document.getElementById(
+        "loginScreen"
+    ).style.display = "none";
+
+    document.getElementById(
+        "adminScreen"
+    ).style.display = "block";
+
+    document.getElementById(
+        "userEmail"
+    ).textContent = user.email;
+
+    cargarEnlaces();
+
+}
+
+
+/* ==========================================
+   LOGOUT
+========================================== */
+
+async function logout(){
+
+    await supabaseClient.auth.signOut();
+
+    location.reload();
+
+}
+
+
+/* ==========================================
+   TOKEN
+========================================== */
+
+function generarToken(){
+
+    const bytes =
+        new Uint8Array(24);
+
+    crypto.getRandomValues(bytes);
+
+    return Array.from(bytes)
+        .map(
+            b => b.toString(16).padStart(2,"0")
+        )
+        .join("");
+
+}
+
+
+/* ==========================================
+   PUBLICAR
+========================================== */
+
+async function publicar(){
+
+    const input =
+        document.getElementById("urlInput");
+
+    const url =
+        input.value.trim();
+
+    const message =
+        document.getElementById("publishMessage");
+
+    const result =
+        document.getElementById("result");
+
+    message.style.display = "none";
+    result.style.display = "none";
+
+    if(!url){
+
+        message.textContent =
+            "Introduce una dirección.";
+
+        message.className =
+            "message error";
+
+        message.style.display = "block";
+
+        return;
+    }
+
+
+    let parsed;
+
+    try{
+
+        parsed = new URL(url);
+
+    }catch{
+
+        message.textContent =
+            "La dirección no es válida.";
+
+        message.className =
+            "message error";
+
+        message.style.display = "block";
+
+        return;
+    }
+
+
+    if(
+        parsed.protocol !== "https:" &&
+        parsed.protocol !== "http:"
+    ){
+
+        message.textContent =
+            "Solo se permiten enlaces HTTP o HTTPS.";
+
+        message.className =
+            "message error";
+
+        message.style.display = "block";
+
+        return;
+    }
+
+
+    const {
+        data:{
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    if(!user){
+
+        location.reload();
+
+        return;
+    }
+
+
+    const token =
+        generarToken();
+
+
+    const {
+        error
+    } = await supabaseClient
+        .from("ldvu_enlaces")
+        .insert({
+
+            token:token,
+
+            target_url:url,
+
+            creado_por:user.id
+
+        });
+
+
+    if(error){
+
+        message.textContent =
+            "Error al publicar: " +
+            error.message;
+
+        message.className =
+            "message error";
+
+        message.style.display = "block";
+
+        return;
+    }
+
+
+    const base =
+        window.location.origin +
+        "/ldvu/ver/index.html";
+
+    const link =
+        base +
+        "?token=" +
+        encodeURIComponent(token);
+
+
+    document.getElementById(
+        "generatedLink"
+    ).value = link;
+
+    result.style.display = "block";
+
+
+    message.textContent =
+        "El enlace fue publicado correctamente.";
+
+    message.className =
+        "message success";
+
+    message.style.display = "block";
+
+
+    input.value = "";
+
+    cargarEnlaces();
+
+}
+
+
+/* ==========================================
+   COPIAR
+========================================== */
+
+async function copiarLink(){
+
+    const input =
+        document.getElementById(
+            "generatedLink"
+        );
+
+    try{
+
+        await navigator.clipboard.writeText(
+            input.value
+        );
+
+        alert(
+            "Enlace copiado."
+        );
+
+    }catch{
+
+        input.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+        alert(
+            "Enlace copiado."
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   CARGAR ENLACES
+========================================== */
+
+async function cargarEnlaces(){
+
+    const {
+        data:{
+            user
+        }
+    } = await supabaseClient.auth.getUser();
+
+
+    if(!user)
+        return;
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from("ldvu_enlaces")
+        .select("*")
+        .eq(
+            "creado_por",
+            user.id
+        )
+        .order(
+            "creado_en",
+            {
+                ascending:false
+            }
+        );
+
+
+    const table =
+        document.getElementById(
+            "linksTable"
+        );
+
+
+    table.innerHTML = "";
+
+
+    if(error){
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="3">
+                    Error al consultar los enlaces.
+                </td>
+            </tr>`;
+
+        return;
+    }
+
+
+    if(!data || data.length === 0){
+
+        table.innerHTML =
+            `<tr>
+                <td colspan="3">
+                    Todavía no hay enlaces publicados.
+                </td>
+            </tr>`;
+
+        return;
+    }
+
+
+    data.forEach(item => {
+
+        const fecha =
+            new Date(
+                item.creado_en
+            ).toLocaleString(
+                "es-MX"
+            );
+
+
+        const estado =
+            item.usado
+
+            ? `<span class="status used">
+                UTILIZADO
+               </span>`
+
+            : `<span class="status available">
+                DISPONIBLE
+               </span>`;
+
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+
+        row.innerHTML = `
+
+            <td>
+
+                <span
+                    class="small-link"
+                    title="${escapeHtml(item.target_url)}"
+                >
+                    ${escapeHtml(item.target_url)}
+                </span>
+
+            </td>
+
+            <td>
+                ${fecha}
+            </td>
+
+            <td>
+                ${estado}
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* ==========================================
+   ESCAPAR HTML
+========================================== */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
