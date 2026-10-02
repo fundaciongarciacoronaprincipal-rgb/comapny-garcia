@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>LDVU | Visualización</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    background:#000;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+/* =====================================
+   VISOR
+===================================== */
+
+#viewer{
+    position:fixed;
+    inset:0;
+
+    width:100vw;
+    height:100vh;
+
+    background:#000;
+
+    display:none;
+}
+
+/* =====================================
+   IFRAME
+===================================== */
+
+#pageFrame{
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:100%;
+    height:100%;
+
+    border:0;
+
+    background:#fff;
+}
+
+/* =====================================
+   BOTONES
+===================================== */
+
+.controls{
+
+    position:fixed;
+
+    right:18px;
+    bottom:18px;
+
+    z-index:1000;
+
+    display:flex;
+    gap:8px;
+
+    opacity:.35;
+
+    transition:.25s;
+}
+
+.controls:hover{
+    opacity:1;
+}
+
+.control{
+
+    width:46px;
+    height:46px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:rgba(0,0,0,.75);
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    box-shadow:
+        0 5px 25px rgba(0,0,0,.35);
+
+    backdrop-filter:blur(8px);
+}
+
+.control:hover{
+
+    background:#111;
+
+    transform:scale(1.05);
+}
+
+
+/* =====================================
+   ESTADO
+===================================== */
+
+#status{
+
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    padding:25px;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #153d62,
+            #050b14 65%
+        );
+
+    color:#fff;
+
+    z-index:2000;
+}
+
+.status-box{
+
+    max-width:520px;
+
+    padding:35px;
+
+    border-radius:24px;
+
+    background:rgba(255,255,255,.07);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(15px);
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.4);
+}
+
+.status-icon{
+
+    font-size:48px;
+
+    margin-bottom:15px;
+}
+
+.status-title{
+
+    font-size:25px;
+
+    font-weight:900;
+
+    margin-bottom:10px;
+}
+
+.status-text{
+
+    opacity:.7;
+
+    line-height:1.5;
+}
+
+.loader{
+
+    width:42px;
+    height:42px;
+
+    border:4px solid rgba(255,255,255,.15);
+
+    border-top-color:#26d9ff;
+
+    border-radius:50%;
+
+    animation:
+        spin .8s linear infinite;
+
+    margin:0 auto 20px;
+}
+
+@keyframes spin{
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- =====================================
+     ESTADO
+===================================== -->
+
+<div id="status">
+
+    <div class="status-box">
+
+        <div class="loader"></div>
+
+        <div class="status-title">
+            Cargando contenido
+        </div>
+
+        <div class="status-text">
+            Estamos verificando tu enlace.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     VISUALIZADOR
+===================================== -->
+
+<div id="viewer">
+
+    <iframe
+        id="pageFrame"
+        allowfullscreen
+        referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
+
+
+    <div class="controls">
+
+        <button
+            class="control"
+            onclick="recargar()"
+            title="Recargar"
+        >
+            ↻
+        </button>
+
+        <button
+            class="control"
+            onclick="pantallaCompleta()"
+            title="Pantalla completa"
+        >
+            ⛶
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+    "https://mxlsbndododfkehgtkeb.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_xaPbqCuMAfk1mUS9ayYEBA_9w8pv1jD";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================
+   INICIO
+===================================== */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    cargar
+);
+
+
+/* =====================================
+   CARGAR LINK
+===================================== */
+
+async function cargar(){
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const token =
+        params.get("token");
+
+
+    if(!token){
+
+        mostrarError(
+            "Enlace no válido",
+            "Este enlace no contiene un código de visualización."
+        );
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .rpc(
+            "consume_ldvu_link",
+            {
+                p_token:token
+            }
+        );
+
+
+    if(error){
+
+        console.error(error);
+
+        mostrarError(
+            "No se pudo cargar",
+            "Ocurrió un error al verificar el enlace."
+        );
+
+        return;
+    }
+
+
+    if(
+        !data ||
+        data.length === 0 ||
+        !data[0].target_url
+    ){
+
+        mostrarError(
+            "Enlace no disponible",
+            "Este enlace ya fue utilizado, no existe o ya no está disponible."
+        );
+
+        return;
+    }
+
+
+    const target =
+        data[0].target_url;
+
+
+    const frame =
+        document.getElementById(
+            "pageFrame"
+        );
+
+
+    frame.src =
+        target;
+
+
+    document.getElementById(
+        "status"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "viewer"
+    ).style.display =
+        "block";
+
+}
+
+
+/* =====================================
+   ERROR
+===================================== */
+
+function mostrarError(
+    titulo,
+    texto
+){
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    status.innerHTML = `
+
+        <div class="status-box">
+
+            <div class="status-icon">
+                ⚠️
+            </div>
+
+            <div class="status-title">
+                ${titulo}
+            </div>
+
+            <div class="status-text">
+                ${texto}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================
+   RECARGAR
+===================================== */
+
+function recargar(){
+
+    const frame =
+        document.getElementById(
+            "pageFrame"
+        );
+
+    frame.src =
+        frame.src;
+
+}
+
+
+/* =====================================
+   PANTALLA COMPLETA
+===================================== */
+
+async function pantallaCompleta(){
+
+    const viewer =
+        document.getElementById(
+            "viewer"
+        );
+
+
+    try{
+
+        if(
+            !document.fullscreenElement
+        ){
+
+            await viewer.requestFullscreen();
+
+        }else{
+
+            await document.exitFullscreen();
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "No se pudo activar pantalla completa",
+            error
+        );
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>
