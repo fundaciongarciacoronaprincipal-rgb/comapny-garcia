@@ -1,0 +1,18 @@
+{
+  "name": "OFTV No. 0216 Francisco Villa",
+  "short_name": "Francisco Villa",
+  "description": "Educación, disciplina, estudio y honor — Tele-Secundaria",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d47a1",
+  "icons": [
+    {
+      "src": "./imagenes/logo_telesecundaria.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
