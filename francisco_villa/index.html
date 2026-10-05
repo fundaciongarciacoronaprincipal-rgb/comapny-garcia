@@ -7,10 +7,12 @@
 
 <title>OFTV No. 0216 "Francisco Villa" | Presentación Institucional</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<!-- ===== PWA ===== -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0d47a1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Francisco Villa">
+<link rel="apple-touch-icon" href="./imagenes/logo_telesecundaria.png">
 
 <style>
 
@@ -32,7 +34,7 @@
     0 20px 50px rgba(7,28,53,.12);
 
     --imagen-institucional:
-    url("https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png");
+    url("./imagenes/logo_telesecundaria.png");
 
 }
 
@@ -49,7 +51,7 @@
 
 body{
 
-    font-family:'Inter',sans-serif;
+    font-family:system-ui, -apple-system, sans-serif;
 
     background:#fff;
 
@@ -95,8 +97,6 @@ a{
 }
 
 .loader-logo{
-
-    /* IMAGEN: LOADER */
 
     width:110px;
 
@@ -210,8 +210,6 @@ header.scrolled{
 
 .logo-mark{
 
-    /* IMAGEN: LOGOTIPO DEL HEADER */
-
     width:50px;
 
     height:50px;
@@ -308,9 +306,6 @@ nav a:hover{
 
 }
 
-
-/* Flecha */
-
 .dropdown > a::after{
 
     content:"⌄";
@@ -326,9 +321,6 @@ nav a:hover{
     transform:rotate(180deg);
 
 }
-
-
-/* SUBMENU */
 
 .dropdown-menu{
 
@@ -362,9 +354,6 @@ nav a:hover{
 
 }
 
-
-/* Mostrar al pasar mouse */
-
 .dropdown:hover .dropdown-menu{
 
     opacity:1;
@@ -376,9 +365,6 @@ nav a:hover{
     translateY(0);
 
 }
-
-
-/* Elementos submenu */
 
 .dropdown-menu a{
 
@@ -434,8 +420,6 @@ nav a:hover{
 
 .hero{
 
-    /* IMAGEN: PORTADA PRINCIPAL */
-
     min-height:100vh;
 
     position:relative;
@@ -459,7 +443,8 @@ nav a:hover{
 
     background-position:center;
 
-    background-size:cover;
+    background-size:contain;
+    background-repeat:no-repeat;
 
 }
 
@@ -492,8 +477,6 @@ nav a:hover{
 }
 
 .hero h1{
-
-    font-family:'Playfair Display',serif;
 
     font-size:
     clamp(48px,7vw,100px);
@@ -649,8 +632,6 @@ section{
 
 .section-title{
 
-    font-family:'Playfair Display',serif;
-
     color:var(--azul);
 
     font-size:
@@ -710,8 +691,6 @@ section{
 }
 
 .about-image{
-
-    /* IMAGEN: SECCIÓN INSTITUCIÓN */
 
     min-height:500px;
 
@@ -963,8 +942,6 @@ section{
 
 .community-card{
 
-    /* IMAGEN: COMUNIDAD ALUMNOS */
-
     position:relative;
 
     height:330px;
@@ -982,8 +959,8 @@ section{
 
     var(--imagen-institucional);
 
-    background-size:cover;
-
+    background-size:contain;
+    background-repeat:no-repeat;
     background-position:center;
 
     display:flex;
@@ -994,10 +971,7 @@ section{
 
 }
 
-.community-link:nth-child(2)
-.community-card{
-
-    /* IMAGEN: COMUNIDAD DOCENTES */
+.community-link:nth-child(2) .community-card{
 
     background-image:
 
@@ -1010,10 +984,7 @@ section{
 
 }
 
-.community-link:nth-child(3)
-.community-card{
-
-    /* IMAGEN: COMUNIDAD FAMILIAS */
+.community-link:nth-child(3) .community-card{
 
     background-image:
 
@@ -1144,8 +1115,6 @@ section{
 
 .framework{
 
-    /* IMAGEN: MARCO EDUCATIVO */
-
     background:
 
     linear-gradient(
@@ -1158,7 +1127,8 @@ section{
 
     background-position:center;
 
-    background-size:cover;
+    background-size:contain;
+    background-repeat:no-repeat;
 
     color:white;
 
@@ -1319,8 +1289,6 @@ section{
 
 .company-box{
 
-    /* IMAGEN: REPRESENTACIÓN TECNOLÓGICA */
-
     background:
 
     linear-gradient(
@@ -1332,7 +1300,8 @@ section{
 
     background-position:center;
 
-    background-size:cover;
+    background-size:contain;
+    background-repeat:no-repeat;
 
     color:white;
 
@@ -1593,8 +1562,6 @@ footer{
 
 .footer-logo{
 
-    /* IMAGEN: LOGOTIPO DEL FOOTER */
-
     width:90px;
 
     height:90px;
@@ -1771,12 +1738,6 @@ footer li{
 
     }
 
-    .dropdown:hover .dropdown-menu{
-
-        transform:none;
-
-    }
-
     .grid,
     .about-grid,
     .tech-grid,
@@ -1869,7 +1830,7 @@ footer li{
     <div class="loader-logo">
 
         <img
-        src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
+        src="./imagenes/logo_telesecundaria.png"
         alt="OFTV No. 0216 Francisco Villa">
 
     </div>
@@ -1888,13 +1849,12 @@ footer li{
 
 <div class="navbar">
 
-
 <a href="#inicio" class="logo">
 
     <div class="logo-mark">
 
         <img
-        src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
+        src="./imagenes/logo_telesecundaria.png"
         alt="Logo Francisco Villa">
 
     </div>
@@ -1911,96 +1871,33 @@ footer li{
 
 </a>
 
-
 <div class="menu-btn" id="menuBtn">
 ☰
 </div>
 
-
 <nav id="nav">
 
-<a href="#inicio">
-Inicio
-</a>
-
-
-<a href="#institucion">
-Institución
-</a>
-
-
-<!-- =====================================================
-     MENÚ OFERTA EDUCATIVA
-     AQUÍ PUEDES CAMBIAR LOS LINKS
-===================================================== -->
+<a href="#inicio">Inicio</a>
+<a href="#institucion">Institución</a>
 
 <div class="dropdown" id="dropdownOferta">
 
-<a href="javascript:void(0)">
-Oferta educativa
-</a>
-
+<a href="javascript:void(0)">Oferta educativa</a>
 
 <div class="dropdown-menu">
-
-
-<!-- LINK: INSCRIPCIÓN -->
-
-<a href="#LINK_AQUI_INSCRIPCION">
-
-Inscripción
-
-</a>
-
-
-<!-- LINK: PORTAL DE INSCRIPCIÓN -->
-
-<a href="#LINK_AQUI_PORTAL_INSCRIPCION">
-
-Portal de inscripción
-
-</a>
-
-
+<a href="#LINK_AQUI_INSCRIPCION">Inscripción</a>
+<a href="#LINK_AQUI_PORTAL_INSCRIPCION">Portal de inscripción</a>
 </div>
 
 </div>
 
-
-<a href="#identidad">
-Identidad
-</a>
-
-
-<a href="#comunidad">
-Comunidad
-</a>
-
-
-<a href="#servicios">
-Servicios
-</a>
-
-
-<a href="#marco">
-Marco educativo
-</a>
-
-
-<a href="#tecnologia">
-Tecnología
-</a>
-
-
-<a href="#empresa">
-Empresa
-</a>
-
-
-<a href="#contacto">
-Contacto
-</a>
-
+<a href="#identidad">Identidad</a>
+<a href="#comunidad">Comunidad</a>
+<a href="#servicios">Servicios</a>
+<a href="#marco">Marco educativo</a>
+<a href="#tecnologia">Tecnología</a>
+<a href="#empresa">Empresa</a>
+<a href="#contacto">Contacto</a>
 
 </nav>
 
@@ -2018,62 +1915,25 @@ Contacto
 
 <div class="hero-content reveal">
 
-<div class="eyebrow">
-
-PRESENTACIÓN INSTITUCIONAL
-
-</div>
-
+<div class="eyebrow">PRESENTACIÓN INSTITUCIONAL</div>
 
 <h1>
-
 OFTV No. 0216
-
-<span>
-Francisco Villa
-</span>
-
+<span>Francisco Villa</span>
 </h1>
 
-
 <p>
-
-Educación, disciplina, estudio y honor.
-
-Una institución comprometida con la formación integral de sus estudiantes y con el desarrollo de una comunidad educativa preparada para el futuro.
-
+Educación, disciplina, estudio y honor. Una institución comprometida con la formación integral de sus estudiantes y con el desarrollo de una comunidad educativa preparada para el futuro.
 </p>
 
-
 <div class="hero-buttons">
-
-<a
-href="#institucion"
-class="btn btn-primary">
-
-CONOCER LA INSTITUCIÓN →
-
-</a>
-
-
-<a
-href="#servicios"
-class="btn btn-outline">
-
-NUESTROS SERVICIOS
-
-</a>
-
+<a href="#institucion" class="btn btn-primary">CONOCER LA INSTITUCIÓN →</a>
+<a href="#servicios" class="btn btn-outline">NUESTROS SERVICIOS</a>
 </div>
 
 </div>
 
-
-<div class="hero-bottom">
-
-DESPLÁZATE PARA CONOCER MÁS ↓
-
-</div>
+<div class="hero-bottom">DESPLÁZATE PARA CONOCER MÁS ↓</div>
 
 </section>
 
@@ -2083,96 +1943,43 @@ DESPLÁZATE PARA CONOCER MÁS ↓
      INSTITUCIÓN
 ===================================================== -->
 
-<section
-class="about"
-id="institucion">
+<section class="about" id="institucion">
 
 <div class="container about-grid">
 
-
-<div class="about-image reveal">
-
-</div>
-
+<div class="about-image reveal"></div>
 
 <div class="reveal">
 
+<div class="section-tag">Nuestra institución</div>
 
-<div class="section-tag">
-
-Nuestra institución
-
-</div>
-
-
-<h2 class="section-title">
-
-Formamos personas para construir el futuro.
-
-</h2>
-
+<h2 class="section-title">Formamos personas para construir el futuro.</h2>
 
 <p class="section-description">
-
 Nuestra institución trabaja para brindar una educación de calidad, promoviendo el conocimiento, los valores, la responsabilidad y el desarrollo de habilidades que permitan a nuestros estudiantes enfrentar los retos del mundo actual.
-
 </p>
-
 
 <div class="info-list">
 
-
 <div class="info-item">
-
-<strong>
-Nombre de la institución
-</strong>
-
-<span>
-OFTV NO. 0216 "FRANCISCO VILLA"
-</span>
-
+<strong>Nombre de la institución</strong>
+<span>OFTV NO. 0216 "FRANCISCO VILLA"</span>
 </div>
 
-
 <div class="info-item">
-
-<strong>
-Clave de Centro de Trabajo
-</strong>
-
-<span>
-15ETV0217V
-</span>
-
+<strong>Clave de Centro de Trabajo</strong>
+<span>15ETV0217V</span>
 </div>
 
-
 <div class="info-item">
-
-<strong>
-Ciclo escolar
-</strong>
-
-<span>
-2026 - 2027
-</span>
-
+<strong>Ciclo escolar</strong>
+<span>2026 - 2027</span>
 </div>
 
-
 <div class="info-item">
-
-<strong>
-Modalidad
-</strong>
-
-<span>
-Educación Tele-Secundaria
-</span>
-
+<strong>Modalidad</strong>
+<span>Educación Tele-Secundaria</span>
 </div>
-
 
 </div>
 
@@ -2186,147 +1993,48 @@ Educación Tele-Secundaria
 
 <!-- =====================================================
      IDENTIDAD
-     MISIÓN / VISIÓN / VALORES
 ===================================================== -->
 
 <section id="identidad">
 
 <div class="container">
 
+<div class="section-tag reveal">Nuestra identidad</div>
 
-<div class="section-tag reveal">
-
-Nuestra identidad
-
-</div>
-
-
-<h2 class="section-title reveal">
-
-Principios que nos representan.
-
-</h2>
-
+<h2 class="section-title reveal">Principios que nos representan.</h2>
 
 <p class="section-description reveal">
-
 Nuestra identidad institucional se construye a partir de principios que orientan nuestro trabajo diario y nuestra relación con la comunidad.
-
 </p>
-
 
 <div class="grid">
 
-
-<!-- =====================================================
-     PDF MISIÓN
-     REEMPLAZA #LINK_AQUI_MISION POR TU PDF
-===================================================== -->
-
-<a
-href="#LINK_AQUI_MISION"
-class="card-link reveal"
-download>
-
-
+<a href="#LINK_AQUI_MISION" class="card-link reveal" download>
 <div class="card">
-
-<div class="card-icon">
-◎
+<div class="card-icon">◎</div>
+<h3>Misión</h3>
+<p>Brindar una formación integral que permita a nuestros estudiantes desarrollar conocimientos, habilidades, valores y competencias para participar activamente en la sociedad.</p>
+<span class="pdf-label">↓ DESCARGAR PDF</span>
 </div>
-
-<h3>
-Misión
-</h3>
-
-<p>
-
-Brindar una formación integral que permita a nuestros estudiantes desarrollar conocimientos, habilidades, valores y competencias para participar activamente en la sociedad.
-
-</p>
-
-<span class="pdf-label">
-↓ DESCARGAR PDF
-</span>
-
-</div>
-
 </a>
 
-
-
-<!-- =====================================================
-     PDF VISIÓN
-     REEMPLAZA #LINK_AQUI_VISION POR TU PDF
-===================================================== -->
-
-<a
-href="#LINK_AQUI_VISION"
-class="card-link reveal"
-download>
-
-
+<a href="#LINK_AQUI_VISION" class="card-link reveal" download>
 <div class="card">
-
-<div class="card-icon">
-◈
+<div class="card-icon">◈</div>
+<h3>Visión</h3>
+<p>Ser una institución reconocida por su compromiso educativo, innovación, responsabilidad social y capacidad para impulsar el desarrollo de sus estudiantes.</p>
+<span class="pdf-label">↓ DESCARGAR PDF</span>
 </div>
-
-<h3>
-Visión
-</h3>
-
-<p>
-
-Ser una institución reconocida por su compromiso educativo, innovación, responsabilidad social y capacidad para impulsar el desarrollo de sus estudiantes.
-
-</p>
-
-<span class="pdf-label">
-↓ DESCARGAR PDF
-</span>
-
-</div>
-
 </a>
 
-
-
-<!-- =====================================================
-     PDF VALORES
-     REEMPLAZA #LINK_AQUI_VALORES POR TU PDF
-===================================================== -->
-
-<a
-href="#LINK_AQUI_VALORES"
-class="card-link reveal"
-download>
-
-
+<a href="#LINK_AQUI_VALORES" class="card-link reveal" download>
 <div class="card">
-
-<div class="card-icon">
-✦
+<div class="card-icon">✦</div>
+<h3>Valores</h3>
+<p>Respeto, responsabilidad, honestidad, inclusión, solidaridad, compromiso, trabajo en equipo y búsqueda permanente de la excelencia.</p>
+<span class="pdf-label">↓ DESCARGAR PDF</span>
 </div>
-
-<h3>
-Valores
-</h3>
-
-<p>
-
-Respeto, responsabilidad, honestidad, inclusión, solidaridad, compromiso, trabajo en equipo y búsqueda permanente de la excelencia.
-
-</p>
-
-<span class="pdf-label">
-↓ DESCARGAR PDF
-</span>
-
-</div>
-
 </a>
-
 
 </div>
 
@@ -2344,74 +2052,25 @@ Respeto, responsabilidad, honestidad, inclusión, solidaridad, compromiso, traba
 
 <div class="container stats-grid">
 
+<div class="stat reveal">
+<div class="stat-number" data-number="100">0</div>
+<p>Compromiso educativo</p>
+</div>
 
 <div class="stat reveal">
-
-<div
-class="stat-number"
-data-number="100">
-
-0
-
+<div class="stat-number" data-number="15">0</div>
+<p>Trayectoria institucional</p>
 </div>
-
-<p>
-Compromiso educativo
-</p>
-
-</div>
-
 
 <div class="stat reveal">
-
-<div
-class="stat-number"
-data-number="15">
-
-0
-
+<div class="stat-number" data-number="20">0</div>
+<p>Docentes y colaboradores</p>
 </div>
-
-<p>
-Trayectoria institucional
-</p>
-
-</div>
-
 
 <div class="stat reveal">
-
-<div
-class="stat-number"
-data-number="20">
-
-0
-
+<div class="stat-number" data-number="100">0</div>
+<p>Comunidad educativa</p>
 </div>
-
-<p>
-Docentes y colaboradores
-</p>
-
-</div>
-
-
-<div class="stat reveal">
-
-<div
-class="stat-number"
-data-number="100">
-
-0
-
-</div>
-
-<p>
-Comunidad educativa
-</p>
-
-</div>
-
 
 </div>
 
@@ -2421,123 +2080,48 @@ Comunidad educativa
 
 <!-- =====================================================
      COMUNIDAD
-     CADA RECUADRO TIENE UN LINK DIFERENTE
 ===================================================== -->
 
 <section id="comunidad">
 
 <div class="container">
 
+<div class="section-tag reveal">Comunidad educativa</div>
 
-<div class="section-tag reveal">
-
-Comunidad educativa
-
-</div>
-
-
-<h2 class="section-title reveal">
-
-Una comunidad que aprende y crece.
-
-</h2>
-
+<h2 class="section-title reveal">Una comunidad que aprende y crece.</h2>
 
 <p class="section-description reveal">
-
 La institución está integrada por estudiantes, docentes, personal administrativo, familias y colaboradores que participan en la construcción de una comunidad educativa sólida.
-
 </p>
-
 
 <div class="grid">
 
-
-<!-- =====================================================
-     LINK ALUMNOS
-===================================================== -->
-
-<a
-href="#LINK_AQUI_ALUMNOS"
-class="community-link reveal">
-
-
+<a href="#LINK_AQUI_ALUMNOS" class="community-link reveal">
 <div class="community-card">
-
 <div class="community-content">
-
-<h3>
-Alumnos
-</h3>
-
-<p>
-El centro de nuestra comunidad educativa.
-</p>
-
+<h3>Alumnos</h3>
+<p>El centro de nuestra comunidad educativa.</p>
 </div>
-
 </div>
-
 </a>
 
-
-
-<!-- =====================================================
-     LINK DOCENTES
-===================================================== -->
-
-<a
-href="#LINK_AQUI_DOCENTES"
-class="community-link reveal">
-
-
+<a href="#LINK_AQUI_DOCENTES" class="community-link reveal">
 <div class="community-card">
-
 <div class="community-content">
-
-<h3>
-Docentes
-</h3>
-
-<p>
-Profesionales comprometidos con la enseñanza.
-</p>
-
+<h3>Docentes</h3>
+<p>Profesionales comprometidos con la enseñanza.</p>
 </div>
-
 </div>
-
 </a>
 
-
-
-<!-- =====================================================
-     LINK FAMILIAS
-===================================================== -->
-
-<a
-href="#LINK_AQUI_FAMILIAS"
-class="community-link reveal">
-
-
+<a href="#LINK_AQUI_FAMILIAS" class="community-link reveal">
 <div class="community-card">
-
 <div class="community-content">
-
-<h3>
-Familias
-</h3>
-
-<p>
-Parte fundamental del proceso educativo.
-</p>
-
+<h3>Familias</h3>
+<p>Parte fundamental del proceso educativo.</p>
 </div>
-
 </div>
-
 </a>
-
 
 </div>
 
@@ -2551,209 +2135,67 @@ Parte fundamental del proceso educativo.
      SERVICIOS
 ===================================================== -->
 
-<section
-class="services"
-id="servicios">
+<section class="services" id="servicios">
 
 <div class="container">
 
+<div class="section-tag reveal">Servicios escolares</div>
 
-<div class="section-tag reveal">
-
-Servicios escolares
-
-</div>
-
-
-<h2 class="section-title reveal">
-
-Una institución conectada.
-
-</h2>
-
+<h2 class="section-title reveal">Una institución conectada.</h2>
 
 <p class="section-description reveal">
-
 Nuestros servicios digitales permiten facilitar procesos académicos, administrativos y de comunicación institucional.
-
 </p>
-
 
 <div class="grid">
 
-
-<!-- =====================================================
-     PORTAL ALUMNO
-===================================================== -->
-
-<a
-href="https://companygarciacorona.com.mx/francisco_villa/portal_escolar.edu.html"
-class="service-link reveal">
-
-
+<a href="portal_escolar.edu.html" class="service-link reveal">
 <div class="service-card">
-
-<span class="service-number">
-01
-</span>
-
-<h3>
-Portal Alumno Y Tutor
-</h3>
-
-<p>
-Consulta de información académica, evaluaciones, asistencia, reportes y servicios disponibles para estudiantes.
-</p>
-
+<span class="service-number">01</span>
+<h3>Portal Alumno Y Tutor</h3>
+<p>Consulta de información académica, evaluaciones, asistencia, reportes y servicios disponibles para estudiantes.</p>
 </div>
-
 </a>
 
-
-
-<!-- =====================================================
-     PORTAL DOCENTE
-===================================================== -->
-
-<a
-href="https://companygarciacorona.com.mx/francisco_villa/portal_docente.edu.html"
-class="service-link reveal">
-
-
+<a href="portal_docente.edu.html" class="service-link reveal">
 <div class="service-card">
-
-<span class="service-number">
-02
-</span>
-
-<h3>
-Portal Docente
-</h3>
-
-<p>
-Herramientas para docentes destinadas a la gestión académica, captura de evaluaciones y seguimiento escolar.
-</p>
-
+<span class="service-number">02</span>
+<h3>Portal Docente</h3>
+<p>Herramientas para docentes destinadas a la gestión académica, captura de evaluaciones y seguimiento escolar.</p>
 </div>
-
 </a>
 
-
-
-<!-- =====================================================
-     CORREO INSTITUCIONAL
-===================================================== -->
-
-<a
-href="https://companygarciacorona.com.mx/francisco_villa/nexus_mail.ggc.html"
-class="service-link reveal">
-
-
+<a href="nexus_mail.ggc.html" class="service-link reveal">
 <div class="service-card">
-
-<span class="service-number">
-03
-</span>
-
-<h3>
-Correo Institucional
-</h3>
-
-<p>
-Servicio de correo interno solo para cosas relacionadas a la institucion academica.
-</p>
-
+<span class="service-number">03</span>
+<h3>Correo Institucional</h3>
+<p>Servicio de correo interno solo para cosas relacionadas a la institución académica.</p>
 </div>
-
 </a>
 
-
-
-<!-- =====================================================
-     ASISTENCIA
-===================================================== -->
-
-<a
-href="#LINK_AQUI_ASISTENCIA"
-class="service-link reveal">
-
-
+<a href="#LINK_AQUI_ASISTENCIA" class="service-link reveal">
 <div class="service-card">
-
-<span class="service-number">
-04
-</span>
-
-<h3>
-Asistencia
-</h3>
-
-<p>
-Registro y seguimiento de asistencia de los estudiantes.
-</p>
-
+<span class="service-number">04</span>
+<h3>Asistencia</h3>
+<p>Registro y seguimiento de asistencia de los estudiantes.</p>
 </div>
-
 </a>
 
-
-
-<!-- =====================================================
-     REPORTES
-===================================================== -->
-
-<a
-href="#LINK_AQUI_REPORTES"
-class="service-link reveal">
-
-
+<a href="#LINK_AQUI_REPORTES" class="service-link reveal">
 <div class="service-card">
-
-<span class="service-number">
-05
-</span>
-
-<h3>
-Reportes
-</h3>
-
-<p>
-Generación y consulta de información académica y administrativa.
-</p>
-
+<span class="service-number">05</span>
+<h3>Reportes</h3>
+<p>Generación y consulta de información académica y administrativa.</p>
 </div>
-
 </a>
 
-
-
-<!-- =====================================================
-     AVISOS
-===================================================== -->
-
-<a
-href="https://companygarciacorona.com.mx/francisco_villa/avisos.html"
-class="service-link reveal">
-
-
+<a href="avisos.html" class="service-link reveal">
 <div class="service-card">
-
-<span class="service-number">
-06
-</span>
-
-<h3>
-Comunicados Oficiales
-</h3>
-
-<p>
-Comunicación institucional para informar actualizaciones, actividades y acontecimientos importantes.
-</p>
-
+<span class="service-number">06</span>
+<h3>Comunicados Oficiales</h3>
+<p>Comunicación institucional para informar actualizaciones, actividades y acontecimientos importantes.</p>
 </div>
-
 </a>
-
 
 </div>
 
@@ -2767,96 +2209,39 @@ Comunicación institucional para informar actualizaciones, actividades y acontec
      MARCO EDUCATIVO
 ===================================================== -->
 
-<section
-class="framework"
-id="marco">
+<section class="framework" id="marco">
 
 <div class="container">
 
+<div class="section-tag reveal">Marco institucional</div>
 
-<div class="section-tag reveal">
-
-Marco institucional
-
-</div>
-
-
-<h2 class="section-title reveal">
-
-Educación con responsabilidad institucional.
-
-</h2>
-
+<h2 class="section-title reveal">Educación con responsabilidad institucional.</h2>
 
 <p class="section-description reveal">
-
 La institución desarrolla sus actividades dentro del marco educativo correspondiente y mantiene una relación institucional con las autoridades educativas aplicables.
-
 </p>
-
 
 <div class="framework-grid">
 
-
 <div class="framework-item reveal">
-
-<h3>
-Autoridades educativas
-</h3>
-
-<p>
-
-Información y referencias correspondientes a las autoridades educativas que regulan y acompañan los procesos de enseñanza.
-
-</p>
-
+<h3>Autoridades educativas</h3>
+<p>Información y referencias correspondientes a las autoridades educativas que regulan y acompañan los procesos de enseñanza.</p>
 </div>
 
-
 <div class="framework-item reveal">
-
-<h3>
-Normatividad
-</h3>
-
-<p>
-
-Consulta de disposiciones, lineamientos y documentación aplicable a las actividades de la institución.
-
-</p>
-
+<h3>Normatividad</h3>
+<p>Consulta de disposiciones, lineamientos y documentación aplicable a las actividades de la institución.</p>
 </div>
 
-
 <div class="framework-item reveal">
-
-<h3>
-Información escolar
-</h3>
-
-<p>
-
-Datos institucionales, ciclos escolares, servicios, programas y documentación de interés para la comunidad.
-
-</p>
-
+<h3>Información escolar</h3>
+<p>Datos institucionales, ciclos escolares, servicios, programas y documentación de interés para la comunidad.</p>
 </div>
 
-
 <div class="framework-item reveal">
-
-<h3>
-Transparencia institucional
-</h3>
-
-<p>
-
-Comunicación clara y responsable de la información relevante para estudiantes, familias y personal educativo.
-
-</p>
-
+<h3>Transparencia institucional</h3>
+<p>Comunicación clara y responsable de la información relevante para estudiantes, familias y personal educativo.</p>
 </div>
-
 
 </div>
 
@@ -2874,171 +2259,50 @@ Comunicación clara y responsable de la información relevante para estudiantes,
 
 <div class="container tech-grid">
 
-
 <div class="reveal">
 
+<div class="section-tag">Transformación digital</div>
 
-<div class="section-tag">
-
-Transformación digital
-
-</div>
-
-
-<h2 class="section-title">
-
-La tecnología al servicio de la educación.
-
-</h2>
-
+<h2 class="section-title">La tecnología al servicio de la educación.</h2>
 
 <p class="section-description">
-
 La institución incorpora herramientas digitales para facilitar la gestión escolar y mejorar la experiencia de alumnos, docentes y personal administrativo.
-
 </p>
-
 
 <div class="info-list">
 
+<div class="info-item">
+<strong>Gestión académica</strong>
+<span>Organización digital de información escolar.</span>
+</div>
 
 <div class="info-item">
-
-<strong>
-Gestión académica
-</strong>
-
-<span>
-Organización digital de información escolar.
-</span>
-
+<strong>Información centralizada</strong>
+<span>Consulta organizada de datos institucionales.</span>
 </div>
-
 
 <div class="info-item">
-
-<strong>
-Información centralizada
-</strong>
-
-<span>
-Consulta organizada de datos institucionales.
-</span>
-
-</div>
-
-
-<div class="info-item">
-
-<strong>
-Acceso controlado
-</strong>
-
-<span>
-Herramientas con acceso de acuerdo con el perfil del usuario.
-</span>
-
-</div>
-
-
+<strong>Acceso controlado</strong>
+<span>Herramientas con acceso de acuerdo con el perfil del usuario.</span>
 </div>
 
 </div>
 
+</div>
 
 <div class="tech-panel reveal">
 
-
 <div class="panel-header">
-
-<strong>
-SISTEMA ESCOLAR
-</strong>
-
-<span class="status">
-● OPERATIVO
-</span>
-
+<strong>SISTEMA ESCOLAR</strong>
+<span class="status">● OPERATIVO</span>
 </div>
 
-
-<div class="tech-row">
-
-<span>
-Portal Alumno
-</span>
-
-<span>
-ACTIVO
-</span>
-
-</div>
-
-
-<div class="tech-row">
-
-<span>
-Portal Docente
-</span>
-
-<span>
-ACTIVO
-</span>
-
-</div>
-
-
-<div class="tech-row">
-
-<span>
-Evaluaciones
-</span>
-
-<span>
-ACTIVO
-</span>
-
-</div>
-
-
-<div class="tech-row">
-
-<span>
-Asistencia
-</span>
-
-<span>
-ACTIVO
-</span>
-
-</div>
-
-
-<div class="tech-row">
-
-<span>
-Reportes
-</span>
-
-<span>
-ACTIVO
-</span>
-
-</div>
-
-
-<div class="tech-row">
-
-<span>
-Avisos
-</span>
-
-<span>
-ACTIVO
-</span>
-
-</div>
-
+<div class="tech-row"><span>Portal Alumno</span><span>ACTIVO</span></div>
+<div class="tech-row"><span>Portal Docente</span><span>ACTIVO</span></div>
+<div class="tech-row"><span>Evaluaciones</span><span>ACTIVO</span></div>
+<div class="tech-row"><span>Asistencia</span><span>ACTIVO</span></div>
+<div class="tech-row"><span>Reportes</span><span>ACTIVO</span></div>
+<div class="tech-row"><span>Avisos</span><span>ACTIVO</span></div>
 
 </div>
 
@@ -3052,59 +2316,31 @@ ACTIVO
      EMPRESA
 ===================================================== -->
 
-<section
-class="company"
-id="empresa">
+<section class="company" id="empresa">
 
 <div class="container">
 
-
 <div class="company-box reveal">
-
 
 <div class="company-content">
 
-
-<div class="company-label">
-
-REPRESENTACIÓN TECNOLÓGICA
-
-</div>
-
+<div class="company-label">REPRESENTACIÓN TECNOLÓGICA</div>
 
 <div class="company-name">
-
 CORPORATIVO
-
-<span>
-NEXEL DIGITAL
-</span>
-
+<span>NEXEL DIGITAL</span>
 </div>
-
 
 <p>
-
 Empresa dedicada al desarrollo de soluciones digitales, sistemas web y herramientas tecnológicas orientadas a las necesidades de organizaciones e instituciones.
-
 </p>
 
-
 <div class="company-footer">
-
 DESARROLLO TECNOLÓGICO POR
-
-<strong>
-GRUPO GARCIA CORONA
-</strong>
-
-<br>
-<br>
-
+<strong>GRUPO GARCIA CORONA</strong>
+<br><br>
 La infraestructura, desarrollo y componentes tecnológicos deberán identificarse de acuerdo con los contratos, autorizaciones y condiciones aplicables.
-
 </div>
-
 
 </div>
 
@@ -3120,155 +2356,62 @@ La infraestructura, desarrollo y componentes tecnológicos deberán identificars
      CONTACTO
 ===================================================== -->
 
-<section
-class="contact"
-id="contacto">
+<section class="contact" id="contacto">
 
 <div class="container contact-grid">
 
-
 <div class="reveal">
 
+<div class="section-tag">Contacto</div>
 
-<div class="section-tag">
-
-Contacto
-
-</div>
-
-
-<h2 class="section-title">
-
-Estamos para atenderte.
-
-</h2>
-
+<h2 class="section-title">Estamos para atenderte.</h2>
 
 <p class="section-description">
-
 Para información académica, administrativa o institucional, puedes utilizar los medios oficiales de contacto de la institución.
-
 </p>
-
 
 <div class="contact-info">
 
+<div class="contact-item">
+<strong>Dirección</strong>
+<span>Agregar dirección oficial de la institución</span>
+</div>
 
 <div class="contact-item">
-
-<strong>
-Dirección
-</strong>
-
-<span>
-Agregar dirección oficial de la institución
-</span>
-
+<strong>Correo electrónico</strong>
+<span>correo@institucion.edu.mx</span>
 </div>
-
 
 <div class="contact-item">
-
-<strong>
-Correo electrónico
-</strong>
-
-<span>
-correo@institucion.edu.mx
-</span>
-
+<strong>Teléfono</strong>
+<span>00 0000 0000</span>
 </div>
-
 
 <div class="contact-item">
-
-<strong>
-Teléfono
-</strong>
-
-<span>
-00 0000 0000
-</span>
-
-</div>
-
-
-<div class="contact-item">
-
-<strong>
-Horario de atención
-</strong>
-
-<span>
-Lunes a viernes · 08:00 — 15:00
-</span>
-
-</div>
-
-
+<strong>Horario de atención</strong>
+<span>Lunes a viernes · 08:00 — 15:00</span>
 </div>
 
 </div>
 
+</div>
 
 <div class="contact-form reveal">
 
+<h3 style="color:#0b1f3a; margin-bottom:20px;">Envíanos un mensaje</h3>
 
-<h3 style="
-color:#0b1f3a;
-margin-bottom:20px;
-">
+<form onsubmit="enviarMensaje(event)">
 
-Envíanos un mensaje
+<input type="text" placeholder="Nombre completo" required>
+<input type="email" placeholder="Correo electrónico" required>
+<input type="text" placeholder="Asunto" required>
+<textarea placeholder="Escribe tu mensaje..." required></textarea>
 
-</h3>
-
-
-<form
-onsubmit="enviarMensaje(event)"
->
-
-
-<input
-type="text"
-placeholder="Nombre completo"
-required
->
-
-
-<input
-type="email"
-placeholder="Correo electrónico"
-required
->
-
-
-<input
-type="text"
-placeholder="Asunto"
-required
->
-
-
-<textarea
-placeholder="Escribe tu mensaje..."
-required
-></textarea>
-
-
-<button
-class="btn btn-primary"
-type="submit">
-
-ENVIAR MENSAJE →
-
-</button>
-
+<button class="btn btn-primary" type="submit">ENVIAR MENSAJE →</button>
 
 </form>
 
 </div>
-
 
 </div>
 
@@ -3282,129 +2425,47 @@ ENVIAR MENSAJE →
 
 <footer>
 
-
 <div class="footer-grid">
-
 
 <div>
 
-
-<!-- IMAGEN: LOGOTIPO DEL FOOTER -->
-
 <div class="footer-logo">
-
-<img
-src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
-alt="OFTV No. 0216 Francisco Villa">
-
+<img src="./imagenes/logo_telesecundaria.png" alt="OFTV No. 0216 Francisco Villa">
 </div>
 
-
 <p>
-
-OFTV No. 0216 "Francisco Villa".
-
-Presentación institucional de la comunidad educativa. Información académica, institucional y tecnológica para nuestros estudiantes, familias y colaboradores.
-
+OFTV No. 0216 "Francisco Villa". Presentación institucional de la comunidad educativa. Información académica, institucional y tecnológica para nuestros estudiantes, familias y colaboradores.
 </p>
 
 </div>
 
+<div>
+<h4>Institución</h4>
+<ul>
+<li><a href="#institucion">Quiénes somos</a></li>
+<li><a href="#identidad">Misión y visión</a></li>
+<li><a href="#comunidad">Comunidad</a></li>
+<li><a href="#servicios">Servicios</a></li>
+</ul>
+</div>
 
 <div>
-
-<h4>
-Institución
-</h4>
-
+<h4>Información</h4>
 <ul>
-
-<li>
-<a href="#institucion">
-Quiénes somos
-</a>
-</li>
-
-<li>
-<a href="#identidad">
-Misión y visión
-</a>
-</li>
-
-<li>
-<a href="#comunidad">
-Comunidad
-</a>
-</li>
-
-<li>
-<a href="#servicios">
-Servicios
-</a>
-</li>
-
+<li><a href="#marco">Marco institucional</a></li>
+<li><a href="#tecnologia">Tecnología</a></li>
+<li><a href="https://companygarciacorona.com.mx">Empresa desarrolladora</a></li>
+<li><a href="#contacto">Contacto</a></li>
 </ul>
-
 </div>
 
-
-<div>
-
-<h4>
-Información
-</h4>
-
-<ul>
-
-<li>
-<a href="#marco">
-Marco institucional
-</a>
-</li>
-
-<li>
-<a href="#tecnologia">
-Tecnología
-</a>
-</li>
-
-<li>
-<a href="https://companygarciacorona.com.mx">
-Empresa desarrolladora
-</a>
-</li>
-
-<li>
-<a href="#contacto">
-Contacto
-</a>
-</li>
-
-</ul>
-
 </div>
-
-
-</div>
-
 
 <div class="copyright">
-
-© 2026 OFTV NO. 0216 "FRANCISCO VILLA"
-
-· Todos los derechos reservados.
-
-<br>
-<br>
-
-Desarrollo tecnológico:
-
-CORPORATIVO NEXEL DIGITAL
-
-· GRUPO GARCIA CORONA
-
+© 2026 OFTV NO. 0216 "FRANCISCO VILLA" · Todos los derechos reservados.
+<br><br>
+Desarrollo tecnológico: CORPORATIVO NEXEL DIGITAL · GRUPO GARCIA CORONA
 </div>
-
 
 </footer>
 
@@ -3412,310 +2473,92 @@ CORPORATIVO NEXEL DIGITAL
 
 <script>
 
-
-/* =====================================================
-   LOADER
-===================================================== */
-
-window.addEventListener(
-"load",
-()=>{
-
-    setTimeout(
-    ()=>{
-
-        document
-        .getElementById("loader")
-        .style.opacity="0";
-
-
-        setTimeout(
-        ()=>{
-
-            document
-            .getElementById("loader")
-            .style.display="none";
-
-        },
-        700
-        );
-
-    },
-    900
-    );
-
-});
-
-
-
-/* =====================================================
-   HEADER
-===================================================== */
-
-window.addEventListener(
-"scroll",
-()=>{
-
-    const header=
-    document.getElementById("header");
-
-
-    if(window.scrollY>50){
-
-        header.classList.add(
-            "scrolled"
-        );
-
-    }else{
-
-        header.classList.remove(
-            "scrolled"
-        );
-
-    }
-
-});
-
-
-
-/* =====================================================
-   MENÚ MÓVIL
-===================================================== */
-
-const menuBtn=
-document.getElementById("menuBtn");
-
-const nav=
-document.getElementById("nav");
-
-
-menuBtn.addEventListener(
-"click",
-()=>{
-
-    nav.classList.toggle(
-        "active"
-    );
-
-});
-
-
-
-/* =====================================================
-   OFERTA EDUCATIVA EN MÓVIL
-===================================================== */
-
-const dropdownOferta=
-document.getElementById(
-    "dropdownOferta"
-);
-
-
-dropdownOferta
-.querySelector("a")
-.addEventListener(
-"click",
-(event)=>{
-
-    if(window.innerWidth<=900){
-
-        event.preventDefault();
-
-        dropdownOferta
-        .classList.toggle(
-            "active"
-        );
-
-    }
-
-});
-
-
-
-/* =====================================================
-   CERRAR MENÚ
-===================================================== */
-
-document
-.querySelectorAll("nav a")
-.forEach(
-link=>{
-
-    link.addEventListener(
-    "click",
-    ()=>{
-
-        if(
-            !link.parentElement.classList.contains(
-                "dropdown"
-            )
-        ){
-
-            nav.classList.remove(
-                "active"
-            );
-
-        }
-
-    });
-
-});
-
-
-
-/* =====================================================
-   ANIMACIONES
-===================================================== */
-
-const observer=
-new IntersectionObserver(
-
-(entries)=>{
-
-    entries.forEach(
-    entry=>{
-
-        if(entry.isIntersecting){
-
-            entry.target.classList.add(
-                "active"
-            );
-
-        }
-
-    });
-
-},
-{
-    threshold:.12
+/* ===== PWA Service Worker ===== */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js')
+    .then(r => console.log('✅ PWA activa'))
+    .catch(err => console.log('❌ SW:', err));
 }
-);
 
-
-document
-.querySelectorAll(".reveal")
-.forEach(
-el=>{
-
-    observer.observe(el);
-
+/* LOADER */
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    document.getElementById("loader").style.opacity = "0";
+    setTimeout(() => {
+      document.getElementById("loader").style.display = "none";
+    }, 700);
+  }, 900);
 });
 
+/* HEADER SCROLL */
+window.addEventListener("scroll", () => {
+  const header = document.getElementById("header");
+  header.classList.toggle("scrolled", window.scrollY > 50);
+});
 
+/* MENÚ MÓVIL */
+const menuBtn = document.getElementById("menuBtn");
+const nav = document.getElementById("nav");
+menuBtn.addEventListener("click", () => nav.classList.toggle("active"));
 
-/* =====================================================
-   CONTADORES
-===================================================== */
+/* OFERTA EDUCATIVA EN MÓVIL */
+const dropdownOferta = document.getElementById("dropdownOferta");
+dropdownOferta.querySelector("a").addEventListener("click", (e) => {
+  if (window.innerWidth <= 900) {
+    e.preventDefault();
+    dropdownOferta.classList.toggle("active");
+  }
+});
 
-const stats=
-document.querySelectorAll(
-    ".stat-number"
-);
+/* CERRAR MENÚ AL TOCAR ENLACE */
+document.querySelectorAll("nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    if (!link.parentElement.classList.contains("dropdown")) {
+      nav.classList.remove("active");
+    }
+  });
+});
 
+/* ANIMACIONES SCROLL */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add("active");
+  });
+}, { threshold: 0.12 });
 
-const statsObserver=
-new IntersectionObserver(
+document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
-(entries)=>{
-
-    entries.forEach(
-    entry=>{
-
-        if(entry.isIntersecting){
-
-            const element=
-            entry.target;
-
-
-            const target=
-            parseInt(
-                element.dataset.number
-            );
-
-
-            let current=0;
-
-
-            const increment=
-            Math.max(
-                1,
-                Math.ceil(target/50)
-            );
-
-
-            const interval=
-            setInterval(
-            ()=>{
-
-                current+=increment;
-
-
-                if(current>=target){
-
-                    current=target;
-
-                    clearInterval(
-                        interval
-                    );
-
-                }
-
-
-                element.textContent=
-                current;
-
-            },
-            30
-            );
-
-
-            statsObserver.unobserve(
-                element
-            );
-
+/* CONTADORES ANIMADOS */
+const stats = document.querySelectorAll(".stat-number");
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.number);
+      let current = 0;
+      const increment = Math.max(1, Math.ceil(target / 50));
+      const interval = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(interval);
         }
+        el.textContent = current;
+      }, 30);
+      statsObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
 
-    });
+stats.forEach(stat => statsObserver.observe(stat));
 
-},
-{
-    threshold:.5
-}
-);
-
-
-stats.forEach(
-stat=>{
-
-    statsObserver.observe(
-        stat
-    );
-
-});
-
-
-
-/* =====================================================
-   FORMULARIO
-===================================================== */
-
-function enviarMensaje(event){
-
-    event.preventDefault();
-
-
-    alert(
-
-        "Mensaje preparado correctamente.\n\n"+
-        "Para activar el envío real, conecta este formulario "+
-        "con tu sistema de correo o backend."
-
-    );
-
+/* FORMULARIO */
+function enviarMensaje(e) {
+  e.preventDefault();
+  alert("Mensaje preparado correctamente.\n\nPara activar el envío real, conecta este formulario con tu sistema de correo o backend.");
 }
 
 </script>
-
 
 </body>
 </html>
