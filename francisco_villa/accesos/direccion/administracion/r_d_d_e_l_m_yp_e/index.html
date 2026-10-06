@@ -1,0 +1,2205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Calendario de Registros Docentes</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+:root{
+    --azul:#0b1f3a;
+    --azul2:#123d68;
+    --azul3:#1d6fa5;
+    --cyan:#00bcd4;
+    --blanco:#ffffff;
+    --gris:#f4f7fb;
+    --texto:#172033;
+    --borde:#dce4ef;
+    --verde:#16a085;
+    --amarillo:#f39c12;
+    --rojo:#e74c3c;
+    --sombra:0 15px 40px rgba(11,31,58,.12);
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:
+        radial-gradient(circle at top left,rgba(0,188,212,.15),transparent 35%),
+        linear-gradient(135deg,#eef5fb,#f8fbff);
+    color:var(--texto);
+    min-height:100vh;
+}
+
+/* HEADER */
+
+header{
+    background:linear-gradient(135deg,var(--azul),var(--azul2));
+    color:white;
+    min-height:82px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px 25px;
+    box-shadow:0 5px 25px rgba(0,0,0,.18);
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo-icon{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--cyan),#2384c6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    box-shadow:0 5px 18px rgba(0,188,212,.3);
+}
+
+.header-title h1{
+    margin:0;
+    font-size:20px;
+}
+
+.header-title p{
+    margin:4px 0 0;
+    font-size:12px;
+    opacity:.75;
+}
+
+.menu-btn{
+    border:0;
+    background:rgba(255,255,255,.12);
+    color:white;
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    font-size:26px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.menu-btn:hover{
+    background:rgba(255,255,255,.22);
+    transform:scale(1.04);
+}
+
+/* MENU */
+
+.side-menu{
+    position:fixed;
+    top:0;
+    right:-330px;
+    width:320px;
+    height:100vh;
+    background:white;
+    z-index:500;
+    box-shadow:-15px 0 40px rgba(0,0,0,.18);
+    transition:.3s;
+    padding:25px;
+}
+
+.side-menu.open{
+    right:0;
+}
+
+.menu-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.menu-header h2{
+    margin:0;
+    color:var(--azul);
+}
+
+.close-menu{
+    border:0;
+    background:#eef3f8;
+    width:40px;
+    height:40px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:20px;
+}
+
+.menu-item{
+    width:100%;
+    border:0;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:12px;
+    background:#f2f6fa;
+    text-align:left;
+    cursor:pointer;
+    color:var(--azul);
+    font-size:15px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.menu-item:hover{
+    background:#e3f4f8;
+    transform:translateX(-3px);
+}
+
+.menu-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.35);
+    z-index:400;
+    display:none;
+}
+
+.menu-overlay.show{
+    display:block;
+}
+
+/* CONTENEDOR */
+
+main{
+    max-width:1400px;
+    margin:auto;
+    padding:30px 20px 60px;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+/* CABECERA CALENDARIO */
+
+.calendar-card{
+    background:white;
+    border-radius:22px;
+    box-shadow:var(--sombra);
+    overflow:hidden;
+}
+
+.calendar-top{
+    padding:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+    border-bottom:1px solid var(--borde);
+}
+
+.calendar-title h2{
+    margin:0;
+    color:var(--azul);
+    font-size:26px;
+}
+
+.calendar-title p{
+    margin:7px 0 0;
+    color:#68778c;
+    font-size:14px;
+}
+
+.navigation{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.nav-btn{
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:11px;
+    background:#edf4f9;
+    color:var(--azul);
+    font-size:20px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.nav-btn:hover{
+    background:#dcecf6;
+}
+
+.today-btn{
+    border:0;
+    background:var(--azul);
+    color:white;
+    padding:12px 16px;
+    border-radius:11px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* CICLO */
+
+.cycle-box{
+    margin:20px 25px 0;
+    padding:15px 18px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#edf9fc,#eef5ff);
+    border:1px solid #d8edf2;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.cycle-box strong{
+    color:var(--azul);
+}
+
+.cycle-box span{
+    color:#52677c;
+    font-size:14px;
+}
+
+/* CALENDARIO */
+
+.calendar{
+    padding:20px 25px 25px;
+}
+
+.weekdays,
+.days{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+}
+
+.weekdays div{
+    text-align:center;
+    font-weight:bold;
+    font-size:13px;
+    color:#607087;
+    padding:12px 5px;
+}
+
+.day{
+    min-height:125px;
+    border:1px solid #edf1f5;
+    margin:-1px 0 0 -1px;
+    padding:8px;
+    background:#fff;
+    cursor:pointer;
+    transition:.15s;
+    position:relative;
+}
+
+.day:hover{
+    background:#f7fbfd;
+    z-index:2;
+    box-shadow:0 0 0 2px rgba(0,188,212,.25);
+}
+
+.day.other-month{
+    background:#f8fafc;
+    color:#a9b3c0;
+}
+
+.day.today{
+    background:#f0fbfd;
+    box-shadow:inset 0 0 0 2px var(--cyan);
+}
+
+.day-number{
+    width:30px;
+    height:30px;
+    border-radius:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.day.today .day-number{
+    background:var(--cyan);
+    color:white;
+}
+
+.records{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.record-badge{
+    font-size:10px;
+    border-radius:6px;
+    padding:5px 6px;
+    color:white;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    font-weight:bold;
+}
+
+.badge-planeacion{
+    background:#1976d2;
+}
+
+.badge-economico{
+    background:#f39c12;
+}
+
+.badge-medica{
+    background:#e74c3c;
+}
+
+/* LEYENDA */
+
+.legend{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    padding:0 25px 25px;
+    font-size:13px;
+    color:#64748b;
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.legend-dot{
+    width:12px;
+    height:12px;
+    border-radius:4px;
+}
+
+/* RESUMEN */
+
+.summary-header{
+    background:white;
+    border-radius:22px 22px 0 0;
+    padding:25px;
+    box-shadow:var(--sombra);
+}
+
+.summary-header h2{
+    margin:0;
+    color:var(--azul);
+}
+
+.summary-header p{
+    color:#66758a;
+    margin:7px 0 0;
+}
+
+.summary-cycle{
+    margin-top:15px;
+    padding:12px 15px;
+    border-radius:10px;
+    background:#f0f7fb;
+    color:#496075;
+    font-size:14px;
+}
+
+.table-container{
+    background:white;
+    padding:0 25px 25px;
+    border-radius:0 0 22px 22px;
+    box-shadow:var(--sombra);
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:700px;
+}
+
+thead th{
+    background:var(--azul);
+    color:white;
+    padding:15px;
+    text-align:left;
+    font-size:13px;
+}
+
+thead th:first-child{
+    border-radius:10px 0 0 10px;
+}
+
+thead th:last-child{
+    border-radius:0 10px 10px 0;
+}
+
+tbody td{
+    padding:15px;
+    border-bottom:1px solid #edf0f4;
+    font-size:14px;
+}
+
+.teacher-name{
+    font-weight:bold;
+    color:var(--azul);
+}
+
+.count-btn{
+    min-width:50px;
+    padding:8px 12px;
+    border:0;
+    border-radius:9px;
+    background:#edf4f9;
+    color:var(--azul);
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.count-btn:hover{
+    background:#d8edf5;
+}
+
+.count-zero{
+    opacity:.55;
+}
+
+/* DETALLE */
+
+.detail-card{
+    background:white;
+    border-radius:22px;
+    box-shadow:var(--sombra);
+    padding:25px;
+}
+
+.back-btn{
+    border:0;
+    background:#edf4f9;
+    color:var(--azul);
+    padding:11px 15px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.detail-title{
+    color:var(--azul);
+    margin:0;
+}
+
+.detail-subtitle{
+    color:#68778c;
+    margin:7px 0 25px;
+}
+
+.date-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:12px;
+}
+
+.date-item{
+    padding:16px;
+    border-radius:14px;
+    border:1px solid var(--borde);
+    background:#fafcff;
+}
+
+.date-item strong{
+    display:block;
+    color:var(--azul);
+    margin-bottom:5px;
+}
+
+.date-item span{
+    color:#66758a;
+    font-size:13px;
+}
+
+/* MODAL */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(5,17,32,.65);
+    backdrop-filter:blur(5px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:1000;
+}
+
+.modal-overlay.show{
+    display:flex;
+}
+
+.modal{
+    background:white;
+    width:100%;
+    max-width:540px;
+    border-radius:24px;
+    padding:25px;
+    box-shadow:0 25px 80px rgba(0,0,0,.3);
+    animation:modalIn .2s ease;
+}
+
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:translateY(15px) scale(.98);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:15px;
+}
+
+.modal-header h2{
+    margin:0;
+    color:var(--azul);
+}
+
+.modal-header p{
+    margin:7px 0 0;
+    color:#66758a;
+    font-size:14px;
+}
+
+.modal-close{
+    border:0;
+    background:#eef3f7;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.form-group{
+    margin-top:22px;
+}
+
+.form-group label{
+    display:block;
+    font-weight:bold;
+    color:var(--azul);
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+select{
+    width:100%;
+    padding:14px;
+    border:1px solid var(--borde);
+    border-radius:11px;
+    background:white;
+    font-size:14px;
+    outline:none;
+}
+
+select:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 0 3px rgba(0,188,212,.12);
+}
+
+.type-buttons{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.type-btn{
+    padding:14px;
+    border:2px solid var(--borde);
+    background:white;
+    border-radius:12px;
+    cursor:pointer;
+    text-align:left;
+    font-weight:bold;
+    color:var(--azul);
+    transition:.2s;
+}
+
+.type-btn:hover{
+    border-color:var(--cyan);
+    background:#f5fcfd;
+}
+
+.type-btn.selected{
+    border-color:var(--cyan);
+    background:#eafafd;
+    box-shadow:0 0 0 2px rgba(0,188,212,.1);
+}
+
+.type-btn small{
+    display:block;
+    font-weight:normal;
+    color:#718096;
+    margin-top:4px;
+}
+
+.save-btn{
+    width:100%;
+    margin-top:25px;
+    border:0;
+    padding:15px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--azul),var(--azul3));
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.save-btn:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+/* LOADING */
+
+.loading{
+    text-align:center;
+    padding:50px 20px;
+    color:#6b7a90;
+}
+
+.spinner{
+    width:35px;
+    height:35px;
+    border:4px solid #dceaf1;
+    border-top-color:var(--cyan);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    margin:0 auto 15px;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    max-width:380px;
+    padding:15px 18px;
+    border-radius:13px;
+    color:white;
+    background:var(--azul);
+    box-shadow:0 12px 35px rgba(0,0,0,.25);
+    transform:translateY(100px);
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+    z-index:2000;
+    font-size:14px;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+.toast.success{
+    background:#16866f;
+}
+
+.toast.error{
+    background:#c0392b;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:800px){
+
+    header{
+        padding:12px 15px;
+    }
+
+    .header-title h1{
+        font-size:16px;
+    }
+
+    main{
+        padding:15px 10px 40px;
+    }
+
+    .calendar-top{
+        padding:18px;
+    }
+
+    .calendar-title h2{
+        font-size:21px;
+    }
+
+    .calendar{
+        padding:15px 10px 20px;
+        overflow-x:auto;
+    }
+
+    .weekdays,
+    .days{
+        min-width:700px;
+    }
+
+    .cycle-box{
+        margin:15px 18px 0;
+    }
+
+    .legend{
+        padding:0 18px 20px;
+    }
+
+    .table-container{
+        padding:0 12px 20px;
+    }
+
+    .summary-header{
+        padding:20px;
+    }
+
+    .day{
+        min-height:105px;
+    }
+
+    .side-menu{
+        width:290px;
+    }
+}
+
+@media(max-width:500px){
+
+    .navigation{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .today-btn{
+        flex:1;
+    }
+
+    .modal{
+        padding:20px;
+        border-radius:18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-left">
+        <div class="logo-icon">📅</div>
+
+        <div class="header-title">
+            <h1>Registros Docentes</h1>
+            <p>Calendario de control y seguimiento</p>
+        </div>
+    </div>
+
+    <button class="menu-btn" onclick="abrirMenu()">☰</button>
+
+</header>
+
+<div class="menu-overlay" id="menuOverlay" onclick="cerrarMenu()"></div>
+
+<aside class="side-menu" id="sideMenu">
+
+    <div class="menu-header">
+        <h2>Menú</h2>
+        <button class="close-menu" onclick="cerrarMenu()">✕</button>
+    </div>
+
+    <button class="menu-item" onclick="mostrarSeccion('calendario')">
+        📅 Calendario
+    </button>
+
+    <button class="menu-item" onclick="mostrarResumen()">
+        📊 Resumen de docentes
+    </button>
+
+</aside>
+
+<main>
+
+    <!-- ================= CALENDARIO ================= -->
+
+    <section id="seccionCalendario" class="section active">
+
+        <div class="calendar-card">
+
+            <div class="calendar-top">
+
+                <div class="calendar-title">
+                    <h2 id="mesTitulo">Cargando...</h2>
+                    <p>Selecciona cualquier fecha para registrar un movimiento.</p>
+                </div>
+
+                <div class="navigation">
+
+                    <button class="nav-btn" onclick="mesAnterior()">
+                        ‹
+                    </button>
+
+                    <button class="today-btn" onclick="irHoy()">
+                        Hoy
+                    </button>
+
+                    <button class="nav-btn" onclick="mesSiguiente()">
+                        ›
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="cycle-box">
+                <div>
+                    <strong>Ciclo actual:</strong>
+                    <span id="cicloActual">Cargando...</span>
+                </div>
+
+                <div>
+                    <span id="rangoCiclo"></span>
+                </div>
+            </div>
+
+            <div class="calendar">
+
+                <div class="weekdays">
+                    <div>LUN</div>
+                    <div>MAR</div>
+                    <div>MIÉ</div>
+                    <div>JUE</div>
+                    <div>VIE</div>
+                    <div>SÁB</div>
+                    <div>DOM</div>
+                </div>
+
+                <div class="days" id="calendarDays">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        Cargando calendario...
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="legend">
+
+                <div class="legend-item">
+                    <span class="legend-dot badge-planeacion"></span>
+                    Planeación
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot badge-economico"></span>
+                    Días económicos
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot badge-medica"></span>
+                    Licencia médica
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= RESUMEN ================= -->
+
+    <section id="seccionResumen" class="section">
+
+        <div class="summary-header">
+
+            <h2>Resumen de docentes</h2>
+
+            <p>
+                Consulta los registros del ciclo escolar actual.
+                Los docentes sin registros también aparecen.
+            </p>
+
+            <div class="summary-cycle">
+                <strong>Ciclo:</strong>
+                <span id="cicloResumen"></span>
+            </div>
+
+        </div>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Docente</th>
+                        <th>Planeaciones</th>
+                        <th>Días económicos</th>
+                        <th>Licencias médicas</th>
+                    </tr>
+                </thead>
+
+                <tbody id="summaryBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= DETALLE ================= -->
+
+    <section id="seccionDetalle" class="section">
+
+        <div class="detail-card">
+
+            <button class="back-btn" onclick="mostrarResumen()">
+                ← Regresar al resumen
+            </button>
+
+            <h2 class="detail-title" id="detalleTitulo">
+                Detalle
+            </h2>
+
+            <p class="detail-subtitle" id="detalleSubtitulo">
+                Fechas registradas
+            </p>
+
+            <div class="date-list" id="dateList">
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ================= MODAL REGISTRO ================= -->
+
+<div class="modal-overlay" id="modalRegistro">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+                <h2>Nuevo registro</h2>
+                <p id="fechaSeleccionadaTexto"></p>
+            </div>
+
+            <button class="modal-close" onclick="cerrarModal()">
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="docenteSelect">
+                Docente
+            </label>
+
+            <select id="docenteSelect">
+
+                <option value="">
+                    Selecciona un docente
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Tipo de registro
+            </label>
+
+            <div class="type-buttons">
+
+                <button
+                    class="type-btn"
+                    data-type="Planeación"
+                    onclick="seleccionarTipo(this)"
+                >
+                    📘 Planeación
+                    <small>Registro relacionado con planeaciones.</small>
+                </button>
+
+                <button
+                    class="type-btn"
+                    data-type="Días económicos"
+                    onclick="seleccionarTipo(this)"
+                >
+                    📅 Días económicos
+                    <small>Registro de día económico.</small>
+                </button>
+
+                <button
+                    class="type-btn"
+                    data-type="Licencia médica"
+                    onclick="seleccionarTipo(this)"
+                >
+                    🏥 Licencia médica
+                    <small>Registro de licencia médica.</small>
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="save-btn"
+            id="guardarBtn"
+            onclick="guardarRegistro()"
+        >
+            Guardar registro
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* ============================================================
+   SUPABASE
+============================================================ */
+
+const SUPABASE_URL =
+    "https://nlpdpvjtdxknhvgqbfls.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* ============================================================
+   VARIABLES
+============================================================ */
+
+let docentes = [];
+let registros = [];
+
+let fechaCalendario = new Date();
+
+let fechaSeleccionada = null;
+
+let tipoSeleccionado = "";
+
+let cicloActual = "";
+
+const nombresMeses = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre"
+];
+
+
+/* ============================================================
+   INICIO
+============================================================ */
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    cicloActual = obtenerCiclo(new Date());
+
+    actualizarInformacionCiclo();
+
+    await cargarDocentes();
+
+    await cargarRegistros();
+
+    renderizarCalendario();
+
+});
+
+
+/* ============================================================
+   CICLO ESCOLAR
+   1 AGOSTO - 31 JULIO
+============================================================ */
+
+function obtenerCiclo(fecha){
+
+    const año = fecha.getFullYear();
+
+    const mes = fecha.getMonth();
+
+    let añoInicio;
+
+    if(mes >= 7){
+        añoInicio = año;
+    }else{
+        añoInicio = año - 1;
+    }
+
+    return `${añoInicio}-${añoInicio + 1}`;
+}
+
+
+function obtenerInicioCiclo(ciclo){
+
+    const año = parseInt(ciclo.split("-")[0]);
+
+    return new Date(año,7,1);
+}
+
+
+function obtenerFinCiclo(ciclo){
+
+    const año = parseInt(ciclo.split("-")[0]);
+
+    return new Date(año + 1,6,31,23,59,59,999);
+}
+
+
+function fechaDentroCiclo(fecha,ciclo){
+
+    const inicio = obtenerInicioCiclo(ciclo);
+
+    const fin = obtenerFinCiclo(ciclo);
+
+    const f = new Date(fecha + "T00:00:00");
+
+    return f >= inicio && f <= fin;
+}
+
+
+function actualizarInformacionCiclo(){
+
+    const inicio = obtenerInicioCiclo(cicloActual);
+
+    const fin = obtenerFinCiclo(cicloActual);
+
+    document.getElementById("cicloActual").textContent =
+        cicloActual;
+
+    document.getElementById("rangoCiclo").textContent =
+        `${formatearFechaCompleta(inicio)} al ${formatearFechaCompleta(fin)}`;
+
+    document.getElementById("cicloResumen").textContent =
+        cicloActual;
+}
+
+
+/* ============================================================
+   CARGAR DOCENTES
+============================================================ */
+
+async function cargarDocentes(){
+
+    try{
+
+        const { data,error } =
+            await supabaseClient
+                .from("docentes")
+                .select("nombre_completo,numero_servidor,rol")
+                .order("nombre_completo",{ascending:true});
+
+        if(error) throw error;
+
+        docentes = data || [];
+
+        llenarSelectDocentes();
+
+    }catch(error){
+
+        console.error(error);
+
+        mostrarToast(
+            "No fue posible cargar los docentes.",
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   SELECT DOCENTES
+============================================================ */
+
+function llenarSelectDocentes(){
+
+    const select =
+        document.getElementById("docenteSelect");
+
+    select.innerHTML =
+        `<option value="">Selecciona un docente</option>`;
+
+    docentes.forEach(docente => {
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            docente.numero_servidor;
+
+        option.textContent =
+            `${docente.numero_servidor} - ${docente.nombre_completo}`;
+
+        select.appendChild(option);
+
+    });
+}
+
+
+/* ============================================================
+   CARGAR REGISTROS
+============================================================ */
+
+async function cargarRegistros(){
+
+    try{
+
+        const { data,error } =
+            await supabaseClient
+                .from("registros_docentes")
+                .select("*")
+                .order("fecha",{ascending:true});
+
+        if(error) throw error;
+
+        registros = data || [];
+
+    }catch(error){
+
+        console.error(error);
+
+        mostrarToast(
+            "No fue posible cargar los registros.",
+            "error"
+        );
+    }
+}
+
+
+/* ============================================================
+   CALENDARIO
+============================================================ */
+
+function renderizarCalendario(){
+
+    const año =
+        fechaCalendario.getFullYear();
+
+    const mes =
+        fechaCalendario.getMonth();
+
+    document.getElementById("mesTitulo").textContent =
+        `${nombresMeses[mes]} ${año}`;
+
+    const contenedor =
+        document.getElementById("calendarDays");
+
+    contenedor.innerHTML = "";
+
+    /*
+       JavaScript: domingo = 0
+       Convertimos para que lunes sea 0.
+    */
+
+    let primerDia =
+        new Date(año,mes,1).getDay();
+
+    primerDia =
+        primerDia === 0 ? 6 : primerDia - 1;
+
+    const diasMes =
+        new Date(año,mes + 1,0).getDate();
+
+    const diasMesAnterior =
+        new Date(año,mes,0).getDate();
+
+    const totalCeldas = 42;
+
+    for(let i=0;i<totalCeldas;i++){
+
+        const celda =
+            document.createElement("div");
+
+        celda.className = "day";
+
+        let numero;
+        let fecha;
+
+        if(i < primerDia){
+
+            numero =
+                diasMesAnterior - primerDia + i + 1;
+
+            fecha =
+                new Date(año,mes - 1,numero);
+
+            celda.classList.add("other-month");
+
+        }else if(i >= primerDia + diasMes){
+
+            numero =
+                i - primerDia - diasMes + 1;
+
+            fecha =
+                new Date(año,mes + 1,numero);
+
+            celda.classList.add("other-month");
+
+        }else{
+
+            numero =
+                i - primerDia + 1;
+
+            fecha =
+                new Date(año,mes,numero);
+        }
+
+        const fechaISO =
+            convertirFechaISO(fecha);
+
+        if(esHoy(fecha)){
+            celda.classList.add("today");
+        }
+
+        celda.addEventListener(
+            "click",
+            () => abrirRegistro(fechaISO)
+        );
+
+        const numeroDiv =
+            document.createElement("div");
+
+        numeroDiv.className = "day-number";
+
+        numeroDiv.textContent = numero;
+
+        celda.appendChild(numeroDiv);
+
+
+        const registrosDia =
+            registros.filter(r =>
+                r.fecha === fechaISO
+            );
+
+        if(registrosDia.length){
+
+            const records =
+                document.createElement("div");
+
+            records.className = "records";
+
+            registrosDia
+                .slice(0,4)
+                .forEach(registro => {
+
+                    const badge =
+                        document.createElement("div");
+
+                    badge.className =
+                        "record-badge " +
+                        claseTipo(registro.tipo_registro);
+
+                    badge.textContent =
+                        `${registro.numero_servidor} · ${registro.nombre_docente}`;
+
+                    badge.title =
+                        `${registro.tipo_registro} - ${registro.numero_servidor} - ${registro.nombre_docente}`;
+
+                    records.appendChild(badge);
+
+                });
+
+
+            if(registrosDia.length > 4){
+
+                const extra =
+                    document.createElement("div");
+
+                extra.style.fontSize = "10px";
+                extra.style.color = "#607087";
+                extra.style.fontWeight = "bold";
+
+                extra.textContent =
+                    `+${registrosDia.length - 4} más`;
+
+                records.appendChild(extra);
+            }
+
+            celda.appendChild(records);
+        }
+
+        contenedor.appendChild(celda);
+    }
+}
+
+
+/* ============================================================
+   NAVEGACIÓN
+============================================================ */
+
+function mesAnterior(){
+
+    fechaCalendario.setMonth(
+        fechaCalendario.getMonth() - 1
+    );
+
+    renderizarCalendario();
+}
+
+
+function mesSiguiente(){
+
+    fechaCalendario.setMonth(
+        fechaCalendario.getMonth() + 1
+    );
+
+    renderizarCalendario();
+}
+
+
+function irHoy(){
+
+    fechaCalendario = new Date();
+
+    renderizarCalendario();
+}
+
+
+/* ============================================================
+   ABRIR REGISTRO
+============================================================ */
+
+function abrirRegistro(fechaISO){
+
+    /*
+       El calendario puede mostrar cualquier fecha,
+       pero los registros solamente pueden hacerse
+       dentro del ciclo actual.
+    */
+
+    if(!fechaDentroCiclo(fechaISO,cicloActual)){
+
+        mostrarToast(
+            `Solo puedes realizar registros dentro del ciclo ${cicloActual}.`,
+            "error"
+        );
+
+        return;
+    }
+
+    fechaSeleccionada = fechaISO;
+
+    tipoSeleccionado = "";
+
+    document.getElementById("docenteSelect").value = "";
+
+    document
+        .querySelectorAll(".type-btn")
+        .forEach(btn =>
+            btn.classList.remove("selected")
+        );
+
+    document.getElementById(
+        "fechaSeleccionadaTexto"
+    ).textContent =
+        formatearFechaISO(fechaISO);
+
+    document
+        .getElementById("modalRegistro")
+        .classList.add("show");
+}
+
+
+function cerrarModal(){
+
+    document
+        .getElementById("modalRegistro")
+        .classList.remove("show");
+}
+
+
+/* ============================================================
+   TIPO
+============================================================ */
+
+function seleccionarTipo(btn){
+
+    document
+        .querySelectorAll(".type-btn")
+        .forEach(b =>
+            b.classList.remove("selected")
+        );
+
+    btn.classList.add("selected");
+
+    tipoSeleccionado =
+        btn.dataset.type;
+}
+
+
+/* ============================================================
+   GUARDAR REGISTRO
+============================================================ */
+
+async function guardarRegistro(){
+
+    const numeroServidor =
+        document.getElementById("docenteSelect").value;
+
+    if(!fechaSeleccionada){
+
+        mostrarToast(
+            "No se seleccionó una fecha.",
+            "error"
+        );
+
+        return;
+    }
+
+    if(!numeroServidor){
+
+        mostrarToast(
+            "Selecciona un docente.",
+            "error"
+        );
+
+        return;
+    }
+
+    if(!tipoSeleccionado){
+
+        mostrarToast(
+            "Selecciona el tipo de registro.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const docente =
+        docentes.find(
+            d =>
+                String(d.numero_servidor) ===
+                String(numeroServidor)
+        );
+
+
+    if(!docente){
+
+        mostrarToast(
+            "No se encontró el docente seleccionado.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    /*
+       Evitar duplicados.
+    */
+
+    const existe =
+        registros.some(r =>
+            r.fecha === fechaSeleccionada &&
+            String(r.numero_servidor) ===
+                String(numeroServidor) &&
+            r.tipo_registro === tipoSeleccionado
+        );
+
+
+    if(existe){
+
+        mostrarToast(
+            "Ese docente ya tiene este tipo de registro en esa fecha.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const boton =
+        document.getElementById("guardarBtn");
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Guardando...";
+
+
+    try{
+
+        const nuevoRegistro = {
+
+            fecha: fechaSeleccionada,
+
+            numero_servidor:
+                docente.numero_servidor,
+
+            nombre_docente:
+                docente.nombre_completo,
+
+            tipo_registro:
+                tipoSeleccionado,
+
+            ciclo:
+                cicloActual
+        };
+
+
+        const { data,error } =
+            await supabaseClient
+                .from("registros_docentes")
+                .insert([nuevoRegistro])
+                .select()
+                .single();
+
+
+        if(error) throw error;
+
+
+        registros.push(data);
+
+
+        cerrarModal();
+
+        renderizarCalendario();
+
+
+        mostrarToast(
+            "Registro guardado correctamente.",
+            "success"
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        mostrarToast(
+            "No fue posible guardar el registro.",
+            "error"
+        );
+
+    }finally{
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Guardar registro";
+    }
+}
+
+
+/* ============================================================
+   RESUMEN
+============================================================ */
+
+async function mostrarResumen(){
+
+    cerrarMenu();
+
+    document
+        .getElementById("seccionCalendario")
+        .classList.remove("active");
+
+    document
+        .getElementById("seccionDetalle")
+        .classList.remove("active");
+
+    document
+        .getElementById("seccionResumen")
+        .classList.add("active");
+
+    actualizarInformacionCiclo();
+
+    construirResumen();
+}
+
+
+/* ============================================================
+   CONSTRUIR RESUMEN
+============================================================ */
+
+function construirResumen(){
+
+    const body =
+        document.getElementById("summaryBody");
+
+    body.innerHTML = "";
+
+
+    docentes.forEach(docente => {
+
+        const registrosDocente =
+            registros.filter(r =>
+
+                String(r.numero_servidor) ===
+                String(docente.numero_servidor)
+
+                &&
+
+                r.ciclo === cicloActual
+
+            );
+
+
+        const planeaciones =
+            registrosDocente.filter(r =>
+                r.tipo_registro === "Planeación"
+            ).length;
+
+
+        const economicos =
+            registrosDocente.filter(r =>
+                r.tipo_registro === "Días económicos"
+            ).length;
+
+
+        const licencias =
+            registrosDocente.filter(r =>
+                r.tipo_registro === "Licencia médica"
+            ).length;
+
+
+        const fila =
+            document.createElement("tr");
+
+
+        fila.innerHTML = `
+
+            <td>
+                <div class="teacher-name">
+                    ${escapeHTML(docente.numero_servidor)}
+                    -
+                    ${escapeHTML(docente.nombre_completo)}
+                </div>
+            </td>
+
+            <td>
+                <button
+                    class="count-btn ${planeaciones === 0 ? "count-zero" : ""}"
+                    onclick="verDetalle(
+                        '${escapeJS(docente.numero_servidor)}',
+                        'Planeación'
+                    )"
+                >
+                    ${planeaciones}
+                </button>
+            </td>
+
+            <td>
+                <button
+                    class="count-btn ${economicos === 0 ? "count-zero" : ""}"
+                    onclick="verDetalle(
+                        '${escapeJS(docente.numero_servidor)}',
+                        'Días económicos'
+                    )"
+                >
+                    ${economicos}
+                </button>
+            </td>
+
+            <td>
+                <button
+                    class="count-btn ${licencias === 0 ? "count-zero" : ""}"
+                    onclick="verDetalle(
+                        '${escapeJS(docente.numero_servidor)}',
+                        'Licencia médica'
+                    )"
+                >
+                    ${licencias}
+                </button>
+            </td>
+
+        `;
+
+
+        body.appendChild(fila);
+
+    });
+}
+
+
+/* ============================================================
+   DETALLE
+============================================================ */
+
+function verDetalle(numeroServidor,tipo){
+
+    document
+        .getElementById("seccionResumen")
+        .classList.remove("active");
+
+    document
+        .getElementById("seccionCalendario")
+        .classList.remove("active");
+
+    document
+        .getElementById("seccionDetalle")
+        .classList.add("active");
+
+
+    const docente =
+        docentes.find(
+            d =>
+                String(d.numero_servidor) ===
+                String(numeroServidor)
+        );
+
+
+    if(!docente) return;
+
+
+    const resultados =
+        registros.filter(r =>
+
+            String(r.numero_servidor) ===
+            String(numeroServidor)
+
+            &&
+
+            r.tipo_registro === tipo
+
+            &&
+
+            r.ciclo === cicloActual
+
+        );
+
+
+    document.getElementById(
+        "detalleTitulo"
+    ).textContent =
+        `${numeroServidor} - ${docente.nombre_completo}`;
+
+
+    document.getElementById(
+        "detalleSubtitulo"
+    ).textContent =
+        `${tipo} · Ciclo ${cicloActual} · ${resultados.length} registro(s)`;
+
+
+    const lista =
+        document.getElementById("dateList");
+
+    lista.innerHTML = "";
+
+
+    if(!resultados.length){
+
+        lista.innerHTML = `
+
+            <div class="date-item">
+
+                <strong>
+                    Sin registros
+                </strong>
+
+                <span>
+                    Este docente no tiene registros de
+                    ${escapeHTML(tipo)}
+                    en el ciclo ${escapeHTML(cicloActual)}.
+                </span>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    resultados
+        .sort((a,b) =>
+            a.fecha.localeCompare(b.fecha)
+        )
+        .forEach(registro => {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "date-item";
+
+            item.innerHTML = `
+
+                <strong>
+                    ${formatearFechaISO(registro.fecha)}
+                </strong>
+
+                <span>
+                    ${escapeHTML(registro.numero_servidor)}
+                    -
+                    ${escapeHTML(registro.nombre_docente)}
+                </span>
+
+            `;
+
+            lista.appendChild(item);
+
+        });
+}
+
+
+/* ============================================================
+   SECCIONES
+============================================================ */
+
+function mostrarSeccion(seccion){
+
+    cerrarMenu();
+
+    document
+        .querySelectorAll(".section")
+        .forEach(s =>
+            s.classList.remove("active")
+        );
+
+
+    if(seccion === "calendario"){
+
+        document
+            .getElementById("seccionCalendario")
+            .classList.add("active");
+
+        renderizarCalendario();
+
+    }
+
+}
+
+
+/* ============================================================
+   MENU
+============================================================ */
+
+function abrirMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList.add("open");
+
+    document
+        .getElementById("menuOverlay")
+        .classList.add("show");
+}
+
+
+function cerrarMenu(){
+
+    document
+        .getElementById("sideMenu")
+        .classList.remove("open");
+
+    document
+        .getElementById("menuOverlay")
+        .classList.remove("show");
+}
+
+
+/* ============================================================
+   UTILIDADES
+============================================================ */
+
+function convertirFechaISO(fecha){
+
+    const año =
+        fecha.getFullYear();
+
+    const mes =
+        String(fecha.getMonth()+1)
+            .padStart(2,"0");
+
+    const dia =
+        String(fecha.getDate())
+            .padStart(2,"0");
+
+    return `${año}-${mes}-${dia}`;
+}
+
+
+function esHoy(fecha){
+
+    const hoy = new Date();
+
+    return (
+        fecha.getFullYear() === hoy.getFullYear()
+        &&
+        fecha.getMonth() === hoy.getMonth()
+        &&
+        fecha.getDate() === hoy.getDate()
+    );
+}
+
+
+function formatearFechaISO(fechaISO){
+
+    const partes =
+        fechaISO.split("-");
+
+    const fecha =
+        new Date(
+            Number(partes[0]),
+            Number(partes[1])-1,
+            Number(partes[2])
+        );
+
+    return formatearFechaCompleta(fecha);
+}
+
+
+function formatearFechaCompleta(fecha){
+
+    return fecha.toLocaleDateString(
+        "es-MX",
+        {
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+        }
+    );
+}
+
+
+function claseTipo(tipo){
+
+    if(tipo === "Planeación")
+        return "badge-planeacion";
+
+    if(tipo === "Días económicos")
+        return "badge-economico";
+
+    if(tipo === "Licencia médica")
+        return "badge-medica";
+
+    return "";
+}
+
+
+function escapeHTML(text){
+
+    return String(text ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+function escapeJS(text){
+
+    return String(text ?? "")
+        .replace(/\\/g,"\\\\")
+        .replace(/'/g,"\\'")
+        .replace(/"/g,'\\"');
+}
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+let toastTimer;
+
+function mostrarToast(mensaje,tipo=""){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent =
+        mensaje;
+
+    toast.className =
+        "toast show " + tipo;
+
+
+    clearTimeout(toastTimer);
+
+    toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        },4000);
+}
+
+
+/* ============================================================
+   CERRAR MODAL AL DAR CLICK FUERA
+============================================================ */
+
+document
+    .getElementById("modalRegistro")
+    .addEventListener("click",function(e){
+
+        if(e.target === this){
+
+            cerrarModal();
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
