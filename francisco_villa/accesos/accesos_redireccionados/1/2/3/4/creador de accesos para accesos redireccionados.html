@@ -1,0 +1,3055 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="description"
+    content="Administración de accesos - Control de Asistencia"
+>
+
+<title>Administración de accesos | OFTV No. 0216</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+
+    min-height:100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(14,165,233,.25),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(37,99,235,.25),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #061426,
+            #0b1f3a,
+            #082f49
+        );
+
+    color:#0f172a;
+
+}
+
+
+/* =========================================================
+   ESTRUCTURA
+========================================================= */
+
+.app{
+
+    min-height:100vh;
+
+    display:flex;
+
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+.menu{
+
+    width:270px;
+
+    min-height:100vh;
+
+    background:
+        rgba(3,15,30,.94);
+
+    border-right:
+        1px solid
+        rgba(255,255,255,.08);
+
+    padding:25px 18px;
+
+    position:fixed;
+
+    left:0;
+    top:0;
+    bottom:0;
+
+    z-index:100;
+
+}
+
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    color:#fff;
+
+    padding:
+        8px 10px
+        25px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.08);
+
+    margin-bottom:25px;
+
+}
+
+
+.logo-icon{
+
+    width:46px;
+    height:46px;
+
+    border-radius:14px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #2563eb
+        );
+
+    font-size:22px;
+
+}
+
+
+.logo-text strong{
+
+    display:block;
+
+    font-size:15px;
+
+}
+
+.logo-text span{
+
+    display:block;
+
+    margin-top:3px;
+
+    color:#94a3b8;
+
+    font-size:11px;
+
+}
+
+
+.menu-titulo{
+
+    color:#64748b;
+
+    font-size:11px;
+
+    font-weight:800;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    padding:
+        0 12px
+        10px;
+
+}
+
+
+.menu button{
+
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:#cbd5e1;
+
+    padding:14px 15px;
+
+    margin-bottom:6px;
+
+    border-radius:12px;
+
+    text-align:left;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    transition:.2s;
+
+}
+
+
+.menu button:hover{
+
+    background:
+        rgba(255,255,255,.07);
+
+    color:#fff;
+
+}
+
+
+.menu button.activo{
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #2563eb
+        );
+
+    color:#fff;
+
+    box-shadow:
+        0 8px 20px
+        rgba(37,99,235,.25);
+
+}
+
+
+.menu-icon{
+
+    width:25px;
+
+    text-align:center;
+
+    font-size:18px;
+
+}
+
+
+/* =========================================================
+   CONTENIDO
+========================================================= */
+
+.contenido{
+
+    margin-left:270px;
+
+    width:
+        calc(100% - 270px);
+
+    min-height:100vh;
+
+    padding:35px;
+
+}
+
+
+.seccion{
+
+    display:none;
+
+    animation:
+        aparecer .3s ease;
+
+}
+
+
+.seccion.activa{
+
+    display:block;
+
+}
+
+
+@keyframes aparecer{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(10px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.encabezado{
+
+    margin-bottom:28px;
+
+}
+
+
+.encabezado h1{
+
+    color:#fff;
+
+    font-size:
+        clamp(25px,4vw,36px);
+
+    margin-bottom:8px;
+
+}
+
+
+.encabezado p{
+
+    color:#94a3b8;
+
+    font-size:14px;
+
+}
+
+
+/* =========================================================
+   TARJETAS
+========================================================= */
+
+.tarjeta{
+
+    background:
+        rgba(255,255,255,.97);
+
+    border-radius:22px;
+
+    padding:30px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.25);
+
+}
+
+
+.tarjeta-titulo{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:25px;
+
+}
+
+
+.tarjeta-titulo h2{
+
+    color:#0f172a;
+
+    font-size:21px;
+
+}
+
+
+.tarjeta-titulo p{
+
+    color:#64748b;
+
+    font-size:13px;
+
+    margin-top:5px;
+
+}
+
+
+/* =========================================================
+   FORMULARIO
+========================================================= */
+
+.formulario{
+
+    max-width:650px;
+
+}
+
+
+.grupo{
+
+    margin-bottom:19px;
+
+}
+
+
+label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#1e293b;
+
+    font-size:14px;
+
+    font-weight:700;
+
+}
+
+
+input{
+
+    width:100%;
+
+    height:52px;
+
+    padding:
+        0 15px;
+
+    border:
+        1px solid
+        #cbd5e1;
+
+    border-radius:12px;
+
+    background:#fff;
+
+    color:#0f172a;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.2s;
+
+}
+
+
+input:focus{
+
+    border-color:#0284c7;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(2,132,199,.10);
+
+}
+
+
+.password-box{
+
+    position:relative;
+
+}
+
+
+.password-box input{
+
+    padding-right:55px;
+
+}
+
+
+.mostrar{
+
+    position:absolute;
+
+    right:6px;
+    top:50%;
+
+    transform:
+        translateY(-50%);
+
+    width:42px;
+    height:42px;
+
+    border:0;
+
+    background:transparent;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:19px;
+
+}
+
+
+.mostrar:hover{
+
+    background:#f1f5f9;
+
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.boton{
+
+    height:50px;
+
+    padding:
+        0 20px;
+
+    border:0;
+
+    border-radius:11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0284c7,
+            #2563eb
+        );
+
+    color:#fff;
+
+    font-weight:800;
+
+    font-size:14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+.boton:hover{
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(37,99,235,.25);
+
+}
+
+
+.boton-secundario{
+
+    background:#e2e8f0;
+
+    color:#334155;
+
+}
+
+
+.boton-peligro{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+
+.boton-verde{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+/* =========================================================
+   TABLA
+========================================================= */
+
+.tabla-contenedor{
+
+    width:100%;
+
+    overflow-x:auto;
+
+}
+
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    min-width:850px;
+
+}
+
+
+thead{
+
+    background:#f8fafc;
+
+}
+
+
+th{
+
+    padding:15px;
+
+    text-align:left;
+
+    color:#475569;
+
+    font-size:12px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.4px;
+
+    border-bottom:
+        1px solid
+        #e2e8f0;
+
+}
+
+
+td{
+
+    padding:15px;
+
+    border-bottom:
+        1px solid
+        #e2e8f0;
+
+    color:#334155;
+
+    font-size:13px;
+
+    vertical-align:middle;
+
+}
+
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+
+.nombre-usuario{
+
+    font-weight:800;
+
+    color:#0f172a;
+
+}
+
+
+.url{
+
+    max-width:320px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+
+    color:#0284c7;
+
+}
+
+
+.estado{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:
+        6px 10px;
+
+    border-radius:20px;
+
+    font-size:11px;
+
+    font-weight:800;
+
+}
+
+
+.estado.activo{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+.estado.inactivo{
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+}
+
+
+.acciones{
+
+    display:flex;
+
+    gap:7px;
+
+}
+
+
+.btn-tabla{
+
+    border:0;
+
+    border-radius:8px;
+
+    padding:
+        8px 11px;
+
+    cursor:pointer;
+
+    font-size:12px;
+
+    font-weight:700;
+
+}
+
+
+.btn-editar{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
+
+
+.btn-estado{
+
+    background:#f1f5f9;
+
+    color:#475569;
+
+}
+
+
+/* =========================================================
+   BUSQUEDA
+========================================================= */
+
+.barra{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-bottom:20px;
+
+}
+
+
+.barra input{
+
+    max-width:400px;
+
+}
+
+
+.contador{
+
+    color:#64748b;
+
+    font-size:13px;
+
+    margin-bottom:15px;
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(2,8,23,.72);
+
+    z-index:500;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+}
+
+
+.modal.visible{
+
+    display:flex;
+
+}
+
+
+.modal-contenido{
+
+    width:100%;
+
+    max-width:560px;
+
+    max-height:
+        calc(100vh - 40px);
+
+    overflow-y:auto;
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:30px;
+
+    box-shadow:
+        0 30px 90px
+        rgba(0,0,0,.4);
+
+}
+
+
+.modal-cabecera{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:25px;
+
+}
+
+
+.modal-cabecera h2{
+
+    font-size:22px;
+
+    color:#0f172a;
+
+}
+
+
+.cerrar{
+
+    width:40px;
+    height:40px;
+
+    border:0;
+
+    border-radius:10px;
+
+    background:#f1f5f9;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+}
+
+
+.modal-botones{
+
+    display:flex;
+
+    gap:10px;
+
+    justify-content:flex-end;
+
+    margin-top:25px;
+
+}
+
+
+/* =========================================================
+   MENSAJES
+========================================================= */
+
+.mensaje{
+
+    display:none;
+
+    padding:13px 15px;
+
+    margin-top:17px;
+
+    border-radius:10px;
+
+    font-size:13px;
+
+}
+
+
+.mensaje.exito{
+
+    display:block;
+
+    background:#dcfce7;
+
+    color:#166534;
+
+    border:1px solid #bbf7d0;
+
+}
+
+
+.mensaje.error{
+
+    display:block;
+
+    background:#fee2e2;
+
+    color:#991b1b;
+
+    border:1px solid #fecaca;
+
+}
+
+
+/* =========================================================
+   VACÍO / CARGANDO
+========================================================= */
+
+.cargando{
+
+    text-align:center;
+
+    padding:50px;
+
+    color:#64748b;
+
+}
+
+
+.vacio{
+
+    text-align:center;
+
+    padding:50px 20px;
+
+    color:#64748b;
+
+}
+
+
+.vacio-icono{
+
+    font-size:40px;
+
+    margin-bottom:10px;
+
+}
+
+
+/* =========================================================
+   MÓVIL
+========================================================= */
+
+.menu-movil{
+
+    display:none;
+
+}
+
+
+@media(max-width:800px){
+
+    .menu{
+
+        width:230px;
+
+        transform:
+            translateX(-100%);
+
+        transition:.25s;
+
+    }
+
+
+    .menu.abierto{
+
+        transform:
+            translateX(0);
+
+    }
+
+
+    .contenido{
+
+        margin-left:0;
+
+        width:100%;
+
+        padding:20px;
+
+    }
+
+
+    .menu-movil{
+
+        display:flex;
+
+        position:fixed;
+
+        left:15px;
+        top:15px;
+
+        width:45px;
+        height:45px;
+
+        border:0;
+
+        border-radius:12px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #0284c7,
+                #2563eb
+            );
+
+        color:#fff;
+
+        align-items:center;
+        justify-content:center;
+
+        font-size:21px;
+
+        cursor:pointer;
+
+        z-index:300;
+
+    }
+
+
+    .encabezado{
+
+        padding-top:55px;
+
+    }
+
+
+    .tarjeta{
+
+        padding:22px;
+
+        border-radius:18px;
+
+    }
+
+
+}
+
+
+@media(max-width:500px){
+
+    .contenido{
+
+        padding:15px;
+
+    }
+
+
+    .barra{
+
+        flex-direction:column;
+
+    }
+
+
+    .barra input{
+
+        max-width:none;
+
+    }
+
+
+    .modal-contenido{
+
+        padding:22px;
+
+    }
+
+
+    .modal-botones{
+
+        flex-direction:column;
+
+    }
+
+
+    .modal-botones .boton{
+
+        width:100%;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<!-- =====================================================
+     MENU
+===================================================== -->
+
+<aside class="menu" id="menu">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            🔐
+        </div>
+
+        <div class="logo-text">
+
+            <strong>
+                Control de Accesos
+            </strong>
+
+            <span>
+                OFTV No. 0216
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu-titulo">
+        Administración
+    </div>
+
+
+    <button
+        class="activo"
+        data-seccion="crear-seccion"
+        onclick="mostrarSeccion('crear-seccion', this)"
+    >
+
+        <span class="menu-icon">
+            ➕
+        </span>
+
+        Crear usuario
+
+    </button>
+
+
+    <button
+        data-seccion="usuarios-seccion"
+        onclick="mostrarSeccion('usuarios-seccion', this)"
+    >
+
+        <span class="menu-icon">
+            👥
+        </span>
+
+        Usuarios y accesos
+
+    </button>
+
+
+</aside>
+
+
+<button
+    class="menu-movil"
+    onclick="abrirMenu()"
+>
+    ☰
+</button>
+
+
+<!-- =====================================================
+     CONTENIDO
+===================================================== -->
+
+<main class="contenido">
+
+
+<!-- =====================================================
+     CREAR USUARIO
+===================================================== -->
+
+<section
+    id="crear-seccion"
+    class="seccion activa"
+>
+
+
+    <div class="encabezado">
+
+        <h1>
+            Crear usuario
+        </h1>
+
+        <p>
+            Registra una persona y asigna el link al que podrá acceder.
+        </p>
+
+    </div>
+
+
+    <div class="tarjeta">
+
+        <div class="tarjeta-titulo">
+
+            <div>
+
+                <h2>
+                    Nuevo acceso
+                </h2>
+
+                <p>
+                    Los datos se almacenarán en Supabase.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="formulario">
+
+
+            <!-- NOMBRE -->
+
+            <div class="grupo">
+
+                <label for="nombre">
+                    Nombre de la persona
+                </label>
+
+                <input
+                    id="nombre"
+                    type="text"
+                    placeholder="Ej. Juan Pérez"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+            </div>
+
+
+            <!-- CONTRASEÑA -->
+
+            <div class="grupo">
+
+                <label for="password">
+                    Contraseña
+                </label>
+
+                <div class="password-box">
+
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Crear contraseña"
+                        autocomplete="new-password"
+                        spellcheck="false"
+                    >
+
+                    <button
+                        type="button"
+                        class="mostrar"
+                        id="mostrar"
+                    >
+                        👁️
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- URL -->
+
+            <div class="grupo">
+
+                <label for="url_acceso">
+                    Link al que tendrá acceso
+                </label>
+
+                <input
+                    id="url_acceso"
+                    type="url"
+                    placeholder="https://ejemplo.com/pagina"
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+
+            </div>
+
+
+            <button
+                type="button"
+                class="boton"
+                id="crear"
+            >
+                🔐 Crear acceso
+            </button>
+
+
+            <div
+                id="mensajeCrear"
+                class="mensaje"
+            ></div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     USUARIOS
+===================================================== -->
+
+<section
+    id="usuarios-seccion"
+    class="seccion"
+>
+
+
+    <div class="encabezado">
+
+        <h1>
+            Usuarios y accesos
+        </h1>
+
+        <p>
+            Consulta y administra las personas autorizadas.
+        </p>
+
+    </div>
+
+
+    <div class="tarjeta">
+
+
+        <div class="tarjeta-titulo">
+
+            <div>
+
+                <h2>
+                    Usuarios registrados
+                </h2>
+
+                <p>
+                    Puedes editar sus datos y cambiar su estado.
+                </p>
+
+            </div>
+
+            <button
+                class="boton"
+                onclick="cargarUsuarios()"
+            >
+                🔄 Actualizar
+            </button>
+
+        </div>
+
+
+        <div class="barra">
+
+            <input
+                id="buscar"
+                type="search"
+                placeholder="🔎 Buscar usuario..."
+                oninput="filtrarUsuarios()"
+            >
+
+        </div>
+
+
+        <div
+            class="contador"
+            id="contador"
+        >
+            Cargando usuarios...
+        </div>
+
+
+        <div
+            class="tabla-contenedor"
+            id="tablaContenedor"
+        >
+
+            <div class="cargando">
+                Cargando usuarios...
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL EDITAR
+===================================================== -->
+
+<div
+    class="modal"
+    id="modalEditar"
+>
+
+    <div class="modal-contenido">
+
+
+        <div class="modal-cabecera">
+
+            <h2>
+                Editar usuario
+            </h2>
+
+            <button
+                class="cerrar"
+                onclick="cerrarModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <input
+            type="hidden"
+            id="editarId"
+        >
+
+
+        <div class="grupo">
+
+            <label for="editarNombre">
+                Nombre
+            </label>
+
+            <input
+                id="editarNombre"
+                type="text"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <div class="grupo">
+
+            <label for="editarUrl">
+                Link de acceso
+            </label>
+
+            <input
+                id="editarUrl"
+                type="url"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <div class="grupo">
+
+            <label for="editarPassword">
+                Nueva contraseña
+            </label>
+
+            <div class="password-box">
+
+                <input
+                    id="editarPassword"
+                    type="password"
+                    placeholder="Dejar vacío para conservarla"
+                    autocomplete="new-password"
+                >
+
+                <button
+                    type="button"
+                    class="mostrar"
+                    onclick="mostrarPasswordEditar()"
+                    id="mostrarEditar"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="grupo">
+
+            <label for="editarActivo">
+                Estado
+            </label>
+
+            <select
+                id="editarActivo"
+                style="
+                    width:100%;
+                    height:52px;
+                    border:1px solid #cbd5e1;
+                    border-radius:12px;
+                    padding:0 15px;
+                    font-size:15px;
+                    color:#0f172a;
+                    background:#fff;
+                "
+            >
+
+                <option value="true">
+                    Activo
+                </option>
+
+                <option value="false">
+                    Inactivo
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="mensajeEditar"
+            class="mensaje"
+        ></div>
+
+
+        <div class="modal-botones">
+
+            <button
+                class="boton boton-secundario"
+                onclick="cerrarModal()"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="boton"
+                id="guardarEdicion"
+                onclick="guardarEdicion()"
+            >
+                💾 Guardar cambios
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://nlpdpvjtdxknhvgqbfls.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let usuarios = [];
+
+let usuariosFiltrados = [];
+
+
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
+const nombre =
+    document.getElementById("nombre");
+
+const password =
+    document.getElementById("password");
+
+const urlAcceso =
+    document.getElementById("url_acceso");
+
+const crear =
+    document.getElementById("crear");
+
+const mostrar =
+    document.getElementById("mostrar");
+
+const mensajeCrear =
+    document.getElementById("mensajeCrear");
+
+
+/* =========================================================
+   HASH
+========================================================= */
+
+async function generarHash(texto){
+
+    const datos =
+        new TextEncoder().encode(texto);
+
+    const hash =
+        await crypto.subtle.digest(
+            "SHA-256",
+            datos
+        );
+
+    return Array
+        .from(
+            new Uint8Array(hash)
+        )
+        .map(
+            byte =>
+                byte
+                    .toString(16)
+                    .padStart(2,"0")
+        )
+        .join("");
+
+}
+
+
+/* =========================================================
+   MENSAJE
+========================================================= */
+
+function mensaje(elemento,texto,tipo){
+
+    elemento.textContent =
+        texto;
+
+    elemento.className =
+        "mensaje " + tipo;
+
+}
+
+
+/* =========================================================
+   MOSTRAR PASSWORD
+========================================================= */
+
+mostrar.addEventListener(
+    "click",
+    function(){
+
+        if(
+            password.type ===
+            "password"
+        ){
+
+            password.type =
+                "text";
+
+            mostrar.textContent =
+                "🙈";
+
+        }
+        else{
+
+            password.type =
+                "password";
+
+            mostrar.textContent =
+                "👁️";
+
+        }
+
+        password.focus();
+
+    }
+);
+
+
+/* =========================================================
+   CREAR USUARIO
+========================================================= */
+
+crear.addEventListener(
+    "click",
+    crearAcceso
+);
+
+
+async function crearAcceso(){
+
+    mensajeCrear.className =
+        "mensaje";
+
+
+    const nombreValor =
+        nombre.value.trim();
+
+    const passwordValor =
+        password.value;
+
+    const urlValor =
+        urlAcceso.value.trim();
+
+
+    if(!nombreValor){
+
+        mensaje(
+            mensajeCrear,
+            "Escribe el nombre de la persona.",
+            "error"
+        );
+
+        nombre.focus();
+
+        return;
+
+    }
+
+
+    if(!passwordValor){
+
+        mensaje(
+            mensajeCrear,
+            "Escribe una contraseña.",
+            "error"
+        );
+
+        password.focus();
+
+        return;
+
+    }
+
+
+    if(passwordValor.length < 4){
+
+        mensaje(
+            mensajeCrear,
+            "La contraseña debe tener al menos 4 caracteres.",
+            "error"
+        );
+
+        password.focus();
+
+        return;
+
+    }
+
+
+    if(!urlValor){
+
+        mensaje(
+            mensajeCrear,
+            "Escribe el link de acceso.",
+            "error"
+        );
+
+        urlAcceso.focus();
+
+        return;
+
+    }
+
+
+    let urlValida;
+
+    try{
+
+        urlValida =
+            new URL(urlValor);
+
+    }
+    catch(error){
+
+        mensaje(
+            mensajeCrear,
+            "Escribe un link válido.",
+            "error"
+        );
+
+        urlAcceso.focus();
+
+        return;
+
+    }
+
+
+    if(
+        urlValida.protocol !== "http:" &&
+        urlValida.protocol !== "https:"
+    ){
+
+        mensaje(
+            mensajeCrear,
+            "El link debe comenzar con http:// o https://",
+            "error"
+        );
+
+        urlAcceso.focus();
+
+        return;
+
+    }
+
+
+    crear.disabled =
+        true;
+
+    crear.textContent =
+        "Creando...";
+
+
+    try{
+
+        const passwordHash =
+            await generarHash(
+                passwordValor
+            );
+
+
+        const resultado =
+            await supabaseClient.rpc(
+                "crear_acceso_asistencia",
+                {
+                    p_nombre:
+                        nombreValor,
+
+                    p_password_hash:
+                        passwordHash,
+
+                    p_url_acceso:
+                        urlValida.href
+                }
+            );
+
+
+        if(resultado.error){
+
+            console.error(
+                resultado.error
+            );
+
+            mensaje(
+                mensajeCrear,
+                "No fue posible crear el acceso.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const data =
+            resultado.data;
+
+
+        if(
+            !data ||
+            data.ok !== true
+        ){
+
+            mensaje(
+                mensajeCrear,
+                data?.mensaje ||
+                "No fue posible crear el acceso.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        mensaje(
+            mensajeCrear,
+            "✓ Usuario creado correctamente.",
+            "exito"
+        );
+
+
+        nombre.value =
+            "";
+
+        password.value =
+            "";
+
+        urlAcceso.value =
+            "";
+
+
+        /* Actualizar lista */
+
+        await cargarUsuarios();
+
+    }
+    catch(error){
+
+        console.error(
+            error
+        );
+
+        mensaje(
+            mensajeCrear,
+            "Ocurrió un error al crear el usuario.",
+            "error"
+        );
+
+    }
+    finally{
+
+        crear.disabled =
+            false;
+
+        crear.textContent =
+            "🔐 Crear acceso";
+
+    }
+
+}
+
+
+/* =========================================================
+   CARGAR USUARIOS
+========================================================= */
+
+async function cargarUsuarios(){
+
+    const contenedor =
+        document.getElementById(
+            "tablaContenedor"
+        );
+
+    const contador =
+        document.getElementById(
+            "contador"
+        );
+
+
+    contenedor.innerHTML =
+        `<div class="cargando">
+            Cargando usuarios...
+        </div>`;
+
+
+    try{
+
+        const resultado =
+            await supabaseClient.rpc(
+                "listar_accesos_asistencia"
+            );
+
+
+        if(resultado.error){
+
+            console.error(
+                resultado.error
+            );
+
+            contenedor.innerHTML =
+                `<div class="vacio">
+                    <div class="vacio-icono">⚠️</div>
+                    No fue posible cargar los usuarios.
+                </div>`;
+
+            contador.textContent =
+                "Error al cargar.";
+
+            return;
+
+        }
+
+
+        usuarios =
+            resultado.data || [];
+
+
+        if(typeof usuarios === "string"){
+
+            try{
+
+                usuarios =
+                    JSON.parse(
+                        usuarios
+                    );
+
+            }
+            catch(error){
+
+                usuarios = [];
+
+            }
+
+        }
+
+
+        usuariosFiltrados =
+            [...usuarios];
+
+
+        renderizarUsuarios();
+
+    }
+    catch(error){
+
+        console.error(
+            error
+        );
+
+        contenedor.innerHTML =
+            `<div class="vacio">
+                <div class="vacio-icono">⚠️</div>
+                Ocurrió un error.
+            </div>`;
+
+        contador.textContent =
+            "Error.";
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDERIZAR USUARIOS
+========================================================= */
+
+function renderizarUsuarios(){
+
+    const contenedor =
+        document.getElementById(
+            "tablaContenedor"
+        );
+
+    const contador =
+        document.getElementById(
+            "contador"
+        );
+
+
+    contador.textContent =
+        usuariosFiltrados.length +
+        (
+            usuariosFiltrados.length === 1
+                ? " usuario"
+                : " usuarios"
+        );
+
+
+    if(!usuariosFiltrados.length){
+
+        contenedor.innerHTML =
+            `<div class="vacio">
+
+                <div class="vacio-icono">
+                    👥
+                </div>
+
+                No hay usuarios registrados.
+
+            </div>`;
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Usuario
+                    </th>
+
+                    <th>
+                        Link de acceso
+                    </th>
+
+                    <th>
+                        Estado
+                    </th>
+
+                    <th>
+                        Creado
+                    </th>
+
+                    <th>
+                        Último acceso
+                    </th>
+
+                    <th>
+                        Acciones
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+    `;
+
+
+    usuariosFiltrados.forEach(
+        usuario => {
+
+            const fechaCreacion =
+                usuario.creado_en
+                    ? formatearFecha(
+                        usuario.creado_en
+                    )
+                    : "—";
+
+
+            const ultimoAcceso =
+                usuario.ultimo_acceso
+                    ? formatearFecha(
+                        usuario.ultimo_acceso
+                    )
+                    : "Nunca";
+
+
+            html += `
+
+                <tr>
+
+                    <td>
+
+                        <div class="nombre-usuario">
+
+                            ${escaparHTML(
+                                usuario.nombre_persona
+                            )}
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        <div
+                            class="url"
+                            title="${escaparHTML(
+                                usuario.url_acceso
+                            )}"
+                        >
+
+                            ${escaparHTML(
+                                usuario.url_acceso
+                            )}
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+
+                        ${
+                            usuario.activo
+                            ?
+
+                            `<span class="estado activo">
+                                ● Activo
+                            </span>`
+
+                            :
+
+                            `<span class="estado inactivo">
+                                ● Inactivo
+                            </span>`
+                        }
+
+                    </td>
+
+
+                    <td>
+
+                        ${fechaCreacion}
+
+                    </td>
+
+
+                    <td>
+
+                        ${ultimoAcceso}
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="acciones">
+
+                            <button
+                                class="btn-tabla btn-editar"
+                                onclick="abrirEditar('${usuario.id}')"
+                            >
+                                ✏️ Editar
+                            </button>
+
+                            <button
+                                class="btn-tabla btn-estado"
+                                onclick="cambiarEstado('${usuario.id}')"
+                            >
+                                ${
+                                    usuario.activo
+                                    ? "⛔ Desactivar"
+                                    : "✅ Activar"
+                                }
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+            </tbody>
+
+        </table>
+
+    `;
+
+
+    contenedor.innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   BUSCAR
+========================================================= */
+
+function filtrarUsuarios(){
+
+    const valor =
+        document
+            .getElementById("buscar")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    usuariosFiltrados =
+        usuarios.filter(
+            usuario =>
+                String(
+                    usuario.nombre_persona
+                )
+                .toLowerCase()
+                .includes(valor)
+                ||
+                String(
+                    usuario.url_acceso
+                )
+                .toLowerCase()
+                .includes(valor)
+        );
+
+
+    renderizarUsuarios();
+
+}
+
+
+/* =========================================================
+   ABRIR EDITAR
+========================================================= */
+
+function abrirEditar(id){
+
+    const usuario =
+        usuarios.find(
+            item =>
+                item.id === id
+        );
+
+
+    if(!usuario){
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "editarId"
+    ).value =
+        usuario.id;
+
+
+    document.getElementById(
+        "editarNombre"
+    ).value =
+        usuario.nombre_persona;
+
+
+    document.getElementById(
+        "editarUrl"
+    ).value =
+        usuario.url_acceso;
+
+
+    document.getElementById(
+        "editarPassword"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "editarActivo"
+    ).value =
+        usuario.activo
+            ? "true"
+            : "false";
+
+
+    document.getElementById(
+        "mensajeEditar"
+    ).className =
+        "mensaje";
+
+
+    document.getElementById(
+        "modalEditar"
+    ).classList.add(
+        "visible"
+    );
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL
+========================================================= */
+
+function cerrarModal(){
+
+    document.getElementById(
+        "modalEditar"
+    ).classList.remove(
+        "visible"
+    );
+
+}
+
+
+/* =========================================================
+   MOSTRAR PASSWORD EDITAR
+========================================================= */
+
+function mostrarPasswordEditar(){
+
+    const campo =
+        document.getElementById(
+            "editarPassword"
+        );
+
+    const boton =
+        document.getElementById(
+            "mostrarEditar"
+        );
+
+
+    if(
+        campo.type ===
+        "password"
+    ){
+
+        campo.type =
+            "text";
+
+        boton.textContent =
+            "🙈";
+
+    }
+    else{
+
+        campo.type =
+            "password";
+
+        boton.textContent =
+            "👁️";
+
+    }
+
+}
+
+
+/* =========================================================
+   GUARDAR EDICIÓN
+========================================================= */
+
+async function guardarEdicion(){
+
+    const id =
+        document.getElementById(
+            "editarId"
+        ).value;
+
+
+    const nombre =
+        document.getElementById(
+            "editarNombre"
+        ).value.trim();
+
+
+    const url =
+        document.getElementById(
+            "editarUrl"
+        ).value.trim();
+
+
+    const password =
+        document.getElementById(
+            "editarPassword"
+        ).value;
+
+
+    const activo =
+        document.getElementById(
+            "editarActivo"
+        ).value === "true";
+
+
+    const mensajeElemento =
+        document.getElementById(
+            "mensajeEditar"
+        );
+
+
+    if(!nombre){
+
+        mensaje(
+            mensajeElemento,
+            "El nombre es obligatorio.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    let urlValida;
+
+    try{
+
+        urlValida =
+            new URL(url);
+
+    }
+    catch(error){
+
+        mensaje(
+            mensajeElemento,
+            "El link no es válido.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        urlValida.protocol !== "http:" &&
+        urlValida.protocol !== "https:"
+    ){
+
+        mensaje(
+            mensajeElemento,
+            "El link debe comenzar con http:// o https://",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const boton =
+        document.getElementById(
+            "guardarEdicion"
+        );
+
+
+    boton.disabled =
+        true;
+
+    boton.textContent =
+        "Guardando...";
+
+
+    try{
+
+        let passwordHash =
+            null;
+
+
+        if(password){
+
+            if(password.length < 4){
+
+                mensaje(
+                    mensajeElemento,
+                    "La contraseña debe tener al menos 4 caracteres.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            passwordHash =
+                await generarHash(
+                    password
+                );
+
+        }
+
+
+        const resultado =
+            await supabaseClient.rpc(
+                "editar_acceso_asistencia",
+                {
+
+                    p_id:
+                        id,
+
+                    p_nombre:
+                        nombre,
+
+                    p_url_acceso:
+                        urlValida.href,
+
+                    p_password_hash:
+                        passwordHash,
+
+                    p_activo:
+                        activo
+
+                }
+            );
+
+
+        if(resultado.error){
+
+            console.error(
+                resultado.error
+            );
+
+            mensaje(
+                mensajeElemento,
+                "No fue posible actualizar el usuario.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const data =
+            resultado.data;
+
+
+        if(
+            !data ||
+            data.ok !== true
+        ){
+
+            mensaje(
+                mensajeElemento,
+                data?.mensaje ||
+                "No fue posible actualizar.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        cerrarModal();
+
+        await cargarUsuarios();
+
+    }
+    catch(error){
+
+        console.error(
+            error
+        );
+
+        mensaje(
+            mensajeElemento,
+            "Ocurrió un error al actualizar.",
+            "error"
+        );
+
+    }
+    finally{
+
+        boton.disabled =
+            false;
+
+        boton.textContent =
+            "💾 Guardar cambios";
+
+    }
+
+}
+
+
+/* =========================================================
+   CAMBIAR ESTADO
+========================================================= */
+
+async function cambiarEstado(id){
+
+    const usuario =
+        usuarios.find(
+            item =>
+                item.id === id
+        );
+
+
+    if(!usuario){
+
+        return;
+
+    }
+
+
+    const nuevoEstado =
+        !usuario.activo;
+
+
+    const confirmacion =
+        confirm(
+            nuevoEstado
+                ? "¿Activar el acceso de " +
+                  usuario.nombre_persona +
+                  "?"
+                : "¿Desactivar el acceso de " +
+                  usuario.nombre_persona +
+                  "?"
+        );
+
+
+    if(!confirmacion){
+
+        return;
+
+    }
+
+
+    try{
+
+        const resultado =
+            await supabaseClient.rpc(
+                "editar_acceso_asistencia",
+                {
+
+                    p_id:
+                        usuario.id,
+
+                    p_nombre:
+                        usuario.nombre_persona,
+
+                    p_url_acceso:
+                        usuario.url_acceso,
+
+                    p_password_hash:
+                        null,
+
+                    p_activo:
+                        nuevoEstado
+
+                }
+            );
+
+
+        if(resultado.error){
+
+            console.error(
+                resultado.error
+            );
+
+            alert(
+                "No fue posible cambiar el estado."
+            );
+
+            return;
+
+        }
+
+
+        const data =
+            resultado.data;
+
+
+        if(
+            !data ||
+            data.ok !== true
+        ){
+
+            alert(
+                data?.mensaje ||
+                "No fue posible cambiar el estado."
+            );
+
+            return;
+
+        }
+
+
+        await cargarUsuarios();
+
+    }
+    catch(error){
+
+        console.error(
+            error
+        );
+
+        alert(
+            "Ocurrió un error."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CAMBIAR SECCIÓN
+========================================================= */
+
+function mostrarSeccion(
+    id,
+    boton
+){
+
+    document
+        .querySelectorAll(".seccion")
+        .forEach(
+            seccion => {
+
+                seccion.classList.remove(
+                    "activa"
+                );
+
+            }
+        );
+
+
+    document
+        .getElementById(id)
+        .classList.add(
+            "activa"
+        );
+
+
+    document
+        .querySelectorAll(".menu button")
+        .forEach(
+            item => {
+
+                item.classList.remove(
+                    "activo"
+                );
+
+            }
+        );
+
+
+    boton.classList.add(
+        "activo"
+    );
+
+
+    if(id === "usuarios-seccion"){
+
+        cargarUsuarios();
+
+    }
+
+
+    document
+        .getElementById("menu")
+        .classList.remove(
+            "abierto"
+        );
+
+}
+
+
+/* =========================================================
+   MENU MÓVIL
+========================================================= */
+
+function abrirMenu(){
+
+    document
+        .getElementById("menu")
+        .classList.toggle(
+            "abierto"
+        );
+
+}
+
+
+/* =========================================================
+   ESCAPAR HTML
+========================================================= */
+
+function escaparHTML(valor){
+
+    return String(
+        valor ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   FECHAS
+========================================================= */
+
+function formatearFecha(
+    fecha
+){
+
+    try{
+
+        return new Date(
+            fecha
+        ).toLocaleString(
+            "es-MX",
+            {
+                dateStyle:"short",
+                timeStyle:"short"
+            }
+        );
+
+    }
+    catch(error){
+
+        return "—";
+
+    }
+
+}
+
+
+/* =========================================================
+   ENTER
+========================================================= */
+
+nombre.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key ===
+            "Enter"
+        ){
+
+            password.focus();
+
+        }
+
+    }
+);
+
+
+password.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key ===
+            "Enter"
+        ){
+
+            urlAcceso.focus();
+
+        }
+
+    }
+);
+
+
+urlAcceso.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key ===
+            "Enter"
+        ){
+
+            crearAcceso();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+window.addEventListener(
+    "load",
+    function(){
+
+        nombre.focus();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
