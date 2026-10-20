@@ -276,53 +276,55 @@ main{
     font-size:14px;
 }
 
-/* CALENDARIO */
-
+/* CALENDARIO EN TABLA: cada fecha ocupa una única celda */
 .calendar{
     padding:20px 25px 25px;
+    width:100%;
+    box-sizing:border-box;
 }
-
-.weekdays,
-.days{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
+.calendar-table-wrap{
+    width:100%;
+    overflow-x:auto;
+    border:1px solid #e4ebf2;
+    border-radius:12px;
+    background:#fff;
+    -webkit-overflow-scrolling:touch;
 }
-
-.weekdays div{
+.calendar-table{
+    width:100%;
+    min-width:0;
+    table-layout:fixed;
+    border-collapse:separate;
+    border-spacing:0;
+}
+.calendar-table thead th{
     text-align:center;
-    font-weight:bold;
+    font-weight:800;
     font-size:13px;
     color:#607087;
-    padding:12px 5px;
+    padding:12px 4px;
+    background:#f4f8fb;
+    border-bottom:1px solid #e4ebf2;
+    border-right:1px solid #e4ebf2;
 }
-
-.day{
-    min-height:125px;
-    border:1px solid #edf1f5;
-    margin:-1px 0 0 -1px;
-    padding:8px;
+.calendar-table thead th:last-child{border-right:0;}
+.calendar-table td{
+    width:14.285%;
+    height:112px;
+    vertical-align:top;
+    border-right:1px solid #edf1f5;
+    border-bottom:1px solid #edf1f5;
+    padding:7px;
     background:#fff;
     cursor:pointer;
-    transition:.15s;
-    position:relative;
+    overflow-wrap:anywhere;
+    box-sizing:border-box;
 }
-
-.day:hover{
-    background:#f7fbfd;
-    z-index:2;
-    box-shadow:0 0 0 2px rgba(0,188,212,.25);
-}
-
-.day.other-month{
-    background:#f8fafc;
-    color:#a9b3c0;
-}
-
-.day.today{
-    background:#f0fbfd;
-    box-shadow:inset 0 0 0 2px var(--cyan);
-}
-
+.calendar-table tr td:last-child{border-right:0;}
+.calendar-table tbody tr:last-child td{border-bottom:0;}
+.calendar-table td:hover{background:#f7fbfd;}
+.calendar-table td.other-month{background:#f8fafc;color:#a9b3c0;}
+.calendar-table td.today{background:#f0fbfd;box-shadow:inset 0 0 0 2px var(--cyan);}
 .day-number{
     width:30px;
     height:30px;
@@ -330,43 +332,31 @@ main{
     display:flex;
     align-items:center;
     justify-content:center;
-    font-weight:bold;
-    margin-bottom:5px;
+    font-weight:800;
+    margin:0 0 5px;
 }
-
-.day.today .day-number{
-    background:var(--cyan);
-    color:white;
-}
-
-.records{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-}
-
+.day.today .day-number{background:var(--cyan);color:white;}
+.records{display:flex;flex-direction:column;gap:4px;min-width:0;}
 .record-badge{
+    display:block;
+    width:100%;
+    box-sizing:border-box;
     font-size:10px;
+    line-height:1.25;
+    border:0;
     border-radius:6px;
     padding:5px 6px;
     color:white;
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow:ellipsis;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    text-align:left;
     font-weight:bold;
+    cursor:pointer;
 }
-
-.badge-planeacion{
-    background:#1976d2;
-}
-
-.badge-economico{
-    background:#f39c12;
-}
-
-.badge-medica{
-    background:#e74c3c;
-}
+.badge-planeacion{background:#1976d2;}
+.badge-economico{background:#f39c12;}
+.badge-medica{background:#e74c3c;}
+.loading-cell{text-align:center;padding:30px!important;color:#607087;cursor:default!important;}
 
 /* LEYENDA */
 
@@ -681,6 +671,69 @@ select:focus{
     cursor:not-allowed;
 }
 
+/* ADMINISTRAR Y ELIMINAR REGISTROS */
+
+.manage-intro{
+    color:#66758a;
+    font-size:14px;
+    line-height:1.5;
+    margin:12px 0 18px;
+}
+.manage-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    max-height:55vh;
+    overflow-y:auto;
+    margin-top:18px;
+}
+.manage-item{
+    border:1px solid var(--borde);
+    border-radius:13px;
+    padding:14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:#fafcff;
+}
+.manage-info{
+    min-width:0;
+}
+.manage-info strong{
+    display:block;
+    color:var(--azul);
+    margin-bottom:5px;
+    overflow-wrap:anywhere;
+}
+.manage-info span{
+    color:#66758a;
+    font-size:13px;
+}
+.delete-btn{
+    flex-shrink:0;
+    border:0;
+    border-radius:9px;
+    padding:10px 12px;
+    color:white;
+    background:#c0392b;
+    font-weight:bold;
+    cursor:pointer;
+}
+.delete-btn:hover{background:#a93226}
+.delete-btn:disabled{opacity:.55;cursor:not-allowed}
+.empty-records{
+    padding:22px;
+    text-align:center;
+    color:#66758a;
+    border:1px dashed var(--borde);
+    border-radius:12px;
+}
+@media(max-width:500px){
+    .manage-item{align-items:flex-start;flex-direction:column}
+    .delete-btn{width:100%}
+}
+
 /* LOADING */
 
 .loading{
@@ -760,15 +813,8 @@ select:focus{
         font-size:21px;
     }
 
-    .calendar{
-        padding:15px 10px 20px;
-        overflow-x:auto;
-    }
-
-    .weekdays,
-    .days{
-        min-width:700px;
-    }
+    .calendar{padding:15px 10px 20px;}
+    .calendar-table{min-width:630px;}
 
     .cycle-box{
         margin:15px 18px 0;
@@ -786,9 +832,7 @@ select:focus{
         padding:20px;
     }
 
-    .day{
-        min-height:105px;
-    }
+    .calendar-table td{height:100px;padding:6px;}
 
     .side-menu{
         width:290px;
@@ -796,6 +840,13 @@ select:focus{
 }
 
 @media(max-width:500px){
+    .calendar{padding:10px 7px 16px;}
+    .calendar-table{min-width:560px;}
+    .calendar-table thead th{font-size:11px;padding:10px 2px;}
+    .calendar-table td{height:82px;padding:4px;}
+    .day-number{width:24px;height:24px;border-radius:7px;font-size:12px;margin-bottom:4px;}
+    .record-badge{font-size:9px;padding:4px 3px;}
+    .records{gap:3px;}
 
     .navigation{
         width:100%;
@@ -894,25 +945,25 @@ select:focus{
                 </div>
             </div>
 
-            <div class="calendar">
-
-                <div class="weekdays">
-                    <div>LUN</div>
-                    <div>MAR</div>
-                    <div>MIÉ</div>
-                    <div>JUE</div>
-                    <div>VIE</div>
-                    <div>SÁB</div>
-                    <div>DOM</div>
+            <div class="calendar" aria-label="Calendario mensual">
+                <div class="calendar-table-wrap">
+                    <table class="calendar-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">LUN</th>
+                                <th scope="col">MAR</th>
+                                <th scope="col">MIÉ</th>
+                                <th scope="col">JUE</th>
+                                <th scope="col">VIE</th>
+                                <th scope="col">SÁB</th>
+                                <th scope="col">DOM</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calendarDays">
+                            <tr><td colspan="7" class="loading-cell">Cargando calendario...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <div class="days" id="calendarDays">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        Cargando calendario...
-                    </div>
-                </div>
-
             </div>
 
             <div class="legend">
@@ -1099,6 +1150,26 @@ select:focus{
 
 </div>
 
+
+<!-- ================= MODAL ADMINISTRAR REGISTROS ================= -->
+
+<div class="modal-overlay" id="modalGestionRegistros">
+    <div class="modal">
+        <div class="modal-header">
+            <div>
+                <h2>Registros de esta fecha</h2>
+                <p id="fechaGestionTexto"></p>
+            </div>
+            <button class="modal-close" onclick="cerrarGestionRegistros()" aria-label="Cerrar">✕</button>
+        </div>
+        <p class="manage-intro">
+            Selecciona <strong>Eliminar</strong> en el registro que quieras quitar.
+            Se solicitará confirmación y el cambio también se guardará en la base de datos.
+        </p>
+        <div class="manage-list" id="listaGestionRegistros"></div>
+        <button class="back-btn" style="margin-top:18px;margin-bottom:0" onclick="cerrarGestionRegistros()">Cerrar</button>
+    </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -1336,157 +1407,191 @@ async function cargarRegistros(){
 ============================================================ */
 
 function renderizarCalendario(){
+    const año = fechaCalendario.getFullYear();
+    const mes = fechaCalendario.getMonth();
 
-    const año =
-        fechaCalendario.getFullYear();
-
-    const mes =
-        fechaCalendario.getMonth();
-
-    document.getElementById("mesTitulo").textContent =
-        `${nombresMeses[mes]} ${año}`;
-
-    const contenedor =
-        document.getElementById("calendarDays");
-
+    document.getElementById("mesTitulo").textContent = `${nombresMeses[mes]} ${año}`;
+    const contenedor = document.getElementById("calendarDays");
     contenedor.innerHTML = "";
 
-    /*
-       JavaScript: domingo = 0
-       Convertimos para que lunes sea 0.
-    */
+    // Calendario de lunes a domingo. Usamos fechas locales y calculamos
+    // una sola celda por fecha para evitar que un número se duplique o se desplace.
+    const primerDiaSemana = (new Date(año, mes, 1).getDay() + 6) % 7;
+    const diasMes = new Date(año, mes + 1, 0).getDate();
+    const totalCeldas = Math.ceil((primerDiaSemana + diasMes) / 7) * 7;
 
-    let primerDia =
-        new Date(año,mes,1).getDay();
+    let fila = null;
+    for(let i = 0; i < totalCeldas; i++){
+        if(i % 7 === 0){
+            fila = document.createElement("tr");
+            contenedor.appendChild(fila);
+        }
 
-    primerDia =
-        primerDia === 0 ? 6 : primerDia - 1;
-
-    const diasMes =
-        new Date(año,mes + 1,0).getDate();
-
-    const diasMesAnterior =
-        new Date(año,mes,0).getDate();
-
-    const totalCeldas = 42;
-
-    for(let i=0;i<totalCeldas;i++){
-
-        const celda =
-            document.createElement("div");
-
+        const desplazamiento = i - primerDiaSemana + 1;
+        const fecha = new Date(año, mes, desplazamiento);
+        const esMesActual = fecha.getMonth() === mes;
+        const fechaISO = convertirFechaISO(fecha);
+        const celda = document.createElement("td");
         celda.className = "day";
+        if(!esMesActual) celda.classList.add("other-month");
+        if(esHoy(fecha)) celda.classList.add("today");
 
-        let numero;
-        let fecha;
-
-        if(i < primerDia){
-
-            numero =
-                diasMesAnterior - primerDia + i + 1;
-
-            fecha =
-                new Date(año,mes - 1,numero);
-
-            celda.classList.add("other-month");
-
-        }else if(i >= primerDia + diasMes){
-
-            numero =
-                i - primerDia - diasMes + 1;
-
-            fecha =
-                new Date(año,mes + 1,numero);
-
-            celda.classList.add("other-month");
-
-        }else{
-
-            numero =
-                i - primerDia + 1;
-
-            fecha =
-                new Date(año,mes,numero);
-        }
-
-        const fechaISO =
-            convertirFechaISO(fecha);
-
-        if(esHoy(fecha)){
-            celda.classList.add("today");
-        }
-
-        celda.addEventListener(
-            "click",
-            () => abrirRegistro(fechaISO)
-        );
-
-        const numeroDiv =
-            document.createElement("div");
-
+        const numeroDiv = document.createElement("div");
         numeroDiv.className = "day-number";
-
-        numeroDiv.textContent = numero;
-
+        numeroDiv.textContent = String(fecha.getDate());
         celda.appendChild(numeroDiv);
 
-
-        const registrosDia =
-            registros.filter(r =>
-                r.fecha === fechaISO
-            );
-
+        const registrosDia = registros.filter(r => r.fecha === fechaISO);
         if(registrosDia.length){
-
-            const records =
-                document.createElement("div");
-
+            const records = document.createElement("div");
             records.className = "records";
-
-            registrosDia
-                .slice(0,4)
-                .forEach(registro => {
-
-                    const badge =
-                        document.createElement("div");
-
-                    badge.className =
-                        "record-badge " +
-                        claseTipo(registro.tipo_registro);
-
-                    badge.textContent =
-                        `${registro.numero_servidor} · ${registro.nombre_docente}`;
-
-                    badge.title =
-                        `${registro.tipo_registro} - ${registro.numero_servidor} - ${registro.nombre_docente}`;
-
-                    records.appendChild(badge);
-
+            registrosDia.slice(0, 4).forEach(registro => {
+                const badge = document.createElement("button");
+                badge.type = "button";
+                badge.className = "record-badge " + claseTipo(registro.tipo_registro);
+                badge.textContent = `${registro.numero_servidor} · ${registro.nombre_docente}`;
+                badge.title = `${registro.tipo_registro} - ${registro.numero_servidor} - ${registro.nombre_docente}. Haz clic para administrar o eliminar este registro.`;
+                badge.addEventListener("click", event => {
+                    event.stopPropagation();
+                    abrirGestionRegistros(fechaISO, registro.id);
                 });
-
-
+                records.appendChild(badge);
+            });
             if(registrosDia.length > 4){
-
-                const extra =
-                    document.createElement("div");
-
+                const extra = document.createElement("div");
                 extra.style.fontSize = "10px";
                 extra.style.color = "#607087";
                 extra.style.fontWeight = "bold";
-
-                extra.textContent =
-                    `+${registrosDia.length - 4} más`;
-
+                extra.textContent = `+${registrosDia.length - 4} más`;
                 records.appendChild(extra);
             }
-
             celda.appendChild(records);
         }
 
-        contenedor.appendChild(celda);
+        celda.addEventListener("click", () => abrirRegistro(fechaISO));
+        fila.appendChild(celda);
     }
 }
 
+
+/* ============================================================
+   ADMINISTRAR / ELIMINAR REGISTROS DEL CALENDARIO
+============================================================ */
+
+function abrirGestionRegistros(fechaISO, registroSeleccionadoId = null){
+    const delDia = registros
+        .filter(r => r.fecha === fechaISO)
+        .sort((a,b) => String(a.tipo_registro).localeCompare(String(b.tipo_registro)));
+
+    document.getElementById("fechaGestionTexto").textContent =
+        formatearFechaISO(fechaISO);
+
+    const lista = document.getElementById("listaGestionRegistros");
+    lista.innerHTML = "";
+
+    if(!delDia.length){
+        lista.innerHTML = '<div class="empty-records">No hay registros para esta fecha.</div>';
+    } else {
+        delDia.forEach(registro => {
+            const item = document.createElement("div");
+            item.className = "manage-item";
+            if(String(registro.id) === String(registroSeleccionadoId)){
+                item.style.borderColor = "var(--cyan)";
+                item.style.boxShadow = "0 0 0 2px rgba(0,188,212,.12)";
+            }
+
+            const info = document.createElement("div");
+            info.className = "manage-info";
+
+            const nombre = document.createElement("strong");
+            nombre.textContent = `${registro.numero_servidor} · ${registro.nombre_docente}`;
+
+            const detalle = document.createElement("span");
+            detalle.textContent = registro.tipo_registro;
+
+            info.appendChild(nombre);
+            info.appendChild(detalle);
+
+            const boton = document.createElement("button");
+            boton.type = "button";
+            boton.className = "delete-btn";
+            boton.textContent = "🗑 Eliminar";
+            boton.addEventListener("click", () => eliminarRegistro(registro, boton));
+
+            item.appendChild(info);
+            item.appendChild(boton);
+            lista.appendChild(item);
+        });
+    }
+
+    document.getElementById("modalGestionRegistros").classList.add("show");
+}
+
+function cerrarGestionRegistros(){
+    document.getElementById("modalGestionRegistros").classList.remove("show");
+}
+
+async function eliminarRegistro(registro, boton){
+    const identificador = registro?.id;
+
+    if(identificador === undefined || identificador === null){
+        mostrarToast("No se encontró el identificador del registro. Verifica que la tabla registros_docentes tenga una columna id.", "error");
+        return;
+    }
+
+    const confirmado = confirm(
+        `¿Seguro que quieres eliminar este registro?\n\n` +
+        `Docente: ${registro.nombre_docente}\n` +
+        `Tipo: ${registro.tipo_registro}\n` +
+        `Fecha: ${formatearFechaISO(registro.fecha)}\n\n` +
+        `Esta acción no se puede deshacer.`
+    );
+
+    if(!confirmado) return;
+
+    boton.disabled = true;
+    boton.textContent = "Eliminando...";
+
+    try{
+        const { error } = await supabaseClient
+            .from("registros_docentes")
+            .delete()
+            .eq("id", identificador);
+
+        if(error) throw error;
+
+        registros = registros.filter(r => String(r.id) !== String(identificador));
+
+        renderizarCalendario();
+        construirResumen();
+
+        // Si el detalle está visible, actualizarlo sin cambiar de docente/tipo.
+        if(document.getElementById("seccionDetalle").classList.contains("active")){
+            const titulo = document.getElementById("detalleTitulo").textContent;
+            const numero = titulo.split(" - ")[0];
+            const docente = docentes.find(d => String(d.numero_servidor) === String(numero));
+            if(docente){
+                const subtitulo = document.getElementById("detalleSubtitulo").textContent;
+                const tipo = ["Planeación","Días económicos","Licencia médica"].find(t => subtitulo.startsWith(t));
+                if(tipo) verDetalle(numero, tipo);
+            }
+        }
+
+        mostrarToast("Registro eliminado correctamente.", "success");
+
+        const quedan = registros.some(r => r.fecha === registro.fecha);
+        if(quedan){
+            abrirGestionRegistros(registro.fecha);
+        }else{
+            cerrarGestionRegistros();
+        }
+    }catch(error){
+        console.error(error);
+        mostrarToast("No fue posible eliminar el registro. Revisa los permisos DELETE de Supabase.", "error");
+        boton.disabled = false;
+        boton.textContent = "🗑 Eliminar";
+    }
+}
 
 /* ============================================================
    NAVEGACIÓN
@@ -2197,6 +2302,14 @@ document
 
         }
 
+    });
+
+document
+    .getElementById("modalGestionRegistros")
+    .addEventListener("click", function(e){
+        if(e.target === this){
+            cerrarGestionRegistros();
+        }
     });
 
 </script>
