@@ -2,804 +2,240 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Iniciar sesión | Control de Asistencia</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0}
+body{font-family:Arial,Helvetica,sans-serif;color:#fff;background:radial-gradient(circle at top left,rgba(0,180,255,.2),transparent 35%),radial-gradient(circle at bottom right,rgba(0,110,255,.18),transparent 35%),linear-gradient(135deg,#061525,#0b1f35,#07111f);min-height:100dvh}
+#loginScreen{min-height:100dvh;width:100%;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.login-container{width:100%;max-width:440px}
+.login-card{background:rgba(10,28,48,.94);border:1px solid rgba(0,191,255,.25);border-radius:24px;padding:clamp(24px,5vw,40px) clamp(20px,4vw,34px);box-shadow:0 25px 70px rgba(0,0,0,.45),0 0 35px rgba(0,174,255,.08);backdrop-filter:blur(14px)}
+.logo{width:76px;height:76px;margin:0 auto 20px;border-radius:22px;background:linear-gradient(135deg,#009dff,#005bea);display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 12px 30px rgba(0,130,255,.3)}
+h1{text-align:center;font-size:clamp(23px,5vw,27px);margin:0 0 8px;font-weight:700}
+.subtitle{text-align:center;color:#9fb5c9;font-size:14px;line-height:1.5;margin-bottom:28px}
+.field{margin-bottom:18px}
+label{display:block;font-size:13px;font-weight:bold;color:#c7d8e8;margin-bottom:8px}
+.input-wrapper{position:relative}
+input{width:100%;height:52px;border-radius:13px;border:1px solid rgba(157,190,215,.2);background:#081827;color:#fff;padding:0 15px;font-size:16px;outline:none}
+input:focus{border-color:#00aaff;box-shadow:0 0 0 3px rgba(0,170,255,.1)}
+input::placeholder{color:#63798d}
+.password-input{padding-right:55px}
+.show-password{position:absolute;right:8px;top:7px;width:38px;height:38px;border:0;border-radius:10px;background:transparent;color:#8ca6ba;cursor:pointer;font-size:18px}
+.login-button{width:100%;min-height:53px;border:0;border-radius:13px;margin-top:7px;background:linear-gradient(135deg,#00a8ff,#0068e8);color:#fff;font-size:15px;font-weight:bold;cursor:pointer}
+.login-button:disabled{opacity:.65;cursor:wait}
+.message{display:none;margin-top:16px;padding:13px 15px;border-radius:11px;font-size:13px;line-height:1.4;text-align:center}
+.message.error{display:block;background:rgba(220,50,50,.1);border:1px solid rgba(255,80,80,.2);color:#ff9b9b}
+.message.success{display:block;background:rgba(0,190,120,.1);border:1px solid rgba(0,220,140,.2);color:#77e8ba}
+.footer{text-align:center;margin-top:22px;color:#637b90;font-size:11px}
+.loading{display:inline-flex;align-items:center;justify-content:center;gap:9px}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-html,
-body{
-    width:100%;
-    height:100%;
-}
-
-body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:
-        radial-gradient(circle at top left, rgba(0,180,255,.20), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(0,110,255,.18), transparent 35%),
-        linear-gradient(135deg,#061525,#0b1f35,#07111f);
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    overflow:hidden;
-}
-
-/* CONTENEDOR */
-
-.login-container{
-    width:100%;
-    max-width:440px;
-    padding:20px;
-}
-
-/* TARJETA */
-
-.login-card{
-    background:rgba(10,28,48,.94);
-    border:1px solid rgba(0,191,255,.25);
-    border-radius:24px;
-    padding:40px 34px;
-    box-shadow:
-        0 25px 70px rgba(0,0,0,.45),
-        0 0 35px rgba(0,174,255,.08);
-    backdrop-filter:blur(14px);
-}
-
-/* ICONO */
-
-.logo{
-    width:82px;
-    height:82px;
-    margin:0 auto 20px;
-    border-radius:22px;
-    background:linear-gradient(135deg,#009dff,#005bea);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:36px;
-    box-shadow:
-        0 12px 30px rgba(0,130,255,.30);
-}
-
-/* TITULOS */
-
-h1{
-    text-align:center;
-    font-size:27px;
-    margin-bottom:8px;
-    font-weight:700;
-}
-
-.subtitle{
-    text-align:center;
-    color:#9fb5c9;
-    font-size:14px;
-    line-height:1.5;
-    margin-bottom:30px;
-}
-
-/* CAMPOS */
-
-.field{
-    margin-bottom:19px;
-}
-
-label{
-    display:block;
-    font-size:13px;
-    font-weight:bold;
-    color:#c7d8e8;
-    margin-bottom:8px;
-}
-
-.input-wrapper{
-    position:relative;
-}
-
-input{
-    width:100%;
-    height:52px;
-    border-radius:13px;
-    border:1px solid rgba(157,190,215,.20);
-    background:#081827;
-    color:#fff;
-    padding:0 15px;
-    font-size:15px;
-    outline:none;
-    transition:.2s;
-}
-
-input:focus{
-    border-color:#00aaff;
-    box-shadow:0 0 0 3px rgba(0,170,255,.10);
-}
-
-input::placeholder{
-    color:#63798d;
-}
-
-/* PASSWORD */
-
-.password-input{
-    padding-right:55px;
-}
-
-.show-password{
-    position:absolute;
-    right:8px;
-    top:7px;
-    width:38px;
-    height:38px;
-    border:0;
-    border-radius:10px;
-    background:transparent;
-    color:#8ca6ba;
-    cursor:pointer;
-    font-size:18px;
-}
-
-.show-password:hover{
-    background:rgba(255,255,255,.06);
-    color:#fff;
-}
-
-/* BOTON */
-
-.login-button{
-    width:100%;
-    height:53px;
-    border:0;
-    border-radius:13px;
-    margin-top:7px;
-    background:linear-gradient(135deg,#00a8ff,#0068e8);
-    color:#fff;
-    font-size:15px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.2s;
-    box-shadow:0 10px 25px rgba(0,125,255,.22);
-}
-
-.login-button:hover{
-    transform:translateY(-1px);
-    box-shadow:0 14px 30px rgba(0,125,255,.32);
-}
-
-.login-button:active{
-    transform:translateY(0);
-}
-
-.login-button:disabled{
-    opacity:.65;
-    cursor:not-allowed;
-    transform:none;
-}
-
-/* MENSAJE */
-
-.message{
-    display:none;
-    margin-top:18px;
-    padding:13px 15px;
-    border-radius:11px;
-    font-size:13px;
-    line-height:1.4;
-    text-align:center;
-}
-
-.message.error{
-    display:block;
-    background:rgba(220,50,50,.10);
-    border:1px solid rgba(255,80,80,.20);
-    color:#ff9b9b;
-}
-
-.message.success{
-    display:block;
-    background:rgba(0,190,120,.10);
-    border:1px solid rgba(0,220,140,.20);
-    color:#77e8ba;
-}
-
-/* PIE */
-
-.footer{
-    text-align:center;
-    margin-top:24px;
-    color:#637b90;
-    font-size:11px;
-}
-
-/* CARGANDO */
-
-.loading{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:9px;
-}
-
-.spinner{
-    width:16px;
-    height:16px;
-    border:2px solid rgba(255,255,255,.35);
-    border-top-color:#fff;
-    border-radius:50%;
-    animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-/* RESPONSIVE */
-
-@media(max-width:500px){
-
-    .login-container{
-        padding:15px;
-    }
-
-    .login-card{
-        padding:32px 22px;
-        border-radius:20px;
-    }
-
-    h1{
-        font-size:24px;
-    }
-
-}
-
+/* Vista protegida: ocupa toda la pantalla del dispositivo */
+#contentScreen{display:none;position:fixed;inset:0;width:100%;height:100%;height:100dvh;background:#fff;z-index:10;overflow:hidden}
+#protectedFrame{display:block;border:0;width:100%;height:100%;height:100dvh;background:#fff}
+#logoutButton{position:fixed;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:99999;border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:12px 16px;background:rgba(5,20,36,.92);color:#fff;font-size:14px;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.28);cursor:pointer;backdrop-filter:blur(10px)}
+#logoutButton:hover{background:#0068e8}
+#frameNotice{display:none;position:absolute;inset:0;background:#fff;color:#173047;padding:80px 24px 24px;text-align:center;z-index:5}
+#frameNotice h2{margin:0 0 12px}
+#frameNotice p{max-width:650px;margin:0 auto 10px;line-height:1.55}
+@media(max-width:500px){.login-card{border-radius:20px}.logo{width:68px;height:68px}}
 </style>
 </head>
-
 <body>
-
-<div class="login-container">
-
+<section id="loginScreen">
+  <div class="login-container">
     <div class="login-card">
+      <div class="logo">🔐</div>
+      <h1>Iniciar sesión</h1>
+      <div class="subtitle">Accesos Administrativos<br>OFTV No. 0216</div>
 
-        <div class="logo">
-            🔐
+      <div class="field">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" placeholder="Ingresa tu nombre" autocomplete="username" maxlength="150">
+      </div>
+
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <div class="input-wrapper">
+          <input type="password" id="password" class="password-input" placeholder="Ingresa tu contraseña" autocomplete="current-password" maxlength="100">
+          <button type="button" class="show-password" id="showPassword" title="Mostrar contraseña" aria-label="Mostrar contraseña">👁</button>
         </div>
+      </div>
 
-        <h1>Iniciar sesión</h1>
-
-        <div class="subtitle">
-            Control de Asistencia<br>
-            OFTV No. 0216
-        </div>
-
-        <!-- NOMBRE -->
-
-        <div class="field">
-
-            <label for="nombre">
-                Nombre
-            </label>
-
-            <input
-                type="text"
-                id="nombre"
-                placeholder="Ingresa tu nombre"
-                autocomplete="username"
-                maxlength="150"
-            >
-
-        </div>
-
-        <!-- CONTRASEÑA -->
-
-        <div class="field">
-
-            <label for="password">
-                Contraseña
-            </label>
-
-            <div class="input-wrapper">
-
-                <input
-                    type="password"
-                    id="password"
-                    class="password-input"
-                    placeholder="Ingresa tu contraseña"
-                    autocomplete="current-password"
-                    maxlength="100"
-                >
-
-                <button
-                    type="button"
-                    class="show-password"
-                    id="showPassword"
-                    title="Mostrar contraseña"
-                    aria-label="Mostrar contraseña"
-                >
-                    👁
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- BOTON -->
-
-        <button
-            type="button"
-            class="login-button"
-            id="loginButton"
-        >
-            Iniciar sesión
-        </button>
-
-        <!-- MENSAJE -->
-
-        <div
-            id="message"
-            class="message"
-        ></div>
-
-        <div class="footer">
-            Sistema de acceso · Grupo García Corona
-        </div>
-
+      <button type="button" class="login-button" id="loginButton">Iniciar sesión</button>
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+      <div class="footer">Sistema de acceso · Grupo García Corona</div>
     </div>
+  </div>
+</section>
 
-</div>
+<section id="contentScreen" aria-label="Contenido protegido">
+  <iframe id="protectedFrame" title="Contenido autorizado" allow="fullscreen; clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <div id="frameNotice">
+    <h2>No se puede mostrar este sitio dentro de la página</h2>
+    <p>El sitio de destino puede bloquear su visualización dentro de un iframe por motivos de seguridad. Para usarlo integrado, el administrador de ese sitio debe permitir que se incruste.</p>
+    <p>Al cerrar sesión volverás al formulario de acceso.</p>
+  </div>
+  <button id="logoutButton" type="button">↩ Cerrar sesión</button>
+</section>
 
 <script>
+const SUPABASE_URL = "https://nlpdpvjtdxknhvgqbfls.supabase.co";
+const SUPABASE_KEY = "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* =========================================================
-   SUPABASE
-========================================================= */
+const loginScreen = document.getElementById("loginScreen");
+const contentScreen = document.getElementById("contentScreen");
+const nombreInput = document.getElementById("nombre");
+const passwordInput = document.getElementById("password");
+const loginButton = document.getElementById("loginButton");
+const showPassword = document.getElementById("showPassword");
+const message = document.getElementById("message");
+const protectedFrame = document.getElementById("protectedFrame");
+const logoutButton = document.getElementById("logoutButton");
+const frameNotice = document.getElementById("frameNotice");
 
-const SUPABASE_URL =
-    "https://nlpdpvjtdxknhvgqbfls.supabase.co";
-
-const SUPABASE_KEY =
-    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
-
-const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
-
-
-/* =========================================================
-   ELEMENTOS
-========================================================= */
-
-const nombreInput =
-    document.getElementById("nombre");
-
-const passwordInput =
-    document.getElementById("password");
-
-const loginButton =
-    document.getElementById("loginButton");
-
-const showPassword =
-    document.getElementById("showPassword");
-
-const message =
-    document.getElementById("message");
-
-
-/* =========================================================
-   MOSTRAR / OCULTAR CONTRASEÑA
-========================================================= */
-
-showPassword.addEventListener("click", function(){
-
-    if(passwordInput.type === "password"){
-
-        passwordInput.type = "text";
-
-        showPassword.textContent = "🙈";
-
-        showPassword.title =
-            "Ocultar contraseña";
-
-        showPassword.setAttribute(
-            "aria-label",
-            "Ocultar contraseña"
-        );
-
-    }else{
-
-        passwordInput.type = "password";
-
-        showPassword.textContent = "👁";
-
-        showPassword.title =
-            "Mostrar contraseña";
-
-        showPassword.setAttribute(
-            "aria-label",
-            "Mostrar contraseña"
-        );
-
-    }
-
+showPassword.addEventListener("click", () => {
+  const mostrar = passwordInput.type === "password";
+  passwordInput.type = mostrar ? "text" : "password";
+  showPassword.textContent = mostrar ? "🙈" : "👁";
+  showPassword.title = mostrar ? "Ocultar contraseña" : "Mostrar contraseña";
+  showPassword.setAttribute("aria-label", showPassword.title);
 });
 
-
-/* =========================================================
-   SHA-256
-========================================================= */
-
-async function sha256(texto){
-
-    const encoder =
-        new TextEncoder();
-
-    const data =
-        encoder.encode(texto);
-
-    const hashBuffer =
-        await crypto.subtle.digest(
-            "SHA-256",
-            data
-        );
-
-    const hashArray =
-        Array.from(
-            new Uint8Array(hashBuffer)
-        );
-
-    return hashArray
-        .map(
-            byte =>
-                byte
-                    .toString(16)
-                    .padStart(2,"0")
-        )
-        .join("");
-
+async function sha256(texto) {
+  const data = new TextEncoder().encode(texto);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(byte => byte.toString(16).padStart(2, "0")).join("");
 }
 
-
-/* =========================================================
-   MENSAJE
-========================================================= */
-
-function mostrarMensaje(texto,tipo){
-
-    message.textContent =
-        texto;
-
-    message.className =
-        "message " + tipo;
-
+function mostrarMensaje(texto, tipo) {
+  message.textContent = texto;
+  message.className = "message " + tipo;
 }
 
-
-/* =========================================================
-   BLOQUEAR PANTALLA
-========================================================= */
-
-function bloquearPantalla(){
-
-    document.body.innerHTML = "";
-
-    document.body.style.background =
-        "#ffffff";
-
-    document.documentElement.style.background =
-        "#ffffff";
-
+function restaurarBoton() {
+  loginButton.disabled = false;
+  loginButton.textContent = "Iniciar sesión";
 }
 
-
-/* =========================================================
-   VALIDAR URL
-========================================================= */
-
-function urlEsValida(url){
-
-    try{
-
-        const objeto =
-            new URL(url);
-
-        return (
-            objeto.protocol === "http:" ||
-            objeto.protocol === "https:"
-        );
-
-    }catch(error){
-
-        return false;
-
-    }
-
+function urlEsValida(valor) {
+  try {
+    const url = new URL(valor);
+    return url.protocol === "https:" || url.protocol === "http:";
+  } catch {
+    return false;
+  }
 }
 
-
-/* =========================================================
-   INICIAR SESIÓN
-========================================================= */
-
-async function iniciarSesion(){
-
-    const nombre =
-        nombreInput.value.trim();
-
-    const password =
-        passwordInput.value;
-
-    /* VALIDACIONES */
-
-    if(!nombre){
-
-        mostrarMensaje(
-            "Ingresa tu nombre.",
-            "error"
-        );
-
-        nombreInput.focus();
-
-        return;
-
-    }
-
-    if(!password){
-
-        mostrarMensaje(
-            "Ingresa tu contraseña.",
-            "error"
-        );
-
-        passwordInput.focus();
-
-        return;
-
-    }
-
-
-    /* ESTADO CARGANDO */
-
-    loginButton.disabled = true;
-
-    loginButton.innerHTML = `
-        <span class="loading">
-            <span class="spinner"></span>
-            Verificando...
-        </span>
-    `;
-
-    message.className =
-        "message";
-
-
-    try{
-
-        /* HASH */
-
-        const passwordHash =
-            await sha256(password);
-
-
-        /* CONSULTA SUPABASE */
-
-        const { data, error } =
-            await supabaseClient.rpc(
-                "validar_acceso_asistencia",
-                {
-                    p_nombre:
-                        nombre,
-
-                    p_password_hash:
-                        passwordHash
-                }
-            );
-
-
-        /* ERROR DE SUPABASE */
-
-        if(error){
-
-            console.error(
-                "Error Supabase:",
-                error
-            );
-
-            mostrarMensaje(
-                "No fue posible verificar el acceso.",
-                "error"
-            );
-
-            restaurarBoton();
-
-            return;
-
-        }
-
-
-        /* RESPUESTA */
-
-        let resultado = data;
-
-        /*
-           En algunos casos Supabase puede devolver
-           el JSON como texto.
-        */
-
-        if(typeof resultado === "string"){
-
-            try{
-
-                resultado =
-                    JSON.parse(resultado);
-
-            }catch(e){
-
-                resultado = null;
-
-            }
-
-        }
-
-
-        /* ACCESO DENEGADO */
-
-        if(
-            !resultado ||
-            resultado.ok !== true
-        ){
-
-            /*
-               Puedes cambiar esta parte por
-               mostrarMensaje(...) si quieres
-               mantener visible el formulario.
-
-               Actualmente, después de un intento
-               incorrecto, se bloquea la pantalla.
-            */
-
-            bloquearPantalla();
-
-            return;
-
-        }
-
-
-        /* URL DEL USUARIO */
-
-        const urlAcceso =
-            resultado.url_acceso;
-
-
-        if(
-            !urlAcceso ||
-            !urlEsValida(urlAcceso)
-        ){
-
-            mostrarMensaje(
-                "El acceso no tiene un link válido configurado.",
-                "error"
-            );
-
-            restaurarBoton();
-
-            return;
-
-        }
-
-
-        /* ÉXITO */
-
-        mostrarMensaje(
-            "Acceso autorizado. Redirigiendo...",
-            "success"
-        );
-
-
-        /*
-           REDIRECCIÓN AL LINK QUE
-           ESTÁ GUARDADO EN SUPABASE.
-        */
-
-        setTimeout(function(){
-
-            window.location.replace(
-                urlAcceso
-            );
-
-        },500);
-
-
-    }catch(error){
-
-        console.error(
-            "Error:",
-            error
-        );
-
-        mostrarMensaje(
-            "Ocurrió un error al iniciar sesión.",
-            "error"
-        );
-
-        restaurarBoton();
-
-    }
-
+function mostrarContenido(url) {
+  // No cambia la dirección principal: carga el destino dentro del iframe.
+  frameNotice.style.display = "none";
+  protectedFrame.src = url;
+  loginScreen.style.display = "none";
+  contentScreen.style.display = "block";
+  document.title = "Control de Asistencia | Sesión activa";
 }
 
-
-/* =========================================================
-   RESTAURAR BOTÓN
-========================================================= */
-
-function restaurarBoton(){
-
-    loginButton.disabled =
-        false;
-
-    loginButton.textContent =
-        "Iniciar sesión";
-
+function cerrarSesion() {
+  // Vacía el contenido protegido y regresa al formulario.
+  protectedFrame.src = "about:blank";
+  frameNotice.style.display = "none";
+  contentScreen.style.display = "none";
+  loginScreen.style.display = "flex";
+  nombreInput.value = "";
+  passwordInput.value = "";
+  message.className = "message";
+  message.textContent = "";
+  restaurarBoton();
+  document.title = "Iniciar sesión | Control de Asistencia";
+  nombreInput.focus();
 }
 
+logoutButton.addEventListener("click", cerrarSesion);
 
-/* =========================================================
-   BOTÓN
-========================================================= */
+async function iniciarSesion() {
+  const nombre = nombreInput.value.trim();
+  const password = passwordInput.value;
 
-loginButton.addEventListener(
-    "click",
-    iniciarSesion
-);
+  if (!nombre) {
+    mostrarMensaje("Ingresa tu nombre.", "error");
+    nombreInput.focus();
+    return;
+  }
+  if (!password) {
+    mostrarMensaje("Ingresa tu contraseña.", "error");
+    passwordInput.focus();
+    return;
+  }
 
+  loginButton.disabled = true;
+  loginButton.innerHTML = '<span class="loading"><span class="spinner"></span>Verificando...</span>';
+  message.className = "message";
 
-/* =========================================================
-   ENTER
-========================================================= */
+  try {
+    const passwordHash = await sha256(password);
+    const { data, error } = await supabaseClient.rpc("validar_acceso_asistencia", {
+      p_nombre: nombre,
+      p_password_hash: passwordHash
+    });
 
-nombreInput.addEventListener(
-    "keydown",
-    function(event){
-
-        if(event.key === "Enter"){
-
-            passwordInput.focus();
-
-        }
-
+    if (error) {
+      console.error("Error Supabase:", error);
+      mostrarMensaje("No fue posible verificar el acceso. Intenta de nuevo.", "error");
+      restaurarBoton();
+      return;
     }
-);
 
-
-passwordInput.addEventListener(
-    "keydown",
-    function(event){
-
-        if(event.key === "Enter"){
-
-            iniciarSesion();
-
-        }
-
+    let resultado = data;
+    if (typeof resultado === "string") {
+      try { resultado = JSON.parse(resultado); }
+      catch { resultado = null; }
     }
-);
 
+    if (!resultado || resultado.ok !== true) {
+      mostrarMensaje("Nombre o contraseña incorrectos, o acceso desactivado.", "error");
+      restaurarBoton();
+      return;
+    }
+
+    const urlAcceso = resultado.url_acceso;
+    if (!urlAcceso || !urlEsValida(urlAcceso)) {
+      mostrarMensaje("El acceso no tiene un enlace válido configurado.", "error");
+      restaurarBoton();
+      return;
+    }
+
+    mostrarContenido(urlAcceso);
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+    mostrarMensaje("Ocurrió un error al iniciar sesión. Revisa tu conexión e inténtalo de nuevo.", "error");
+    restaurarBoton();
+  }
+}
+
+loginButton.addEventListener("click", iniciarSesion);
+nombreInput.addEventListener("keydown", event => {
+  if (event.key === "Enter") passwordInput.focus();
+});
+passwordInput.addEventListener("keydown", event => {
+  if (event.key === "Enter") iniciarSesion();
+});
+
+/*
+  Nota: los navegadores no permiten detectar de forma fiable si una página
+  externa bloqueó la carga en iframe. Si el destino usa X-Frame-Options o
+  Content-Security-Policy frame-ancestors, debe habilitar la inserción desde
+  la configuración del sitio de destino.
+*/
+protectedFrame.addEventListener("load", () => {
+  // El evento load por sí solo no confirma que el sitio sea visible.
+});
 </script>
-
 </body>
 </html>
