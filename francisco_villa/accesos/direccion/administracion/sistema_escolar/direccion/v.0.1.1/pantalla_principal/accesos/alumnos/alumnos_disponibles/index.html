@@ -1,0 +1,1180 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Alumnos Registrados | OFTV No. 0216</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --navy: #0b1f3a;
+    --blue: #123d70;
+    --blue2: #1768ac;
+    --cyan: #36b9ef;
+    --light: #edf5fc;
+    --text: #172b45;
+    --muted: #64748b;
+    --border: #d9e5f2;
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at top right, rgba(54,185,239,.16), transparent 35%),
+        linear-gradient(135deg, #edf5fc, #dceafa);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* ENCABEZADO */
+
+header {
+    background: linear-gradient(120deg, var(--navy), var(--blue));
+    color: white;
+    text-align: center;
+    padding: 32px 18px;
+    border-bottom: 4px solid var(--cyan);
+}
+
+header .subtitulo {
+    color: #9edfff;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+header h1 {
+    font-size: clamp(23px, 4vw, 34px);
+    margin: 12px 0;
+}
+
+header p {
+    margin: 0;
+    color: #d7e9fb;
+    line-height: 1.6;
+}
+
+/* CONTENIDO PRINCIPAL */
+
+main {
+    width: min(1500px, calc(100% - 28px));
+    margin: 28px auto 45px;
+}
+
+.panel {
+    background: rgba(255,255,255,.96);
+    border: 1px solid rgba(18,61,112,.12);
+    border-radius: 20px;
+    box-shadow: 0 14px 40px rgba(11,31,58,.10);
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.panel-header {
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-header h2 {
+    margin: 0 0 8px;
+    color: var(--navy);
+    font-size: 22px;
+}
+
+.panel-header p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+/* RESUMEN */
+
+.resumen {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 15px;
+    padding: 20px 24px;
+}
+
+.resumen-card {
+    background: linear-gradient(135deg, #f4f9ff, #e7f3ff);
+    border: 1px solid #d6e7f8;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.resumen-card span {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.resumen-card strong {
+    color: var(--blue);
+    font-size: 27px;
+}
+
+/* ACCIONES GENERALES */
+
+.acciones-generales {
+    padding: 0 24px 23px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+button {
+    font-family: inherit;
+}
+
+.btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn:hover {
+    filter: brightness(.96);
+    transform: translateY(-1px);
+}
+
+.btn:disabled {
+    opacity: .6;
+    cursor: wait;
+    transform: none;
+}
+
+.btn-recargar {
+    background: var(--blue);
+    color: white;
+}
+
+.btn-editar {
+    background: #1768ac;
+    color: white;
+}
+
+.btn-eliminar {
+    background: #b42332;
+    color: white;
+}
+
+.btn-cancelar {
+    background: #e8eef5;
+    color: #344a63;
+}
+
+.btn-guardar {
+    background: #12805c;
+    color: white;
+}
+
+/* FILTROS */
+
+.filtros {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(150px, 220px);
+    gap: 14px;
+    padding: 0 24px 23px;
+}
+
+.filtros input,
+.filtros select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #cbd9e9;
+    border-radius: 10px;
+    font-size: 14px;
+    color: var(--text);
+    background: white;
+    outline: none;
+}
+
+.filtros input:focus,
+.filtros select:focus {
+    border-color: var(--blue2);
+    box-shadow: 0 0 0 3px rgba(23,104,172,.10);
+}
+
+/* GRUPOS */
+
+#contenedorTablas {
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+}
+
+.grupo-card {
+    background: white;
+    border: 1px solid #d8e5f3;
+    border-radius: 17px;
+    box-shadow: 0 8px 25px rgba(11,31,58,.06);
+    overflow: hidden;
+}
+
+.grupo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 18px 20px;
+    color: white;
+    background: linear-gradient(110deg, var(--navy), var(--blue));
+}
+
+.grupo-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.grupo-header p {
+    margin: 5px 0 0;
+    color: #c9e8ff;
+    font-size: 12px;
+}
+
+.contador {
+    background: rgba(255,255,255,.13);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 30px;
+    padding: 9px 13px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* TABLA CON DESPLAZAMIENTO */
+
+.tabla-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: auto;
+    scrollbar-color: #8bb6df #eaf1f8;
+}
+
+.tabla-scroll::-webkit-scrollbar {
+    height: 12px;
+}
+
+.tabla-scroll::-webkit-scrollbar-track {
+    background: #eaf1f8;
+    border-radius: 10px;
+}
+
+.tabla-scroll::-webkit-scrollbar-thumb {
+    background: #8bb6df;
+    border-radius: 10px;
+    border: 2px solid #eaf1f8;
+}
+
+table {
+    width: 100%;
+    min-width: 1500px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    text-align: left;
+}
+
+thead {
+    background: #edf5fc;
+}
+
+th {
+    color: #173e69;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    padding: 15px 13px;
+    border-bottom: 1px solid #d8e5f3;
+    white-space: nowrap;
+}
+
+td {
+    padding: 13px;
+    font-size: 13px;
+    border-bottom: 1px solid #edf1f6;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+tbody tr:hover {
+    background: #f5faff;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.nombre-alumno {
+    color: var(--navy);
+    font-weight: bold;
+    min-width: 200px;
+}
+
+.matricula {
+    color: var(--blue);
+    font-weight: bold;
+}
+
+.correo {
+    color: #355878;
+}
+
+.acciones-celda {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.acciones-celda .btn {
+    padding: 9px 11px;
+}
+
+/* EDICIÓN */
+
+select.edicion,
+input.edicion {
+    width: 100%;
+    min-width: 100px;
+    padding: 9px;
+    border: 1px solid #cbd9e9;
+    border-radius: 8px;
+    font-size: 13px;
+    background: white;
+}
+
+/* MENSAJES */
+
+.estado {
+    display: none;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin: 0 24px 22px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.estado.error {
+    display: block;
+    background: #fff1f2;
+    color: #9f1239;
+    border: 1px solid #fecdd3;
+}
+
+.estado.info {
+    display: block;
+    background: #eef7ff;
+    color: #174a79;
+    border: 1px solid #cfe8ff;
+}
+
+.vacio {
+    padding: 35px 20px;
+    text-align: center;
+    color: var(--muted);
+    background: #fbfdff;
+    line-height: 1.7;
+}
+
+.vacio strong {
+    display: block;
+    color: var(--blue);
+    margin-bottom: 8px;
+    font-size: 17px;
+}
+
+.ayuda-deslizar {
+    padding: 11px 15px;
+    background: #f6faff;
+    border-bottom: 1px solid #e1ebf5;
+    color: #647b96;
+    font-size: 12px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px 15px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+footer strong {
+    color: var(--blue);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 650px) {
+    main {
+        width: calc(100% - 18px);
+        margin-top: 15px;
+    }
+
+    header {
+        padding: 27px 13px;
+    }
+
+    .resumen {
+        grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 10px;
+    }
+
+    .resumen-card {
+        padding: 14px;
+    }
+
+    .resumen-card strong {
+        font-size: 23px;
+    }
+
+    .panel-header {
+        padding: 19px 16px;
+    }
+
+    .acciones-generales {
+        padding: 0 15px 18px;
+    }
+
+    .filtros {
+        grid-template-columns: 1fr;
+        padding: 0 15px 18px;
+    }
+
+    .estado {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+    .grupo-header {
+        padding: 16px;
+    }
+
+    .grupo-header h3 {
+        font-size: 16px;
+    }
+
+    table {
+        min-width: 1450px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="subtitulo">Sistema de apoyo y gestión escolar</div>
+    <h1>Alumnos Registrados</h1>
+    <p>OFTV No. 0216 “Francisco Villa”</p>
+</header>
+
+<main>
+
+    <section class="panel">
+        <div class="panel-header">
+            <h2>Directorio escolar</h2>
+            <p>
+                Consulta los alumnos organizados por grado y grupo.
+                Dentro de cada tabla, los nombres se muestran en orden alfabético.
+            </p>
+        </div>
+
+        <div class="resumen">
+            <div class="resumen-card">
+                <span>Total de alumnos</span>
+                <strong id="totalAlumnos">—</strong>
+            </div>
+        </div>
+
+        <div class="acciones-generales">
+            <button class="btn btn-recargar" id="btnRecargar" type="button">
+                ↻ Actualizar alumnos
+            </button>
+        </div>
+
+        <div class="filtros">
+            <input
+                type="search"
+                id="buscar"
+                placeholder="Buscar por nombre, matrícula, tutor o correo..."
+                aria-label="Buscar alumnos"
+            >
+
+            <select id="filtroGrupo" aria-label="Filtrar por grupo">
+                <option value="todos">Todos los grados y grupos</option>
+                <option value="1-A">1.º grado · Grupo A</option>
+                <option value="1-B">1.º grado · Grupo B</option>
+                <option value="1-C">1.º grado · Grupo C</option>
+                <option value="2-A">2.º grado · Grupo A</option>
+                <option value="2-B">2.º grado · Grupo B</option>
+                <option value="2-C">2.º grado · Grupo C</option>
+                <option value="3-A">3.º grado · Grupo A</option>
+                <option value="3-B">3.º grado · Grupo B</option>
+                <option value="3-C">3.º grado · Grupo C</option>
+            </select>
+        </div>
+
+        <div id="estado" class="estado" role="status"></div>
+    </section>
+
+    <div id="contenedorTablas">
+        <section class="panel">
+            <div class="vacio">
+                <strong>Cargando alumnos...</strong>
+                Consultando la base de datos escolar.
+            </div>
+        </section>
+    </div>
+
+</main>
+
+<footer>
+    <strong>Corporativo Nexel Digital</strong><br>
+    Empresa administrada y supervisada por Grupo García Corona.<br>
+    © 2026 Grupo García Corona. Todos los derechos reservados.
+</footer>
+
+<script>
+/* ======================================================
+   CONEXIÓN CON SUPABASE
+   ====================================================== */
+
+const SUPABASE_URL = "https://nlpdpvjtdxknhvgqbfls.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+/* ======================================================
+   ESTADO DE LA PÁGINA
+   ====================================================== */
+
+let alumnos = [];
+let cargando = false;
+
+const contenedorTablas = document.getElementById("contenedorTablas");
+const campoBuscar = document.getElementById("buscar");
+const filtroGrupo = document.getElementById("filtroGrupo");
+const estado = document.getElementById("estado");
+
+/* ======================================================
+   UTILIDADES
+   ====================================================== */
+
+function normalizarGrado(valor) {
+    const texto = String(valor ?? "").trim();
+
+    if (texto === "1" || texto === "1°" || texto === "1.º") return "1";
+    if (texto === "2" || texto === "2°" || texto === "2.º") return "2";
+    if (texto === "3" || texto === "3°" || texto === "3.º") return "3";
+
+    return texto;
+}
+
+function normalizarGrupo(valor) {
+    return String(valor ?? "").trim().toUpperCase();
+}
+
+function claveGrupo(alumno) {
+    return normalizarGrado(alumno.grado) + "-" +
+           normalizarGrupo(alumno.grupo);
+}
+
+function escaparHTML(valor) {
+    return String(valor ?? "").replace(/[&<>"']/g, caracter => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[caracter]);
+}
+
+function ordenarAlfabeticamente(lista) {
+    return [...lista].sort((a, b) => {
+        const nombreA = String(a.nombre_completo || "").trim();
+        const nombreB = String(b.nombre_completo || "").trim();
+
+        return nombreA.localeCompare(nombreB, "es", {
+            sensitivity: "base",
+            numeric: true
+        });
+    });
+}
+
+function mostrarEstado(mensaje, tipo = "info") {
+    estado.textContent = mensaje;
+    estado.className = "estado " + tipo;
+}
+
+function ocultarEstado() {
+    estado.textContent = "";
+    estado.className = "estado";
+}
+
+function texto(valor) {
+    return escaparHTML(valor || "—");
+}
+
+/* ======================================================
+   CARGAR ALUMNOS
+   ====================================================== */
+
+async function cargarAlumnos() {
+    if (cargando) return;
+
+    cargando = true;
+
+    const boton = document.getElementById("btnRecargar");
+    boton.disabled = true;
+    boton.textContent = "Cargando...";
+
+    mostrarEstado("Consultando los registros de alumnos...", "info");
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("alumnos")
+            .select("*");
+
+        if (error) throw error;
+
+        alumnos = data || [];
+
+        renderizarPagina();
+        ocultarEstado();
+
+    } catch (error) {
+        console.error("Error al cargar alumnos:", error);
+
+        mostrarEstado(
+            "No se pudieron cargar los alumnos. " +
+            "Verifica la conexión con Supabase y los permisos de lectura. " +
+            (error.message || ""),
+            "error"
+        );
+
+        contenedorTablas.innerHTML = `
+            <section class="panel">
+                <div class="vacio">
+                    <strong>No fue posible cargar los alumnos</strong>
+                    Revisa tu conexión e inténtalo nuevamente con el botón
+                    «Actualizar alumnos».
+                </div>
+            </section>
+        `;
+
+    } finally {
+        cargando = false;
+        boton.disabled = false;
+        boton.textContent = "↻ Actualizar alumnos";
+    }
+}
+
+/* ======================================================
+   RESUMEN
+   ====================================================== */
+
+function actualizarResumen(lista) {
+    document.getElementById("totalAlumnos").textContent = lista.length;
+}
+
+/* ======================================================
+   BUSCAR Y FILTRAR
+   ====================================================== */
+
+function filtrarAlumnos() {
+    const busqueda = campoBuscar.value.trim().toLocaleLowerCase("es");
+    const grupoSeleccionado = filtroGrupo.value;
+
+    return alumnos.filter(al => {
+        const campos = [
+            al.nombre_completo,
+            al.tutor_nombre,
+            al.matricula,
+            al.correo_alumno,
+            al.correo_tutor,
+            al.fecha_nacimiento,
+            al.grado,
+            al.grupo
+        ];
+
+        const coincideBusqueda = !busqueda || campos.some(valor =>
+            String(valor ?? "")
+                .toLocaleLowerCase("es")
+                .includes(busqueda)
+        );
+
+        const coincideGrupo =
+            grupoSeleccionado === "todos" ||
+            claveGrupo(al) === grupoSeleccionado;
+
+        return coincideBusqueda && coincideGrupo;
+    });
+}
+
+/* ======================================================
+   CREAR TABLA PARA CADA GRADO Y GRUPO
+   ====================================================== */
+
+function crearTablaGrupo(grado, grupo, lista) {
+    const tituloGrado = grado + ".º grado";
+    const tituloGrupo = "Grupo " + grupo;
+
+    const filas = ordenarAlfabeticamente(lista).map(al => {
+        const id = escaparHTML(al.id);
+
+        return `
+            <tr>
+                <td class="nombre-alumno">
+                    ${texto(al.nombre_completo)}
+                </td>
+
+                <td>${texto(al.fecha_nacimiento)}</td>
+
+                <td>${texto(al.tutor_nombre)}</td>
+
+                <td>${texto(al.grado)}</td>
+
+                <td>${texto(al.grupo)}</td>
+
+                <td class="matricula">${texto(al.matricula)}</td>
+
+                <td class="correo">${texto(al.correo_alumno)}</td>
+
+                <td class="correo">${texto(al.correo_tutor)}</td>
+
+                <td>
+                    <div class="acciones-celda">
+                        <button
+                            class="btn btn-editar"
+                            type="button"
+                            data-accion="editar"
+                            data-id="${id}">
+                            Editar
+                        </button>
+
+                        <button
+                            class="btn btn-eliminar"
+                            type="button"
+                            data-accion="eliminar"
+                            data-id="${id}">
+                            Eliminar
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join("");
+
+    return `
+        <section class="grupo-card">
+            <div class="grupo-header">
+                <div>
+                    <h3>${tituloGrado} · ${tituloGrupo}</h3>
+                    <p>OFTV No. 0216 “Francisco Villa”</p>
+                </div>
+
+                <span class="contador">
+                    ${lista.length} ${lista.length === 1 ? "alumno" : "alumnos"}
+                </span>
+            </div>
+
+            <div class="ayuda-deslizar">
+                ↔ Si no ves todas las columnas, desliza la tabla horizontalmente
+                para consultar los demás datos y las acciones.
+            </div>
+
+            <div class="tabla-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre del alumno</th>
+                            <th>Fecha de nacimiento</th>
+                            <th>Tutor</th>
+                            <th>Grado</th>
+                            <th>Grupo</th>
+                            <th>Matrícula</th>
+                            <th>Correo del alumno</th>
+                            <th>Correo del tutor</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        ${filas}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    `;
+}
+
+/* ======================================================
+   RENDERIZAR TODAS LAS TABLAS
+   ====================================================== */
+
+function renderizarPagina() {
+    const lista = filtrarAlumnos();
+
+    actualizarResumen(alumnos);
+
+    if (lista.length === 0) {
+        contenedorTablas.innerHTML = `
+            <section class="panel">
+                <div class="vacio">
+                    <strong>No se encontraron alumnos</strong>
+                    ${
+                        alumnos.length
+                            ? "Prueba con otro nombre, matrícula o filtro de grado y grupo."
+                            : "Todavía no hay alumnos registrados en la base de datos."
+                    }
+                </div>
+            </section>
+        `;
+        return;
+    }
+
+    const gruposOrdenados = [
+        { grado: "1", grupo: "A" },
+        { grado: "1", grupo: "B" },
+        { grado: "1", grupo: "C" },
+        { grado: "2", grupo: "A" },
+        { grado: "2", grupo: "B" },
+        { grado: "2", grupo: "C" },
+        { grado: "3", grupo: "A" },
+        { grado: "3", grupo: "B" },
+        { grado: "3", grupo: "C" }
+    ];
+
+    let html = "";
+
+    gruposOrdenados.forEach(({ grado, grupo }) => {
+        const listaGrupo = lista.filter(al =>
+            normalizarGrado(al.grado) === grado &&
+            normalizarGrupo(al.grupo) === grupo
+        );
+
+        // No mostrar tablas vacías.
+        if (listaGrupo.length === 0) return;
+
+        html += crearTablaGrupo(grado, grupo, listaGrupo);
+    });
+
+    // Incluir registros que tengan grado o grupo fuera de las opciones previstas.
+    const listaSinGrupoPrevisto = lista.filter(al => {
+        const grado = normalizarGrado(al.grado);
+        const grupo = normalizarGrupo(al.grupo);
+
+        return !(
+            ["1", "2", "3"].includes(grado) &&
+            ["A", "B", "C"].includes(grupo)
+        );
+    });
+
+    if (listaSinGrupoPrevisto.length > 0) {
+        html += `
+            <section class="grupo-card">
+                <div class="grupo-header">
+                    <div>
+                        <h3>Otros registros</h3>
+                        <p>Alumnos con grado o grupo distinto de las opciones establecidas</p>
+                    </div>
+                    <span class="contador">
+                        ${listaSinGrupoPrevisto.length} registros
+                    </span>
+                </div>
+
+                <div class="tabla-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre del alumno</th>
+                                <th>Fecha de nacimiento</th>
+                                <th>Tutor</th>
+                                <th>Grado</th>
+                                <th>Grupo</th>
+                                <th>Matrícula</th>
+                                <th>Correo del alumno</th>
+                                <th>Correo del tutor</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${ordenarAlfabeticamente(listaSinGrupoPrevisto).map(al => `
+                                <tr>
+                                    <td class="nombre-alumno">${texto(al.nombre_completo)}</td>
+                                    <td>${texto(al.fecha_nacimiento)}</td>
+                                    <td>${texto(al.tutor_nombre)}</td>
+                                    <td>${texto(al.grado)}</td>
+                                    <td>${texto(al.grupo)}</td>
+                                    <td class="matricula">${texto(al.matricula)}</td>
+                                    <td class="correo">${texto(al.correo_alumno)}</td>
+                                    <td class="correo">${texto(al.correo_tutor)}</td>
+                                    <td>
+                                        <div class="acciones-celda">
+                                            <button class="btn btn-editar" type="button"
+                                                data-accion="editar" data-id="${escaparHTML(al.id)}">
+                                                Editar
+                                            </button>
+                                            <button class="btn btn-eliminar" type="button"
+                                                data-accion="eliminar" data-id="${escaparHTML(al.id)}">
+                                                Eliminar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join("")}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        `;
+    }
+
+    contenedorTablas.innerHTML = html;
+}
+
+/* ======================================================
+   EDITAR GRADO Y GRUPO
+   ====================================================== */
+
+function opcionesSelect(tipo, valorActual) {
+    const opciones = tipo === "grado"
+        ? [
+            ["1", "1.º grado"],
+            ["2", "2.º grado"],
+            ["3", "3.º grado"]
+        ]
+        : [
+            ["A", "Grupo A"],
+            ["B", "Grupo B"],
+            ["C", "Grupo C"]
+        ];
+
+    const valor = String(valorActual ?? "").trim().toUpperCase();
+
+    const existe = opciones.some(([v]) => v === valor);
+
+    let resultado = `<select class="edicion" id="edit-${tipo}">`;
+
+    if (!existe && valor) {
+        resultado += `<option value="${escaparHTML(valor)}" selected>${escaparHTML(valor)}</option>`;
+    }
+
+    resultado += `<option value="">Seleccionar</option>`;
+
+    opciones.forEach(([v, etiqueta]) => {
+        resultado += `
+            <option value="${v}" ${valor === v ? "selected" : ""}>
+                ${etiqueta}
+            </option>
+        `;
+    });
+
+    resultado += `</select>`;
+
+    return resultado;
+}
+
+async function editarAlumno(id) {
+    const alumno = alumnos.find(al => String(al.id) === String(id));
+
+    if (!alumno) {
+        alert("No se encontró el alumno seleccionado.");
+        return;
+    }
+
+    const nombreActual = alumno.nombre_completo || "este alumno";
+
+    const confirmar = confirm(
+        "Vas a editar el grado y grupo de " + nombreActual +
+        ". ¿Deseas continuar?"
+    );
+
+    if (!confirmar) return;
+
+    const fila = [...contenedorTablas.querySelectorAll("tbody tr")]
+        .find(tr => {
+            const boton = tr.querySelector('[data-accion="editar"]');
+            return boton && boton.dataset.id === String(id);
+        });
+
+    if (!fila) return;
+
+    const celdas = fila.querySelectorAll("td");
+
+    // El grado y el grupo son las columnas cuarta y quinta.
+    celdas[3].innerHTML = opcionesSelect("grado", alumno.grado);
+    celdas[4].innerHTML = opcionesSelect("grupo", alumno.grupo);
+
+    celdas[8].innerHTML = `
+        <div class="acciones-celda">
+            <button class="btn btn-guardar" type="button"
+                data-accion="guardar" data-id="${escaparHTML(id)}">
+                Guardar
+            </button>
+            <button class="btn btn-cancelar" type="button"
+                data-accion="cancelar" data-id="${escaparHTML(id)}">
+                Cancelar
+            </button>
+        </div>
+    `;
+}
+
+/* ======================================================
+   GUARDAR CAMBIOS
+   ====================================================== */
+
+async function guardarAlumno(id, boton) {
+    const fila = boton.closest("tr");
+
+    if (!fila) return;
+
+    const grado = fila.querySelector("#edit-grado")?.value;
+    const grupo = fila.querySelector("#edit-grupo")?.value;
+
+    if (!grado || !grupo) {
+        alert("Selecciona un grado y un grupo válidos.");
+        return;
+    }
+
+    boton.disabled = true;
+    boton.textContent = "Guardando...";
+
+    try {
+        const { error } = await supabaseClient
+            .from("alumnos")
+            .update({
+                grado: grado,
+                grupo: grupo
+            })
+            .eq("id", id);
+
+        if (error) throw error;
+
+        mostrarEstado("Los datos del alumno se actualizaron correctamente.", "info");
+
+        await cargarAlumnos();
+
+    } catch (error) {
+        console.error("Error al editar alumno:", error);
+
+        alert("No fue posible actualizar el alumno: " + error.message);
+
+        boton.disabled = false;
+        boton.textContent = "Guardar";
+    }
+}
+
+/* ======================================================
+   CANCELAR EDICIÓN
+   ====================================================== */
+
+function cancelarEdicion() {
+    renderizarPagina();
+}
+
+/* ======================================================
+   ELIMINAR UN ALUMNO
+   ====================================================== */
+
+async function eliminarAlumno(id) {
+    const alumno = alumnos.find(al => String(al.id) === String(id));
+
+    if (!alumno) {
+        alert("No se encontró el alumno seleccionado.");
+        return;
+    }
+
+    const confirmar = confirm(
+        "¿Estás seguro de eliminar el registro de " +
+        alumno.nombre_completo +
+        "?\n\nEsta acción no se puede deshacer."
+    );
+
+    if (!confirmar) return;
+
+    try {
+        const { error } = await supabaseClient
+            .from("alumnos")
+            .delete()
+            .eq("id", id);
+
+        if (error) throw error;
+
+        mostrarEstado("El alumno se eliminó correctamente.", "info");
+
+        await cargarAlumnos();
+
+    } catch (error) {
+        console.error("Error al eliminar alumno:", error);
+        alert("No fue posible eliminar al alumno: " + error.message);
+    }
+}
+
+/* ======================================================
+   EVENTOS
+   ====================================================== */
+
+contenedorTablas.addEventListener("click", event => {
+    const boton = event.target.closest("button[data-accion]");
+
+    if (!boton) return;
+
+    const accion = boton.dataset.accion;
+    const id = boton.dataset.id;
+
+    if (accion === "editar") {
+        editarAlumno(id);
+    } else if (accion === "eliminar") {
+        eliminarAlumno(id);
+    } else if (accion === "guardar") {
+        guardarAlumno(id, boton);
+    } else if (accion === "cancelar") {
+        cancelarEdicion();
+    }
+});
+
+campoBuscar.addEventListener("input", renderizarPagina);
+filtroGrupo.addEventListener("change", renderizarPagina);
+
+document.getElementById("btnRecargar").addEventListener(
+    "click",
+    cargarAlumnos
+);
+
+/* CARGA INICIAL */
+cargarAlumnos();
+</script>
+
+</body>
+</html>
