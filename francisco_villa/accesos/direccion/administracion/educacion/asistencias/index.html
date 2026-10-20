@@ -846,7 +846,7 @@ type="text"
 autocomplete="off"
 inputmode="text"
 autofocus
-placeholder="Ejemplo: 123456789-0">
+placeholder="Solo números — se formatea automáticamente">
 
 <button
 class="primary-btn"
@@ -863,22 +863,11 @@ Registrar
 
 <div class="info-box">
 
-<strong>Formato de matrícula:</strong>
-
-123456789-0
-
+<strong>Funcionamiento:</strong>
 <br>
-
-El sistema acepta únicamente números y el
-guion <strong>-</strong>.
-
+El sistema extrae automáticamente los números del código, toma los últimos <strong>10 dígitos</strong> y les agrega el guion → <strong>123456789-0</strong>
 <br><br>
-
-<strong>Escáner USB:</strong>
-
-Conecta el lector, coloca el cursor en el campo
-y escanea. La mayoría de lectores envían
-automáticamente la tecla ENTER al terminar.
+<strong>Escáner USB:</strong> Conecta el lector, coloca el cursor en el campo y escanea. El sistema ignorará cualquier letra o texto.
 
 </div>
 
@@ -1017,14 +1006,9 @@ class="result">
 
 <div class="info-box">
 
-<strong>Cámara:</strong>
-
-La cámara trasera se utilizará automáticamente
-cuando el dispositivo permita identificarla.
-
-El botón
-<strong>🔄 Cambiar cámara</strong>
-permite cambiar entre las cámaras disponibles.
+<strong>Funcionamiento:</strong>
+<br>
+El sistema ignora letras y texto. Solo toma los números, extrae los últimos 10 y los formatea automáticamente como <strong>123456789-0</strong>.
 
 </div>
 
@@ -1107,6 +1091,39 @@ let ultimoEscaneo = 0;
 
 
 /* =================================================
+   NORMALIZAR MATRÍCULA
+   Recibe cualquier texto, elimina todo lo que no
+   sea número, toma los últimos 10 y le pone el guion
+================================================= */
+
+function normalizarMatricula(valor){
+    // 1. Eliminar TODO lo que NO sea número
+    const soloNumeros = String(valor || "").replace(/[^0-9]/g, "");
+    
+    // 2. Tomar SOLO los últimos 10 dígitos
+    const ultimos10 = soloNumeros.slice(-10);
+    
+    // 3. Si tenemos 10 dígitos, insertar guion en posición 9
+    if(ultimos10.length === 10){
+        return ultimos10.slice(0, 9) + "-" + ultimos10.slice(9);
+    }
+    
+    // Si no llega a 10 dígitos, devolver lo que haya
+    return ultimos10;
+}
+
+
+/* =================================================
+   VALIDAR MATRÍCULA
+   Formato estricto: 9 dígitos + guion + 1 dígito
+================================================= */
+
+function validarMatricula(matricula){
+    return /^\d{9}-\d$/.test(matricula);
+}
+
+
+/* =================================================
    CAMBIAR SECCION
 ================================================= */
 
@@ -1183,76 +1200,20 @@ function mostrarSeccion(seccion){
 
 
 /* =================================================
-   NORMALIZAR MATRICULA
+   ESCÁNER USB — SOLO PERMITE NÚMEROS
 ================================================= */
 
-function normalizarMatricula(valor){
+const scanner = document.getElementById("scanner");
 
-    return String(valor || "")
-        .trim()
-        .replace(/[^0-9-]/g, "");
-
-}
-
-
-/* =================================================
-   VALIDAR MATRICULA
-================================================= */
-
-function validarMatricula(matricula){
-
-    return /^\d{9}-\d$/.test(
-        matricula
-    );
-
-}
-
-
-/* =================================================
-   ESCANER USB
-================================================= */
-
-const scanner =
-document.getElementById("scanner");
-
-
-scanner.addEventListener(
-    "input",
-    function(){
-
-        const posicion =
-            scanner.selectionStart;
-
-        const valorOriginal =
-            scanner.value;
-
-        const valorLimpio =
-            normalizarMatricula(
-                valorOriginal
-            );
-
-        if(
-            valorOriginal !==
-            valorLimpio
-        ){
-
-            scanner.value =
-                valorLimpio;
-
-            try{
-
-                scanner.setSelectionRange(
-                    valorLimpio.length,
-                    valorLimpio.length
-                );
-
-            }
-            catch(error){}
-
-        }
-
+scanner.addEventListener("input", function(){
+    const valorOriginal = scanner.value;
+    // Bloquear letras mientras se escribe/escanea
+    const valorSoloNumeros = valorOriginal.replace(/[^0-9]/g, "");
+    
+    if(valorOriginal !== valorSoloNumeros){
+        scanner.value = valorSoloNumeros;
     }
-);
+});
 
 
 scanner.addEventListener(
@@ -1278,144 +1239,69 @@ scanner.addEventListener(
 async function procesarCodigoUSB(){
 
     if(procesandoCodigo){
-
         return;
-
     }
 
+    let codigo = scanner.value;
 
-    let codigo =
-        scanner.value;
+    // Procesar: limpiar, tomar últimos 10, agregar guion
+    codigo = normalizarMatricula(codigo);
 
-
-    codigo =
-        normalizarMatricula(
-            codigo
-        );
-
-
-    scanner.value =
-        codigo;
-
+    scanner.value = codigo;
 
     if(!codigo){
-
         mostrarResultado(
             "usb",
             "warning",
             "⚠️ Matrícula vacía",
             "Escanea una matrícula."
         );
-
         return;
-
     }
 
-
     if(!validarMatricula(codigo)){
-
         mostrarResultado(
             "usb",
             "warning",
-            "⚠️ Matrícula no válida",
+            "⚠️ Matrícula incompleta",
             `
-            La matrícula debe tener exactamente
-            este formato:
-
+            Se requieren al menos 10 dígitos numéricos.
             <br><br>
-
-            <strong>
-            123456789-0
-            </strong>
-
+            Formato esperado:
+            <strong>123456789-0</strong>
             <br><br>
-
-            El código recibido fue:
-
-            <br>
-
-            <strong>
-            ${escaparHTML(codigo)}
-            </strong>
+            Recibido:
+            <strong>${escaparHTML(codigo) || "(vacío)"}</strong>
             `
         );
-
-
-        actualizarStatus(
-            "usb",
-            "warning",
-            "Matrícula no válida"
-        );
-
-
+        actualizarStatus("usb", "warning", "Matrícula incompleta");
         scanner.select();
-
         return;
-
     }
 
-
-    procesandoCodigo =
-        true;
-
-
-    actualizarStatus(
-        "usb",
-        "warning",
-        "Consultando matrícula " + codigo + "..."
-    );
-
+    procesandoCodigo = true;
+    actualizarStatus("usb", "warning", "Consultando matrícula " + codigo + "...");
 
     try{
-
-        await registrarAsistencia(
-            codigo,
-            "usb"
-        );
-
+        await registrarAsistencia(codigo, "usb");
     }
     catch(error){
-
-        console.error(
-            "ERROR SUPABASE:",
-            error
-        );
-
-
+        console.error("ERROR SUPABASE:", error);
         mostrarResultado(
             "usb",
             "error",
             "❌ Error al consultar Supabase",
             obtenerMensajeError(error)
         );
-
-
-        actualizarStatus(
-            "usb",
-            "error",
-            "No se pudo consultar Supabase"
-        );
-
+        actualizarStatus("usb", "error", "No se pudo consultar Supabase");
     }
 
+    procesandoCodigo = false;
+    scanner.value = "";
 
-    procesandoCodigo =
-        false;
-
-
-    scanner.value =
-        "";
-
-
-    setTimeout(
-        () => {
-
-            scanner.focus();
-
-        },
-        150
-    );
-
+    setTimeout(() => {
+        scanner.focus();
+    }, 150);
 }
 
 
@@ -1426,114 +1312,54 @@ async function procesarCodigoUSB(){
 async function iniciarCamara(){
 
     if(camaraActiva){
-
         return;
-
     }
 
-
-    if(
-        typeof ZXingBrowser ===
-        "undefined"
-    ){
-
+    if(typeof ZXingBrowser === "undefined"){
         mostrarResultado(
             "camara",
             "error",
             "❌ Error",
             "No se pudo cargar el lector de códigos."
         );
-
         return;
-
     }
 
-
     try{
-
-        actualizarStatus(
-            "camara",
-            "warning",
-            "Iniciando cámara..."
-        );
-
+        actualizarStatus("camara", "warning", "Iniciando cámara...");
 
         camarasDisponibles =
             await ZXingBrowser
                 .BrowserCodeReader
                 .listVideoInputDevices();
 
-
-        if(
-            !camarasDisponibles ||
-            camarasDisponibles.length === 0
-        ){
-
-            throw new Error(
-                "NO_CAMERA"
-            );
-
+        if(!camarasDisponibles || camarasDisponibles.length === 0){
+            throw new Error("NO_CAMERA");
         }
-
 
         let indiceTrasera =
-            camarasDisponibles.findIndex(
-                camara => {
-
-                    const nombre =
-                        (
-                            camara.label ||
-                            ""
-                        ).toLowerCase();
-
-
-                    return (
-
-                        nombre.includes("back") ||
-
-                        nombre.includes("rear") ||
-
-                        nombre.includes("trasera") ||
-
-                        nombre.includes("environment")
-
-                    );
-
-                }
-            );
-
+            camarasDisponibles.findIndex(camara => {
+                const nombre = (camara.label || "").toLowerCase();
+                return (
+                    nombre.includes("back") ||
+                    nombre.includes("rear") ||
+                    nombre.includes("trasera") ||
+                    nombre.includes("environment")
+                );
+            });
 
         if(indiceTrasera < 0){
-
-            indiceTrasera =
-                0;
-
+            indiceTrasera = 0;
         }
 
-
-        camaraActual =
-            indiceTrasera;
-
-
-        await iniciarCamaraPorIndice(
-            camaraActual
-        );
+        camaraActual = indiceTrasera;
+        await iniciarCamaraPorIndice(camaraActual);
 
     }
     catch(error){
-
-        console.error(
-            "ERROR CAMARA:",
-            error
-        );
-
-
-        manejarErrorCamara(
-            error
-        );
-
+        console.error("ERROR CAMARA:", error);
+        manejarErrorCamara(error);
     }
-
 }
 
 
@@ -1545,137 +1371,67 @@ async function iniciarCamaraPorIndice(indice){
 
     detenerControlesZXing();
 
-
-    const camara =
-        camarasDisponibles[indice];
-
+    const camara = camarasDisponibles[indice];
 
     if(!camara){
-
-        throw new Error(
-            "NO_CAMERA"
-        );
-
+        throw new Error("NO_CAMERA");
     }
 
+    const video = document.getElementById("video");
 
-    const video =
-        document.getElementById("video");
-
-
-    codeReader =
-        new ZXingBrowser
-            .BrowserMultiFormatReader();
-
+    codeReader = new ZXingBrowser.BrowserMultiFormatReader();
 
     cameraControls =
-        await codeReader
-            .decodeFromVideoDevice(
-                camara.deviceId,
-                video,
-                async (
-                    resultado,
-                    error
-                ) => {
+        await codeReader.decodeFromVideoDevice(
+            camara.deviceId,
+            video,
+            async (resultado, error) => {
 
-                    if(!resultado){
-
-                        return;
-
-                    }
-
-
-                    const codigoOriginal =
-                        resultado
-                            .getText()
-                            .trim();
-
-
-                    const codigo =
-                        normalizarMatricula(
-                            codigoOriginal
-                        );
-
-
-                    if(!codigo){
-
-                        return;
-
-                    }
-
-
-                    const ahora =
-                        Date.now();
-
-
-                    if(
-                        codigo === ultimoCodigo &&
-                        ahora - ultimoEscaneo < 3500
-                    ){
-
-                        return;
-
-                    }
-
-
-                    if(procesandoCodigo){
-
-                        return;
-
-                    }
-
-
-                    ultimoCodigo =
-                        codigo;
-
-                    ultimoEscaneo =
-                        ahora;
-
-
-                    procesandoCodigo =
-                        true;
-
-
-                    try{
-
-                        await procesarCodigoCamara(
-                            codigo
-                        );
-
-                    }
-                    finally{
-
-                        procesandoCodigo =
-                            false;
-
-                    }
-
+                if(!resultado){
+                    return;
                 }
-            );
 
+                const codigoOriginal = resultado.getText().trim();
+                
+                // Procesar: eliminar letras, tomar últimos 10, agregar guion
+                const codigo = normalizarMatricula(codigoOriginal);
 
-    camaraActiva =
-        true;
+                if(!codigo){
+                    return;
+                }
 
+                const ahora = Date.now();
 
-    document
-        .getElementById("cameraPlaceholder")
-        .style.display =
-        "none";
+                if(
+                    codigo === ultimoCodigo &&
+                    ahora - ultimoEscaneo < 3500
+                ){
+                    return;
+                }
 
+                if(procesandoCodigo){
+                    return;
+                }
 
-    document
-        .getElementById("scanFrame")
-        .style.display =
-        "block";
+                ultimoCodigo = codigo;
+                ultimoEscaneo = ahora;
+                procesandoCodigo = true;
 
+                try{
+                    await procesarCodigoCamara(codigo);
+                }
+                finally{
+                    procesandoCodigo = false;
+                }
+            }
+        );
 
-    actualizarStatus(
-        "camara",
-        "success",
-        "Cámara activa · Escaneando..."
-    );
+    camaraActiva = true;
 
+    document.getElementById("cameraPlaceholder").style.display = "none";
+    document.getElementById("scanFrame").style.display = "block";
+
+    actualizarStatus("camara", "success", "Cámara activa · Escaneando...");
 }
 
 
@@ -1686,81 +1442,39 @@ async function iniciarCamaraPorIndice(indice){
 async function cambiarCamara(){
 
     try{
-
-        if(
-            !camarasDisponibles ||
-            camarasDisponibles.length < 2
-        ){
-
+        if(!camarasDisponibles || camarasDisponibles.length < 2){
             camarasDisponibles =
                 await ZXingBrowser
                     .BrowserCodeReader
                     .listVideoInputDevices();
-
         }
 
-
-        if(
-            !camarasDisponibles ||
-            camarasDisponibles.length < 2
-        ){
-
+        if(!camarasDisponibles || camarasDisponibles.length < 2){
             mostrarResultado(
                 "camara",
                 "warning",
                 "⚠️ No hay otra cámara",
                 "Este dispositivo solamente tiene una cámara disponible."
             );
-
             return;
-
         }
-
 
         camaraActual++;
 
-
-        if(
-            camaraActual >=
-            camarasDisponibles.length
-        ){
-
-            camaraActual =
-                0;
-
+        if(camaraActual >= camarasDisponibles.length){
+            camaraActual = 0;
         }
 
+        camaraActiva = false;
+        actualizarStatus("camara", "warning", "Cambiando cámara...");
 
-        camaraActiva =
-            false;
-
-
-        actualizarStatus(
-            "camara",
-            "warning",
-            "Cambiando cámara..."
-        );
-
-
-        await iniciarCamaraPorIndice(
-            camaraActual
-        );
+        await iniciarCamaraPorIndice(camaraActual);
 
     }
     catch(error){
-
-        console.error(
-            "ERROR CAMBIO CAMARA:",
-            error
-        );
-
-
-        manejarErrorCamara(
-            error
-        );
-
+        console.error("ERROR CAMBIO CAMARA:", error);
+        manejarErrorCamara(error);
     }
-
 }
 
 
@@ -1770,104 +1484,45 @@ async function cambiarCamara(){
 
 async function procesarCodigoCamara(codigo){
 
-    codigo =
-        normalizarMatricula(
-            codigo
-        );
-
-
-    if(
-        !validarMatricula(codigo)
-    ){
-
+    if(!validarMatricula(codigo)){
         mostrarResultado(
             "camara",
             "warning",
-            "⚠️ Matrícula no válida",
+            "⚠️ Matrícula incompleta",
             `
-            El código escaneado no tiene el formato
-            de matrícula:
-
+            Se requieren al menos 10 dígitos numéricos.
             <br><br>
-
-            <strong>
-            123456789-0
-            </strong>
-
+            Formato esperado:
+            <strong>123456789-0</strong>
             <br><br>
-
-            Código detectado:
-
-            <br>
-
-            <strong>
-            ${escaparHTML(codigo)}
-            </strong>
+            Recibido:
+            <strong>${escaparHTML(codigo) || "(vacío)"}</strong>
             `
         );
-
         return;
-
     }
 
-
-    actualizarStatus(
-        "camara",
-        "warning",
-        "Consultando matrícula..."
-    );
-
+    actualizarStatus("camara", "warning", "Consultando matrícula...");
 
     try{
-
-        await registrarAsistencia(
-            codigo,
-            "camara"
-        );
-
+        await registrarAsistencia(codigo, "camara");
     }
     catch(error){
-
-        console.error(
-            "ERROR CONSULTA CAMARA:",
-            error
-        );
-
-
+        console.error("ERROR CONSULTA CAMARA:", error);
         mostrarResultado(
             "camara",
             "error",
             "❌ Error al consultar Supabase",
             obtenerMensajeError(error)
         );
-
-
-        actualizarStatus(
-            "camara",
-            "error",
-            "No se pudo consultar Supabase"
-        );
-
+        actualizarStatus("camara", "error", "No se pudo consultar Supabase");
     }
 
-
-    setTimeout(
-        () => {
-
-            if(camaraActiva){
-
-                actualizarStatus(
-                    "camara",
-                    "success",
-                    "Cámara activa · Escaneando..."
-                );
-
-            }
-
-        },
-        1800
-    );
-
+    setTimeout(() => {
+        if(camaraActiva){
+            actualizarStatus("camara", "success", "Cámara activa · Escaneando...");
+        }
+    }, 1800);
 }
 
 
@@ -1880,26 +1535,13 @@ async function registrarAsistencia(
     origen
 ){
 
-    const matricula =
-        normalizarMatricula(
-            codigo
-        );
+    const matricula = normalizarMatricula(codigo);
 
-
-    if(
-        !validarMatricula(matricula)
-    ){
-
-        throw new Error(
-            "La matrícula no tiene el formato 123456789-0."
-        );
-
+    if(!validarMatricula(matricula)){
+        throw new Error("La matrícula debe tener el formato 123456789-0.");
     }
 
-
-    const fechaHoy =
-        obtenerFechaLocal();
-
+    const fechaHoy = obtenerFechaLocal();
 
     /* =============================================
        BUSCAR ALUMNO
@@ -1909,28 +1551,16 @@ async function registrarAsistencia(
         await supabaseClient
             .from("alumnos")
             .select("*")
-            .eq(
-                "matricula",
-                matricula
-            )
+            .eq("matricula", matricula)
             .limit(1);
 
-
     if(respuestaAlumno.error){
-
         throw respuestaAlumno.error;
-
     }
 
+    const alumnos = respuestaAlumno.data || [];
 
-    const alumnos =
-        respuestaAlumno.data || [];
-
-
-    if(
-        alumnos.length === 0
-    ){
-
+    if(alumnos.length === 0){
         mostrarResultado(
             origen,
             "error",
@@ -1938,37 +1568,16 @@ async function registrarAsistencia(
             `
             No existe un alumno registrado
             con la matrícula:
-
             <br><br>
-
-            <strong>
-            ${escaparHTML(matricula)}
-            </strong>
+            <strong>${escaparHTML(matricula)}</strong>
             `
         );
-
-
-        actualizarStatus(
-            origen,
-            "error",
-            "Alumno no encontrado"
-        );
-
-
-        agregarLog(
-            origen,
-            "❌ Alumno no encontrado"
-        );
-
-
+        actualizarStatus(origen, "error", "Alumno no encontrado");
+        agregarLog(origen, "❌ Alumno no encontrado: " + matricula);
         return;
-
     }
 
-
-    const alumno =
-        alumnos[0];
-
+    const alumno = alumnos[0];
 
     const nombreAlumno =
         alumno.nombre_completo ||
@@ -1978,7 +1587,6 @@ async function registrarAsistencia(
         alumno.nombre_alumno ||
         "Alumno";
 
-
     /* =============================================
        BUSCAR ASISTENCIA DE HOY
     ============================================= */
@@ -1987,33 +1595,16 @@ async function registrarAsistencia(
         await supabaseClient
             .from("asistencias")
             .select("*")
-            .eq(
-                "matricula",
-                matricula
-            )
-            .eq(
-                "fecha",
-                fechaHoy
-            )
+            .eq("matricula", matricula)
+            .eq("fecha", fechaHoy)
             .limit(1);
 
-
     if(respuestaAsistencia.error){
-
         throw respuestaAsistencia.error;
-
     }
 
-
-    const registros =
-        respuestaAsistencia.data || [];
-
-
-    const asistencia =
-        registros.length > 0
-            ? registros[0]
-            : null;
-
+    const registros = respuestaAsistencia.data || [];
+    const asistencia = registros.length > 0 ? registros[0] : null;
 
     /* =============================================
        PRIMER ESCANEO = ENTRADA
@@ -2021,98 +1612,46 @@ async function registrarAsistencia(
 
     if(!asistencia){
 
-        const timestampEntrada =
-            obtenerTimestampLocal();
-
+        const timestampEntrada = obtenerTimestampLocal();
 
         const registroNuevo = {
-
-            alumno_id:
-                alumno.id,
-
-            matricula:
-                matricula,
-
-            fecha:
-                fechaHoy,
-
-            hora_entrada:
-                timestampEntrada
-
+            alumno_id: alumno.id,
+            matricula: matricula,
+            fecha: fechaHoy,
+            hora_entrada: timestampEntrada
         };
 
-
-        console.log(
-            "INSERTANDO ASISTENCIA:",
-            registroNuevo
-        );
-
+        console.log("INSERTANDO ASISTENCIA:", registroNuevo);
 
         const respuestaInsert =
             await supabaseClient
                 .from("asistencias")
-                .insert(
-                    registroNuevo
-                );
-
+                .insert(registroNuevo);
 
         if(respuestaInsert.error){
-
             throw respuestaInsert.error;
-
         }
-
 
         mostrarResultado(
             origen,
             "success",
-            "✅ Alumno encontrado",
+            "✅ Asistencia registrada",
             `
-            <strong>
-            ${escaparHTML(nombreAlumno)}
-            </strong>
-
+            <strong>${escaparHTML(nombreAlumno)}</strong>
             <br><br>
-
-            Matrícula:
-            <strong>
-            ${escaparHTML(matricula)}
-            </strong>
-
+            Matrícula: <strong>${escaparHTML(matricula)}</strong>
             <br><br>
-
-            <strong>
-            Asistencia registrada
-            </strong>
-
+            <strong>Entrada registrada</strong>
             <br>
-
-            Hora de entrada:
-            <strong>
-            ${formatearTimestamp(timestampEntrada)}
-            </strong>
+            Hora: <strong>${formatearTimestamp(timestampEntrada)}</strong>
             `
         );
 
-
-        actualizarStatus(
-            origen,
-            "success",
-            "Asistencia registrada"
-        );
-
-
-        agregarLog(
-            origen,
-            "✅ Asistencia registrada a " +
-            nombreAlumno
-        );
-
+        actualizarStatus(origen, "success", "Asistencia registrada");
+        agregarLog(origen, "✅ Entrada — " + nombreAlumno + " (" + matricula + ")");
 
         return;
-
     }
-
 
     /* =============================================
        SEGUNDO ESCANEO = SALIDA
@@ -2123,99 +1662,42 @@ async function registrarAsistencia(
         !asistencia.hora_salida
     ){
 
-        const timestampSalida =
-            obtenerTimestampLocal();
+        const timestampSalida = obtenerTimestampLocal();
 
-
-        if(
-            asistencia.id === undefined ||
-            asistencia.id === null
-        ){
-
-            throw new Error(
-                "El registro de asistencia no contiene la columna id."
-            );
-
+        if(asistencia.id === undefined || asistencia.id === null){
+            throw new Error("El registro de asistencia no contiene la columna id.");
         }
-
 
         const respuestaUpdate =
             await supabaseClient
                 .from("asistencias")
-                .update({
-
-                    hora_salida:
-                        timestampSalida
-
-                })
-                .eq(
-                    "id",
-                    asistencia.id
-                );
-
+                .update({ hora_salida: timestampSalida })
+                .eq("id", asistencia.id);
 
         if(respuestaUpdate.error){
-
             throw respuestaUpdate.error;
-
         }
-
 
         mostrarResultado(
             origen,
             "success",
             "🟢 Salida registrada",
             `
-            <strong>
-            ${escaparHTML(nombreAlumno)}
-            </strong>
-
+            <strong>${escaparHTML(nombreAlumno)}</strong>
             <br><br>
-
-            Matrícula:
-            <strong>
-            ${escaparHTML(matricula)}
-            </strong>
-
+            Matrícula: <strong>${escaparHTML(matricula)}</strong>
             <br><br>
-
-            Entrada:
-            <strong>
-            ${formatearTimestamp(
-                asistencia.hora_entrada
-            )}
-            </strong>
-
+            Entrada: <strong>${formatearTimestamp(asistencia.hora_entrada)}</strong>
             <br>
-
-            Salida:
-            <strong>
-            ${formatearTimestamp(
-                timestampSalida
-            )}
-            </strong>
+            Salida: <strong>${formatearTimestamp(timestampSalida)}</strong>
             `
         );
 
-
-        actualizarStatus(
-            origen,
-            "success",
-            "Salida registrada"
-        );
-
-
-        agregarLog(
-            origen,
-            "🟢 Salida registrada a " +
-            nombreAlumno
-        );
-
+        actualizarStatus(origen, "success", "Salida registrada");
+        agregarLog(origen, "🟢 Salida — " + nombreAlumno + " (" + matricula + ")");
 
         return;
-
     }
-
 
     /* =============================================
        TERCER ESCANEO = COMPLETO
@@ -2231,60 +1713,22 @@ async function registrarAsistencia(
             "warning",
             "⚠️ Registro completo",
             `
-            <strong>
-            ${escaparHTML(nombreAlumno)}
-            </strong>
-
+            <strong>${escaparHTML(nombreAlumno)}</strong>
             <br><br>
-
-            Matrícula:
-            <strong>
-            ${escaparHTML(matricula)}
-            </strong>
-
+            Matrícula: <strong>${escaparHTML(matricula)}</strong>
             <br><br>
-
-            Este alumno ya registró
-            su asistencia y salida.
-
+            Ya registró entrada y salida.
             <br><br>
-
-            Entrada:
-            <strong>
-            ${formatearTimestamp(
-                asistencia.hora_entrada
-            )}
-            </strong>
-
+            Entrada: <strong>${formatearTimestamp(asistencia.hora_entrada)}</strong>
             <br>
-
-            Salida:
-            <strong>
-            ${formatearTimestamp(
-                asistencia.hora_salida
-            )}
-            </strong>
+            Salida: <strong>${formatearTimestamp(asistencia.hora_salida)}</strong>
             `
         );
 
-
-        actualizarStatus(
-            origen,
-            "warning",
-            "Asistencia y salida ya registradas"
-        );
-
-
-        agregarLog(
-            origen,
-            "⚠️ " +
-            nombreAlumno +
-            " ya registró su asistencia y salida"
-        );
-
+        actualizarStatus(origen, "warning", "Asistencia completa");
+        agregarLog(origen, "⚠️ Completo — " + nombreAlumno);
 
         return;
-
     }
 
 }
@@ -2296,40 +1740,13 @@ async function registrarAsistencia(
 
 function obtenerFechaLocal(){
 
-    const fecha =
-        new Date();
+    const fecha = new Date();
 
+    const año = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
 
-    const año =
-        fecha.getFullYear();
-
-
-    const mes =
-        String(
-            fecha.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const dia =
-        String(
-            fecha.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return (
-        año +
-        "-" +
-        mes +
-        "-" +
-        dia
-    );
-
+    return año + "-" + mes + "-" + dia;
 }
 
 
@@ -2339,73 +1756,16 @@ function obtenerFechaLocal(){
 
 function obtenerTimestampLocal(){
 
-    const fecha =
-        new Date();
+    const fecha = new Date();
 
+    const año = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+    const dia = String(fecha.getDate()).padStart(2, "0");
+    const horas = String(fecha.getHours()).padStart(2, "0");
+    const minutos = String(fecha.getMinutes()).padStart(2, "0");
+    const segundos = String(fecha.getSeconds()).padStart(2, "0");
 
-    const año =
-        fecha.getFullYear();
-
-
-    const mes =
-        String(
-            fecha.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const dia =
-        String(
-            fecha.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const horas =
-        String(
-            fecha.getHours()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const minutos =
-        String(
-            fecha.getMinutes()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const segundos =
-        String(
-            fecha.getSeconds()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return (
-        año +
-        "-" +
-        mes +
-        "-" +
-        dia +
-        " " +
-        horas +
-        ":" +
-        minutos +
-        ":" +
-        segundos
-    );
-
+    return año + "-" + mes + "-" + dia + " " + horas + ":" + minutos + ":" + segundos;
 }
 
 
@@ -2416,34 +1776,16 @@ function obtenerTimestampLocal(){
 function formatearTimestamp(valor){
 
     if(!valor){
-
         return "No registrado";
-
     }
 
+    const texto = String(valor).replace("T", " ");
 
-    const texto =
-        String(valor)
-            .replace(
-                "T",
-                " "
-            );
-
-
-    if(
-        texto.length >= 19
-    ){
-
-        return texto.substring(
-            11,
-            19
-        );
-
+    if(texto.length >= 19){
+        return texto.substring(11, 19);
     }
-
 
     return texto;
-
 }
 
 
@@ -2454,72 +1796,37 @@ function formatearTimestamp(valor){
 function detenerControlesZXing(){
 
     try{
-
         if(
             cameraControls &&
-            typeof cameraControls.stop ===
-            "function"
+            typeof cameraControls.stop === "function"
         ){
-
             cameraControls.stop();
-
         }
-
     }
     catch(error){
-
         console.error(error);
-
     }
 
-
-    cameraControls =
-        null;
-
+    cameraControls = null;
 
     try{
-
         if(
             codeReader &&
-            typeof codeReader.reset ===
-            "function"
+            typeof codeReader.reset === "function"
         ){
-
             codeReader.reset();
-
         }
-
     }
     catch(error){
-
         console.error(error);
-
     }
 
+    const video = document.getElementById("video");
 
-    const video =
-        document.getElementById(
-            "video"
-        );
-
-
-    if(
-        video &&
-        video.srcObject
-    ){
-
-        video.srcObject
-            .getTracks()
-            .forEach(
-                track => track.stop()
-            );
-
-
-        video.srcObject =
-            null;
-
+    if(video && video.srcObject){
+        video.srcObject.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
     }
-
 }
 
 
@@ -2531,33 +1838,12 @@ function detenerCamara(){
 
     detenerControlesZXing();
 
+    camaraActiva = false;
 
-    camaraActiva =
-        false;
+    document.getElementById("cameraPlaceholder").style.display = "flex";
+    document.getElementById("scanFrame").style.display = "none";
 
-
-    document
-        .getElementById(
-            "cameraPlaceholder"
-        )
-        .style.display =
-        "flex";
-
-
-    document
-        .getElementById(
-            "scanFrame"
-        )
-        .style.display =
-        "none";
-
-
-    actualizarStatus(
-        "camara",
-        null,
-        "Cámara preparada"
-    );
-
+    actualizarStatus("camara", null, "Cámara preparada");
 }
 
 
@@ -2567,83 +1853,27 @@ function detenerCamara(){
 
 function manejarErrorCamara(error){
 
-    console.error(
-        "ERROR CAMARA:",
-        error
-    );
+    console.error("ERROR CAMARA:", error);
 
+    camaraActiva = false;
 
-    camaraActiva =
-        false;
+    document.getElementById("cameraPlaceholder").style.display = "flex";
+    document.getElementById("scanFrame").style.display = "none";
 
+    let mensaje = "No fue posible iniciar la cámara.";
 
-    document
-        .getElementById(
-            "cameraPlaceholder"
-        )
-        .style.display =
-        "flex";
-
-
-    document
-        .getElementById(
-            "scanFrame"
-        )
-        .style.display =
-        "none";
-
-
-    let mensaje =
-        "No fue posible iniciar la cámara.";
-
-
-    if(
-        error &&
-        error.name ===
-        "NotAllowedError"
-    ){
-
-        mensaje =
-            "Debes permitir el acceso a la cámara.";
-
+    if(error && error.name === "NotAllowedError"){
+        mensaje = "Debes permitir el acceso a la cámara.";
     }
-
-
-    else if(
-        error &&
-        error.name ===
-        "NotFoundError"
-    ){
-
-        mensaje =
-            "No se encontró ninguna cámara.";
-
+    else if(error && error.name === "NotFoundError"){
+        mensaje = "No se encontró ninguna cámara.";
     }
-
-
-    else if(
-        error &&
-        error.name ===
-        "NotReadableError"
-    ){
-
-        mensaje =
-            "La cámara está siendo utilizada por otra aplicación.";
-
+    else if(error && error.name === "NotReadableError"){
+        mensaje = "La cámara está siendo utilizada por otra aplicación.";
     }
-
-
-    else if(
-        error &&
-        error.message ===
-        "NO_CAMERA"
-    ){
-
-        mensaje =
-            "Este dispositivo no tiene una cámara disponible.";
-
+    else if(error && error.message === "NO_CAMERA"){
+        mensaje = "Este dispositivo no tiene una cámara disponible.";
     }
-
 
     mostrarResultado(
         "camara",
@@ -2652,13 +1882,7 @@ function manejarErrorCamara(error){
         mensaje
     );
 
-
-    actualizarStatus(
-        "camara",
-        "error",
-        "Cámara no disponible"
-    );
-
+    actualizarStatus("camara", "error", "Cámara no disponible");
 }
 
 
@@ -2672,41 +1896,21 @@ function actualizarStatus(
     mensaje
 ){
 
-    const status =
-        document.getElementById(
-            origen === "usb"
-                ? "statusUSB"
-                : "statusCamara"
-        );
-
-
-    const texto =
-        document.getElementById(
-            origen === "usb"
-                ? "statusUSBText"
-                : "statusCamaraText"
-        );
-
-
-    status.classList.remove(
-        "success",
-        "error",
-        "warning"
+    const status = document.getElementById(
+        origen === "usb" ? "statusUSB" : "statusCamara"
     );
 
+    const texto = document.getElementById(
+        origen === "usb" ? "statusUSBText" : "statusCamaraText"
+    );
+
+    status.classList.remove("success", "error", "warning");
 
     if(tipo){
-
-        status.classList.add(
-            tipo
-        );
-
+        status.classList.add(tipo);
     }
 
-
-    texto.textContent =
-        mensaje;
-
+    texto.textContent = mensaje;
 }
 
 
@@ -2721,47 +1925,22 @@ function mostrarResultado(
     mensaje
 ){
 
-    const elemento =
-        document.getElementById(
-            origen === "usb"
-                ? "resultadoUSB"
-                : "resultadoCamara"
-        );
-
-
-    elemento.className =
-        "result show " +
-        tipo;
-
-
-    elemento.innerHTML =
-        `
-        <h3>
-        ${titulo}
-        </h3>
-
-        <p>
-        ${mensaje}
-        </p>
-        `;
-
-
-    setTimeout(
-        () => {
-
-            elemento.classList.remove(
-                "show"
-            );
-
-        },
-        9000
+    const elemento = document.getElementById(
+        origen === "usb" ? "resultadoUSB" : "resultadoCamara"
     );
 
+    elemento.className = "result show " + tipo;
+    elemento.innerHTML =
+        `<h3>${titulo}</h3><p>${mensaje}</p>`;
+
+    setTimeout(() => {
+        elemento.classList.remove("show");
+    }, 9000);
 }
 
 
 /* =================================================
-   ACTIVIDAD
+   ACTIVIDAD / LOG
 ================================================= */
 
 function agregarLog(
@@ -2769,120 +1948,49 @@ function agregarLog(
     mensaje
 ){
 
-    const log =
-        document.getElementById(
-            origen === "usb"
-                ? "logUSB"
-                : "logCamara"
-        );
+    const log = document.getElementById(
+        origen === "usb" ? "logUSB" : "logCamara"
+    );
 
-
-    const items =
-        log.querySelectorAll(
-            ".log-item"
-        );
-
+    const items = log.querySelectorAll(".log-item");
 
     if(
         items.length === 1 &&
-        items[0]
-            .querySelector(
-                ".log-message"
-            )
+        items[0].querySelector(".log-message")
             ?.textContent
-            .includes(
-                "Aún no hay registros"
-            )
+            .includes("Aún no hay registros")
     ){
-
         items[0].remove();
-
     }
 
-
-    const item =
-        document.createElement(
-            "div"
-        );
-
-
-    item.className =
-        "log-item";
-
+    const item = document.createElement("div");
+    item.className = "log-item";
 
     item.innerHTML =
-        `
-        <span class="log-message">
-        ${escaparHTML(mensaje)}
-        </span>
-
-        <span class="log-time">
-        ${obtenerHoraLocal()}
-        </span>
-        `;
-
+        `<span class="log-message">${escaparHTML(mensaje)}</span>
+         <span class="log-time">${obtenerHoraLocal()}</span>`;
 
     log.prepend(item);
 
-
-    while(
-        log.children.length > 20
-    ){
-
-        log.removeChild(
-            log.lastChild
-        );
-
+    while(log.children.length > 20){
+        log.removeChild(log.lastChild);
     }
-
 }
 
 
 /* =================================================
-   HORA
+   HORA LOCAL
 ================================================= */
 
 function obtenerHoraLocal(){
 
-    const fecha =
-        new Date();
+    const fecha = new Date();
 
+    const horas = String(fecha.getHours()).padStart(2, "0");
+    const minutos = String(fecha.getMinutes()).padStart(2, "0");
+    const segundos = String(fecha.getSeconds()).padStart(2, "0");
 
-    const horas =
-        String(
-            fecha.getHours()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const minutos =
-        String(
-            fecha.getMinutes()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const segundos =
-        String(
-            fecha.getSeconds()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return (
-        horas +
-        ":" +
-        minutos +
-        ":" +
-        segundos
-    );
-
+    return horas + ":" + minutos + ":" + segundos;
 }
 
 
@@ -2892,18 +2000,9 @@ function obtenerHoraLocal(){
 
 function escaparHTML(texto){
 
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    div.textContent =
-        String(texto);
-
-
+    const div = document.createElement("div");
+    div.textContent = String(texto);
     return div.innerHTML;
-
 }
 
 
@@ -2914,73 +2013,32 @@ function escaparHTML(texto){
 function obtenerMensajeError(error){
 
     if(!error){
-
-        return `
-        No fue posible completar la operación.
-        `;
-
+        return "No fue posible completar la operación.";
     }
-
 
     let mensaje = "";
 
-
     if(error.message){
-
-        mensaje +=
-            "<strong>" +
-            escaparHTML(
-                error.message
-            ) +
-            "</strong>";
-
+        mensaje += "<strong>" + escaparHTML(error.message) + "</strong>";
     }
-
 
     if(error.details){
-
-        mensaje +=
-            "<br>" +
-            escaparHTML(
-                error.details
-            );
-
+        mensaje += "<br>" + escaparHTML(error.details);
     }
-
 
     if(error.hint){
-
-        mensaje +=
-            "<br>" +
-            escaparHTML(
-                error.hint
-            );
-
+        mensaje += "<br>" + escaparHTML(error.hint);
     }
-
 
     if(error.code){
-
-        mensaje +=
-            "<br><small>Código: " +
-            escaparHTML(
-                error.code
-            ) +
-            "</small>";
-
+        mensaje += "<br><small>Código: " + escaparHTML(error.code) + "</small>";
     }
-
 
     if(!mensaje){
-
-        mensaje =
-            "Supabase rechazó la operación.";
-
+        mensaje = "Supabase rechazó la operación.";
     }
 
-
     return mensaje;
-
 }
 
 
@@ -2991,15 +2049,8 @@ function obtenerMensajeError(error){
 window.addEventListener(
     "load",
     () => {
-
-        const campo =
-            document.getElementById(
-                "scanner"
-            );
-
-
+        const campo = document.getElementById("scanner");
         campo.focus();
-
     }
 );
 
@@ -3011,9 +2062,7 @@ window.addEventListener(
 window.addEventListener(
     "beforeunload",
     () => {
-
         detenerCamara();
-
     }
 );
 
