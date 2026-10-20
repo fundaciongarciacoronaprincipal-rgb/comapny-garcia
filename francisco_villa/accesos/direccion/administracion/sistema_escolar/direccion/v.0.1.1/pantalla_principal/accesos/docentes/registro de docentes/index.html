@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Registro Docentes | Francisco Villa</title>
+
+<style>
+
+/* =====================================
+   CONFIGURACIÓN GENERAL
+===================================== */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+
+    --azul:#2563eb;
+    --azul2:#3b82f6;
+    --cyan:#06b6d4;
+
+    --verde:#10b981;
+    --rojo:#ef4444;
+    --amarillo:#f59e0b;
+
+    --fondo:#020617;
+    --panel:#0f172a;
+
+    --texto:#ffffff;
+    --gris:#94a3b8;
+
+    --borde:rgba(255,255,255,.10);
+
+}
+
+
+/* =====================================
+   BODY
+===================================== */
+
+body{
+
+    min-height:100vh;
+
+    font-family:
+    Inter,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+    color:var(--texto);
+
+    background:
+
+    radial-gradient(
+        circle at 15% 20%,
+        rgba(37,99,235,.20),
+        transparent 30%
+    ),
+
+    radial-gradient(
+        circle at 85% 80%,
+        rgba(6,182,212,.15),
+        transparent 30%
+    ),
+
+    linear-gradient(
+        135deg,
+        #020617,
+        #0f172a,
+        #020617
+    );
+
+    overflow-x:hidden;
+
+}
+
+
+/* =====================================
+   DECORACIÓN DE FONDO
+===================================== */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    width:500px;
+    height:500px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(37,99,235,.15),
+        transparent 70%
+    );
+
+    top:-180px;
+    left:-180px;
+
+    pointer-events:none;
+
+}
+
+
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    width:500px;
+    height:500px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle,
+        rgba(6,182,212,.10),
+        transparent 70%
+    );
+
+    bottom:-200px;
+    right:-200px;
+
+    pointer-events:none;
+
+}
+
+
+/* =====================================
+   CONTENEDOR
+===================================== */
+
+.contenedor{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:30px;
+
+}
+
+
+/* =====================================
+   FORMULARIO
+===================================== */
+
+.formulario{
+
+    width:100%;
+
+    max-width:470px;
+
+    padding:38px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    background:
+    rgba(15,23,42,.88);
+
+    border:
+    1px solid var(--borde);
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+    box-shadow:
+
+    0 30px 80px
+    rgba(0,0,0,.45),
+
+    inset 0 1px 0
+    rgba(255,255,255,.05);
+
+    animation:
+    aparecer .6s ease;
+
+}
+
+
+/* =====================================
+   LÍNEA SUPERIOR
+===================================== */
+
+.formulario::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:4px;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        var(--azul),
+        var(--cyan),
+        var(--azul)
+    );
+
+}
+
+
+/* =====================================
+   ENCABEZADO
+===================================== */
+
+.encabezado{
+
+    text-align:center;
+
+    margin-bottom:28px;
+
+}
+
+
+.icono{
+
+    width:72px;
+    height:72px;
+
+    margin:
+    0 auto 18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:32px;
+
+    border-radius:20px;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        var(--azul),
+        var(--cyan)
+    );
+
+    box-shadow:
+
+    0 15px 35px
+    rgba(37,99,235,.30);
+
+}
+
+
+h1{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    letter-spacing:-.5px;
+
+    margin-bottom:8px;
+
+}
+
+
+.subtitulo{
+
+    color:var(--gris);
+
+    font-size:14px;
+
+    line-height:1.6;
+
+}
+
+
+.subtitulo strong{
+
+    color:#cbd5e1;
+
+}
+
+
+/* =====================================
+   SEPARADOR
+===================================== */
+
+.separador{
+
+    height:1px;
+
+    background:
+    rgba(255,255,255,.08);
+
+    margin:
+    25px 0;
+
+}
+
+
+/* =====================================
+   CAMPOS
+===================================== */
+
+.campo{
+
+    margin-bottom:18px;
+
+}
+
+
+.campo label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#cbd5e1;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+
+.input-contenedor{
+
+    position:relative;
+
+}
+
+
+.input-contenedor span{
+
+    position:absolute;
+
+    left:15px;
+
+    top:50%;
+
+    transform:
+    translateY(-50%);
+
+    font-size:17px;
+
+    opacity:.7;
+
+    pointer-events:none;
+
+}
+
+
+input,
+select{
+
+    width:100%;
+
+    height:50px;
+
+    padding:
+    0 15px 0 45px;
+
+    border-radius:13px;
+
+    border:
+    1px solid
+    rgba(255,255,255,.10);
+
+    background:
+    rgba(2,6,23,.65);
+
+    color:white;
+
+    outline:none;
+
+    font-size:14px;
+
+    transition:.25s;
+
+}
+
+
+input::placeholder{
+
+    color:#64748b;
+
+}
+
+
+select{
+
+    cursor:pointer;
+
+}
+
+
+select option{
+
+    background:#0f172a;
+
+    color:white;
+
+}
+
+
+input:focus,
+select:focus{
+
+    border-color:
+    var(--azul2);
+
+    background:
+    rgba(2,6,23,.9);
+
+    box-shadow:
+
+    0 0 0 4px
+    rgba(37,99,235,.10);
+
+}
+
+
+/* =====================================
+   INFORMACIÓN DE CAMPOS
+===================================== */
+
+.info-campo{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:7px;
+
+    font-size:11px;
+
+    color:#64748b;
+
+}
+
+
+.contador{
+
+    color:#64748b;
+
+}
+
+
+/* =====================================
+   CORREO
+===================================== */
+
+.correo-generado{
+
+    margin-top:10px;
+
+    padding:13px 14px;
+
+    border-radius:12px;
+
+    background:
+    rgba(37,99,235,.08);
+
+    border:
+    1px solid
+    rgba(37,99,235,.15);
+
+    color:#60a5fa;
+
+    font-size:12px;
+
+    word-break:break-all;
+
+    display:none;
+
+}
+
+
+/* =====================================
+   CONTRASEÑA
+===================================== */
+
+#nivelPassword{
+
+    font-weight:600;
+
+}
+
+
+/* =====================================
+   BOTÓN
+===================================== */
+
+button{
+
+    width:100%;
+
+    height:52px;
+
+    margin-top:8px;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #06b6d4
+    );
+
+    box-shadow:
+
+    0 12px 30px
+    rgba(37,99,235,.25);
+
+    transition:.25s;
+
+}
+
+
+button:hover{
+
+    transform:
+    translateY(-2px);
+
+    box-shadow:
+
+    0 18px 40px
+    rgba(37,99,235,.35);
+
+}
+
+
+button:active{
+
+    transform:
+    scale(.98);
+
+}
+
+
+button:disabled{
+
+    opacity:.65;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+
+/* =====================================
+   MENSAJES
+===================================== */
+
+.mensaje{
+
+    margin-top:18px;
+
+    padding:13px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    font-size:13px;
+
+    line-height:1.5;
+
+    display:none;
+
+}
+
+
+.mensaje.exito{
+
+    display:block;
+
+    background:
+    rgba(16,185,129,.10);
+
+    border:
+    1px solid
+    rgba(16,185,129,.25);
+
+    color:#6ee7b7;
+
+}
+
+
+.mensaje.error{
+
+    display:block;
+
+    background:
+    rgba(239,68,68,.10);
+
+    border:
+    1px solid
+    rgba(239,68,68,.25);
+
+    color:#fca5a5;
+
+}
+
+
+/* =====================================
+   PIE
+===================================== */
+
+.pie{
+
+    text-align:center;
+
+    margin-top:25px;
+
+    color:#64748b;
+
+    font-size:11px;
+
+    line-height:1.7;
+
+}
+
+
+.pie strong{
+
+    color:#94a3b8;
+
+}
+
+
+/* =====================================
+   ANIMACIÓN
+===================================== */
+
+@keyframes aparecer{
+
+    from{
+
+        opacity:0;
+
+        transform:
+        translateY(20px)
+        scale(.98);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+        translateY(0)
+        scale(1);
+
+    }
+
+}
+
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media(max-width:520px){
+
+    .contenedor{
+
+        padding:18px;
+
+    }
+
+
+    .formulario{
+
+        padding:28px 22px;
+
+        border-radius:22px;
+
+    }
+
+
+    h1{
+
+        font-size:24px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="contenedor">
+
+<div class="formulario">
+
+
+<!-- =====================================
+     ENCABEZADO
+===================================== -->
+
+<div class="encabezado">
+
+<div class="icono">
+👨‍🏫
+</div>
+
+<h1>
+Registro Docente
+</h1>
+
+<p class="subtitulo">
+
+Crea tu acceso al sistema institucional
+
+<br>
+
+<strong>
+OFTV No. 0216 · Francisco Villa
+</strong>
+
+</p>
+
+</div>
+
+
+<div class="separador"></div>
+
+
+<!-- =====================================
+     NOMBRE
+===================================== -->
+
+<div class="campo">
+
+<label>
+Nombre completo
+</label>
+
+<div class="input-contenedor">
+
+<span>👤</span>
+
+<input
+type="text"
+id="nombre"
+placeholder="Escribe tu nombre completo"
+autocomplete="name"
+>
+
+</div>
+
+</div>
+
+
+<!-- =====================================
+     NÚMERO DE SERVIDOR
+===================================== -->
+
+<div class="campo">
+
+<label>
+Número de servidor público
+</label>
+
+<div class="input-contenedor">
+
+<span>🪪</span>
+
+<input
+type="text"
+id="numero"
+placeholder="Ingresa 9 números"
+inputmode="numeric"
+maxlength="9"
+pattern="[0-9]{9}"
+autocomplete="off"
+>
+
+</div>
+
+<div class="info-campo">
+
+<span>
+Solo números · 9 dígitos
+</span>
+
+<span
+class="contador"
+id="contadorNumero">
+0 / 9
+</span>
+
+</div>
+
+</div>
+
+
+<!-- =====================================
+     ROL
+===================================== -->
+
+<div class="campo">
+
+<label>
+Rol dentro de la institución
+</label>
+
+<div class="input-contenedor">
+
+<span>🏢</span>
+
+<select id="rol">
+
+<option value="">
+Selecciona tu rol
+</option>
+
+<option value="Directivo">
+Directivo
+</option>
+
+<option value="Administrativo">
+Administrativo
+</option>
+
+<option value="Orientador">
+Orientador
+</option>
+
+<option value="Docente">
+Docente
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<!-- =====================================
+     CONTRASEÑA
+===================================== -->
+
+<div class="campo">
+
+<label>
+Contraseña numérica
+</label>
+
+<div class="input-contenedor">
+
+<span>🔐</span>
+
+<input
+type="password"
+id="password"
+placeholder="Entre 3 y 10 números"
+inputmode="numeric"
+maxlength="10"
+pattern="[0-9]{3,10}"
+autocomplete="new-password"
+>
+
+</div>
+
+<div class="info-campo">
+
+<span>
+Solo números · 3 a 10 dígitos
+</span>
+
+<span id="nivelPassword">
+Seguridad
+</span>
+
+</div>
+
+<div class="info-campo">
+
+<span>
+Caracteres utilizados
+</span>
+
+<span
+class="contador"
+id="contadorPassword">
+0 / 10
+</span>
+
+</div>
+
+</div>
+
+
+<!-- =====================================
+     CORREO
+===================================== -->
+
+<div
+class="correo-generado"
+id="correoPreview">
+</div>
+
+
+<!-- =====================================
+     BOTÓN
+===================================== -->
+
+<button
+id="btnRegistrar"
+onclick="registrar()">
+
+Crear cuenta docente
+
+</button>
+
+
+<!-- =====================================
+     MENSAJE
+===================================== -->
+
+<div
+id="mensaje"
+class="mensaje">
+</div>
+
+
+<!-- =====================================
+     PIE
+===================================== -->
+
+<div class="pie">
+
+Sistema de Gestión Escolar "Francisco Villa"
+
+<br>
+
+<strong>
+GRUPO GARCIA CORONA
+</strong>
+
+<br>
+
+© 2026 · Corporativo Nexel Digital | Todos los derechos reservados.
+
+</div>
+
+
+</div>
+
+</div>
+
+
+<!-- =====================================
+     SUPABASE
+===================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+/* =====================================
+   CONEXIÓN SUPABASE
+===================================== */
+
+const supabaseClient =
+supabase.createClient(
+
+"https://nlpdpvjtdxknhvgqbfls.supabase.co",
+
+"sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+
+);
+
+
+/* =====================================
+   ELEMENTOS
+===================================== */
+
+const nombre =
+document.getElementById("nombre");
+
+const numero =
+document.getElementById("numero");
+
+const rol =
+document.getElementById("rol");
+
+const password =
+document.getElementById("password");
+
+const correoPreview =
+document.getElementById("correoPreview");
+
+const nivelPassword =
+document.getElementById("nivelPassword");
+
+const contadorNumero =
+document.getElementById("contadorNumero");
+
+const contadorPassword =
+document.getElementById("contadorPassword");
+
+const mensaje =
+document.getElementById("mensaje");
+
+const btnRegistrar =
+document.getElementById("btnRegistrar");
+
+
+/* =====================================
+   NÚMERO DE SERVIDOR
+===================================== */
+
+numero.addEventListener(
+"input",
+function(){
+
+    /*
+       Eliminar cualquier cosa
+       que NO sea número
+    */
+
+    this.value =
+    this.value.replace(
+        /[^0-9]/g,
+        ""
+    );
+
+
+    /*
+       Máximo 9 caracteres
+    */
+
+    if(this.value.length > 9){
+
+        this.value =
+        this.value.substring(0,9);
+
+    }
+
+
+    /*
+       Contador
+    */
+
+    contadorNumero.innerText =
+    this.value.length +
+    " / 9";
+
+});
+
+
+/* =====================================
+   CONTRASEÑA NUMÉRICA
+===================================== */
+
+password.addEventListener(
+"input",
+function(){
+
+    /*
+       Eliminar letras,
+       espacios y símbolos
+    */
+
+    this.value =
+    this.value.replace(
+        /[^0-9]/g,
+        ""
+    );
+
+
+    /*
+       Máximo 10 números
+    */
+
+    if(this.value.length > 10){
+
+        this.value =
+        this.value.substring(0,10);
+
+    }
+
+
+    /*
+       Contador
+    */
+
+    contadorPassword.innerText =
+    this.value.length +
+    " / 10";
+
+
+    /*
+       Indicador de seguridad
+    */
+
+    let cantidad =
+    this.value.length;
+
+
+    if(cantidad === 0){
+
+        nivelPassword.innerText =
+        "Seguridad";
+
+        nivelPassword.style.color =
+        "#64748b";
+
+    }
+
+    else if(cantidad < 3){
+
+        nivelPassword.innerText =
+        "Muy corta";
+
+        nivelPassword.style.color =
+        "#f87171";
+
+    }
+
+    else if(cantidad < 6){
+
+        nivelPassword.innerText =
+        "Básica";
+
+        nivelPassword.style.color =
+        "#fbbf24";
+
+    }
+
+    else{
+
+        nivelPassword.innerText =
+        "Buena";
+
+        nivelPassword.style.color =
+        "#34d399";
+
+    }
+
+});
+
+
+/* =====================================
+   GENERAR CORREO
+===================================== */
+
+nombre.addEventListener(
+"input",
+function(){
+
+    /*
+       Convertir nombre
+       a formato de correo
+    */
+
+    let nombreLimpio =
+
+    this.value
+
+    .toLowerCase()
+
+    .normalize("NFD")
+
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    )
+
+    .replace(
+        /[^a-z0-9\s]/g,
+        ""
+    )
+
+    .replace(
+        /\s+/g,
+        ""
+    );
+
+
+    if(nombreLimpio){
+
+        let correo =
+
+        nombreLimpio +
+        "@docente_francisco_villa.com";
+
+
+        correoPreview.innerText =
+
+        "📧 Correo institucional: " +
+        correo;
+
+
+        correoPreview.style.display =
+        "block";
+
+    }
+
+    else{
+
+        correoPreview.style.display =
+        "none";
+
+    }
+
+});
+
+
+/* =====================================
+   FUNCIÓN PARA MOSTRAR MENSAJE
+===================================== */
+
+function mostrarMensaje(
+texto,
+tipo
+){
+
+    mensaje.innerText =
+    texto;
+
+    mensaje.className =
+    "mensaje " + tipo;
+
+}
+
+
+/* =====================================
+   REGISTRAR DOCENTE
+===================================== */
+
+async function registrar(){
+
+
+    /*
+       Obtener valores
+    */
+
+    let nombreValor =
+    nombre.value.trim();
+
+    let numeroValor =
+    numero.value.trim();
+
+    let rolValor =
+    rol.value;
+
+    let passwordValor =
+    password.value;
+
+
+    /*
+       Limpiar mensaje
+    */
+
+    mensaje.className =
+    "mensaje";
+
+    mensaje.innerText =
+    "";
+
+
+    /* =================================
+       CAMPOS VACÍOS
+    ================================= */
+
+    if(
+        !nombreValor ||
+        !numeroValor ||
+        !rolValor ||
+        !passwordValor
+    ){
+
+        mostrarMensaje(
+
+            "Completa todos los campos para continuar.",
+
+            "error"
+
+        );
+
+        return;
+
+    }
+
+
+    /* =================================
+       VALIDAR NÚMERO DE SERVIDOR
+    ================================= */
+
+    if(
+        !/^[0-9]{9}$/.test(
+            numeroValor
+        )
+    ){
+
+        mostrarMensaje(
+
+            "El número de servidor debe contener exactamente 9 números.",
+
+            "error"
+
+        );
+
+        numero.focus();
+
+        return;
+
+    }
+
+
+    /* =================================
+       VALIDAR CONTRASEÑA
+    ================================= */
+
+    if(
+        !/^[0-9]{3,10}$/.test(
+            passwordValor
+        )
+    ){
+
+        mostrarMensaje(
+
+            "La contraseña debe contener únicamente números y tener entre 3 y 10 dígitos.",
+
+            "error"
+
+        );
+
+        password.focus();
+
+        return;
+
+    }
+
+
+    /* =================================
+       GENERAR CORREO
+    ================================= */
+
+    let nombreLimpio =
+
+    nombreValor
+
+    .toLowerCase()
+
+    .normalize("NFD")
+
+    .replace(
+        /[\u0300-\u036f]/g,
+        ""
+    )
+
+    .replace(
+        /[^a-z0-9\s]/g,
+        ""
+    )
+
+    .replace(
+        /\s+/g,
+        ""
+    );
+
+
+    let correo =
+
+    nombreLimpio +
+    "@docente_francisco_villa.com";
+
+
+    /* =================================
+       BLOQUEAR BOTÓN
+    ================================= */
+
+    btnRegistrar.disabled =
+    true;
+
+    btnRegistrar.innerText =
+    "Registrando...";
+
+
+    /* =================================
+       INSERTAR EN SUPABASE
+    ================================= */
+
+    const { error } =
+
+    await supabaseClient
+
+    .from("docentes")
+
+    .insert([{
+
+        nombre_completo:
+        nombreValor,
+
+        numero_servidor:
+        numeroValor,
+
+        rol:
+        rolValor,
+
+        correo:
+        correo,
+
+        password:
+        passwordValor
+
+    }]);
+
+
+    /* =================================
+       ERROR
+    ================================= */
+
+    if(error){
+
+        console.error(
+            "Error Supabase:",
+            error
+        );
+
+
+        mostrarMensaje(
+
+            "No fue posible completar el registro. " +
+            error.message,
+
+            "error"
+
+        );
+
+
+        btnRegistrar.disabled =
+        false;
+
+        btnRegistrar.innerText =
+        "Crear cuenta docente";
+
+
+        return;
+
+    }
+
+
+    /* =================================
+       REGISTRO EXITOSO
+    ================================= */
+
+    mostrarMensaje(
+
+        "✓ Registro exitoso. Tu cuenta docente fue creada correctamente.",
+
+        "exito"
+
+    );
+
+
+    /* =================================
+       LIMPIAR FORMULARIO
+    ================================= */
+
+    nombre.value =
+    "";
+
+    numero.value =
+    "";
+
+    rol.value =
+    "";
+
+    password.value =
+    "";
+
+
+    correoPreview.style.display =
+    "none";
+
+
+    contadorNumero.innerText =
+    "0 / 9";
+
+
+    contadorPassword.innerText =
+    "0 / 10";
+
+
+    nivelPassword.innerText =
+    "Seguridad";
+
+
+    nivelPassword.style.color =
+    "#64748b";
+
+
+    btnRegistrar.innerText =
+    "Cuenta creada ✓";
+
+
+    /*
+       Volver a habilitar después
+    */
+
+    setTimeout(function(){
+
+        btnRegistrar.disabled =
+        false;
+
+        btnRegistrar.innerText =
+        "Crear cuenta docente";
+
+    },3000);
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
