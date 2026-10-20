@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Registro de Alumnos</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(45deg,#1abc9c,#3498db,#9b59b6);
+background-size:400% 400%;
+animation:fondo 10s ease infinite;
+color:white;
+}
+
+/* Fondo animado */
+@keyframes fondo{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* 🔥 BORDE RGB PANTALLA */
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+padding:4px;
+background:linear-gradient(270deg,#ff0000,#00ffcc,#ff00ff,#00ff00,#ff0000);
+background-size:600% 600%;
+animation:borde 8s linear infinite;
+z-index:9999;
+pointer-events:none;
+
+mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
+mask-composite:exclude;
+-webkit-mask-composite:xor;
+}
+
+@keyframes borde{
+0%{background-position:0% 50%;}
+100%{background-position:100% 50%;}
+}
+
+/* Contenedor */
+.contenedor{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+/* Formulario */
+.formulario{
+position:relative;
+padding:30px;
+width:400px;
+border-radius:20px;
+background:rgba(0,0,0,0.6);
+overflow:hidden;
+}
+
+/* Luz interna */
+.formulario::before{
+content:"";
+position:absolute;
+top:-50%;
+left:-50%;
+width:200%;
+height:200%;
+background:linear-gradient(60deg,#ff0000,#00ffcc,#ff00ff,#00ff00,#ff0000);
+animation:giro 6s linear infinite;
+opacity:0.2;
+}
+
+/* Borde RGB */
+.formulario::after{
+content:"";
+position:absolute;
+inset:0;
+border-radius:20px;
+padding:2px;
+background:linear-gradient(270deg,#ff0000,#00ffcc,#ff00ff,#00ff00,#ff0000);
+background-size:400% 400%;
+animation:borde 6s linear infinite;
+
+mask:
+linear-gradient(#000 0 0) content-box,
+linear-gradient(#000 0 0);
+mask-composite:exclude;
+-webkit-mask-composite:xor;
+}
+
+@keyframes giro{
+0%{transform:rotate(0);}
+100%{transform:rotate(360deg);}
+}
+
+.formulario *{
+position:relative;
+z-index:2;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:none;
+border-radius:8px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#1abc9c;
+border:none;
+color:white;
+border-radius:10px;
+cursor:pointer;
+}
+
+.preview{
+font-size:13px;
+color:#f1c40f;
+}
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+<div class="formulario">
+
+<h2>Registro de Alumno</h2>
+
+<input type="text" id="nombre" placeholder="Nombre completo">
+<input type="date" id="fecha">
+<input type="text" id="tutor" placeholder="Nombre del padre/madre/tutor">
+<input type="text" id="grado" placeholder="Grado">
+<input type="text" id="grupo" placeholder="Grupo">
+
+<input type="password" id="passAlumno" placeholder="Contraseña del alumno">
+<input type="password" id="passTutor" placeholder="Contraseña del tutor">
+
+<div class="preview" id="previewAlumno"></div>
+<div class="preview" id="previewTutor"></div>
+<div class="preview" id="previewMatricula"></div>
+
+<button onclick="registrar()">Registrar</button>
+
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = supabase.createClient(
+"https://nlpdpvjtdxknhvgqbfls.supabase.co",
+"sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+// Generadores
+function generarCorreo(nombre, tipo){
+return nombre.toLowerCase().replace(/\s+/g,"") + "@" + tipo + "_francisco_villa.com";
+}
+
+function generarMatricula(){
+let num = Math.floor(100000000 + Math.random() * 900000000);
+let digito = Math.floor(Math.random() * 9);
+return num + "-" + digito;
+}
+
+// Preview en vivo
+document.getElementById("nombre").addEventListener("input", function(){
+let nombre = this.value;
+
+document.getElementById("previewAlumno").innerText =
+"Alumno: " + generarCorreo(nombre,"alumno");
+
+document.getElementById("previewTutor").innerText =
+"Tutor: " + generarCorreo(document.getElementById("tutor").value,"tutor");
+});
+
+document.getElementById("tutor").addEventListener("input", function(){
+let tutor = this.value;
+
+document.getElementById("previewTutor").innerText =
+"Tutor: " + generarCorreo(tutor,"tutor");
+});
+
+let matriculaGlobal = generarMatricula();
+document.getElementById("previewMatricula").innerText =
+"Matrícula: " + matriculaGlobal;
+
+// Registrar
+async function registrar(){
+
+let nombre = document.getElementById("nombre").value;
+let fecha = document.getElementById("fecha").value;
+let tutor = document.getElementById("tutor").value;
+let grado = document.getElementById("grado").value;
+let grupo = document.getElementById("grupo").value;
+let passAlumno = document.getElementById("passAlumno").value;
+let passTutor = document.getElementById("passTutor").value;
+
+let correoAlumno = generarCorreo(nombre,"alumno");
+let correoTutor = generarCorreo(tutor,"tutor");
+
+if(!nombre || !fecha || !tutor || !grado || !grupo || !passAlumno || !passTutor){
+alert("Completa todos los campos");
+return;
+}
+
+const { error } = await supabaseClient
+.from("alumnos")
+.insert([{
+nombre_completo: nombre,
+fecha_nacimiento: fecha,
+tutor_nombre: tutor,
+grado: grado,
+grupo: grupo,
+matricula: matriculaGlobal,
+correo_alumno: correoAlumno,
+correo_tutor: correoTutor,
+password_alumno: passAlumno,
+password_tutor: passTutor
+}]);
+
+if(error){
+alert("Error: " + error.message);
+}else{
+alert("Alumno registrado 🚀");
+}
+}
+</script>
+
+</body>
+</html>
