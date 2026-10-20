@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Docentes Activos | OFTV No. 0216 Francisco Villa</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   CONFIGURACIÓN GENERAL
+========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:"Inter",Arial,sans-serif;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top left, rgba(30,120,90,.35), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(0,80,140,.30), transparent 35%),
+        linear-gradient(135deg,#071b2b,#0b3043,#092536);
+    color:#17212b;
+}
+
+/* =========================================================
+   BARRA SUPERIOR
+========================================================= */
+
+.header{
+    width:100%;
+    background:rgba(255,255,255,.97);
+    border-bottom:4px solid #0c7654;
+    box-shadow:0 5px 25px rgba(0,0,0,.20);
+}
+
+.header-contenido{
+    max-width:1400px;
+    margin:auto;
+    padding:20px 30px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.identidad{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.logo{
+    width:65px;
+    height:65px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#087f5b,#0b526b);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:25px;
+    font-weight:800;
+    box-shadow:0 8px 20px rgba(0,0,0,.20);
+}
+
+.titulos h1{
+    font-size:22px;
+    font-weight:800;
+    color:#123b4a;
+    margin-bottom:4px;
+}
+
+.titulos p{
+    font-size:13px;
+    color:#64748b;
+    font-weight:500;
+}
+
+.fecha{
+    text-align:right;
+    color:#475569;
+    font-size:13px;
+}
+
+.fecha strong{
+    display:block;
+    color:#123b4a;
+    font-size:15px;
+    margin-bottom:4px;
+}
+
+/* =========================================================
+   CONTENEDOR
+========================================================= */
+
+.contenedor{
+    width:94%;
+    max-width:1400px;
+    margin:35px auto 50px;
+}
+
+/* =========================================================
+   TÍTULO
+========================================================= */
+
+.titulo-seccion{
+    color:white;
+    margin-bottom:22px;
+}
+
+.titulo-seccion h2{
+    font-size:30px;
+    font-weight:800;
+    margin-bottom:6px;
+}
+
+.titulo-seccion p{
+    color:#cbd5e1;
+    font-size:14px;
+}
+
+/* =========================================================
+   ESTADÍSTICAS
+========================================================= */
+
+.estadisticas{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.tarjeta{
+    background:rgba(255,255,255,.96);
+    border-radius:16px;
+    padding:20px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.18);
+    border:1px solid rgba(255,255,255,.4);
+}
+
+.icono{
+    width:52px;
+    height:52px;
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    background:#e5f6ef;
+}
+
+.tarjeta h3{
+    color:#64748b;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-bottom:5px;
+}
+
+.tarjeta strong{
+    color:#123b4a;
+    font-size:26px;
+}
+
+/* =========================================================
+   PANEL PRINCIPAL
+========================================================= */
+
+.panel{
+    background:rgba(255,255,255,.97);
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+}
+
+/* =========================================================
+   BARRA DE HERRAMIENTAS
+========================================================= */
+
+.herramientas{
+    padding:20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    border-bottom:1px solid #e2e8f0;
+}
+
+.buscador{
+    position:relative;
+    width:100%;
+    max-width:450px;
+}
+
+.buscador input{
+    width:100%;
+    padding:13px 16px 13px 45px;
+    border:1px solid #cbd5e1;
+    border-radius:11px;
+    outline:none;
+    font-size:14px;
+    transition:.2s;
+}
+
+.buscador input:focus{
+    border-color:#0c7654;
+    box-shadow:0 0 0 3px rgba(12,118,84,.12);
+}
+
+.buscador span{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:18px;
+}
+
+.btn-actualizar{
+    border:none;
+    background:#0c7654;
+    color:white;
+    padding:12px 18px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn-actualizar:hover{
+    background:#095b42;
+    transform:translateY(-1px);
+}
+
+/* =========================================================
+   TABLA
+========================================================= */
+
+.tabla-scroll{
+    width:100%;
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:850px;
+}
+
+thead{
+    background:#123b4a;
+    color:white;
+}
+
+th{
+    padding:16px;
+    text-align:left;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    white-space:nowrap;
+}
+
+td{
+    padding:15px 16px;
+    border-bottom:1px solid #e2e8f0;
+    font-size:14px;
+    color:#334155;
+}
+
+tbody tr{
+    transition:.15s;
+}
+
+tbody tr:hover{
+    background:#f0fdf9;
+}
+
+.nombre{
+    font-weight:700;
+    color:#123b4a;
+}
+
+.correo{
+    color:#64748b;
+}
+
+/* =========================================================
+   ETIQUETA DE ROL
+========================================================= */
+
+.rol{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    background:#e8f5f0;
+    color:#08704e;
+    font-size:12px;
+    font-weight:700;
+}
+
+/* =========================================================
+   BOTONES DE ACCIÓN
+========================================================= */
+
+.acciones{
+    display:flex;
+    gap:7px;
+}
+
+button{
+    font-family:inherit;
+}
+
+.btn{
+    border:none;
+    border-radius:8px;
+    padding:8px 11px;
+    color:white;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+    filter:brightness(.95);
+}
+
+.btn-jubilado{
+    background:#dc3545;
+}
+
+.btn-cambio{
+    background:#d97706;
+}
+
+/* =========================================================
+   ESTADO VACÍO
+========================================================= */
+
+.vacio{
+    text-align:center;
+    padding:45px 20px;
+    color:#64748b;
+}
+
+.vacio .emoji{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.vacio h3{
+    color:#334155;
+    margin-bottom:5px;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading{
+    text-align:center;
+    padding:45px;
+    color:#64748b;
+}
+
+.spinner{
+    width:35px;
+    height:35px;
+    border:4px solid #dbe5e1;
+    border-top-color:#0c7654;
+    border-radius:50%;
+    animation:girar .8s linear infinite;
+    margin:0 auto 12px;
+}
+
+@keyframes girar{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* =========================================================
+   NOTIFICACIONES
+========================================================= */
+
+.notificacion{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    max-width:360px;
+    padding:15px 18px;
+    border-radius:12px;
+    color:white;
+    font-size:14px;
+    font-weight:600;
+    box-shadow:0 12px 30px rgba(0,0,0,.25);
+    transform:translateY(120px);
+    opacity:0;
+    transition:.3s;
+    z-index:9999;
+}
+
+.notificacion.mostrar{
+    transform:translateY(0);
+    opacity:1;
+}
+
+.notificacion.exito{
+    background:#087f5b;
+}
+
+.notificacion.error{
+    background:#dc3545;
+}
+
+.notificacion.info{
+    background:#2563eb;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:5000;
+}
+
+.modal.mostrar{
+    display:flex;
+}
+
+.modal-contenido{
+    width:100%;
+    max-width:430px;
+    background:white;
+    border-radius:18px;
+    padding:28px;
+    box-shadow:0 25px 70px rgba(0,0,0,.35);
+    animation:aparecer .2s ease;
+}
+
+@keyframes aparecer{
+    from{
+        opacity:0;
+        transform:scale(.95);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.modal-icono{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:#fff3cd;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+    margin-bottom:15px;
+}
+
+.modal h3{
+    color:#123b4a;
+    margin-bottom:8px;
+}
+
+.modal p{
+    color:#64748b;
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:22px;
+}
+
+.modal-botones{
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+}
+
+.btn-cancelar{
+    background:#e2e8f0;
+    color:#334155;
+    border:none;
+    padding:11px 16px;
+    border-radius:9px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.btn-confirmar{
+    background:#dc3545;
+    color:white;
+    border:none;
+    padding:11px 16px;
+    border-radius:9px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+/* =========================================================
+   PIE DE PÁGINA
+========================================================= */
+
+.footer{
+    text-align:center;
+    color:#94a3b8;
+    font-size:12px;
+    margin-top:25px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:800px){
+
+    .header-contenido{
+        padding:16px;
+    }
+
+    .fecha{
+        display:none;
+    }
+
+    .contenedor{
+        width:96%;
+        margin-top:25px;
+    }
+
+    .titulo-seccion h2{
+        font-size:24px;
+    }
+
+    .estadisticas{
+        grid-template-columns:1fr;
+    }
+
+    .herramientas{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .buscador{
+        max-width:none;
+    }
+
+    .btn-actualizar{
+        width:100%;
+    }
+
+    .notificacion{
+        left:15px;
+        right:15px;
+        bottom:15px;
+        max-width:none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     ENCABEZADO INSTITUCIONAL
+===================================================== -->
+
+<header class="header">
+
+    <div class="header-contenido">
+
+        <div class="identidad">
+
+            <div class="logo">
+                <img src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png" width="50" heigth="80">
+            </div>
+
+            <div class="titulos">
+
+                <h1>
+                    OFTV No. 0216 “FRANCISCO VILLA”
+                </h1>
+
+                <p>
+                    Sistema de Administración Escolar
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="fecha">
+
+            <strong id="fechaActual">
+                Cargando...
+            </strong>
+
+            Gestión de Docentes
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENIDO
+===================================================== -->
+
+<main class="contenedor">
+
+    <section class="titulo-seccion">
+
+        <h2>
+            Docentes Activos
+        </h2>
+
+        <p>
+            Consulta y administración del personal docente actualmente registrado.
+        </p>
+
+    </section>
+
+
+    <!-- ESTADÍSTICAS -->
+
+    <section class="estadisticas">
+
+        <div class="tarjeta">
+
+            <div class="icono">
+                👨‍🏫
+            </div>
+
+            <div>
+                <h3>Docentes activos</h3>
+                <strong id="totalDocentes">0</strong>
+            </div>
+
+        </div>
+
+
+        <div class="tarjeta">
+
+            <div class="icono">
+                🏫
+            </div>
+
+            <div>
+                <h3>Institución</h3>
+                <strong>OFTV 0216 "FRANCISCO VILLA"</strong>
+            </div>
+
+        </div>
+
+
+        <div class="tarjeta">
+
+            <div class="icono">
+                📋
+            </div>
+
+            <div>
+                <h3>Estado</h3>
+                <strong>Activo</strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PANEL -->
+
+    <section class="panel">
+
+
+        <!-- HERRAMIENTAS -->
+
+        <div class="herramientas">
+
+            <div class="buscador">
+
+                <span>🔎</span>
+
+                <input
+                    type="text"
+                    id="buscador"
+                    placeholder="Buscar por nombre, servidor, rol o correo..."
+                    oninput="filtrarDocentes()"
+                >
+
+            </div>
+
+
+            <button
+                class="btn-actualizar"
+                onclick="cargar()"
+            >
+                🔄 Actualizar información
+            </button>
+
+        </div>
+
+
+        <!-- TABLA -->
+
+        <div class="tabla-scroll">
+
+            <table id="tabla">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Nombre completo</th>
+
+                        <th>N° Servidor</th>
+
+                        <th>Rol</th>
+
+                        <th>Correo electrónico</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="cuerpoTabla">
+
+                    <tr>
+
+                        <td colspan="5">
+
+                            <div class="loading">
+
+                                <div class="spinner"></div>
+
+                                Cargando docentes...
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <div class="footer">
+
+        Copyright 2026 © 2026 CORPORATIVO NEXEL DIGITAL | Todos los derechos reservados. 
+<br>
+Empresa creada, supervisada, administrada y operada bajo la compania de GRUPO GARCIA CORONA
+<br>
+Al continuar con el uso de esta plataforma usted esta de acuerdo con nuestros terminos y condiciones, politica de privacidad y declaracion de accesibilidad.
+
+    </div>
+
+</main>
+
+
+<!-- =====================================================
+     NOTIFICACIÓN
+===================================================== -->
+
+<div
+    id="notificacion"
+    class="notificacion"
+></div>
+
+
+<!-- =====================================================
+     MODAL DE CONFIRMACIÓN
+===================================================== -->
+
+<div
+    id="modal"
+    class="modal"
+>
+
+    <div class="modal-contenido">
+
+        <div class="modal-icono">
+            ⚠️
+        </div>
+
+        <h3 id="modalTitulo">
+            Confirmar movimiento
+        </h3>
+
+        <p id="modalTexto">
+            ¿Deseas mover este docente al historial?
+        </p>
+
+        <div class="modal-botones">
+
+            <button
+                class="btn-cancelar"
+                onclick="cerrarModal()"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="btn-confirmar"
+                id="btnConfirmar"
+            >
+                Confirmar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* =========================================================
+   CONEXIÓN SUPABASE
+========================================================= */
+
+const supabaseClient = supabase.createClient(
+
+    "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+
+);
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let docentes = [];
+
+let idSeleccionado = null;
+
+let motivoSeleccionado = null;
+
+
+/* =========================================================
+   FECHA ACTUAL
+========================================================= */
+
+function mostrarFecha(){
+
+    const fecha = new Date();
+
+    const opciones = {
+        weekday:"long",
+        year:"numeric",
+        month:"long",
+        day:"numeric"
+    };
+
+    document.getElementById("fechaActual").textContent =
+        fecha.toLocaleDateString("es-MX",opciones);
+
+}
+
+mostrarFecha();
+
+
+/* =========================================================
+   ESCAPAR HTML
+========================================================= */
+
+function escaparHTML(texto){
+
+    if(texto === null || texto === undefined){
+
+        return "";
+
+    }
+
+    return String(texto)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   CARGAR DOCENTES
+========================================================= */
+
+async function cargar(){
+
+    const tabla = document.querySelector("#cuerpoTabla");
+
+    tabla.innerHTML = `
+
+        <tr>
+
+            <td colspan="5">
+
+                <div class="loading">
+
+                    <div class="spinner"></div>
+
+                    Cargando docentes...
+
+                </div>
+
+            </td>
+
+        </tr>
+
+    `;
+
+
+    const { data, error } = await supabaseClient
+
+        .from("docentes")
+
+        .select("*")
+
+        .order("nombre_completo",{ascending:true});
+
+
+    if(error){
+
+        console.error(error);
+
+        tabla.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    <div class="vacio">
+
+                        <div class="emoji">⚠️</div>
+
+                        <h3>No se pudieron cargar los docentes</h3>
+
+                        <p>Verifica la conexión con la base de datos.</p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        mostrarNotificacion(
+            "No se pudo conectar con la base de datos.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    docentes = data || [];
+
+    document.getElementById("totalDocentes").textContent =
+        docentes.length;
+
+
+    mostrarDocentes(docentes);
+
+}
+
+
+/* =========================================================
+   MOSTRAR DOCENTES
+========================================================= */
+
+function mostrarDocentes(lista){
+
+    const tabla = document.querySelector("#cuerpoTabla");
+
+    tabla.innerHTML = "";
+
+
+    if(!lista.length){
+
+        tabla.innerHTML = `
+
+            <tr>
+
+                <td colspan="5">
+
+                    <div class="vacio">
+
+                        <div class="emoji">👨‍🏫</div>
+
+                        <h3>No hay docentes registrados</h3>
+
+                        <p>No se encontraron registros para mostrar.</p>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    lista.forEach(doc => {
+
+        const fila = document.createElement("tr");
+
+
+        fila.innerHTML = `
+
+            <td class="nombre">
+                ${escaparHTML(doc.nombre_completo)}
+            </td>
+
+            <td>
+                ${escaparHTML(doc.numero_servidor)}
+            </td>
+
+            <td>
+                <span class="rol">
+                    ${escaparHTML(doc.rol)}
+                </span>
+            </td>
+
+            <td class="correo">
+                ${escaparHTML(doc.correo)}
+            </td>
+
+            <td>
+
+                <div class="acciones">
+
+                    <button
+                        class="btn btn-jubilado"
+                        onclick="abrirModal('${escaparHTML(doc.id)}','Jubilado')"
+                    >
+                        Jubilado
+                    </button>
+
+                    <button
+                        class="btn btn-cambio"
+                        onclick="abrirModal('${escaparHTML(doc.id)}','Cambio de institución')"
+                    >
+                        Cambio
+                    </button>
+
+                </div>
+
+            </td>
+
+        `;
+
+
+        tabla.appendChild(fila);
+
+    });
+
+}
+
+
+/* =========================================================
+   BUSCADOR
+========================================================= */
+
+function filtrarDocentes(){
+
+    const texto =
+        document
+        .getElementById("buscador")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    if(!texto){
+
+        mostrarDocentes(docentes);
+
+        return;
+
+    }
+
+
+    const resultados = docentes.filter(doc => {
+
+        return (
+
+            String(doc.nombre_completo || "")
+                .toLowerCase()
+                .includes(texto)
+
+            ||
+
+            String(doc.numero_servidor || "")
+                .toLowerCase()
+                .includes(texto)
+
+            ||
+
+            String(doc.rol || "")
+                .toLowerCase()
+                .includes(texto)
+
+            ||
+
+            String(doc.correo || "")
+                .toLowerCase()
+                .includes(texto)
+
+        );
+
+    });
+
+
+    mostrarDocentes(resultados);
+
+}
+
+
+/* =========================================================
+   ABRIR MODAL
+========================================================= */
+
+function abrirModal(id,motivo){
+
+    idSeleccionado = id;
+
+    motivoSeleccionado = motivo;
+
+
+    document.getElementById("modalTitulo").textContent =
+        motivo === "Jubilado"
+        ? "Registrar jubilación"
+        : "Registrar cambio de institución";
+
+
+    document.getElementById("modalTexto").textContent =
+
+        motivo === "Jubilado"
+
+        ? "¿Deseas mover este docente al historial como jubilado?"
+
+        : "¿Deseas mover este docente al historial por cambio de institución?";
+
+
+    document.getElementById("modal").classList.add("mostrar");
+
+
+    document.getElementById("btnConfirmar").onclick =
+        confirmarMovimiento;
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL
+========================================================= */
+
+function cerrarModal(){
+
+    document
+        .getElementById("modal")
+        .classList.remove("mostrar");
+
+    idSeleccionado = null;
+
+    motivoSeleccionado = null;
+
+}
+
+
+/* =========================================================
+   CONFIRMAR MOVIMIENTO
+========================================================= */
+
+async function confirmarMovimiento(){
+
+    if(!idSeleccionado || !motivoSeleccionado){
+
+        return;
+
+    }
+
+
+    const id = idSeleccionado;
+
+    const motivo = motivoSeleccionado;
+
+
+    cerrarModal();
+
+
+    mostrarNotificacion(
+        "Procesando movimiento...",
+        "info"
+    );
+
+
+    try{
+
+        /* Obtener docente */
+
+        const { data, error } = await supabaseClient
+
+            .from("docentes")
+
+            .select("*")
+
+            .eq("id",id)
+
+            .single();
+
+
+        if(error || !data){
+
+            throw new Error(
+                "No se encontró el docente."
+            );
+
+        }
+
+
+        /* Insertar en historial */
+
+        const { error: errorHistorial } =
+            await supabaseClient
+
+                .from("historial_docentes")
+
+                .insert([{
+
+                    nombre_completo:
+                        data.nombre_completo,
+
+                    numero_servidor:
+                        data.numero_servidor,
+
+                    rol:
+                        data.rol,
+
+                    correo:
+                        data.correo,
+
+                    fecha_registro:
+                        data.created_at,
+
+                    motivo:
+                        motivo
+
+                }]);
+
+
+        if(errorHistorial){
+
+            throw errorHistorial;
+
+        }
+
+
+        /* Eliminar de docentes activos */
+
+        const { error: errorEliminar } =
+            await supabaseClient
+
+                .from("docentes")
+
+                .delete()
+
+                .eq("id",id);
+
+
+        if(errorEliminar){
+
+            throw errorEliminar;
+
+        }
+
+
+        mostrarNotificacion(
+
+            motivo === "Jubilado"
+
+            ? "Docente registrado como jubilado."
+
+            : "Docente registrado por cambio de institución.",
+
+            "exito"
+
+        );
+
+
+        cargar();
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        mostrarNotificacion(
+
+            "No se pudo completar el movimiento.",
+
+            "error"
+
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   NOTIFICACIONES
+========================================================= */
+
+function mostrarNotificacion(mensaje,tipo){
+
+    const elemento =
+        document.getElementById("notificacion");
+
+
+    elemento.textContent = mensaje;
+
+
+    elemento.className =
+        "notificacion " + tipo + " mostrar";
+
+
+    setTimeout(() => {
+
+        elemento.classList.remove("mostrar");
+
+    },3500);
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL AL HACER CLICK FUERA
+========================================================= */
+
+document
+.getElementById("modal")
+.addEventListener("click",function(event){
+
+    if(event.target === this){
+
+        cerrarModal();
+
+    }
+
+});
+
+
+/* =========================================================
+   INICIAR SISTEMA
+========================================================= */
+
+cargar();
+
+</script>
+
+</body>
+</html>
