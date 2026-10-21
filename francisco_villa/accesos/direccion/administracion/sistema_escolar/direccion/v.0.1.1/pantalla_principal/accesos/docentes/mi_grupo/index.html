@@ -1,0 +1,741 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#12345a">
+<title>Asignación Docente | OFTV No. 0216</title>
+
+<style>
+:root {
+  --navy: #12345a;
+  --blue: #1d4f91;
+  --background: #f3f6fa;
+  --text: #1f2937;
+  --muted: #64748b;
+  --border: #dbe3ed;
+  --green: #16794b;
+  --red: #b42318;
+  --amber: #8a5a00;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--background);
+  color: var(--text);
+}
+
+header {
+  background: var(--navy);
+  color: white;
+  padding: 26px clamp(16px, 4vw, 42px);
+  box-shadow: 0 4px 18px #102a4318;
+}
+
+.eyebrow {
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: #c8ddf3;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  margin: 8px 0 6px;
+}
+
+header p {
+  margin: 0;
+  color: #dbeafe;
+  line-height: 1.5;
+}
+
+.container {
+  width: min(1600px, 100%);
+  margin: auto;
+  padding: clamp(14px, 3vw, 30px);
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: .92rem;
+  line-height: 1.5;
+}
+
+.search {
+  width: min(100%, 340px);
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: white;
+  font: inherit;
+}
+
+.search:focus,
+.field:focus,
+.subject input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px #1d4f911c;
+  outline: none;
+}
+
+.count {
+  font-size: .85rem;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.table-wrap {
+  width: 100%;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 8px 24px #0f172a08;
+}
+
+table {
+  width: 100%;
+  min-width: 1000px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+thead th {
+  background: #edf3f9;
+  color: #29415f;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .035em;
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #e9eef5;
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:hover {
+  background: #f9fbfe;
+}
+
+.teacher-name {
+  font-weight: 700;
+  min-width: 155px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.teacher-server {
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.field {
+  width: 100%;
+  min-width: 75px;
+  padding: 9px 7px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  color: var(--text);
+  font: inherit;
+}
+
+.small-select {
+  min-width: 82px;
+}
+
+/* Diez materias en dos columnas: cinco a cada lado */
+.subjects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(125px, 1fr));
+  grid-template-rows: repeat(5, auto);
+  grid-auto-flow: column;
+  gap: 6px 10px;
+  min-width: 280px;
+  max-width: 360px;
+}
+
+.subject {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.subject span {
+  flex: 0 0 16px;
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+.subject input {
+  min-width: 0;
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid #d5dee9;
+  border-radius: 7px;
+  font: inherit;
+  font-size: .85rem;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .8rem;
+  white-space: nowrap;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #94a3b8;
+  flex: 0 0 auto;
+}
+
+.status.saved {
+  color: var(--green);
+}
+
+.status.saved .dot {
+  background: #16a34a;
+}
+
+.status.saving,
+.status.pending {
+  color: var(--amber);
+}
+
+.status.saving .dot,
+.status.pending .dot {
+  background: #e0a126;
+}
+
+.status.error {
+  color: var(--red);
+  white-space: normal;
+  max-width: 190px;
+}
+
+.status.error .dot {
+  background: #dc2626;
+}
+
+.empty {
+  padding: 30px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.footer-note {
+  margin: 14px 2px 0;
+  color: var(--muted);
+  font-size: .84rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1100px) {
+  .container {
+    padding: 18px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 9px 8px;
+  }
+}
+
+@media (max-width: 700px) {
+  header {
+    padding: 20px 15px;
+  }
+
+  .container {
+    padding: 12px;
+  }
+
+  .toolbar {
+    align-items: stretch;
+  }
+
+  .search {
+    width: 100%;
+    max-width: none;
+  }
+
+  .table-wrap {
+    border-radius: 10px;
+  }
+
+  table {
+    min-width: 950px;
+  }
+
+  .subjects {
+    min-width: 280px;
+    max-width: 330px;
+    gap: 6px 8px;
+  }
+
+  thead th {
+    font-size: .72rem;
+  }
+
+  .teacher-name {
+    min-width: 135px;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    padding: 8px;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+
+  .hint {
+    font-size: .82rem;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="eyebrow">
+    OFTV No. 0216 · Francisco Villa
+  </div>
+
+  <h1>Asignación de grado, grupo y materias</h1>
+
+  <p>
+    Administra las asignaciones docentes.
+    Los cambios se guardan automáticamente en la base de datos.
+  </p>
+</header>
+
+<main class="container">
+
+  <div class="toolbar">
+    <div>
+      <div class="hint">
+        Puedes dejar grado, grupo o cualquier materia en blanco
+        mientras realizas cambios.
+      </div>
+
+      <div class="count" id="contador">
+        Cargando docentes…
+      </div>
+    </div>
+
+    <input
+      class="search"
+      id="buscar"
+      type="search"
+      placeholder="Buscar por nombre o número de servidor…"
+      aria-label="Buscar docente"
+    >
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre del docente</th>
+          <th>N.º de servidor</th>
+          <th>Grado</th>
+          <th>Grupo</th>
+          <th>Materias (opcionales)</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+
+      <tbody id="tabla">
+        <tr>
+          <td class="empty" colspan="6">
+            Cargando información…
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="footer-note">
+    El guardado comienza automáticamente mientras escribes o cambias
+    una selección. Si hay un guardado en curso, los cambios posteriores
+    también se enviarán. Si ocurre un error de conexión, se mostrará
+    el estado correspondiente.
+  </p>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+  "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+const tabla = document.getElementById("tabla");
+const contador = document.getElementById("contador");
+const buscar = document.getElementById("buscar");
+
+const estados = new Map();
+let docentes = [];
+
+function escapar(valor) {
+  return String(valor ?? "").replace(/[&<>"']/g, caracter => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[caracter]);
+}
+
+function estadoDocente(id) {
+  const clave = String(id);
+
+  if (!estados.has(clave)) {
+    estados.set(clave, {
+      version: 0,
+      guardada: 0,
+      timer: null,
+      enCurso: false,
+      pendiente: false
+    });
+  }
+
+  return estados.get(clave);
+}
+
+function opcionesGrado(valor) {
+  const actual = String(valor ?? "");
+
+  return `
+    <option value="" ${actual === "" ? "selected" : ""}>
+      — Vacío —
+    </option>
+    ${[1, 2, 3].map(n => `
+      <option value="${n}"
+        ${actual === String(n) ? "selected" : ""}>
+        ${n}
+      </option>
+    `).join("")}
+  `;
+}
+
+function opcionesGrupo(valor) {
+  const actual = String(valor ?? "").trim().toUpperCase();
+
+  return `
+    <option value="" ${actual === "" ? "selected" : ""}>
+      — Vacío —
+    </option>
+    ${["A", "B", "C"].map(g => `
+      <option value="${g}"
+        ${actual === g ? "selected" : ""}>
+        ${g}
+      </option>
+    `).join("")}
+  `;
+}
+
+function mostrarEstado(id, tipo, mensaje) {
+  const elemento = document.getElementById(
+    `estado-${CSS.escape(String(id))}`
+  );
+
+  if (!elemento) return;
+
+  elemento.className = `status ${tipo}`;
+
+  const texto = elemento.querySelector("span:last-child");
+
+  if (texto) {
+    texto.textContent = mensaje;
+  }
+}
+
+function crearFila(doc) {
+  const id = String(doc.id);
+
+  const materias = Array.from({ length: 10 }, (_, i) => {
+    const numero = i + 1;
+
+    return `
+      <label class="subject">
+        <span>${numero}.</span>
+
+        <input
+          data-id="${escapar(id)}"
+          data-campo="materia${numero}"
+          aria-label="Materia ${numero} de ${escapar(doc.nombre_completo || "docente")}"
+          value="${escapar(doc["materia" + numero] || "")}"
+          placeholder="Materia ${numero}"
+          autocomplete="off"
+        >
+      </label>
+    `;
+  }).join("");
+
+  return `
+    <tr data-docente="${escapar(id)}">
+
+      <td>
+        <div class="teacher-name">
+          ${escapar(doc.nombre_completo || "Sin nombre")}
+        </div>
+      </td>
+
+      <td>
+        <span class="teacher-server">
+          ${escapar(doc.numero_servidor || "—")}
+        </span>
+      </td>
+
+      <td>
+        <select
+          class="field small-select"
+          data-id="${escapar(id)}"
+          data-campo="grado"
+          aria-label="Grado de ${escapar(doc.nombre_completo || "docente")}"
+        >
+          ${opcionesGrado(doc.grado)}
+        </select>
+      </td>
+
+      <td>
+        <select
+          class="field small-select"
+          data-id="${escapar(id)}"
+          data-campo="grupo"
+          aria-label="Grupo de ${escapar(doc.nombre_completo || "docente")}"
+        >
+          ${opcionesGrupo(doc.grupo)}
+        </select>
+      </td>
+
+      <td>
+        <div class="subjects">
+          ${materias}
+        </div>
+      </td>
+
+      <td>
+        <div id="estado-${escapar(id)}" class="status saved">
+          <span class="dot"></span>
+          <span>Sin cambios</span>
+        </div>
+      </td>
+
+    </tr>
+  `;
+}
+
+function renderizar() {
+  const consulta = buscar.value.trim().toLocaleLowerCase("es");
+
+  const filtrados = docentes.filter(doc => {
+    const texto =
+      `${doc.nombre_completo || ""} ${doc.numero_servidor || ""}`;
+
+    return texto.toLocaleLowerCase("es").includes(consulta);
+  });
+
+  contador.textContent =
+    `${filtrados.length} docente${filtrados.length === 1 ? "" : "s"}` +
+    (consulta ? " encontrado(s)" : " registrado(s)");
+
+  tabla.innerHTML = filtrados.length
+    ? filtrados.map(crearFila).join("")
+    : `<tr><td class="empty" colspan="6">No se encontraron docentes.</td></tr>`;
+}
+
+async function cargar() {
+  contador.textContent = "Cargando docentes…";
+
+  const { data, error } = await supabaseClient
+    .from("docentes")
+    .select("*")
+    .order("nombre_completo", { ascending: true });
+
+  if (error) {
+    tabla.innerHTML = `
+      <tr>
+        <td class="empty" colspan="6">
+          No se pudieron cargar los docentes:
+          ${escapar(error.message)}
+        </td>
+      </tr>
+    `;
+
+    contador.textContent = "Error al cargar la información";
+    return;
+  }
+
+  docentes = data || [];
+  renderizar();
+}
+
+function programarGuardado(id, campo, valor) {
+  const estado = estadoDocente(id);
+
+  estado.version++;
+  estado.pendiente = true;
+
+  const docente = docentes.find(
+    d => String(d.id) === String(id)
+  );
+
+  if (docente) {
+    docente[campo] = valor;
+  }
+
+  mostrarEstado(id, "pending", "Cambios pendientes…");
+
+  clearTimeout(estado.timer);
+
+  estado.timer = setTimeout(() => {
+    procesarGuardado(id);
+  }, 300);
+}
+
+async function procesarGuardado(id) {
+  const estado = estadoDocente(id);
+
+  if (estado.enCurso || !estado.pendiente) return;
+
+  estado.enCurso = true;
+  estado.pendiente = false;
+
+  const versionEnviada = estado.version;
+
+  const docente = docentes.find(
+    d => String(d.id) === String(id)
+  );
+
+  if (!docente) {
+    estado.enCurso = false;
+    return;
+  }
+
+  const cambios = {
+    grado: docente.grado ?? "",
+    grupo: docente.grupo ?? ""
+  };
+
+  for (let i = 1; i <= 10; i++) {
+    cambios["materia" + i] = docente["materia" + i] ?? "";
+  }
+
+  mostrarEstado(id, "saving", "Guardando…");
+
+  const { error } = await supabaseClient
+    .from("docentes")
+    .update(cambios)
+    .eq("id", id);
+
+  estado.enCurso = false;
+
+  if (error) {
+    console.error("Error al guardar docente", id, error);
+
+    mostrarEstado(
+      id,
+      "error",
+      "Error al guardar. Edita de nuevo para reintentar."
+    );
+
+    return;
+  }
+
+  estado.guardada = versionEnviada;
+
+  if (
+    estado.version !== versionEnviada ||
+    estado.pendiente
+  ) {
+    mostrarEstado(id, "pending", "Guardando cambios recientes…");
+    procesarGuardado(id);
+  } else {
+    mostrarEstado(id, "saved", "Guardado automáticamente");
+  }
+}
+
+tabla.addEventListener("input", event => {
+  const campo = event.target.closest("[data-id][data-campo]");
+
+  if (!campo) return;
+
+  programarGuardado(
+    campo.dataset.id,
+    campo.dataset.campo,
+    campo.value
+  );
+});
+
+tabla.addEventListener("change", event => {
+  const campo = event.target.closest("[data-id][data-campo]");
+
+  if (!campo || campo.tagName !== "SELECT") return;
+
+  const id = campo.dataset.id;
+  const estado = estadoDocente(id);
+
+  clearTimeout(estado.timer);
+
+  programarGuardado(
+    id,
+    campo.dataset.campo,
+    campo.value
+  );
+
+  clearTimeout(estado.timer);
+  procesarGuardado(id);
+});
+
+buscar.addEventListener("input", renderizar);
+
+cargar();
+</script>
+
+</body>
+</html>
