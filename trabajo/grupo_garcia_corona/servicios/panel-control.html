@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎛️ Plataforma Central — Control de Proyectos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        :root {
+            --primario: #2563eb;
+            --exito: #10b981;
+            --peligro: #ef4444;
+            --advertencia: #f59e0b;
+            --gris-claro: #f3f4f6;
+            --gris-medio: #9ca3af;
+            --gris-oscuro: #374151;
+            --fondo: #f8fafc;
+            --blanco: #ffffff;
+            --sombra: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --sombra-hover: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --borde: #e5e7eb;
+        }
+
+        body {
+            background-color: var(--fondo);
+            color: var(--gris-oscuro);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--blanco);
+            box-shadow: var(--sombra);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-contenedor {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+        }
+
+        .navbar-marca {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primario);
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            display: flex;
+            list-style: none;
+            gap: 4px;
+        }
+
+        .navbar-link {
+            padding: 20px 24px;
+            text-decoration: none;
+            color: var(--gris-oscuro);
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .navbar-link:hover {
+            color: var(--primario);
+            background: rgba(37, 99, 235, 0.04);
+        }
+
+        .navbar-link.activo {
+            color: var(--primario);
+            border-bottom-color: var(--primario);
+        }
+
+        .contenedor {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .seccion {
+            display: none;
+            animation: aparecer 0.3s ease;
+        }
+
+        .seccion.mostrar {
+            display: block;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .seccion-titulo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .seccion-subtitulo {
+            color: var(--gris-medio);
+            margin-bottom: 32px;
+            font-size: 15px;
+        }
+
+        .tarjeta {
+            background: var(--blanco);
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: var(--sombra);
+            margin-bottom: 24px;
+            border: 1px solid var(--borde);
+            transition: box-shadow 0.25s ease;
+        }
+
+        .tarjeta:hover {
+            box-shadow: var(--sombra-hover);
+        }
+
+        .tarjeta h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grupo-input {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--gris-oscuro);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            background: var(--blanco);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primario);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .boton {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .boton:hover {
+            transform: translateY(-1px);
+        }
+
+        .boton:active {
+            transform: translateY(0);
+        }
+
+        .boton-primario {
+            background: var(--primario);
+            color: white;
+        }
+
+        .boton-primario:hover {
+            background: #1d4ed8;
+        }
+
+        .boton-exito {
+            background: var(--exito);
+            color: white;
+        }
+
+        .boton-exito:hover {
+            background: #059669;
+        }
+
+        .boton-peligro {
+            background: var(--peligro);
+            color: white;
+        }
+
+        .boton-peligro:hover {
+            background: #dc2626;
+        }
+
+        .proyecto-tarjeta {
+            background: var(--blanco);
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 16px;
+            box-shadow: var(--sombra);
+            border-left: 4px solid var(--borde);
+            transition: all 0.25s ease;
+        }
+
+        .proyecto-tarjeta.activo {
+            border-left-color: var(--exito);
+        }
+
+        .proyecto-tarjeta.inactivo {
+            border-left-color: var(--peligro);
+            background: #fef2f2;
+        }
+
+        .proyecto-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .proyecto-nombre {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .proyecto-id {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            background: var(--gris-claro);
+            padding: 4px 10px;
+            border-radius: 5px;
+            color: var(--gris-oscuro);
+            display: inline-block;
+            margin: 6px 0;
+        }
+
+        .proyecto-estado {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .estado-activo {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .estado-inactivo {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .proyecto-detalles {
+            font-size: 14px;
+            color: var(--gris-medio);
+            margin: 8px 0 16px 0;
+            line-height: 1.5;
+        }
+
+        .proyecto-acciones {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .vacio {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gris-medio);
+        }
+
+        .vacio-icono {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-contenedor {
+                flex-direction: column;
+                padding: 0;
+            }
+
+            .navbar-menu {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .navbar-link {
+                padding: 14px 10px;
+                font-size: 14px;
+                text-align: center;
+                flex: 1;
+            }
+
+            .contenedor {
+                padding: 20px 16px;
+            }
+
+            .tarjeta {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-contenedor">
+            <a class="navbar-marca">🎛️ Plataforma Central</a>
+            <ul class="navbar-menu">
+                <li onclick="mostrarSeccion('proyectos')">
+                    <span class="navbar-link activo" id="link-proyectos">📋 Mis Proyectos</span>
+                </li>
+                <li onclick="mostrarSeccion('nuevo')">
+                    <span class="navbar-link" id="link-nuevo">➕ Nuevo Proyecto</span>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="contenedor">
+
+        <section id="seccion-proyectos" class="seccion mostrar">
+            <h1 class="seccion-titulo">📋 Mis Proyectos</h1>
+            <p class="seccion-subtitulo">Gestiona, activa y suspende todos tus proyectos desde un solo lugar</p>
+
+            <div id="lista-proyectos">
+                <div class="vacio">
+                    <div class="vacio-icono">📁</div>
+                    <h3>No hay proyectos registrados aún</h3>
+                    <p>Ve a la sección "Nuevo Proyecto" para registrar tu primero</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="seccion-nuevo" class="seccion">
+            <h1 class="seccion-titulo">➕ Registrar Nuevo Proyecto</h1>
+            <p class="seccion-subtitulo">Agrega un nuevo proyecto a tu plataforma de control central</p>
+
+            <div class="tarjeta">
+                <h3>📝 Datos del Proyecto</h3>
+                
+                <div class="grupo-input">
+                    <label for="inp_id">🔑 Identificador Único del Sistema</label>
+                    <input type="text" id="inp_id" placeholder="ej: grupogarcia-asistencias-001">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="inp_nombre">🏷️ Nombre del Proyecto / Cliente</label>
+                    <input type="text" id="inp_nombre" placeholder="ej: Sistema de Asistencias — Grupo García">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="inp_desc">📄 Descripción (opcional)</label>
+                    <input type="text" id="inp_desc" placeholder="ej: Sistema de registro de asistencias para personal">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="inp_url">🌐 Supabase URL</label>
+                    <input type="text" id="inp_url" placeholder="https://xxxxx.supabase.co">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="inp_key">🔐 Supabase Anon Key</label>
+                    <input type="text" id="inp_key" placeholder="Clave pública anon de tu proyecto">
+                </div>
+
+                <button class="boton boton-primario" onclick="agregarProyecto()">
+                    ✅ Registrar Proyecto
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="config-mi-plataforma.js"></script>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+        
+        const supabaseCentral = createClient(
+            SUPABASE_PLATAFORMA.url,
+            SUPABASE_PLATAFORMA.anonKey
+        );
+
+        window.mostrarSeccion = function(nombreSeccion) {
+            document.querySelectorAll('.seccion').forEach(s => s.classList.remove('mostrar'));
+            document.querySelectorAll('.navbar-link').forEach(l => l.classList.remove('activo'));
+            
+            document.getElementById(`seccion-${nombreSeccion}`).classList.add('mostrar');
+            document.getElementById(`link-${nombreSeccion}`).classList.add('activo');
+            
+            if (nombreSeccion === 'proyectos') {
+                cargarProyectos();
+            }
+        };
+
+        window.cargarProyectos = async function() {
+            const { data, error } = await supabaseCentral
+                .from('proyectos')
+                .select('*')
+                .order('nombre', { ascending: true });
+            
+            const contenedor = document.getElementById('lista-proyectos');
+            
+            if (error) {
+                contenedor.innerHTML = `<div class="vacio"><div class="vacio-icono">⚠️</div><h3>Error al cargar proyectos</h3><p>${error.message}</p></div>`;
+                return;
+            }
+            
+            if (!data || data.length === 0) {
+                contenedor.innerHTML = `<div class="vacio"><div class="vacio-icono">📁</div><h3>No hay proyectos registrados aún</h3><p>Ve a "Nuevo Proyecto" para registrar el primero</p></div>`;
+                return;
+            }
+            
+            contenedor.innerHTML = data.map(p => `
+                <div class="proyecto-tarjeta ${p.activo ? 'activo' : 'inactivo'}">
+                    <div class="proyecto-cabecera">
+                        <div>
+                            <div class="proyecto-nombre">${p.nombre}</div>
+                            <div class="proyecto-id">${p.identificador}</div>
+                        </div>
+                        <span class="proyecto-estado ${p.activo ? 'estado-activo' : 'estado-inactivo'}">
+                            ${p.activo ? '✅ ACTIVO' : '⛔ SUSPENDIDO'}
+                        </span>
+                    </div>
+                    
+                    <div class="proyecto-detalles">
+                        ${p.descripcion ? `<p>${p.descripcion}</p>` : ''}
+                        <small>URL: ${p.supabase_url}</small>
+                    </div>
+                    
+                    <div class="proyecto-acciones">
+                        <button class="boton ${p.activo ? 'boton-peligro' : 'boton-exito'}" 
+                                onclick="cambiarEstado('${p.identificador}', ${!p.activo})">
+                            ${p.activo ? '🔒 Suspender Servicio' : '🔓 Activar Servicio'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.cambiarEstado = async function(identificador, nuevoEstado) {
+            const { error } = await supabaseCentral
+                .from('proyectos')
+                .update({ 
+                    activo: nuevoEstado, 
+                    ultima_modificacion: new Date() 
+                })
+                .eq('identificador', identificador);
+            
+            if (error) {
+                alert('Error: ' + error.message);
+                return;
+            }
+            
+            await cargarProyectos();
+        };
+
+        window.agregarProyecto = async function() {
+            const identificador = document.getElementById('inp_id').value.trim();
+            const nombre = document.getElementById('inp_nombre').value.trim();
+            const descripcion = document.getElementById('inp_desc').value.trim();
+            const url = document.getElementById('inp_url').value.trim();
+            const key = document.getElementById('inp_key').value.trim();
+            
+            if (!identificador || !nombre || !url || !key) {
+                alert('⚠️ Por favor llena todos los campos obligatorios');
+                return;
+            }
+            
+            const { error } = await supabaseCentral
+                .from('proyectos')
+                .insert([{
+                    identificador,
+                    nombre,
+                    descripcion: descripcion || null,
+                    supabase_url: url,
+                    supabase_anon_key: key
+                }]);
+            
+            if (error) {
+                if (error.code === '23505') {
+                    alert('⚠️ Ese identificador ya está en uso. Usa uno diferente.');
+                } else {
+                    alert('Error: ' + error.message);
+                }
+                return;
+            }
+            
+            document.getElementById('inp_id').value = '';
+            document.getElementById('inp_nombre').value = '';
+            document.getElementById('inp_desc').value = '';
+            document.getElementById('inp_url').value = '';
+            document.getElementById('inp_key').value = '';
+            
+            mostrarSeccion('proyectos');
+            alert('✅ Proyecto registrado exitosamente');
+        };
+
+        cargarProyectos();
+    </script>
+</body>
+</html>
