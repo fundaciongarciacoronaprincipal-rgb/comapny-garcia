@@ -1,1 +1,315 @@
-.
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Prueba</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .pantalla-suspendido {
+            background: white; padding: 50px 40px; border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; max-width: 450px;
+        }
+        .icono-grande { font-size: 70px; margin-bottom: 20px; }
+        .pantalla-suspendido h1 { color: #dc2626; font-size: 24px; margin-bottom: 15px; }
+        .pantalla-suspendido p { color: #6b7280; font-size: 16px; line-height: 1.6; }
+        .id-sistema { margin-top: 25px; font-size: 12px; color: #9ca3af; font-family: monospace; }
+        .contenedor {
+            background: white; padding: 40px 30px; border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); width: 100%; max-width: 420px; display: none;
+        }
+        .contenedor.visible { display: block; animation: aparecer 0.4s ease; }
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 { text-align: center; color: #1f2937; margin-bottom: 25px; font-size: 22px; }
+        .form-grupo { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; color: #374151; }
+        input, textarea {
+            width: 100%; padding: 12px 14px; border: 1px solid #d1d5db;
+            border-radius: 8px; font-size: 15px;
+        }
+        input:focus, textarea:focus { outline: none; border-color: #667eea; }
+        button {
+            width: 100%; padding: 13px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; border-radius: 8px;
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s;
+        }
+        button:hover { transform: translateY(-2px); }
+        .enlace { text-align: center; margin-top: 20px; font-size: 14px; color: #6b7280; }
+        .enlace span { color: #667eea; cursor: pointer; font-weight: 500; }
+        .mensaje { margin-top: 15px; padding: 12px; border-radius: 6px; font-size: 14px; display: none; }
+        .mensaje.error { background: #fee2e2; color: #991b1b; display: block; }
+        .mensaje.exito { background: #d1fae5; color: #065f46; display: block; }
+        .datos-usuario { background: #f9fafb; padding: 20px; border-radius: 10px; margin-top: 20px; }
+        .datos-usuario h3 { font-size: 16px; color: #374151; margin-bottom: 15px; }
+        .dato-fila { padding: 8px 0; border-bottom: 1px solid #e5e7eb; font-size: 14px; }
+        .dato-fila:last-child { border-bottom: none; }
+        .dato-etiqueta { font-weight: 600; color: #4b5563; }
+        .btn-cerrar { margin-top: 20px; background: #ef4444; }
+        .cargando { text-align: center; color: white; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-cargando" class="cargando">
+        <p>🔄 Verificando estado del servicio...</p>
+    </div>
+
+    <div id="pantalla-suspendido" class="pantalla-suspendido" style="display:none;">
+        <div class="icono-grande">🔒</div>
+        <h1>Servicio Temporalmente Suspendido</h1>
+        <p>Este servicio se encuentra desactivado por cuestiones administrativas o de pago.<br>Por favor contacta al administrador para reactivar el acceso.</p>
+        <div class="id-sistema">ID del Sistema: <span id="mostrar-id"></span></div>
+    </div>
+
+    <div id="contenedor-sistema" class="contenedor">
+        
+        <div id="form-login">
+            <h2>🔐 Iniciar Sesión</h2>
+            <div class="form-grupo">
+                <label>Correo Electrónico</label>
+                <input type="email" id="login-correo" placeholder="tu@correo.com">
+            </div>
+            <div class="form-grupo">
+                <label>Contraseña</label>
+                <input type="password" id="login-contrasena" placeholder="Tu contraseña">
+            </div>
+            <button onclick="iniciarSesion()">Entrar</button>
+            <div class="enlace">
+                ¿No tienes cuenta? <span onclick="mostrarFormulario('registro')">Crea una aquí</span>
+            </div>
+            <div id="mensaje-login" class="mensaje"></div>
+        </div>
+
+        <div id="form-registro" style="display:none;">
+            <h2>📝 Crear Nueva Cuenta</h2>
+            <div class="form-grupo">
+                <label>Nombre Completo</label>
+                <input type="text" id="reg-nombre" placeholder="Tu nombre completo">
+            </div>
+            <div class="form-grupo">
+                <label>Correo Electrónico</label>
+                <input type="email" id="reg-correo" placeholder="tu@correo.com">
+            </div>
+            <div class="form-grupo">
+                <label>Contraseña</label>
+                <input type="password" id="reg-contrasena" placeholder="Crea una contraseña">
+            </div>
+            <div class="form-grupo">
+                <label>Repetir Contraseña</label>
+                <input type="password" id="reg-repetir" placeholder="Vuelve a escribir tu contraseña">
+            </div>
+            <div class="form-grupo">
+                <label>Pequeña Descripción sobre ti</label>
+                <textarea id="reg-descripcion" rows="3" placeholder="Escribe algo breve sobre ti..."></textarea>
+            </div>
+            <button onclick="registrarCuenta()">Registrarme</button>
+            <div class="enlace">
+                ¿Ya tienes cuenta? <span onclick="mostrarFormulario('login')">Inicia sesión aquí</span>
+            </div>
+            <div id="mensaje-registro" class="mensaje"></div>
+        </div>
+
+        <div id="pantalla-datos" style="display:none;">
+            <h2>✅ Bienvenido</h2>
+            <div class="datos-usuario">
+                <h3>📋 Tus Datos Registrados:</h3>
+                <div class="dato-fila">
+                    <span class="dato-etiqueta">Nombre:</span>
+                    <span id="dato-nombre"></span>
+                </div>
+                <div class="dato-fila">
+                    <span class="dato-etiqueta">Correo:</span>
+                    <span id="dato-correo"></span>
+                </div>
+                <div class="dato-fila">
+                    <span class="dato-etiqueta">Contraseña:</span>
+                    <span id="dato-contrasena"></span>
+                </div>
+                <div class="dato-fila">
+                    <span class="dato-etiqueta">Descripción:</span>
+                    <span id="dato-descripcion"></span>
+                </div>
+                <div class="dato-fila">
+                    <span class="dato-etiqueta">Fecha de registro:</span>
+                    <span id="dato-fecha"></span>
+                </div>
+            </div>
+            <button class="btn-cerrar" onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         ✅ CONFIGURACIÓN — PON TUS DATOS AQUÍ
+         ============================================== -->
+    <script>
+        const CONFIG = {
+            IDENTIFICADOR_SISTEMA: "prueba",
+            SUPABASE_URL: "https://tqztjxvftyhnoahzooj.supabase.co",
+            SUPABASE_KEY: "sb_publishable_vjOs2Q_kNffcZ2Ya5Fx4qg_iLfNlXZm",
+            SIMULACION_ACTIVO: true // Cambia a false para probar servicio suspendido
+        };
+    </script>
+
+    <!-- Librería de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+    <script>
+        // Inicializar Supabase
+        const supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+        let usuarioActual = null;
+
+        async function verificarEstadoServicio() {
+            try {
+                const sistemaActivo = CONFIG.SIMULACION_ACTIVO;
+                
+                if (!sistemaActivo) {
+                    mostrarPantallaSuspendido();
+                    return;
+                }
+                
+                document.getElementById('pantalla-cargando').style.display = 'none';
+                document.getElementById('contenedor-sistema').classList.add('visible');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarPantallaSuspendido();
+            }
+        }
+
+        function mostrarPantallaSuspendido() {
+            document.getElementById('pantalla-cargando').style.display = 'none';
+            document.getElementById('pantalla-suspendido').style.display = 'block';
+            document.getElementById('mostrar-id').textContent = CONFIG.IDENTIFICADOR_SISTEMA;
+        }
+
+        function mostrarFormulario(cual) {
+            document.getElementById('form-login').style.display = 'none';
+            document.getElementById('form-registro').style.display = 'none';
+            document.getElementById('pantalla-datos').style.display = 'none';
+            
+            if (cual === 'login') {
+                document.getElementById('form-login').style.display = 'block';
+            } else if (cual === 'registro') {
+                document.getElementById('form-registro').style.display = 'block';
+            }
+        }
+
+        async function registrarCuenta() {
+            const nombre = document.getElementById('reg-nombre').value.trim();
+            const correo = document.getElementById('reg-correo').value.trim();
+            const contrasena = document.getElementById('reg-contrasena').value;
+            const repetir = document.getElementById('reg-repetir').value;
+            const descripcion = document.getElementById('reg-descripcion').value.trim();
+            const mensaje = document.getElementById('mensaje-registro');
+            
+            if (!nombre || !correo || !contrasena) {
+                mensaje.textContent = '⚠️ Todos los campos son obligatorios';
+                mensaje.className = 'mensaje error';
+                return;
+            }
+            
+            if (contrasena !== repetir) {
+                mensaje.textContent = '⚠️ Las contraseñas no coinciden';
+                mensaje.className = 'mensaje error';
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('usuarios_prueba')
+                    .insert([{ nombre, correo, contrasena, descripcion }])
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                mensaje.textContent = '✅ Cuenta creada correctamente. Ya puedes iniciar sesión';
+                mensaje.className = 'mensaje exito';
+                
+                document.getElementById('reg-nombre').value = '';
+                document.getElementById('reg-correo').value = '';
+                document.getElementById('reg-contrasena').value = '';
+                document.getElementById('reg-repetir').value = '';
+                document.getElementById('reg-descripcion').value = '';
+                
+                setTimeout(() => mostrarFormulario('login'), 1500);
+            } catch (error) {
+                if (error.code === '23505') {
+                    mensaje.textContent = '⚠️ Este correo ya está registrado';
+                } else {
+                    mensaje.textContent = '❌ Error: ' + error.message;
+                }
+                mensaje.className = 'mensaje error';
+            }
+        }
+
+        async function iniciarSesion() {
+            const correo = document.getElementById('login-correo').value.trim();
+            const contrasena = document.getElementById('login-contrasena').value;
+            const mensaje = document.getElementById('mensaje-login');
+            
+            if (!correo || !contrasena) {
+                mensaje.textContent = '⚠️ Ingresa tu correo y contraseña';
+                mensaje.className = 'mensaje error';
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('usuarios_prueba')
+                    .select('*')
+                    .eq('correo', correo)
+                    .eq('contrasena', contrasena)
+                    .maybeSingle();
+                
+                if (error) throw error;
+                
+                if (!data) {
+                    mensaje.textContent = '⚠️ Correo o contraseña incorrectos';
+                    mensaje.className = 'mensaje error';
+                    return;
+                }
+                
+                usuarioActual = data;
+                mostrarPantallaDatos();
+            } catch (error) {
+                mensaje.textContent = '❌ Error: ' + error.message;
+                mensaje.className = 'mensaje error';
+            }
+        }
+
+        function mostrarPantallaDatos() {
+            document.getElementById('form-login').style.display = 'none';
+            document.getElementById('form-registro').style.display = 'none';
+            document.getElementById('pantalla-datos').style.display = 'block';
+            
+            document.getElementById('dato-nombre').textContent = usuarioActual.nombre;
+            document.getElementById('dato-correo').textContent = usuarioActual.correo;
+            document.getElementById('dato-contrasena').textContent = usuarioActual.contrasena;
+            document.getElementById('dato-descripcion').textContent = usuarioActual.descripcion || '(Sin descripción)';
+            document.getElementById('dato-fecha').textContent = new Date(usuarioActual.fecha_registro).toLocaleString('es-MX');
+        }
+
+        function cerrarSesion() {
+            usuarioActual = null;
+            document.getElementById('login-correo').value = '';
+            document.getElementById('login-contrasena').value = '';
+            mostrarFormulario('login');
+        }
+
+        verificarEstadoServicio();
+    </script>
+</body>
+</html>
