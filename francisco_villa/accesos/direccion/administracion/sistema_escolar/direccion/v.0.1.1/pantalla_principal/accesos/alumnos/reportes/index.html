@@ -1,0 +1,835 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#142b49">
+<title>Reportes Escolares | OFTV No. 0216</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --navy: #142b49;
+    --navy2: #203f65;
+    --blue: #356da5;
+    --background: #f3f5f8;
+    --border: #dce3eb;
+    --text: #263548;
+    --muted: #6b7788;
+    --green: #197348;
+    --red: #b42318;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: "Segoe UI", Arial, sans-serif;
+    min-height: 100vh;
+}
+
+.topbar {
+    background: var(--navy);
+    color: white;
+    padding: 15px max(20px, calc((100% - 1120px) / 2));
+    min-height: 94px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    border-bottom: 4px solid #416f9e;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+}
+
+.school-logo {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+    flex-shrink: 0;
+    padding: 4px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.brand-name {
+    font-size: 16px;
+    font-weight: 750;
+    letter-spacing: .25px;
+    line-height: 1.4;
+}
+
+.brand-subtitle {
+    color: #cfdeee;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.header-label {
+    text-align: right;
+    color: #d7e3f0;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.container {
+    width: min(1120px, calc(100% - 36px));
+    margin: 32px auto 45px;
+}
+
+.page-heading { margin-bottom: 25px; }
+
+.breadcrumb {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+.page-heading h1 {
+    margin: 0 0 8px;
+    color: var(--navy);
+    font-size: clamp(25px, 3vw, 32px);
+    letter-spacing: -.5px;
+}
+
+.page-heading p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 285px;
+    gap: 22px;
+    align-items: start;
+}
+
+.panel {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(23,42,67,.035);
+    overflow: hidden;
+}
+
+.panel-heading {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border-bottom: 1px solid var(--border);
+}
+
+.heading-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: #edf3f9;
+    color: var(--navy);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+}
+
+.panel-heading h2 {
+    color: var(--navy);
+    margin: 0;
+    font-size: 16px;
+}
+
+.panel-heading p {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.panel-body { padding: 24px; }
+
+.field {
+    margin-bottom: 20px;
+    min-width: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #34465b;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.required { color: var(--red); }
+
+input, textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #ccd6e1;
+    border-radius: 8px;
+    background: white;
+    padding: 12px 13px;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(53,109,165,.11);
+}
+
+input[readonly] {
+    background: #f5f7fa;
+    color: #35465a;
+}
+
+input::placeholder, textarea::placeholder { color: #98a4b3; }
+
+textarea {
+    resize: vertical;
+    min-height: 118px;
+    line-height: 1.6;
+}
+
+.helper {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+    margin-top: 7px;
+}
+
+.student-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0 24px;
+}
+
+.student-heading {
+    background: #f4f7fb;
+    padding: 13px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+}
+
+.student-heading strong {
+    font-size: 13px;
+    color: var(--navy);
+}
+
+.student-status {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.student-content { padding: 17px; }
+.student-content .field { margin-bottom: 15px; }
+.student-content .field:last-child { margin-bottom: 0; }
+
+.student-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.status-message {
+    display: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin: 0 0 18px;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.status-message.info {
+    display: block;
+    color: #285581;
+    background: #edf4fc;
+    border: 1px solid #d6e5f6;
+}
+
+.status-message.success {
+    display: block;
+    color: #17663e;
+    background: #edf8f1;
+    border: 1px solid #ccebd7;
+}
+
+.status-message.error {
+    display: block;
+    color: #a5221a;
+    background: #fff0ef;
+    border: 1px solid #f2d0cd;
+}
+
+.status-message.warning {
+    display: block;
+    color: #805900;
+    background: #fff8e8;
+    border: 1px solid #f1e0b5;
+}
+
+.actions {
+    padding-top: 21px;
+    margin-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.btn {
+    width: 100%;
+    min-height: 46px;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-primary { background: var(--navy); color: white; }
+.btn-primary:hover:not(:disabled) { background: var(--navy2); }
+.btn:disabled { opacity: .48; cursor: not-allowed; }
+
+.side-panel { padding: 22px; }
+
+.side-panel h3 {
+    margin: 0 0 18px;
+    color: var(--navy);
+    font-size: 14px;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.step:last-of-type { margin-bottom: 0; }
+
+.step-number {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #eaf0f7;
+    color: var(--navy);
+    font-size: 12px;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+}
+
+.step strong {
+    display: block;
+    margin: 3px 0 5px;
+    font-size: 12px;
+}
+
+.step p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.divider {
+    height: 1px;
+    background: var(--border);
+    margin: 22px 0;
+}
+
+.notice {
+    padding: 13px;
+    border-radius: 8px;
+    background: #f5f7fa;
+    color: #5b6879;
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.footer {
+    text-align: center;
+    border-top: 1px solid var(--border);
+    padding: 20px;
+    background: white;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+@media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+    .side-panel { order: 2; }
+    .header-label { max-width: 150px; }
+}
+
+@media (max-width: 480px) {
+    .topbar {
+        padding: 13px;
+        gap: 8px;
+    }
+
+    .brand { gap: 9px; }
+    .school-logo { width: 47px; height: 47px; }
+    .brand-name { font-size: 12px; }
+    .brand-subtitle { font-size: 10px; }
+    .header-label { font-size: 10px; max-width: 100px; }
+    .container { width: calc(100% - 22px); margin-top: 22px; }
+    .panel-heading { padding: 17px; }
+    .panel-body { padding: 17px; }
+    .student-grid { grid-template-columns: 1fr; gap: 0; }
+    input, textarea { font-size: 16px; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <img
+            class="school-logo"
+            src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
+            alt="Logo oficial de la Telesecundaria Francisco Villa"
+            onerror="this.onerror=null;this.alt='Logo no disponible';"
+        >
+
+        <div>
+            <div class="brand-name">OFTV No. 0216 “FRANCISCO VILLA”</div>
+            <div class="brand-subtitle">Sistema de Apoyo y Gestión Escolar</div>
+        </div>
+    </div>
+
+    <div class="header-label">
+        Módulo administrativo<br>
+        Reportes escolares
+    </div>
+</header>
+
+<main class="container">
+
+    <div class="page-heading">
+        <div class="breadcrumb">Gestión escolar / Reportes / Nuevo reporte</div>
+        <h1>Generar reporte escolar</h1>
+        <p>
+            Registra incidencias, observaciones y las soluciones aplicadas
+            a los alumnos de la institución.
+        </p>
+    </div>
+
+    <div class="layout">
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div class="heading-icon" aria-hidden="true">✎</div>
+                <div>
+                    <h2>Información del reporte</h2>
+                    <p>Completa los campos requeridos para registrar el reporte.</p>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <form id="formReporte" autocomplete="off">
+
+                    <div class="field">
+                        <label for="matricula">
+                            Matrícula del alumno <span class="required">*</span>
+                        </label>
+                        <input
+                            id="matricula"
+                            type="text"
+                            placeholder="Ingresa o escanea la matrícula"
+                            required
+                            spellcheck="false"
+                            aria-describedby="matriculaHelp"
+                        >
+                        <div class="helper" id="matriculaHelp">
+                            Los datos aparecerán automáticamente cuando se encuentre la matrícula.
+                        </div>
+                    </div>
+
+                    <div id="estado" class="status-message"
+                         role="status" aria-live="polite"></div>
+
+                    <section class="student-card">
+                        <div class="student-heading">
+                            <strong>Identificación del alumno</strong>
+                            <span class="student-status" id="estadoAlumno">
+                                Pendiente
+                            </span>
+                        </div>
+
+                        <div class="student-content">
+                            <div class="field">
+                                <label for="nombre">Nombre completo</label>
+                                <input id="nombre" type="text"
+                                       placeholder="Se obtiene de la base de datos"
+                                       readonly>
+                            </div>
+
+                            <div class="student-grid">
+                                <div class="field">
+                                    <label for="grado">Grado</label>
+                                    <input id="grado" type="text"
+                                           placeholder="—" readonly>
+                                </div>
+
+                                <div class="field">
+                                    <label for="grupo">Grupo</label>
+                                    <input id="grupo" type="text"
+                                           placeholder="—" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="field">
+                        <label for="motivo">
+                            Motivo del reporte <span class="required">*</span>
+                        </label>
+                        <textarea
+                            id="motivo"
+                            placeholder="Describe de manera clara y objetiva la situación presentada..."
+                            maxlength="5000"
+                            required
+                        ></textarea>
+                        <div class="helper">Máximo 5,000 caracteres.</div>
+                    </div>
+
+                    <div class="field">
+                        <label for="solucion">
+                            Solución aplicada <span class="required">*</span>
+                        </label>
+                        <textarea
+                            id="solucion"
+                            placeholder="Registra las medidas tomadas, acuerdos o seguimiento..."
+                            maxlength="5000"
+                            required
+                        ></textarea>
+                        <div class="helper">Máximo 5,000 caracteres.</div>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" id="btnGuardar"
+                                type="submit" disabled>
+                            Guardar reporte escolar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <aside class="panel side-panel">
+            <h3>Instrucciones de registro</h3>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <strong>Identifica al alumno</strong>
+                    <p>Escribe o escanea su matrícula y verifica sus datos.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <strong>Describe la situación</strong>
+                    <p>Explica el motivo del reporte con información clara y objetiva.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <strong>Registra la solución</strong>
+                    <p>Indica las acciones realizadas o los acuerdos establecidos.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>
+                    <strong>Guarda el reporte</strong>
+                    <p>El sistema confirmará si el registro se guardó correctamente.</p>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="notice">
+                <strong>Importante</strong><br>
+                Comprueba los datos del alumno antes de guardar.
+                La fecha y hora se generan automáticamente.
+            </div>
+        </aside>
+
+    </div>
+</main>
+
+<footer class="footer">
+    copyright ⓒ CORPORATIVO NEXEL DEGITAL | Todos los derechos reservados.
+     <br>
+     empresa administrada y supervizada por GRUPO GARCIA CORONA.
+</footer>
+
+<script>
+"use strict";
+
+const supabaseClient = window.supabase.createClient(
+    "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+const $ = id => document.getElementById(id);
+
+const form = $("formReporte");
+const matriculaInput = $("matricula");
+const nombreInput = $("nombre");
+const gradoInput = $("grado");
+const grupoInput = $("grupo");
+const motivoInput = $("motivo");
+const solucionInput = $("solucion");
+const estado = $("estado");
+const estadoAlumno = $("estadoAlumno");
+const btnGuardar = $("btnGuardar");
+
+let alumno = null;
+let busquedaId = 0;
+let temporizador = null;
+let guardando = false;
+
+function mostrarEstado(mensaje, tipo) {
+    estado.textContent = mensaje;
+    estado.className = "status-message " + tipo;
+}
+
+function ocultarEstado() {
+    estado.textContent = "";
+    estado.className = "status-message";
+}
+
+function limpiarAlumno() {
+    alumno = null;
+    nombreInput.value = "";
+    gradoInput.value = "";
+    grupoInput.value = "";
+    estadoAlumno.textContent = "Pendiente";
+    actualizarBoton();
+}
+
+function actualizarBoton() {
+    btnGuardar.disabled =
+        guardando ||
+        !alumno ||
+        matriculaInput.value.trim() !== String(alumno.matricula) ||
+        !motivoInput.value.trim() ||
+        !solucionInput.value.trim();
+}
+
+/* Búsqueda automática por matrícula */
+matriculaInput.addEventListener("input", () => {
+    clearTimeout(temporizador);
+
+    const valor = matriculaInput.value.trim();
+    const idActual = ++busquedaId;
+
+    limpiarAlumno();
+
+    if (!valor) {
+        ocultarEstado();
+        return;
+    }
+
+    estadoAlumno.textContent = "Buscando...";
+    mostrarEstado("Consultando matrícula...", "info");
+
+    temporizador = setTimeout(async () => {
+        try {
+            const { data, error } = await supabaseClient
+                .from("alumnos")
+                .select("id, matricula, nombre_completo, grado, grupo")
+                .eq("matricula", valor)
+                .limit(2);
+
+            if (idActual !== busquedaId) return;
+
+            if (error) {
+                console.error("Error de consulta:", error);
+                estadoAlumno.textContent = "Error";
+                mostrarEstado(
+                    "No se pudieron consultar los alumnos. Revisa la conexión, las columnas y los permisos de Supabase.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                estadoAlumno.textContent = "No encontrado";
+                mostrarEstado(
+                    "No se encontró esa matrícula. Comprueba que esté escrita correctamente.",
+                    "warning"
+                );
+                return;
+            }
+
+            if (data.length > 1) {
+                estadoAlumno.textContent = "Duplicado";
+                mostrarEstado(
+                    "Hay varios alumnos con esa matrícula. Corrige los registros duplicados antes de continuar.",
+                    "error"
+                );
+                return;
+            }
+
+            const registro = data[0];
+
+            if (
+                registro.id == null ||
+                registro.matricula == null ||
+                registro.nombre_completo == null
+            ) {
+                estadoAlumno.textContent = "Incompleto";
+                mostrarEstado(
+                    "El registro no contiene el identificador, matrícula o nombre necesarios.",
+                    "error"
+                );
+                return;
+            }
+
+            alumno = registro;
+            nombreInput.value = registro.nombre_completo ?? "";
+            gradoInput.value = registro.grado ?? "";
+            grupoInput.value = registro.grupo ?? "";
+
+            estadoAlumno.textContent = "Verificado";
+            mostrarEstado(
+                "Alumno encontrado. Ya puedes completar el reporte.",
+                "success"
+            );
+
+            actualizarBoton();
+
+        } catch (error) {
+            if (idActual !== busquedaId) return;
+
+            console.error(error);
+            estadoAlumno.textContent = "Error";
+            mostrarEstado(
+                "Ocurrió un problema durante la búsqueda. Intenta nuevamente.",
+                "error"
+            );
+        }
+    }, 300);
+});
+
+motivoInput.addEventListener("input", actualizarBoton);
+solucionInput.addEventListener("input", actualizarBoton);
+
+/* Guardar reporte */
+form.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (guardando) return;
+
+    if (
+        !alumno ||
+        matriculaInput.value.trim() !== String(alumno.matricula)
+    ) {
+        mostrarEstado(
+            "Busca una matrícula válida y espera a que se verifiquen los datos.",
+            "warning"
+        );
+        matriculaInput.focus();
+        return;
+    }
+
+    const motivo = motivoInput.value.trim();
+    const solucion = solucionInput.value.trim();
+
+    if (!motivo || !solucion) {
+        mostrarEstado(
+            "Completa el motivo del reporte y la solución aplicada.",
+            "warning"
+        );
+        return;
+    }
+
+    guardando = true;
+    actualizarBoton();
+    btnGuardar.textContent = "Guardando...";
+    mostrarEstado("Registrando el reporte escolar...", "info");
+
+    try {
+        const fecha = new Date();
+
+        const reporte = {
+            alumno_id: alumno.id,
+            matricula: alumno.matricula,
+            nombre: alumno.nombre_completo,
+            grado: alumno.grado,
+            grupo: alumno.grupo,
+            motivo,
+            solucion,
+            fecha: fecha.toISOString()
+        };
+
+        const { error } = await supabaseClient
+            .from("reportes")
+            .insert([reporte]);
+
+        if (error) {
+            console.error("Error al guardar:", error);
+            mostrarEstado(
+                "No fue posible guardar el reporte. Verifica las columnas de la tabla reportes y los permisos de inserción.",
+                "error"
+            );
+            return;
+        }
+
+        form.reset();
+        limpiarAlumno();
+
+        mostrarEstado(
+            "Reporte guardado correctamente. Fecha y hora: " +
+            fecha.toLocaleString("es-MX") + ".",
+            "success"
+        );
+
+        matriculaInput.focus();
+
+    } catch (error) {
+        console.error("Error inesperado:", error);
+        mostrarEstado(
+            "Ocurrió un error inesperado al guardar el reporte.",
+            "error"
+        );
+
+    } finally {
+        guardando = false;
+        btnGuardar.textContent = "Guardar reporte escolar";
+        actualizarBoton();
+    }
+});
+</script>
+
+</body>
+</html>
