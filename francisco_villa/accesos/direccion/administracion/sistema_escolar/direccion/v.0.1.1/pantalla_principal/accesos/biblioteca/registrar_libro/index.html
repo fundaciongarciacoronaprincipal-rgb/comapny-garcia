@@ -1,0 +1,1105 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#12345a">
+
+<title>Registro de Libros | Biblioteca Escolar</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@zxing/browser@0.2.1"></script>
+
+<style>
+:root {
+    --azul: #12345a;
+    --azul-2: #1d4f85;
+    --azul-claro: #eaf2fb;
+    --fondo: #f4f7fb;
+    --blanco: #ffffff;
+    --texto: #26374a;
+    --secundario: #718096;
+    --borde: #dce5ef;
+    --verde: #16805d;
+    --rojo: #b42332;
+    --sombra: 0 12px 35px rgba(18, 52, 90, .08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--texto);
+    background: var(--fondo);
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.topbar {
+    background: var(--azul);
+    color: white;
+    padding: 0 6%;
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    box-shadow: 0 4px 16px rgba(18, 52, 90, .12);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-icon {
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.1);
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+}
+
+.brand-name {
+    font-size: 17px;
+    font-weight: 750;
+    letter-spacing: .2px;
+}
+
+.brand-subtitle {
+    margin-top: 4px;
+    color: #d4e3f5;
+    font-size: 12px;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #e0ebf8;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #57d6a3;
+    border-radius: 50%;
+}
+
+main {
+    width: min(1080px, 92%);
+    margin: 0 auto;
+    padding: 35px 0 50px;
+}
+
+.breadcrumb {
+    font-size: 13px;
+    color: var(--secundario);
+    margin-bottom: 25px;
+}
+
+.breadcrumb strong {
+    color: var(--azul-2);
+}
+
+.intro {
+    margin-bottom: 26px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--azul-2);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+h1 {
+    margin: 0;
+    color: var(--azul);
+    font-size: clamp(27px, 4vw, 36px);
+    letter-spacing: -.8px;
+}
+
+.intro p {
+    margin: 12px 0 0;
+    color: var(--secundario);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 680px;
+}
+
+.info-strip {
+    display: flex;
+    gap: 13px;
+    align-items: flex-start;
+    padding: 16px 18px;
+    background: var(--azul-claro);
+    border: 1px solid #d5e5f7;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.info-icon {
+    font-size: 21px;
+}
+
+.info-strip strong {
+    display: block;
+    color: var(--azul);
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.info-strip p {
+    color: #526a83;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.card {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 17px;
+    box-shadow: var(--sombra);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 23px 27px;
+    border-bottom: 1px solid var(--borde);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.card-header-icon {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    background: var(--azul-claro);
+    border-radius: 12px;
+    font-size: 23px;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--azul);
+}
+
+.card-header p {
+    margin: 5px 0 0;
+    color: var(--secundario);
+    font-size: 12px;
+}
+
+.card-body {
+    padding: 27px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--azul);
+    font-size: 14px;
+    font-weight: 750;
+    margin: 0 0 19px;
+}
+
+.section-number {
+    width: 27px;
+    height: 27px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: var(--azul-claro);
+    color: var(--azul-2);
+    font-size: 12px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 21px 24px;
+}
+
+.field {
+    min-width: 0;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 9px;
+    color: #34475c;
+}
+
+.required {
+    color: var(--rojo);
+}
+
+.input-wrap {
+    position: relative;
+}
+
+input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+    padding: 0 14px;
+    color: var(--texto);
+    background: #fff;
+    border: 1px solid #cfd9e5;
+    border-radius: 9px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+input::placeholder {
+    color: #a0adbc;
+}
+
+input:focus {
+    border-color: #3976b8;
+    box-shadow: 0 0 0 3px rgba(57, 118, 184, .12);
+}
+
+input:disabled {
+    background: #f1f4f8;
+}
+
+.hint {
+    margin-top: 7px;
+    font-size: 11px;
+    color: var(--secundario);
+    line-height: 1.5;
+}
+
+.code-wrap {
+    display: flex;
+    gap: 9px;
+}
+
+.code-wrap input {
+    flex: 1;
+    min-width: 0;
+}
+
+.camera-button {
+    width: 49px;
+    min-width: 49px;
+    height: 48px;
+    border: 1px solid #cbd9e8;
+    background: #edf4fc;
+    color: var(--azul);
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    transition: background .2s;
+}
+
+.camera-button:hover {
+    background: #dceafa;
+}
+
+.camera-button.active {
+    color: white;
+    background: var(--rojo);
+    border-color: var(--rojo);
+}
+
+.scanner {
+    display: none;
+    margin-top: 17px;
+    padding: 15px;
+    border: 1px solid var(--borde);
+    background: #f7faff;
+    border-radius: 12px;
+}
+
+.scanner.visible {
+    display: block;
+}
+
+.scanner-title {
+    font-size: 13px;
+    font-weight: 750;
+    color: var(--azul);
+    margin-bottom: 10px;
+}
+
+.video-box {
+    overflow: hidden;
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+    background: #101820;
+    border-radius: 10px;
+    aspect-ratio: 4 / 3;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.scanner-help {
+    text-align: center;
+    color: var(--secundario);
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 12px 0 0;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 29px;
+    padding-top: 23px;
+    border-top: 1px solid var(--borde);
+}
+
+.required-note {
+    font-size: 12px;
+    color: var(--secundario);
+    line-height: 1.6;
+}
+
+.actions-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.btn {
+    min-height: 45px;
+    padding: 0 19px;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    font-weight: 700;
+    font-size: 13px;
+    transition: background .2s, transform .2s;
+}
+
+.btn:active {
+    transform: scale(.98);
+}
+
+.btn-secondary {
+    color: #40566e;
+    background: white;
+    border-color: #d3dce7;
+}
+
+.btn-secondary:hover {
+    background: #f4f7fa;
+}
+
+.btn-primary {
+    color: white;
+    background: var(--azul);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+}
+
+.btn-primary:hover {
+    background: var(--azul-2);
+}
+
+.btn:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+}
+
+.message {
+    display: none;
+    padding: 14px 16px;
+    margin-top: 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.message.show {
+    display: block;
+}
+
+.message.ok {
+    background: #eaf8f1;
+    color: #176747;
+    border: 1px solid #b9e7d0;
+}
+
+.message.error {
+    background: #fff0f0;
+    color: #a52432;
+    border: 1px solid #f0c8cd;
+}
+
+.message.info {
+    background: #edf4fc;
+    color: #234f7b;
+    border: 1px solid #d0e2f6;
+}
+
+.bottom-note {
+    margin-top: 22px;
+    text-align: center;
+    color: var(--secundario);
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+footer {
+    padding: 20px 15px;
+    text-align: center;
+    border-top: 1px solid var(--borde);
+    background: white;
+    color: var(--secundario);
+    font-size: 11px;
+}
+
+footer strong {
+    color: var(--azul);
+}
+
+@media (max-width: 650px) {
+    .topbar {
+        padding: 15px 5%;
+        min-height: 72px;
+    }
+
+    .brand-name {
+        font-size: 14px;
+    }
+
+    .brand-subtitle {
+        font-size: 11px;
+    }
+
+    .brand-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .status {
+        font-size: 0;
+        gap: 0;
+    }
+
+    main {
+        width: 92%;
+        padding-top: 25px;
+    }
+
+    .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 19px;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .card-header {
+        padding: 19px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .form-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .actions-right {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .actions-right .btn {
+        padding: 0 10px;
+    }
+
+    .btn-primary {
+        grid-column: 1 / -1;
+        min-height: 49px;
+    }
+}
+
+@media (max-width: 360px) {
+    .brand-name {
+        font-size: 12px;
+    }
+
+    .brand-icon {
+        display: none;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .actions-right {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-primary {
+        grid-column: auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <div class="brand-icon" aria-hidden="true">📚</div>
+        <div>
+            <div class="brand-name">BIBLIOTECA ESCOLAR</div>
+            <div class="brand-subtitle">Sistema de gestión bibliográfica</div>
+        </div>
+    </div>
+
+    <div class="status">
+        <span class="status-dot"></span>
+        Registro de ejemplares
+    </div>
+</header>
+
+<main>
+    <div class="breadcrumb">
+        Biblioteca escolar / <strong>Registro de libros</strong>
+    </div>
+
+    <section class="intro">
+        <div class="eyebrow">Administración de biblioteca</div>
+        <h1>Registro de Libros</h1>
+        <p>
+            Incorpora nuevos títulos al catálogo de la biblioteca.
+            Registra los datos bibliográficos y la cantidad disponible
+            para mantener organizado el inventario escolar.
+        </p>
+    </section>
+
+    <div class="info-strip">
+        <div class="info-icon" aria-hidden="true">💡</div>
+        <div>
+            <strong>Organiza el conocimiento</strong>
+            <p>
+                Captura correctamente el título, autor, editorial,
+                existencia y código de barras de cada libro.
+                Los campos marcados con asterisco son obligatorios.
+            </p>
+        </div>
+    </div>
+
+    <section class="card">
+        <div class="card-header">
+            <div class="card-header-icon" aria-hidden="true">📖</div>
+            <div>
+                <h2>Información del libro</h2>
+                <p>Completa los datos para registrar el material bibliográfico.</p>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <form id="formLibro" autocomplete="off">
+                <h3 class="section-title">
+                    <span class="section-number">01</span>
+                    Datos bibliográficos
+                </h3>
+
+                <div class="form-grid">
+                    <div class="field full">
+                        <label for="nombre">
+                            Nombre del libro <span class="required">*</span>
+                        </label>
+                        <input
+                            id="nombre"
+                            name="nombre"
+                            type="text"
+                            maxlength="200"
+                            placeholder="Ej. El principito"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="autor">
+                            Autor <span class="required">*</span>
+                        </label>
+                        <input
+                            id="autor"
+                            name="autor"
+                            type="text"
+                            maxlength="150"
+                            placeholder="Nombre del autor"
+                            required
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="editorial">
+                            Editorial <span class="required">*</span>
+                        </label>
+                        <input
+                            id="editorial"
+                            name="editorial"
+                            type="text"
+                            maxlength="150"
+                            placeholder="Nombre de la editorial"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <h3 class="section-title" style="margin-top:30px">
+                    <span class="section-number">02</span>
+                    Inventario e identificación
+                </h3>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="cantidad">
+                            Cantidad en existencia <span class="required">*</span>
+                        </label>
+                        <input
+                            id="cantidad"
+                            name="cantidad"
+                            type="number"
+                            min="1"
+                            max="1000000"
+                            step="1"
+                            inputmode="numeric"
+                            placeholder="Ej. 15"
+                            required
+                        >
+                        <div class="hint">
+                            Ingresa el número total de ejemplares que se registrarán.
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="codigo">
+                            Código de barras <span class="required">*</span>
+                        </label>
+                        <div class="code-wrap">
+                            <input
+                                id="codigo"
+                                name="codigo"
+                                type="text"
+                                maxlength="100"
+                                placeholder="Escribe o escanea el código"
+                                autocapitalize="characters"
+                                spellcheck="false"
+                                required
+                            >
+
+                            <button
+                                class="camera-button"
+                                id="btnCamara"
+                                type="button"
+                                aria-label="Activar o desactivar cámara"
+                                title="Escanear con la cámara"
+                                aria-pressed="false"
+                            >▣</button>
+                        </div>
+                        <div class="hint">
+                            Puedes escribir el código o utilizar la cámara del dispositivo.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scanner" id="scanner">
+                    <div class="scanner-title">📷 Escáner de códigos de barras</div>
+                    <div class="video-box">
+                        <video id="video" autoplay muted playsinline></video>
+                    </div>
+                    <p class="scanner-help" id="scannerHelp">
+                        Iniciando cámara. Coloca el código de barras frente al objetivo.
+                    </p>
+                </div>
+
+                <div id="mensaje" class="message" role="status"
+                     aria-live="polite"></div>
+
+                <div class="form-actions">
+                    <div class="required-note">
+                        <span class="required">*</span> Campos obligatorios.<br>
+                        Verifica la información antes de guardar.
+                    </div>
+
+                    <div class="actions-right">
+                        <button class="btn btn-secondary" type="button"
+                                id="btnLimpiar">
+                            Limpiar
+                        </button>
+
+                        <button class="btn btn-primary" type="submit" id="btnGuardar">
+                            <span aria-hidden="true">✓</span>
+                            Guardar libro
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <div class="bottom-note">
+        La información se envía a la base de datos de la biblioteca.<br>
+        El registro requiere conexión a internet.
+    </div>
+</main>
+
+<footer>
+    <strong>Biblioteca Escolar</strong> · Sistema de gestión bibliográfica
+</footer>
+
+<script>
+"use strict";
+
+/* ==========================================
+   CONEXIÓN CON SUPABASE
+   Se conserva el proyecto y la tabla originales.
+========================================== */
+
+const supabaseClient = window.supabase.createClient(
+    "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+/* ==========================================
+   ELEMENTOS
+========================================== */
+
+const form = document.getElementById("formLibro");
+const nombreInput = document.getElementById("nombre");
+const autorInput = document.getElementById("autor");
+const editorialInput = document.getElementById("editorial");
+const cantidadInput = document.getElementById("cantidad");
+const codigoInput = document.getElementById("codigo");
+
+const mensaje = document.getElementById("mensaje");
+const btnGuardar = document.getElementById("btnGuardar");
+const btnLimpiar = document.getElementById("btnLimpiar");
+const btnCamara = document.getElementById("btnCamara");
+
+const scanner = document.getElementById("scanner");
+const video = document.getElementById("video");
+const scannerHelp = document.getElementById("scannerHelp");
+
+let controlesCamara = null;
+let iniciandoCamara = false;
+let solicitudCamara = 0;
+
+/* ==========================================
+   NOTIFICACIONES
+========================================== */
+
+function mostrar(texto, tipo = "info") {
+    mensaje.textContent = texto;
+    mensaje.className = "message show " + tipo;
+}
+
+function ocultarMensaje() {
+    mensaje.textContent = "";
+    mensaje.className = "message";
+}
+
+/* ==========================================
+   NORMALIZAR CÓDIGO
+========================================== */
+
+codigoInput.addEventListener("input", function () {
+    const posicion = codigoInput.selectionStart;
+    const anterior = codigoInput.value;
+
+    codigoInput.value = anterior
+        .replace(/[^a-zA-Z0-9]/g, "")
+        .toUpperCase();
+
+    // Evita desplazar innecesariamente el cursor al escribir.
+    if (document.activeElement === codigoInput && posicion !== null) {
+        const nuevaPosicion = Math.min(posicion, codigoInput.value.length);
+        codigoInput.setSelectionRange(nuevaPosicion, nuevaPosicion);
+    }
+});
+
+/* ==========================================
+   CÁMARA Y ESCÁNER
+   Al pulsar nuevamente el botón, se detiene
+   el escáner y vuelve el modo manual.
+========================================== */
+
+async function activarCamara() {
+    if (iniciandoCamara) return;
+
+    iniciandoCamara = true;
+    const miSolicitud = ++solicitudCamara;
+
+    scanner.classList.add("visible");
+    btnCamara.classList.add("active");
+    btnCamara.setAttribute("aria-pressed", "true");
+    btnCamara.textContent = "×";
+    btnCamara.title = "Detener cámara";
+
+    scannerHelp.textContent =
+        "Solicitando acceso a la cámara del dispositivo…";
+
+    try {
+        if (!window.ZXingBrowser ||
+            !window.ZXingBrowser.BrowserMultiFormatReader) {
+            throw new Error(
+                "No se pudo cargar el lector de códigos. Comprueba tu conexión a internet."
+            );
+        }
+
+        const lector = new window.ZXingBrowser.BrowserMultiFormatReader();
+
+        const controles = await lector.decodeFromVideoDevice(
+            undefined,
+            video,
+            (resultado, error) => {
+                if (miSolicitud !== solicitudCamara) return;
+
+                if (resultado) {
+                    const valor = resultado.getText();
+
+                    codigoInput.value = valor
+                        .replace(/[^a-zA-Z0-9]/g, "")
+                        .toUpperCase();
+
+                    detenerCamara();
+
+                    mostrar(
+                        "Código leído correctamente. Verifica el código y guarda el libro.",
+                        "ok"
+                    );
+
+                    codigoInput.focus();
+                }
+            }
+        );
+
+        // Si se canceló mientras el navegador solicitaba permiso,
+        // detenemos inmediatamente los controles recién creados.
+        if (miSolicitud !== solicitudCamara) {
+            controles.stop();
+            return;
+        }
+
+        controlesCamara = controles;
+        scannerHelp.textContent =
+            "Cámara activa. Coloca el código de barras dentro de la imagen.";
+    } catch (error) {
+        if (miSolicitud !== solicitudCamara) return;
+
+        console.error("Error al abrir la cámara:", error);
+
+        detenerCamara();
+
+        scanner.classList.add("visible");
+        scannerHelp.textContent =
+            "No fue posible iniciar el escáner. Comprueba los permisos de cámara y utiliza una conexión HTTPS o localhost.";
+
+        mostrar(
+            error && error.message
+                ? error.message
+                : "No se pudo acceder a la cámara. Puedes escribir el código manualmente.",
+            "error"
+        );
+    } finally {
+        iniciandoCamara = false;
+    }
+}
+
+function detenerCamara() {
+    // Invalida cualquier solicitud que siga pendiente.
+    solicitudCamara++;
+
+    if (controlesCamara) {
+        try {
+            controlesCamara.stop();
+        } catch (error) {
+            console.warn("No se pudieron detener todos los controles:", error);
+        }
+        controlesCamara = null;
+    }
+
+    if (video.srcObject) {
+        video.srcObject.getTracks().forEach(pista => pista.stop());
+        video.srcObject = null;
+    }
+
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+
+    btnCamara.classList.remove("active");
+    btnCamara.setAttribute("aria-pressed", "false");
+    btnCamara.textContent = "▣";
+    btnCamara.title = "Escanear con la cámara";
+}
+
+btnCamara.addEventListener("click", function () {
+    ocultarMensaje();
+
+    if (controlesCamara || iniciandoCamara ||
+        scanner.classList.contains("visible")) {
+        detenerCamara();
+        scanner.classList.remove("visible");
+        return;
+    }
+
+    activarCamara();
+});
+
+/* ==========================================
+   LIMPIAR FORMULARIO
+========================================== */
+
+btnLimpiar.addEventListener("click", function () {
+    detenerCamara();
+    scanner.classList.remove("visible");
+    form.reset();
+    ocultarMensaje();
+    nombreInput.focus();
+});
+
+/* ==========================================
+   GUARDAR LIBRO EN SUPABASE
+   Conserva los nombres de columnas originales.
+========================================== */
+
+form.addEventListener("submit", async function (evento) {
+    evento.preventDefault();
+
+    if (btnGuardar.disabled) return;
+
+    const nombre = nombreInput.value.trim();
+    const autor = autorInput.value.trim();
+    const editorial = editorialInput.value.trim();
+    const cantidadTexto = cantidadInput.value.trim();
+    const codigo = codigoInput.value.trim();
+
+    if (!nombre || !autor || !editorial ||
+        !cantidadTexto || !codigo) {
+        mostrar("Completa todos los campos obligatorios.", "error");
+        return;
+    }
+
+    const cantidad = Number(cantidadTexto);
+
+    if (!Number.isSafeInteger(cantidad) ||
+        cantidad < 1 || cantidad > 1000000) {
+        mostrar(
+            "La cantidad debe ser un número entero entre 1 y 1,000,000.",
+            "error"
+        );
+        cantidadInput.focus();
+        return;
+    }
+
+    if (codigo.length > 100) {
+        mostrar("El código de barras no puede superar 100 caracteres.", "error");
+        codigoInput.focus();
+        return;
+    }
+
+    detenerCamara();
+    scanner.classList.remove("visible");
+
+    btnGuardar.disabled = true;
+    btnGuardar.textContent = "Guardando…";
+    ocultarMensaje();
+
+    try {
+        const { error } = await supabaseClient
+            .from("libros")
+            .insert([{
+                nombre_libro: nombre,
+                autor: autor,
+                editorial: editorial,
+                cantidad: cantidad,
+                codigo_barras: codigo
+            }]);
+
+        if (error) {
+            console.error("Error de Supabase:", error);
+
+            mostrar(
+                "No fue posible guardar el libro. " +
+                "Verifica tu conexión, los permisos de la tabla y que sus columnas coincidan con las del sistema. " +
+                "Detalle: " + error.message,
+                "error"
+            );
+            return;
+        }
+
+        form.reset();
+
+        mostrar(
+            "¡Registro completado! El libro «" + nombre +
+            "» se guardó correctamente en la base de datos.",
+            "ok"
+        );
+
+        nombreInput.focus();
+
+    } catch (error) {
+        console.error("Error inesperado:", error);
+
+        mostrar(
+            "Ocurrió un problema de conexión. Comprueba tu internet e inténtalo nuevamente.",
+            "error"
+        );
+    } finally {
+        btnGuardar.disabled = false;
+        btnGuardar.innerHTML = "<span aria-hidden='true'>✓</span> Guardar libro";
+    }
+});
+
+/* Detener la cámara cuando se abandona la página. */
+window.addEventListener("pagehide", detenerCamara);
+</script>
+
+</body>
+</html>
