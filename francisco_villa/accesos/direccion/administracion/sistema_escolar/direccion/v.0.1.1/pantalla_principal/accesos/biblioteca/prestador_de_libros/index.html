@@ -1,0 +1,1818 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>Sistema de Préstamos de Libros</title>
+
+<style>
+:root {
+    --fondo: #080b10;
+    --panel: #111720;
+    --panel2: #182230;
+    --borde: #293747;
+    --texto: #f5f7fa;
+    --secundario: #aab7c7;
+    --azul: #147dff;
+    --azul-hover: #0865d8;
+    --verde: #16a36a;
+    --rojo: #f04452;
+    --radio: 18px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button, input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: 0;
+    border-radius: 11px;
+    padding: 14px 18px;
+    font-weight: 700;
+    transition: background .2s, transform .15s;
+}
+
+button:active {
+    transform: scale(.98);
+}
+
+button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.boton-principal {
+    background: var(--azul);
+    color: white;
+}
+
+.boton-principal:hover {
+    background: var(--azul-hover);
+}
+
+.boton-secundario {
+    background: #253243;
+    color: white;
+    border: 1px solid #39495d;
+}
+
+.boton-secundario:hover {
+    background: #314258;
+}
+
+.boton-peligro {
+    background: #481d25;
+    color: #ffdce0;
+    border: 1px solid #78303a;
+}
+
+.boton-verde {
+    background: var(--verde);
+    color: white;
+}
+
+.boton-completo {
+    width: 100%;
+}
+
+.pantalla {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* PANTALLA INICIAL */
+
+#pantallaInicio {
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+}
+
+.reloj {
+    font-size: clamp(3rem, 10vw, 7.5rem);
+    font-weight: 300;
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+    color: white;
+    line-height: 1.1;
+}
+
+.fecha {
+    color: #c9c9c9;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    margin-top: 16px;
+    text-transform: capitalize;
+}
+
+.inicio-titulo {
+    margin: 48px 0 10px;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.inicio-descripcion {
+    color: #a9a9a9;
+    max-width: 600px;
+    line-height: 1.7;
+    margin: 0 auto 28px;
+}
+
+.opciones-inicio {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+    max-width: 650px;
+}
+
+.opcion-inicio {
+    min-height: 145px;
+    padding: 25px 18px;
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.opcion-inicio:hover {
+    background: #181818;
+    border-color: #777;
+}
+
+.opcion-icono {
+    font-size: 2.3rem;
+}
+
+.opcion-inicio small {
+    font-weight: 400;
+    color: #aaa;
+    line-height: 1.4;
+}
+
+/* PANTALLAS DEL SISTEMA */
+
+#pantallaSistema {
+    padding: 24px 16px 40px;
+    background:
+        radial-gradient(ellipse at top, #142132 0%, #080b10 55%);
+}
+
+.contenedor {
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+.encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 25px;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.marca-icono {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #162d49;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    flex-shrink: 0;
+}
+
+.marca h1 {
+    font-size: clamp(1rem, 3vw, 1.45rem);
+    margin: 0 0 5px;
+}
+
+.marca p {
+    margin: 0;
+    color: var(--secundario);
+    font-size: .83rem;
+}
+
+.tarjeta {
+    background: rgba(17, 23, 32, .97);
+    border: 1px solid var(--borde);
+    border-radius: var(--radio);
+    padding: clamp(18px, 4vw, 32px);
+    box-shadow: 0 18px 55px rgba(0,0,0,.2);
+}
+
+.progreso {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 25px;
+}
+
+.progreso-item {
+    min-width: 0;
+    text-align: center;
+    color: #8d9bad;
+    font-size: .75rem;
+}
+
+.progreso-linea {
+    height: 5px;
+    border-radius: 20px;
+    background: #283443;
+    margin-bottom: 9px;
+}
+
+.progreso-item.activo .progreso-linea,
+.progreso-item.completado .progreso-linea {
+    background: var(--azul);
+}
+
+.progreso-item.activo {
+    color: white;
+}
+
+.paso-titulo {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    margin: 0 0 8px;
+}
+
+.paso-descripcion {
+    color: var(--secundario);
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+.etiqueta {
+    display: block;
+    margin-bottom: 9px;
+    font-weight: 700;
+    font-size: .93rem;
+}
+
+.campo {
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    min-width: 0;
+    width: 100%;
+    background: #080d14;
+    color: white;
+    border: 1px solid #39495d;
+    border-radius: 11px;
+    padding: 15px;
+    outline: none;
+}
+
+input:focus {
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(20,125,255,.15);
+}
+
+input::placeholder {
+    color: #788596;
+}
+
+.ayuda {
+    color: var(--secundario);
+    font-size: .85rem;
+    line-height: 1.6;
+    margin: 12px 0 0;
+}
+
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.acciones button {
+    flex: 1;
+    min-width: 145px;
+}
+
+.mensaje {
+    display: none;
+    margin-top: 18px;
+    padding: 13px 15px;
+    border-radius: 10px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.mensaje.error {
+    display: block;
+    color: #ffd6da;
+    background: #3a1920;
+    border: 1px solid #6a2c36;
+}
+
+.mensaje.exito {
+    display: block;
+    color: #c8ffe5;
+    background: #103526;
+    border: 1px solid #216748;
+}
+
+.resultado {
+    margin-top: 22px;
+    padding: 20px;
+    background: #0b1119;
+    border: 1px solid #344357;
+    border-radius: 13px;
+}
+
+.resultado h3 {
+    margin: 0 0 16px;
+    font-size: 1.1rem;
+}
+
+.datos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.dato {
+    min-width: 0;
+}
+
+.dato small {
+    display: block;
+    color: var(--secundario);
+    margin-bottom: 6px;
+    font-size: .82rem;
+}
+
+.dato strong {
+    display: block;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+/* CÁMARA */
+
+.camara-contenedor {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid #344357;
+    border-radius: 15px;
+    min-height: 220px;
+}
+
+.camara-contenedor video {
+    display: block;
+    width: 100%;
+    max-height: 440px;
+    min-height: 220px;
+    object-fit: cover;
+    background: #000;
+}
+
+.marco-escaneo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(76%, 380px);
+    height: 105px;
+    transform: translate(-50%, -50%);
+    border: 2px solid #26e59a;
+    border-radius: 12px;
+    box-shadow: 0 0 0 999px rgba(0,0,0,.13);
+    pointer-events: none;
+}
+
+.estado-camara {
+    margin-top: 12px;
+    color: var(--secundario);
+    font-size: .9rem;
+    line-height: 1.5;
+}
+
+.controles-camara {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.controles-camara button {
+    flex: 1;
+    min-width: 130px;
+}
+
+.camara-ayuda {
+    color: var(--secundario);
+    font-size: .85rem;
+    line-height: 1.6;
+    margin-top: 14px;
+}
+
+/* RESUMEN Y CONFIRMACIÓN */
+
+.resumen-seccion {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--borde);
+}
+
+.resumen-seccion:first-child {
+    padding-top: 0;
+}
+
+.resumen-seccion:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.resumen-seccion h3 {
+    font-size: 1rem;
+    margin: 0 0 15px;
+    color: #80b9ff;
+}
+
+.nota {
+    color: var(--secundario);
+    font-size: .85rem;
+    line-height: 1.6;
+    margin-top: 15px;
+}
+
+.icono-final {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 20px;
+    background: #103b2b;
+    border: 1px solid #1c8c5b;
+    font-size: 40px;
+}
+
+.texto-centrado {
+    text-align: center;
+}
+
+.pie {
+    color: #778496;
+    text-align: center;
+    font-size: .8rem;
+    margin-top: 25px;
+    line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+    #pantallaInicio {
+        padding: 20px 15px;
+    }
+
+    .opciones-inicio {
+        grid-template-columns: 1fr;
+        max-width: 390px;
+    }
+
+    .opcion-inicio {
+        min-height: 110px;
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    .opcion-inicio small {
+        display: block;
+    }
+
+    #pantallaSistema {
+        padding: 16px 10px 28px;
+    }
+
+    .encabezado {
+        align-items: flex-start;
+    }
+
+    .marca-icono {
+        width: 40px;
+        height: 40px;
+    }
+
+    .encabezado > button {
+        padding: 10px;
+        font-size: .82rem;
+    }
+
+    .datos {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .campo {
+        flex-direction: column;
+    }
+
+    .campo button {
+        width: 100%;
+    }
+
+    .progreso-item {
+        font-size: .67rem;
+    }
+
+    .acciones {
+        flex-direction: column;
+    }
+
+    .acciones button {
+        width: 100%;
+    }
+
+    .controles-camara {
+        flex-direction: column;
+    }
+
+    .controles-camara button {
+        width: 100%;
+    }
+
+    .camara-contenedor video {
+        min-height: 200px;
+    }
+}
+
+@media (min-width: 1000px) {
+    #pantallaSistema {
+        padding-top: 40px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PANTALLA INICIAL -->
+<section id="pantallaInicio" class="pantalla">
+    <div class="reloj" id="reloj">00:00:00</div>
+    <div class="fecha" id="fecha">Cargando fecha...</div>
+
+    <h1 class="inicio-titulo">Sistema de Préstamos de Libros</h1>
+
+    <p class="inicio-descripcion">
+        Selecciona cómo deseas registrar el préstamo.
+        Puedes utilizar un escáner USB o la cámara de este dispositivo.
+    </p>
+
+    <div class="opciones-inicio">
+        <button class="opcion-inicio" onclick="iniciarPrestamo('usb')">
+            <span class="opcion-icono">▤</span>
+            <span>
+                <strong>Escáner USB</strong>
+                <small>Utilizar lector de códigos conectado al equipo</small>
+            </span>
+        </button>
+
+        <button class="opcion-inicio" onclick="iniciarPrestamo('camara')">
+            <span class="opcion-icono">▣</span>
+            <span>
+                <strong>Cámara del dispositivo</strong>
+                <small>Escanear códigos de barras o códigos QR</small>
+            </span>
+        </button>
+    </div>
+
+    <div class="pie">
+        Sistema de gestión y control de préstamos
+    </div>
+</section>
+
+
+<!-- SISTEMA PRINCIPAL -->
+<section id="pantallaSistema" class="pantalla" hidden>
+    <div class="contenedor">
+
+        <header class="encabezado">
+            <div class="marca">
+                <div class="marca-icono">▤</div>
+                <div>
+                    <h1>Préstamos de libros</h1>
+                    <p id="modoTexto">Modo de captura</p>
+                </div>
+            </div>
+
+            <button class="boton-secundario" onclick="volverInicio()">
+                Salir
+            </button>
+        </header>
+
+        <div class="progreso" id="barraProgreso">
+            <div class="progreso-item activo" data-paso="1">
+                <div class="progreso-linea"></div>
+                Alumno
+            </div>
+            <div class="progreso-item" data-paso="2">
+                <div class="progreso-linea"></div>
+                Docente
+            </div>
+            <div class="progreso-item" data-paso="3">
+                <div class="progreso-linea"></div>
+                Libro
+            </div>
+            <div class="progreso-item" data-paso="4">
+                <div class="progreso-linea"></div>
+                Resumen
+            </div>
+        </div>
+
+        <!-- PASO 1: ALUMNO -->
+        <div class="tarjeta paso" id="paso1">
+            <h2 class="paso-titulo">1. Identificar al alumno</h2>
+            <p class="paso-descripcion">
+                Escanea la matrícula del alumno para consultar sus datos registrados.
+            </p>
+
+            <div id="entradaAlumno">
+                <div class="etiqueta">Matrícula del alumno</div>
+                <div class="campo">
+                    <input
+                        id="matricula"
+                        type="text"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        placeholder="Escanea o escribe la matrícula"
+                    >
+                    <button class="boton-principal" onclick="buscarAlumnoUSB()">
+                        Buscar alumno
+                    </button>
+                </div>
+                <p class="ayuda">
+                    Puedes escanear la matrícula con el lector USB.
+                    Si el lector envía Enter automáticamente, la búsqueda se realizará sola.
+                </p>
+            </div>
+
+            <div id="camaraAlumno" hidden>
+                <div class="camara-contenedor">
+                    <video id="videoAlumno" autoplay muted playsinline></video>
+                    <div class="marco-escaneo"></div>
+                </div>
+                <div class="estado-camara" id="estadoCamaraAlumno">
+                    Preparando cámara...
+                </div>
+                <div class="controles-camara">
+                    <button class="boton-secundario" onclick="cambiarCamara()">
+                        Cambiar cámara
+                    </button>
+                    <button class="boton-secundario" onclick="iniciarCamara()">
+                        Volver a escanear
+                    </button>
+                </div>
+                <p class="camara-ayuda">
+                    Coloca la matrícula dentro del marco. La cámara leerá el código
+                    automáticamente cuando pueda reconocerlo.
+                </p>
+            </div>
+
+            <div id="resultadoAlumno" class="resultado" hidden>
+                <h3>Datos del alumno</h3>
+                <div class="datos" id="datosAlumno"></div>
+            </div>
+
+            <div id="mensajeAlumno" class="mensaje" role="status"></div>
+
+            <div class="acciones">
+                <button class="boton-secundario" onclick="volverInicio()">
+                    Cancelar
+                </button>
+                <button
+                    class="boton-principal"
+                    id="siguienteAlumno"
+                    onclick="irPaso(2)"
+                    hidden
+                >
+                    Continuar con docente →
+                </button>
+            </div>
+        </div>
+
+
+        <!-- PASO 2: DOCENTE -->
+        <div class="tarjeta paso" id="paso2" hidden>
+            <h2 class="paso-titulo">2. Identificar al docente</h2>
+            <p class="paso-descripcion">
+                Escanea el código del docente. Se utilizarán los últimos nueve
+                dígitos numéricos para consultar el registro.
+            </p>
+
+            <div id="entradaDocente">
+                <div class="etiqueta">Número de servidor</div>
+                <div class="campo">
+                    <input
+                        id="numeroDocente"
+                        type="text"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        placeholder="Escanea el código del docente"
+                    >
+                    <button class="boton-principal" onclick="buscarDocenteUSB()">
+                        Buscar docente
+                    </button>
+                </div>
+                <p class="ayuda">
+                    Se ignoran los caracteres que no sean números y se toman
+                    los últimos nueve dígitos.
+                </p>
+            </div>
+
+            <div id="camaraDocente" hidden>
+                <div class="camara-contenedor">
+                    <video id="videoDocente" autoplay muted playsinline></video>
+                    <div class="marco-escaneo"></div>
+                </div>
+                <div class="estado-camara" id="estadoCamaraDocente">
+                    Preparando cámara...
+                </div>
+                <div class="controles-camara">
+                    <button class="boton-secundario" onclick="cambiarCamara()">
+                        Cambiar cámara
+                    </button>
+                    <button class="boton-secundario" onclick="iniciarCamara()">
+                        Volver a escanear
+                    </button>
+                </div>
+                <p class="camara-ayuda">
+                    Centra el código del docente en el marco de lectura.
+                </p>
+            </div>
+
+            <div id="resultadoDocente" class="resultado" hidden>
+                <h3>Datos del docente</h3>
+                <div class="datos" id="datosDocente"></div>
+            </div>
+
+            <div id="mensajeDocente" class="mensaje" role="status"></div>
+
+            <div class="acciones">
+                <button class="boton-secundario" onclick="irPaso(1)">
+                    ← Regresar
+                </button>
+                <button
+                    class="boton-principal"
+                    id="siguienteDocente"
+                    onclick="irPaso(3)"
+                    hidden
+                >
+                    Continuar con libro →
+                </button>
+            </div>
+        </div>
+
+
+        <!-- PASO 3: LIBRO -->
+        <div class="tarjeta paso" id="paso3" hidden>
+            <h2 class="paso-titulo">3. Identificar el libro</h2>
+            <p class="paso-descripcion">
+                Escanea el código de barras o QR del libro para localizarlo
+                en el inventario.
+            </p>
+
+            <div id="entradaLibro">
+                <div class="etiqueta">Código del libro</div>
+                <div class="campo">
+                    <input
+                        id="codigoLibro"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Escanea o escribe el código del libro"
+                    >
+                    <button class="boton-principal" onclick="buscarLibroUSB()">
+                        Buscar libro
+                    </button>
+                </div>
+                <p class="ayuda">
+                    El código del libro se consulta tal como se lee,
+                    incluyendo letras o símbolos si los contiene.
+                </p>
+            </div>
+
+            <div id="camaraLibro" hidden>
+                <div class="camara-contenedor">
+                    <video id="videoLibro" autoplay muted playsinline></video>
+                    <div class="marco-escaneo"></div>
+                </div>
+                <div class="estado-camara" id="estadoCamaraLibro">
+                    Preparando cámara...
+                </div>
+                <div class="controles-camara">
+                    <button class="boton-secundario" onclick="cambiarCamara()">
+                        Cambiar cámara
+                    </button>
+                    <button class="boton-secundario" onclick="iniciarCamara()">
+                        Volver a escanear
+                    </button>
+                </div>
+                <p class="camara-ayuda">
+                    Coloca el código del libro dentro del marco y espera
+                    a que la cámara lo reconozca.
+                </p>
+            </div>
+
+            <div id="resultadoLibro" class="resultado" hidden>
+                <h3>Datos del libro</h3>
+                <div class="datos" id="datosLibro"></div>
+            </div>
+
+            <div id="mensajeLibro" class="mensaje" role="status"></div>
+
+            <div class="acciones">
+                <button class="boton-secundario" onclick="irPaso(2)">
+                    ← Regresar
+                </button>
+                <button
+                    class="boton-principal"
+                    id="siguienteLibro"
+                    onclick="irPaso(4)"
+                    hidden
+                >
+                    Revisar préstamo →
+                </button>
+            </div>
+        </div>
+
+
+        <!-- PASO 4: RESUMEN -->
+        <div class="tarjeta paso" id="paso4" hidden>
+            <h2 class="paso-titulo">4. Confirmar préstamo</h2>
+            <p class="paso-descripcion">
+                Revisa que la información del alumno, docente y libro sea correcta
+                antes de guardar el registro.
+            </p>
+
+            <div id="resumenCompleto"></div>
+
+            <p class="nota">
+                Al confirmar, se intentará registrar el préstamo en la tabla
+                <strong>prestamos</strong> de Supabase.
+            </p>
+
+            <div id="mensajeConfirmacion" class="mensaje" role="status"></div>
+
+            <div class="acciones">
+                <button class="boton-secundario" onclick="irPaso(3)">
+                    ← Regresar
+                </button>
+                <button
+                    class="boton-verde"
+                    id="botonConfirmar"
+                    onclick="guardarPrestamo()"
+                >
+                    Confirmar y guardar préstamo
+                </button>
+            </div>
+        </div>
+
+
+        <!-- PASO 5: RESULTADO -->
+        <div class="tarjeta paso" id="paso5" hidden>
+            <div class="texto-centrado">
+                <div class="icono-final" id="iconoFinal">✓</div>
+                <h2 class="paso-titulo" id="tituloFinal">
+                    Préstamo registrado
+                </h2>
+                <p class="paso-descripcion" id="descripcionFinal">
+                    La operación ha terminado.
+                </p>
+            </div>
+
+            <div id="resumenFinal"></div>
+
+            <div class="acciones">
+                <button class="boton-principal boton-completo" onclick="nuevoPrestamo()">
+                    Registrar otro préstamo
+                </button>
+                <button class="boton-secundario boton-completo" onclick="volverInicio()">
+                    Volver al inicio
+                </button>
+            </div>
+        </div>
+
+        <div class="pie">
+            Sistema de Préstamos de Libros
+        </div>
+    </div>
+</section>
+
+
+<!-- LIBRERÍAS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/@zxing/browser@0.2.1"></script>
+
+<script>
+"use strict";
+
+/* =====================================================
+   CONFIGURACIÓN DE SUPABASE
+   Se conservan el proyecto y las tablas del HTML original.
+===================================================== */
+
+const SUPABASE_URL = "https://nlpdpvjtdxknhvgqbfls.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* =====================================================
+   ESTADO DEL SISTEMA
+===================================================== */
+
+let modoCaptura = "usb";
+let pasoActual = 1;
+
+let alumnoActual = null;
+let docenteActual = null;
+let libroActual = null;
+
+let lectorCodigos = null;
+let controlesCamara = null;
+let dispositivosCamara = [];
+let indiceCamara = 0;
+let camaraActiva = false;
+let procesandoCamara = false;
+let identificadorCamara = 0;
+let guardandoPrestamo = false;
+
+
+/* =====================================================
+   RELOJ Y FECHA
+===================================================== */
+
+function actualizarReloj() {
+    const ahora = new Date();
+
+    document.getElementById("reloj").textContent =
+        ahora.toLocaleTimeString("es-MX", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false
+        });
+
+    document.getElementById("fecha").textContent =
+        ahora.toLocaleDateString("es-MX", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
+}
+
+actualizarReloj();
+setInterval(actualizarReloj, 1000);
+
+
+/* =====================================================
+   UTILIDADES
+===================================================== */
+
+function normalizarMatricula(valor) {
+    /*
+       Elimina los caracteres no numéricos, conserva los
+       últimos 10 dígitos y los presenta como 123456789-0.
+    */
+    const digitos = String(valor ?? "").replace(/\D/g, "");
+
+    if (digitos.length < 10) {
+        return null;
+    }
+
+    const ultimosDiez = digitos.slice(-10);
+
+    return ultimosDiez.slice(0, 9) + "-" + ultimosDiez.slice(9);
+}
+
+function normalizarNumeroDocente(valor) {
+    const digitos = String(valor ?? "").replace(/\D/g, "");
+
+    if (digitos.length < 9) {
+        return null;
+    }
+
+    return digitos.slice(-9);
+}
+
+function obtenerCorreo(registro) {
+    return registro?.correo || registro?.email || "No registrado";
+}
+
+function mostrarMensaje(id, texto, tipo = "error") {
+    const elemento = document.getElementById(id);
+
+    elemento.textContent = texto;
+    elemento.className = "mensaje " + tipo;
+}
+
+function limpiarMensaje(id) {
+    const elemento = document.getElementById(id);
+
+    elemento.textContent = "";
+    elemento.className = "mensaje";
+}
+
+function escaparHTML(valor) {
+    return String(valor ?? "").replace(/[&<>"']/g, caracter => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[caracter]);
+}
+
+function ponerDatos(id, campos) {
+    const contenedor = document.getElementById(id);
+
+    contenedor.innerHTML = campos.map(campo => `
+        <div class="dato">
+            <small>${escaparHTML(campo.etiqueta)}</small>
+            <strong>${escaparHTML(campo.valor || "No registrado")}</strong>
+        </div>
+    `).join("");
+}
+
+function limpiarResultados() {
+    ["resultadoAlumno", "resultadoDocente", "resultadoLibro"].forEach(id => {
+        document.getElementById(id).hidden = true;
+    });
+
+    ["siguienteAlumno", "siguienteDocente", "siguienteLibro"].forEach(id => {
+        document.getElementById(id).hidden = true;
+    });
+
+    [
+        "mensajeAlumno",
+        "mensajeDocente",
+        "mensajeLibro",
+        "mensajeConfirmacion"
+    ].forEach(limpiarMensaje);
+}
+
+
+/* =====================================================
+   INICIO Y REINICIO
+===================================================== */
+
+function iniciarPrestamo(modo) {
+    modoCaptura = modo;
+
+    alumnoActual = null;
+    docenteActual = null;
+    libroActual = null;
+
+    document.getElementById("pantallaInicio").hidden = true;
+    document.getElementById("pantallaSistema").hidden = false;
+
+    document.getElementById("modoTexto").textContent =
+        modo === "usb"
+            ? "Modo de captura: escáner USB"
+            : "Modo de captura: cámara del dispositivo";
+
+    document.getElementById("entradaAlumno").hidden = modo !== "usb";
+    document.getElementById("entradaDocente").hidden = modo !== "usb";
+    document.getElementById("entradaLibro").hidden = modo !== "usb";
+
+    document.getElementById("camaraAlumno").hidden = modo !== "camara";
+    document.getElementById("camaraDocente").hidden = modo !== "camara";
+    document.getElementById("camaraLibro").hidden = modo !== "camara";
+
+    document.getElementById("matricula").value = "";
+    document.getElementById("numeroDocente").value = "";
+    document.getElementById("codigoLibro").value = "";
+
+    limpiarResultados();
+    irPaso(1);
+}
+
+async function volverInicio() {
+    await detenerCamara();
+
+    document.getElementById("pantallaSistema").hidden = true;
+    document.getElementById("pantallaInicio").hidden = false;
+}
+
+function nuevoPrestamo() {
+    detenerCamara();
+
+    alumnoActual = null;
+    docenteActual = null;
+    libroActual = null;
+    guardandoPrestamo = false;
+
+    document.getElementById("matricula").value = "";
+    document.getElementById("numeroDocente").value = "";
+    document.getElementById("codigoLibro").value = "";
+
+    limpiarResultados();
+    irPaso(1);
+}
+
+
+/* =====================================================
+   CAMBIO DE PASOS
+===================================================== */
+
+async function irPaso(numero) {
+    await detenerCamara();
+
+    if (numero === 2 && !alumnoActual) return;
+    if (numero === 3 && !docenteActual) return;
+    if (numero === 4 && !libroActual) return;
+
+    pasoActual = numero;
+
+    document.querySelectorAll(".paso").forEach(elemento => {
+        elemento.hidden = true;
+    });
+
+    document.getElementById("paso" + numero).hidden = false;
+
+    document.querySelectorAll(".progreso-item").forEach(elemento => {
+        const numeroPaso = Number(elemento.dataset.paso);
+
+        elemento.classList.toggle("activo", numeroPaso === numero);
+        elemento.classList.toggle("completado", numeroPaso < numero);
+    });
+
+    if (numero === 4) {
+        construirResumen();
+    }
+
+    if (modoCaptura === "camara" && numero <= 3) {
+        setTimeout(() => {
+            if (pasoActual === numero && modoCaptura === "camara") {
+                iniciarCamara();
+            }
+        }, 250);
+    } else if (modoCaptura === "usb") {
+        setTimeout(() => {
+            if (numero === 1) document.getElementById("matricula").focus();
+            if (numero === 2) document.getElementById("numeroDocente").focus();
+            if (numero === 3) document.getElementById("codigoLibro").focus();
+        }, 100);
+    }
+}
+
+
+/* =====================================================
+   ALUMNO
+===================================================== */
+
+async function buscarAlumnoUSB() {
+    const valor = document.getElementById("matricula").value;
+    await procesarCodigoAlumno(valor);
+}
+
+async function procesarCodigoAlumno(valor) {
+    limpiarMensaje("mensajeAlumno");
+
+    const matricula = normalizarMatricula(valor);
+
+    if (!matricula) {
+        mostrarMensaje(
+            "mensajeAlumno",
+            "La matrícula debe contener al menos 10 dígitos numéricos."
+        );
+        return;
+    }
+
+    document.getElementById("matricula").value = matricula;
+
+    mostrarMensaje(
+        "mensajeAlumno",
+        "Buscando matrícula " + matricula + "...",
+        "exito"
+    );
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("alumnos")
+            .select("*")
+            .eq("matricula", matricula)
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+            mostrarMensaje(
+                "mensajeAlumno",
+                "No se encontró un alumno con la matrícula " + matricula +
+                ". Verifica el código e inténtalo nuevamente."
+            );
+            return;
+        }
+
+        alumnoActual = data;
+
+        ponerDatos("datosAlumno", [
+            { etiqueta: "Nombre completo", valor: data.nombre_completo },
+            { etiqueta: "Matrícula", valor: data.matricula },
+            { etiqueta: "Grado", valor: data.grado },
+            { etiqueta: "Grupo", valor: data.grupo },
+            { etiqueta: "Correo electrónico", valor: obtenerCorreo(data) }
+        ]);
+
+        document.getElementById("resultadoAlumno").hidden = false;
+        document.getElementById("siguienteAlumno").hidden = false;
+
+        mostrarMensaje(
+            "mensajeAlumno",
+            "Alumno encontrado correctamente.",
+            "exito"
+        );
+
+    } catch (error) {
+        console.error("Error al consultar alumno:", error);
+
+        mostrarMensaje(
+            "mensajeAlumno",
+            "No fue posible consultar al alumno. Revisa tu conexión, la tabla alumnos y sus permisos de Supabase."
+        );
+    }
+}
+
+
+/* =====================================================
+   DOCENTE
+===================================================== */
+
+async function buscarDocenteUSB() {
+    const valor = document.getElementById("numeroDocente").value;
+    await procesarCodigoDocente(valor);
+}
+
+async function procesarCodigoDocente(valor) {
+    limpiarMensaje("mensajeDocente");
+
+    const numero = normalizarNumeroDocente(valor);
+
+    if (!numero) {
+        mostrarMensaje(
+            "mensajeDocente",
+            "El código debe contener al menos nueve dígitos numéricos."
+        );
+        return;
+    }
+
+    document.getElementById("numeroDocente").value = numero;
+
+    mostrarMensaje(
+        "mensajeDocente",
+        "Buscando docente " + numero + "...",
+        "exito"
+    );
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("docentes")
+            .select("*")
+            .eq("numero_servidor", numero)
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+            mostrarMensaje(
+                "mensajeDocente",
+                "No se encontró un docente con el número de servidor " +
+                numero + ". Verifica el código e inténtalo nuevamente."
+            );
+            return;
+        }
+
+        docenteActual = data;
+
+        ponerDatos("datosDocente", [
+            { etiqueta: "Nombre completo", valor: data.nombre_completo },
+            { etiqueta: "Número de servidor", valor: data.numero_servidor },
+            { etiqueta: "Rol", valor: data.rol },
+            { etiqueta: "Grado", valor: data.grado },
+            { etiqueta: "Grupo", valor: data.grupo },
+            { etiqueta: "Correo electrónico", valor: obtenerCorreo(data) }
+        ]);
+
+        document.getElementById("resultadoDocente").hidden = false;
+        document.getElementById("siguienteDocente").hidden = false;
+
+        mostrarMensaje(
+            "mensajeDocente",
+            "Docente encontrado correctamente.",
+            "exito"
+        );
+
+    } catch (error) {
+        console.error("Error al consultar docente:", error);
+
+        mostrarMensaje(
+            "mensajeDocente",
+            "No fue posible consultar al docente. Revisa la conexión, la tabla docentes y sus permisos de Supabase."
+        );
+    }
+}
+
+
+/* =====================================================
+   LIBRO
+===================================================== */
+
+async function buscarLibroUSB() {
+    const valor = document.getElementById("codigoLibro").value;
+    await procesarCodigoLibro(valor);
+}
+
+async function procesarCodigoLibro(valor) {
+    limpiarMensaje("mensajeLibro");
+
+    const codigo = String(valor ?? "").trim();
+
+    if (!codigo) {
+        mostrarMensaje(
+            "mensajeLibro",
+            "Escanea o escribe el código del libro."
+        );
+        return;
+    }
+
+    document.getElementById("codigoLibro").value = codigo;
+
+    mostrarMensaje(
+        "mensajeLibro",
+        "Buscando libro con código " + codigo + "...",
+        "exito"
+    );
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("libros")
+            .select("*")
+            .eq("codigo_barras", codigo)
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+            mostrarMensaje(
+                "mensajeLibro",
+                "No se encontró un libro con ese código. Verifica el código e inténtalo nuevamente."
+            );
+            return;
+        }
+
+        libroActual = data;
+
+        ponerDatos("datosLibro", [
+            { etiqueta: "Nombre del libro", valor: data.nombre_libro },
+            { etiqueta: "Código de barras", valor: data.codigo_barras },
+            { etiqueta: "Autor", valor: data.autor },
+            { etiqueta: "Editorial", valor: data.editorial }
+        ]);
+
+        document.getElementById("resultadoLibro").hidden = false;
+        document.getElementById("siguienteLibro").hidden = false;
+
+        mostrarMensaje(
+            "mensajeLibro",
+            "Libro encontrado correctamente.",
+            "exito"
+        );
+
+    } catch (error) {
+        console.error("Error al consultar libro:", error);
+
+        mostrarMensaje(
+            "mensajeLibro",
+            "No fue posible consultar el libro. Revisa la conexión, la tabla libros y sus permisos de Supabase."
+        );
+    }
+}
+
+
+/* =====================================================
+   RESUMEN DEL PRÉSTAMO
+===================================================== */
+
+function crearSeccionResumen(titulo, campos) {
+    return `
+        <div class="resumen-seccion">
+            <h3>${escaparHTML(titulo)}</h3>
+            <div class="datos">
+                ${campos.map(campo => `
+                    <div class="dato">
+                        <small>${escaparHTML(campo.etiqueta)}</small>
+                        <strong>${escaparHTML(campo.valor || "No registrado")}</strong>
+                    </div>
+                `).join("")}
+            </div>
+        </div>
+    `;
+}
+
+function construirResumen() {
+    const alumnoHTML = crearSeccionResumen("Alumno", [
+        { etiqueta: "Nombre", valor: alumnoActual?.nombre_completo },
+        { etiqueta: "Matrícula", valor: alumnoActual?.matricula },
+        { etiqueta: "Grado", valor: alumnoActual?.grado },
+        { etiqueta: "Grupo", valor: alumnoActual?.grupo },
+        { etiqueta: "Correo", valor: obtenerCorreo(alumnoActual) }
+    ]);
+
+    const docenteHTML = crearSeccionResumen("Docente responsable", [
+        { etiqueta: "Nombre", valor: docenteActual?.nombre_completo },
+        { etiqueta: "Número de servidor", valor: docenteActual?.numero_servidor },
+        { etiqueta: "Rol", valor: docenteActual?.rol },
+        { etiqueta: "Correo", valor: obtenerCorreo(docenteActual) }
+    ]);
+
+    const libroHTML = crearSeccionResumen("Libro", [
+        { etiqueta: "Nombre", valor: libroActual?.nombre_libro },
+        { etiqueta: "Código de barras", valor: libroActual?.codigo_barras },
+        { etiqueta: "Autor", valor: libroActual?.autor },
+        { etiqueta: "Editorial", valor: libroActual?.editorial }
+    ]);
+
+    document.getElementById("resumenCompleto").innerHTML =
+        alumnoHTML + docenteHTML + libroHTML;
+}
+
+
+/* =====================================================
+   GUARDAR PRÉSTAMO
+===================================================== */
+
+async function guardarPrestamo() {
+    if (guardandoPrestamo) return;
+
+    if (!alumnoActual || !docenteActual || !libroActual) {
+        mostrarMensaje(
+            "mensajeConfirmacion",
+            "Faltan datos para registrar el préstamo. Regresa y completa los pasos."
+        );
+        return;
+    }
+
+    if (!alumnoActual.id || !docenteActual.id || !libroActual.id) {
+        mostrarMensaje(
+            "mensajeConfirmacion",
+            "Uno de los registros no contiene el campo id requerido para guardar el préstamo."
+        );
+        return;
+    }
+
+    const confirmar = window.confirm(
+        "¿Confirmas que deseas registrar este préstamo?\n\n" +
+        "Alumno: " + (alumnoActual.nombre_completo || "") + "\n" +
+        "Docente: " + (docenteActual.nombre_completo || "") + "\n" +
+        "Libro: " + (libroActual.nombre_libro || "")
+    );
+
+    if (!confirmar) return;
+
+    guardandoPrestamo = true;
+
+    const boton = document.getElementById("botonConfirmar");
+    boton.disabled = true;
+    boton.textContent = "Guardando préstamo...";
+
+    limpiarMensaje("mensajeConfirmacion");
+
+    try {
+        /*
+          Se conservan las columnas del HTML original:
+          alumno_id, maestro_id y libro_id.
+        */
+        const { error } = await supabaseClient
+            .from("prestamos")
+            .insert([{
+                alumno_id: alumnoActual.id,
+                maestro_id: docenteActual.id,
+                libro_id: libroActual.id
+            }]);
+
+        if (error) throw error;
+
+        await detenerCamara();
+
+        document.querySelectorAll(".paso").forEach(elemento => {
+            elemento.hidden = true;
+        });
+
+        document.getElementById("paso5").hidden = false;
+        document.getElementById("barraProgreso").hidden = true;
+
+        document.getElementById("iconoFinal").textContent = "✓";
+        document.getElementById("tituloFinal").textContent =
+            "¡Préstamo registrado!";
+
+        document.getElementById("descripcionFinal").textContent =
+            "El registro del préstamo se guardó correctamente en la base de datos.";
+
+        document.getElementById("resumenFinal").innerHTML =
+            crearSeccionResumen("Datos del préstamo registrado", [
+                { etiqueta: "Alumno", valor: alumnoActual.nombre_completo },
+                { etiqueta: "Matrícula", valor: alumnoActual.matricula },
+                { etiqueta: "Docente", valor: docenteActual.nombre_completo },
+                { etiqueta: "Libro", valor: libroActual.nombre_libro },
+                {
+                    etiqueta: "Fecha y hora del registro",
+                    valor: new Date().toLocaleString("es-MX")
+                }
+            ]);
+
+    } catch (error) {
+        console.error("Error al guardar préstamo:", error);
+
+        mostrarMensaje(
+            "mensajeConfirmacion",
+            "No se pudo guardar el préstamo. Revisa la tabla prestamos, sus columnas, las relaciones y las políticas de acceso de Supabase. " +
+            (error.message || "")
+        );
+
+    } finally {
+        guardandoPrestamo = false;
+        boton.disabled = false;
+        boton.textContent = "Confirmar y guardar préstamo";
+    }
+}
+
+
+/* =====================================================
+   ESCÁNER USB
+===================================================== */
+
+document.getElementById("matricula").addEventListener("input", function() {
+    this.value = this.value.replace(/\D/g, "");
+});
+
+document.getElementById("numeroDocente").addEventListener("input", function() {
+    this.value = this.value.replace(/\D/g, "");
+});
+
+document.getElementById("matricula").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        buscarAlumnoUSB();
+    }
+});
+
+document.getElementById("numeroDocente").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        buscarDocenteUSB();
+    }
+});
+
+document.getElementById("codigoLibro").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        buscarLibroUSB();
+    }
+});
+
+
+/* =====================================================
+   CÁMARA Y LECTOR DE CÓDIGOS ZXING
+===================================================== */
+
+function obtenerVideoActual() {
+    if (pasoActual === 1) return document.getElementById("videoAlumno");
+    if (pasoActual === 2) return document.getElementById("videoDocente");
+    if (pasoActual === 3) return document.getElementById("videoLibro");
+    return null;
+}
+
+function obtenerEstadoCamaraActual() {
+    if (pasoActual === 1) return document.getElementById("estadoCamaraAlumno");
+    if (pasoActual === 2) return document.getElementById("estadoCamaraDocente");
+    if (pasoActual === 3) return document.getElementById("estadoCamaraLibro");
+    return null;
+}
+
+async function detenerCamara() {
+    identificadorCamara++;
+    camaraActiva = false;
+    procesandoCamara = false;
+
+    try {
+        if (controlesCamara && typeof controlesCamara.stop === "function") {
+            controlesCamara.stop();
+        }
+    } catch (error) {
+        console.warn("No se pudieron detener los controles de cámara:", error);
+    }
+
+    controlesCamara = null;
+
+    try {
+        if (lectorCodigos && typeof lectorCodigos.reset === "function") {
+            lectorCodigos.reset();
+        }
+    } catch (error) {
+        console.warn("No se pudo reiniciar el lector:", error);
+    }
+
+    const videos = [
+        document.getElementById("videoAlumno"),
+        document.getElementById("videoDocente"),
+        document.getElementById("videoLibro")
+    ];
+
+    videos.forEach(video => {
+        if (video && video.srcObject) {
+            const pistas = video.srcObject.getTracks();
+
+            pistas.forEach(pista => pista.stop());
+
+            video.srcObject = null;
+        }
+    });
+}
+
+async function iniciarCamara() {
+    if (modoCaptura !== "camara" || pasoActual > 3) return;
+
+    await detenerCamara();
+
+    const idInicio = identificadorCamara;
+    const video = obtenerVideoActual();
+    const estado = obtenerEstadoCamaraActual();
+
+    if (!video || !estado) return;
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        estado.textContent =
+            "Este navegador no permite acceder a la cámara. Utiliza un navegador compatible y una conexión segura HTTPS.";
+        return;
+    }
+
+    if (!window.ZXingBrowser) {
+        estado.textContent =
+            "No se pudo cargar el lector de códigos. Comprueba tu conexión a internet.";
+        return;
+    }
+
+    estado.textContent = "Solicitando acceso a la cámara...";
+
+    try {
+        dispositivosCamara =
+            await ZXingBrowser.BrowserCodeReader.listVideoInputDevices();
+
+        if (idInicio !== identificadorCamara || modoCaptura !== "camara") {
+            return;
+        }
+
+        if (!dispositivosCamara || dispositivosCamara.length === 0) {
+            estado.textContent =
+                "No se encontró ninguna cámara disponible en este dispositivo.";
+            return;
+        }
+
+        if (indiceCamara >= dispositivosCamara.length) {
+            indiceCamara = 0;
+        }
+
+        const videoTrasera = dispositivosCamara.findIndex(dispositivo =>
+            /back|rear|environment|trasera|posterior/i.test(dispositivo.label)
+        );
+
+        if (indiceCamara === 0 && videoTrasera >= 0) {
+            indiceCamara = videoTrasera;
+        }
+
+        const dispositivo = dispositivosCamara[indiceCamara];
+
+        lectorCodigos = new ZXingBrowser.BrowserMultiFormatReader();
+
+        camaraActiva = true;
+        procesandoCamara = false;
+
+        estado.textContent =
+            "Cámara activa. Coloca el código dentro del marco.";
+
+        controlesCamara = await lectorCodigos.decodeFromVideoDevice(
+            dispositivo.deviceId,
+            video,
+            async (resultado, error) => {
+                if (!camaraActiva || procesandoCamara) return;
+
+                if (resultado) {
+                    procesandoCamara = true;
+
+                    const textoLeido = resultado.getText();
+
+                    estado.textContent = "Código detectado. Consultando registro...";
+
+                    await detenerCamara();
+
+                    await procesarCodigoSegunPaso(textoLeido);
+                }
+            }
+        );
+
+    } catch (error) {
+        console.error("Error al iniciar cámara:", error);
+
+        await detenerCamara();
+
+        if (estado) {
+            if (error.name === "NotAllowedError") {
+                estado.textContent =
+                    "Se necesita permiso para utilizar la cámara. Autoriza el acceso en tu navegador e inténtalo nuevamente.";
+            } else if (error.name === "NotFoundError") {
+                estado.textContent =
+                    "No se encontró una cámara disponible.";
+            } else {
+                estado.textContent =
+                    "No se pudo iniciar la cámara. Comprueba los permisos, la conexión HTTPS y que ninguna otra aplicación la esté utilizando.";
+            }
+        }
+    }
+}
+
+async function cambiarCamara() {
+    if (modoCaptura !== "camara") return;
+
+    try {
+        await detenerCamara();
+
+        if (!dispositivosCamara || dispositivosCamara.length === 0) {
+            await iniciarCamara();
+            return;
+        }
+
+        indiceCamara = (indiceCamara + 1) % dispositivosCamara.length;
+
+        await iniciarCamara();
+
+    } catch (error) {
+        console.error("Error al cambiar cámara:", error);
+    }
+}
+
+async function procesarCodigoSegunPaso(texto) {
+    if (pasoActual === 1) {
+        await procesarCodigoAlumno(texto);
+    } else if (pasoActual === 2) {
+        await procesarCodigoDocente(texto);
+    } else if (pasoActual === 3) {
+        await procesarCodigoLibro(texto);
+    }
+}
+
+
+/* =====================================================
+   ESTADO INICIAL
+===================================================== */
+
+document.getElementById("barraProgreso").hidden = false;
+document.getElementById("pantallaSistema").hidden = true;
+document.getElementById("pantallaInicio").hidden = false;
+
+</script>
+</body>
+</html>
+
