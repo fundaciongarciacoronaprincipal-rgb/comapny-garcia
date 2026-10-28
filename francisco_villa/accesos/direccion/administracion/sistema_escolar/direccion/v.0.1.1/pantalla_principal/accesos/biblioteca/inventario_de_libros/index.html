@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17365d">
+<title>Consulta de libros | Biblioteca escolar</title>
+<style>
+:root{
+  --navy:#17365d;
+  --navy-dark:#102844;
+  --blue:#285b91;
+  --blue-light:#eaf2f9;
+  --ink:#243447;
+  --muted:#667789;
+  --line:#dce4ec;
+  --surface:#ffffff;
+  --page:#f3f6fa;
+  --success:#19734a;
+  --danger:#a52a2a;
+  --shadow:0 8px 28px rgba(23,54,93,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--ink);
+  background:var(--page);
+  line-height:1.5;
+}
+.topbar{
+  background:var(--navy);
+  color:#fff;
+  border-bottom:4px solid #9bbbd8;
+}
+.topbar-inner{
+  width:min(1200px,94%);
+  margin:auto;
+  min-height:92px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:18px 0;
+}
+.logo{
+  width:56px;height:56px;flex:0 0 56px;
+  border:1px solid rgba(255,255,255,.4);
+  border-radius:12px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.1);
+  font-size:28px;
+}
+.school-name{margin:0;font-size:clamp(16px,2.5vw,22px);font-weight:700;letter-spacing:.2px}
+.school-subtitle{margin:4px 0 0;color:#dce8f4;font-size:13px}
+main{width:min(1200px,94%);margin:28px auto 40px}
+.page-heading{margin-bottom:20px}
+.eyebrow{
+  color:var(--blue);font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.2px;margin:0 0 6px
+}
+h1{font-size:clamp(24px,3vw,32px);color:var(--navy-dark);margin:0}
+.intro{margin:8px 0 0;color:var(--muted);max-width:760px}
+.summary{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;margin:22px 0;
+}
+.summary-card{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:12px;padding:17px 20px;box-shadow:0 2px 8px rgba(23,54,93,.025);
+}
+.summary-label{font-size:13px;color:var(--muted);margin:0 0 5px}
+.summary-value{font-size:25px;font-weight:700;color:var(--navy);margin:0}
+.panel{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;box-shadow:var(--shadow);overflow:hidden;
+}
+.panel-head{
+  padding:20px 22px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap
+}
+.panel-title{margin:0;color:var(--navy-dark);font-size:18px}
+.panel-description{margin:4px 0 0;color:var(--muted);font-size:13px}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1 1 260px;min-width:0}
+.search-wrap input{
+  width:100%;min-height:43px;border:1px solid #cbd6e1;border-radius:8px;
+  padding:10px 12px 10px 38px;font:inherit;color:var(--ink);background:#fff
+}
+.search-wrap input:focus{outline:3px solid #d4e5f6;border-color:var(--blue)}
+.search-icon{position:absolute;left:13px;top:10px;color:var(--muted)}
+button{
+  min-height:43px;padding:10px 16px;border:1px solid var(--navy);
+  border-radius:8px;background:var(--navy);color:#fff;font:600 14px Arial,sans-serif;
+  cursor:pointer;transition:background .15s ease
+}
+button:hover{background:var(--navy-dark)}
+button:focus-visible{outline:3px solid #a9c9e8;outline-offset:2px}
+button:disabled{opacity:.65;cursor:wait}
+.status-line{
+  padding:12px 22px;background:#f8fafc;color:var(--muted);
+  font-size:13px;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap
+}
+.status-dot{display:inline-block;width:8px;height:8px;background:#279365;border-radius:50%;margin-right:7px}
+.message{padding:13px 22px;font-size:14px;display:none}
+.message.info{display:block;background:#edf5fc;color:#214e79}
+.message.error{display:block;background:#fff0f0;color:var(--danger)}
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:680px}
+thead{background:#edf2f7}
+th{
+  padding:14px 16px;text-align:left;color:#334b63;font-size:12px;
+  text-transform:uppercase;letter-spacing:.45px;white-space:nowrap;
+  border-bottom:1px solid var(--line)
+}
+td{padding:15px 16px;border-bottom:1px solid #e8edf2;font-size:14px;vertical-align:middle}
+tbody tr:hover{background:#f7fafd}
+tbody tr:last-child td{border-bottom:0}
+td.quantity{text-align:center;font-weight:700;color:var(--navy);width:100px}
+.code{font-family:Consolas,Monaco,monospace;font-size:13px;color:#40566d;white-space:nowrap}
+.book-name{font-weight:700;color:#263e56}
+.empty-cell{text-align:center!important;padding:38px 20px!important;color:var(--muted)!important}
+.empty-symbol{display:block;font-size:28px;margin-bottom:8px}
+.footer{
+  text-align:center;color:var(--muted);font-size:12px;
+  padding:20px 15px 28px
+}
+.footer strong{color:#43576b}
+@media(max-width:650px){
+  .topbar-inner{width:92%;gap:12px;min-height:80px}
+  .logo{width:46px;height:46px;flex-basis:46px;font-size:24px}
+  .school-subtitle{font-size:12px}
+  main{width:92%;margin-top:22px}
+  .summary{grid-template-columns:1fr 1fr;gap:10px}
+  .summary-card{padding:14px}
+  .summary-value{font-size:22px}
+  .panel-head{padding:17px}
+  .controls{width:100%}
+  .search-wrap{flex-basis:100%}
+  .controls button{width:100%}
+  .status-line{padding:11px 17px}
+  .message{padding:12px 17px}
+}
+@media(max-width:380px){
+  .summary{grid-template-columns:1fr}
+  .school-name{font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo" aria-hidden="true">📚</div>
+    <div>
+      <p class="school-name">OFTV No. 0216 “Francisco Villa”</p>
+      <p class="school-subtitle">Sistema de Apoyo y Gestión Escolar · Biblioteca</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="page-heading">
+    <p class="eyebrow">Área de biblioteca</p>
+    <h1>Consulta de libros</h1>
+    <p class="intro">Consulta el inventario de libros registrados en la biblioteca escolar. Puedes buscar por título, autor, editorial o código de barras.</p>
+  </section>
+
+  <section class="summary" aria-label="Resumen del inventario">
+    <div class="summary-card">
+      <p class="summary-label">Títulos registrados</p>
+      <p class="summary-value" id="totalTitulos" aria-live="polite">—</p>
+    </div>
+    <div class="summary-card">
+      <p class="summary-label">Ejemplares en inventario</p>
+      <p class="summary-value" id="totalEjemplares" aria-live="polite">—</p>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="inventoryTitle">
+    <div class="panel-head">
+      <div>
+        <h2 class="panel-title" id="inventoryTitle">Inventario de libros</h2>
+        <p class="panel-description">Consulta de registros · Solo lectura</p>
+      </div>
+      <div class="controls">
+        <label class="search-wrap">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="busqueda" type="search" placeholder="Buscar libros..." aria-label="Buscar libros por nombre, autor, editorial o código de barras">
+        </label>
+        <button id="actualizarBtn" type="button" onclick="cargarLibros()">↻ Actualizar tabla</button>
+      </div>
+    </div>
+
+    <div class="status-line">
+      <span><span class="status-dot" aria-hidden="true"></span><span id="estadoConexion">Preparando consulta...</span></span>
+      <span id="contadorResultados">0 libros</span>
+    </div>
+    <div id="mensaje" class="message" role="status" aria-live="polite"></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Nombre del libro</th>
+            <th scope="col">Autor</th>
+            <th scope="col">Editorial</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Código de barras</th>
+          </tr>
+        </thead>
+        <tbody id="tablaLibros">
+          <tr><td colspan="5" class="empty-cell">Cargando inventario...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <strong>OFTV No. 0216 “Francisco Villa”</strong><br>
+  Sistema de Apoyo y Gestión Escolar · Biblioteca escolar
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+
+// Conexión existente con Supabase.
+const supabaseClient = supabase.createClient(
+  "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+  "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+
+const tabla = document.getElementById("tablaLibros");
+const mensaje = document.getElementById("mensaje");
+const busqueda = document.getElementById("busqueda");
+const actualizarBtn = document.getElementById("actualizarBtn");
+const estadoConexion = document.getElementById("estadoConexion");
+const contadorResultados = document.getElementById("contadorResultados");
+let libros = [];
+let cargando = false;
+
+function escaparHTML(valor) {
+  return String(valor ?? "").replace(/[&<>"']/g, caracter => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[caracter]);
+}
+
+function mostrarMensaje(texto, tipo = "info") {
+  mensaje.textContent = texto;
+  mensaje.className = "message " + tipo;
+}
+function ocultarMensaje() {
+  mensaje.textContent = "";
+  mensaje.className = "message";
+}
+
+function renderizarLibros() {
+  const termino = busqueda.value.trim().toLocaleLowerCase("es-MX");
+  const filtrados = libros.filter(libro =>
+    [libro.nombre_libro, libro.autor, libro.editorial, libro.codigo_barras]
+      .some(valor => String(valor ?? "").toLocaleLowerCase("es-MX").includes(termino))
+  );
+
+  contadorResultados.textContent = `${filtrados.length} de ${libros.length} ${libros.length === 1 ? "libro" : "libros"}`;
+  document.getElementById("totalTitulos").textContent = libros.length.toLocaleString("es-MX");
+  const ejemplares = libros.reduce((total, libro) => {
+    const cantidad = Number(libro.cantidad);
+    return total + (Number.isFinite(cantidad) ? cantidad : 0);
+  }, 0);
+  document.getElementById("totalEjemplares").textContent = ejemplares.toLocaleString("es-MX");
+
+  if (!filtrados.length) {
+    tabla.innerHTML = `<tr><td colspan="5" class="empty-cell"><span class="empty-symbol">⌕</span>${libros.length ? "No se encontraron libros con esa búsqueda." : "Todavía no hay libros registrados."}</td></tr>`;
+    return;
+  }
+
+  tabla.innerHTML = filtrados.map(libro => `
+    <tr>
+      <td class="book-name">${escaparHTML(libro.nombre_libro || "Sin título")}</td>
+      <td>${escaparHTML(libro.autor || "—")}</td>
+      <td>${escaparHTML(libro.editorial || "—")}</td>
+      <td class="quantity">${escaparHTML(libro.cantidad ?? "0")}</td>
+      <td class="code">${escaparHTML(libro.codigo_barras || "—")}</td>
+    </tr>
+  `).join("");
+}
+
+async function cargarLibros() {
+  if (cargando) return;
+  cargando = true;
+  actualizarBtn.disabled = true;
+  actualizarBtn.textContent = "Consultando...";
+  estadoConexion.textContent = "Consultando inventario...";
+  ocultarMensaje();
+
+  if (!libros.length) {
+    tabla.innerHTML = '<tr><td colspan="5" class="empty-cell">Cargando inventario...</td></tr>';
+  }
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("libros")
+      .select("id,nombre_libro,autor,editorial,cantidad,codigo_barras")
+      .order("id", { ascending: true });
+
+    if (error) throw error;
+
+    libros = Array.isArray(data) ? data : [];
+    renderizarLibros();
+    estadoConexion.textContent = "Inventario consultado correctamente";
+    if (libros.length) ocultarMensaje();
+  } catch (error) {
+    console.error("Error al consultar libros:", error);
+    estadoConexion.textContent = "No se pudo completar la consulta";
+    mostrarMensaje(
+      "No fue posible cargar el inventario. Verifica tu conexión y las políticas de lectura (SELECT/RLS) de la tabla public.libros en Supabase.",
+      "error"
+    );
+    if (!libros.length) {
+      tabla.innerHTML = '<tr><td colspan="5" class="empty-cell">No se pudieron cargar los libros. Intenta actualizar la tabla.</td></tr>';
+      document.getElementById("totalTitulos").textContent = "—";
+      document.getElementById("totalEjemplares").textContent = "—";
+      contadorResultados.textContent = "Consulta no disponible";
+    }
+  } finally {
+    cargando = false;
+    actualizarBtn.disabled = false;
+    actualizarBtn.textContent = "↻ Actualizar tabla";
+  }
+}
+
+busqueda.addEventListener("input", renderizarLibros);
+cargarLibros();
+</script>
+</body>
+</html>
