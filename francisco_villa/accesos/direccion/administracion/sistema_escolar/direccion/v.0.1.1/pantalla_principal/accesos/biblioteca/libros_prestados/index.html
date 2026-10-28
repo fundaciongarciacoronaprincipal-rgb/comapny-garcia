@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#17365d">
+  <title>Libros prestados | OFTV No. 0216</title>
+
+  <style>
+    :root {
+      --azul: #17365d;
+      --azul-oscuro: #102844;
+      --azul-claro: #eaf1f8;
+      --texto: #243447;
+      --texto-secundario: #64748b;
+      --borde: #dbe3ec;
+      --fondo: #f4f7fb;
+      --blanco: #ffffff;
+      --verde: #16794b;
+      --verde-fondo: #e8f6ee;
+      --rojo: #b42318;
+      --rojo-fondo: #fff0ef;
+      --amarillo: #8a5a00;
+      --amarillo-fondo: #fff7df;
+      --sombra: 0 8px 28px rgba(16, 40, 68, .07);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    .encabezado {
+      background: var(--blanco);
+      border-bottom: 1px solid var(--borde);
+    }
+
+    .encabezado-interior {
+      width: min(1240px, calc(100% - 36px));
+      margin: 0 auto;
+      min-height: 106px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 0;
+    }
+
+    .logo {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      flex: 0 0 auto;
+      padding: 5px;
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .institucion { min-width: 0; }
+
+    .institucion .sobrelinea {
+      margin: 0 0 3px;
+      color: var(--azul);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .institucion h1 {
+      margin: 0;
+      color: var(--azul-oscuro);
+      font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+      line-height: 1.25;
+    }
+
+    .institucion p {
+      margin: 5px 0 0;
+      color: var(--texto-secundario);
+      font-size: .92rem;
+    }
+
+    main {
+      width: min(1240px, calc(100% - 36px));
+      margin: 30px auto 42px;
+    }
+
+    .titulo-seccion {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .titulo-seccion h2 {
+      margin: 0;
+      color: var(--azul-oscuro);
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      letter-spacing: -.025em;
+    }
+
+    .titulo-seccion p {
+      margin: 6px 0 0;
+      color: var(--texto-secundario);
+      font-size: .96rem;
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid var(--borde);
+      border-radius: 16px;
+      background: var(--blanco);
+      box-shadow: var(--sombra);
+    }
+
+    .barra-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--borde);
+      background: #fbfcfe;
+    }
+
+    .barra-panel h3 {
+      margin: 0;
+      color: var(--azul-oscuro);
+      font-size: 1.02rem;
+    }
+
+    .barra-panel p {
+      margin: 4px 0 0;
+      color: var(--texto-secundario);
+      font-size: .86rem;
+    }
+
+    .acciones {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .boton {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 10px 15px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font: inherit;
+      font-size: .92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease, transform .15s ease;
+    }
+
+    .boton:focus-visible {
+      outline: 3px solid #91b9e8;
+      outline-offset: 2px;
+    }
+
+    .boton:active { transform: translateY(1px); }
+
+    .boton-primario {
+      color: #fff;
+      background: var(--azul);
+    }
+
+    .boton-primario:hover { background: var(--azul-oscuro); }
+
+    .boton-devolver {
+      min-height: 36px;
+      padding: 7px 12px;
+      color: var(--rojo);
+      background: #fff;
+      border-color: #f0c5c1;
+      font-size: .86rem;
+    }
+
+    .boton-devolver:hover { background: var(--rojo-fondo); }
+    .boton:disabled { opacity: .65; cursor: wait; }
+
+    .estado-mensaje {
+      display: none;
+      margin: 18px 20px 0;
+      padding: 12px 14px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-size: .92rem;
+    }
+
+    .estado-mensaje.visible { display: block; }
+    .estado-mensaje.info { color: var(--azul); background: var(--azul-claro); border-color: #c8d9ed; }
+    .estado-mensaje.error { color: var(--rojo); background: var(--rojo-fondo); border-color: #f2c4c0; }
+    .estado-mensaje.exito { color: var(--verde); background: var(--verde-fondo); border-color: #b7e2c8; }
+    .estado-mensaje.aviso { color: var(--amarillo); background: var(--amarillo-fondo); border-color: #f0dfa4; }
+
+    .tabla-contenedor {
+      width: 100%;
+      overflow-x: auto;
+      padding: 0 20px 20px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      margin-top: 16px;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: left;
+      font-size: .92rem;
+    }
+
+    thead th {
+      padding: 13px 14px;
+      color: #43546a;
+      background: #f2f5f9;
+      border-top: 1px solid var(--borde);
+      border-bottom: 1px solid var(--borde);
+      font-size: .77rem;
+      font-weight: 800;
+      letter-spacing: .045em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    thead th:first-child { border-left: 1px solid var(--borde); border-radius: 9px 0 0 0; }
+    thead th:last-child { border-right: 1px solid var(--borde); border-radius: 0 9px 0 0; }
+
+    tbody td {
+      padding: 14px;
+      border-bottom: 1px solid #e8edf3;
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #f8fbff; }
+
+    .nombre-libro { color: var(--azul-oscuro); font-weight: 700; }
+    .fecha { color: var(--texto-secundario); white-space: nowrap; }
+    .celda-vacia {
+      padding: 38px 18px !important;
+      color: var(--texto-secundario);
+      text-align: center;
+    }
+
+    .pie {
+      padding: 18px 12px 0;
+      color: #7a8798;
+      text-align: center;
+      font-size: .82rem;
+    }
+
+    .indicador-cargando {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      margin-right: 8px;
+      vertical-align: -2px;
+      border: 2px solid #c8d9ed;
+      border-top-color: var(--azul);
+      border-radius: 50%;
+      animation: girar .75s linear infinite;
+    }
+
+    @keyframes girar { to { transform: rotate(360deg); } }
+
+    @media (max-width: 700px) {
+      .encabezado-interior {
+        width: min(100% - 28px, 1240px);
+        min-height: 0;
+        gap: 12px;
+        padding: 15px 0;
+      }
+
+      .logo { width: 58px; height: 58px; border-radius: 10px; }
+      .institucion .sobrelinea { font-size: .66rem; }
+      .institucion p { font-size: .82rem; }
+
+      main {
+        width: calc(100% - 24px);
+        margin: 22px auto 30px;
+      }
+
+      .titulo-seccion {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .barra-panel {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 16px;
+      }
+
+      .acciones, .acciones .boton { width: 100%; }
+      .estado-mensaje { margin: 14px 14px 0; }
+      .tabla-contenedor { padding: 0 12px 12px; }
+      table { margin-top: 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="encabezado">
+    <div class="encabezado-interior">
+      <img
+        class="logo"
+        src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"
+        alt="Logotipo de la telesecundaria"
+        onerror="this.style.display='none'">
+      <div class="institucion">
+        <p class="sobrelinea">Sistema de biblioteca escolar</p>
+        <h1>OFTV No. 0216 “Francisco Villa”</h1>
+        <p>Control y seguimiento de préstamos de libros</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="titulo-seccion">
+      <div>
+        <h2>Libros prestados</h2>
+        <p>Consulta los préstamos registrados y gestiona la devolución de los libros.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="titulo-tabla">
+      <div class="barra-panel">
+        <div>
+          <h3 id="titulo-tabla">Registro de préstamos</h3>
+          <p id="resumen">Consulta de los libros que aparecen registrados como prestados.</p>
+        </div>
+        <div class="acciones">
+          <button class="boton boton-primario" id="btnActualizar" type="button" onclick="cargarPrestamos()">
+            <span aria-hidden="true">↻</span> Actualizar tabla
+          </button>
+        </div>
+      </div>
+
+      <div id="mensaje" class="estado-mensaje" role="status" aria-live="polite"></div>
+
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Alumno</th>
+              <th scope="col">Docente</th>
+              <th scope="col">Libro</th>
+              <th scope="col">Fecha del préstamo</th>
+              <th scope="col">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tablaPrestamos">
+            <tr><td class="celda-vacia" colspan="5"><span class="indicador-cargando"></span>Cargando préstamos...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="pie">
+      Sistema de biblioteca escolar · OFTV No. 0216 “Francisco Villa”
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    /* ======================
+       CONEXIÓN SUPABASE
+       ====================== */
+    const supabaseClient = supabase.createClient(
+      "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+      "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+    );
+
+    const tabla = document.getElementById("tablaPrestamos");
+    const mensaje = document.getElementById("mensaje");
+    const botonActualizar = document.getElementById("btnActualizar");
+    const resumen = document.getElementById("resumen");
+
+    function mostrarMensaje(texto, tipo = "info") {
+      mensaje.textContent = texto;
+      mensaje.className = "estado-mensaje visible " + tipo;
+    }
+
+    function ocultarMensaje() {
+      mensaje.textContent = "";
+      mensaje.className = "estado-mensaje";
+    }
+
+    function celdaSegura(valor, clase = "") {
+      const td = document.createElement("td");
+      if (clase) td.className = clase;
+      td.textContent = valor == null || valor === "" ? "—" : String(valor);
+      return td;
+    }
+
+    function formatearFecha(valor) {
+      if (!valor) return "—";
+      const fecha = new Date(valor);
+      if (Number.isNaN(fecha.getTime())) return "—";
+      return fecha.toLocaleString("es-MX", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function mostrarFilaVacia(texto, cargando = false) {
+      tabla.replaceChildren();
+      const fila = document.createElement("tr");
+      const celda = document.createElement("td");
+      celda.colSpan = 5;
+      celda.className = "celda-vacia";
+      if (cargando) {
+        const indicador = document.createElement("span");
+        indicador.className = "indicador-cargando";
+        celda.append(indicador);
+      }
+      celda.append(document.createTextNode(texto));
+      fila.append(celda);
+      tabla.append(fila);
+    }
+
+    /* ======================
+       CARGAR PRÉSTAMOS
+       ====================== */
+    async function cargarPrestamos() {
+      botonActualizar.disabled = true;
+      botonActualizar.textContent = "Cargando...";
+      mostrarFilaVacia("Consultando los préstamos registrados...", true);
+      ocultarMensaje();
+
+      try {
+        const { data: prestamos, error } = await supabaseClient
+          .from("prestamos")
+          .select("*")
+          .order("id", { ascending: false });
+
+        if (error) throw error;
+
+        if (!prestamos || prestamos.length === 0) {
+          mostrarFilaVacia("No hay préstamos registrados.");
+          resumen.textContent = "No hay libros registrados como prestados.";
+          return;
+        }
+
+        // Consultar los datos relacionados en paralelo para reducir el tiempo de carga.
+        const filasPreparadas = await Promise.all(prestamos.map(async (p) => {
+          const [resultadoAlumno, resultadoDocente, resultadoLibro] = await Promise.all([
+            p.alumno_id != null
+              ? supabaseClient.from("alumnos").select("nombre_completo").eq("id", p.alumno_id).maybeSingle()
+              : Promise.resolve({ data: null, error: null }),
+            p.maestro_id != null
+              ? supabaseClient.from("docentes").select("nombre_completo").eq("id", p.maestro_id).maybeSingle()
+              : Promise.resolve({ data: null, error: null }),
+            p.libro_id != null
+              ? supabaseClient.from("libros").select("nombre_libro").eq("id", p.libro_id).maybeSingle()
+              : Promise.resolve({ data: null, error: null })
+          ]);
+
+          return {
+            id: p.id,
+            alumno: resultadoAlumno.data?.nombre_completo || "No disponible",
+            docente: resultadoDocente.data?.nombre_completo || "No disponible",
+            libro: resultadoLibro.data?.nombre_libro || "No disponible",
+            fecha: formatearFecha(p.created_at)
+          };
+        }));
+
+        tabla.replaceChildren();
+
+        for (const prestamo of filasPreparadas) {
+          const fila = document.createElement("tr");
+          fila.append(
+            celdaSegura(prestamo.alumno),
+            celdaSegura(prestamo.docente),
+            celdaSegura(prestamo.libro, "nombre-libro"),
+            celdaSegura(prestamo.fecha, "fecha")
+          );
+
+          const celdaAccion = document.createElement("td");
+          const botonDevolver = document.createElement("button");
+          botonDevolver.type = "button";
+          botonDevolver.className = "boton boton-devolver";
+          botonDevolver.textContent = "Devolver libro";
+          botonDevolver.addEventListener("click", () => devolver(prestamo.id, botonDevolver));
+          celdaAccion.append(botonDevolver);
+          fila.append(celdaAccion);
+          tabla.append(fila);
+        }
+
+        resumen.textContent = `${filasPreparadas.length} ${filasPreparadas.length === 1 ? "préstamo registrado" : "préstamos registrados"}.`;
+      } catch (error) {
+        console.error("Error al cargar préstamos:", error);
+        mostrarFilaVacia("No fue posible cargar los préstamos.");
+        mostrarMensaje("No se pudieron cargar los préstamos. Comprueba la conexión y los permisos de Supabase e inténtalo de nuevo.", "error");
+      } finally {
+        botonActualizar.disabled = false;
+        botonActualizar.innerHTML = '<span aria-hidden="true">↻</span> Actualizar tabla';
+      }
+    }
+
+    /* ======================
+       DEVOLVER LIBRO
+       Mantiene el comportamiento original: elimina el registro del préstamo.
+       ====================== */
+    async function devolver(id, boton) {
+      const confirmado = confirm("¿Deseas marcar este libro como devuelto? El registro del préstamo se eliminará de la tabla.");
+      if (!confirmado) return;
+
+      if (boton) {
+        boton.disabled = true;
+        boton.textContent = "Procesando...";
+      }
+
+      try {
+        const { error } = await supabaseClient
+          .from("prestamos")
+          .delete()
+          .eq("id", id);
+
+        if (error) throw error;
+
+        mostrarMensaje("El préstamo se eliminó correctamente y el libro quedó registrado como devuelto en este sistema.", "exito");
+        await cargarPrestamos();
+        // Restaurar el mensaje de éxito después de actualizar la tabla.
+        mostrarMensaje("Devolución registrada correctamente.", "exito");
+      } catch (error) {
+        console.error("Error al devolver libro:", error);
+        mostrarMensaje("No se pudo registrar la devolución. Revisa los permisos de Supabase e inténtalo nuevamente.", "error");
+        if (boton) {
+          boton.disabled = false;
+          boton.textContent = "Devolver libro";
+        }
+      }
+    }
+
+    // Carga inicial al abrir la página.
+    cargarPrestamos();
+  </script>
+</body>
+</html>
