@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consulta de clientes | Grupo García Corona</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#102b46;--blue:#175b88;--cyan:#0e7490;--gold:#c99a32;--bg:#f3f6f9;--line:#dce4eb;--text:#172b3a;--muted:#607486;--white:#fff;--red:#b42318;--green:#18794e;--shadow:0 8px 26px rgba(16,43,70,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Segoe UI",Arial,sans-serif}button,input{font:inherit}.topbar{min-height:78px;background:var(--navy);border-bottom:3px solid var(--gold);color:#fff;display:flex;align-items:center;gap:15px;padding:14px 24px;box-shadow:0 3px 14px #102b4620}.logo{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:9px;padding:4px}.brand{font-weight:800;letter-spacing:.3px}.brand small{display:block;font-size:12px;color:#c4d5e3;font-weight:500;margin-top:4px}.live{display:flex;align-items:center;gap:7px;margin-left:auto;border:1px solid #ffffff50;border-radius:999px;padding:8px 12px;color:#e7f0f6;font-size:12px;white-space:nowrap}.live-dot{width:8px;height:8px;border-radius:50%;background:#53d49a;box-shadow:0 0 0 3px #53d49a25}.pill{margin-left:auto;border:1px solid #ffffff50;border-radius:999px;padding:8px 12px;color:#e7f0f6;font-size:12px;white-space:nowrap}.main{max-width:1800px;margin:auto;padding:28px}.pagehead{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:22px}.eyebrow{text-transform:uppercase;color:#a97813;font-size:11px;font-weight:800;letter-spacing:1.8px;margin-bottom:8px}.pagehead h1{margin:0 0 7px;font-size:clamp(23px,3vw,30px);color:var(--navy)}.pagehead p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.panel{background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);padding:20px;margin-bottom:20px}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:15px}.search{width:min(440px,100%);padding:12px 14px;border:1px solid #cbd7e1;border-radius:9px;background:#fff;outline:none}.search:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #0e74901c}.btn{border:0;border-radius:9px;padding:11px 15px;font-weight:700;background:var(--blue);color:white;cursor:pointer}.btn:disabled{opacity:.6;cursor:wait}.count{margin-left:auto;color:var(--muted);font-size:13px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}table{border-collapse:collapse;width:100%;min-width:1450px;background:white}th,td{padding:12px 13px;border-bottom:1px solid #e8edf1;text-align:left;font-size:13px;vertical-align:middle;white-space:nowrap}th{background:#f5f8fa;color:#496071;font-size:11px;text-transform:uppercase;letter-spacing:.4px;position:sticky;top:0;z-index:1}tbody tr:hover{background:#f8fbfd}.money{font-weight:800;color:var(--navy)}.days{display:flex;gap:5px;flex-wrap:wrap;max-width:200px}.day{background:#e8f1f7;color:#175b88;border-radius:5px;padding:4px 6px;font-size:11px;font-weight:700}.code{font-family:Consolas,monospace;letter-spacing:1px;font-weight:800;color:var(--cyan)}.receipt{color:var(--blue);text-decoration:none;font-weight:700}.receipt:hover{text-decoration:underline}.muted{color:var(--muted)}.empty{text-align:center;padding:28px;color:var(--muted);white-space:normal}.alert{padding:13px 15px;border-radius:9px;background:#fff7e6;color:#805d13;border:1px solid #f0dfb4;font-size:13px;line-height:1.5;margin-bottom:15px}.error{background:#fff0ef;color:var(--red);border:1px solid #f3c9c5;padding:15px;border-radius:10px;white-space:normal;line-height:1.5}.footer{text-align:center;color:#8192a0;font-size:12px;padding:8px 20px 25px}
+@media(max-width:700px){.live{margin-left:0;font-size:10px;padding:6px 8px}.topbar{flex-wrap:wrap;padding:12px 14px;gap:10px}.logo{width:43px;height:43px}.brand{font-size:13px}.brand small{font-size:10px}.pill{display:none}.main{padding:16px 11px}.panel{padding:12px}.pagehead{flex-direction:column}.toolbar .search{width:100%;max-width:none}.count{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<script>
+const SUPABASE_URL = 'https://fgaltrkjkhmurmkfzepb.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_5TT2kDET33HdZN9aIWz7ow_pEe94gZQ';
+</script>
+<header class="topbar"><img class="logo" src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png" alt="Grupo García Corona" onerror="this.style.display='none'"><div class="brand">GRUPO GARCÍA CORONA<small>Consulta de clientes · Solo lectura</small></div><span class="live"><span class="live-dot"></span><span id="liveStatus">Actualización automática activa</span></span><span class="pill">CONSULTA · SIN EDICIÓN</span></header>
+<main class="main">
+  <div class="pagehead"><div><div class="eyebrow">Directorio de clientes</div><h1>Clientes</h1><p>Consulta los datos registrados, saldos pendientes, enlaces de recibo y días de pago. Esta pantalla no permite registrar ni modificar información.</p></div><button id="refreshBtn" class="btn">↻ Actualizar tabla</button></div>
+  <div id="notice" class="alert">Esta página es de consulta y no incluye inicio de sesión ni controles para editar. Para que los datos sean visibles, Supabase debe permitir la lectura pública de los campos de clientes mediante una política RLS de solo lectura.</div>
+  <section class="panel"><div class="toolbar"><input id="search" class="search" type="search" placeholder="Buscar por nombre, teléfono, correo, folio o número de servicio…" autocomplete="off"><span id="count" class="count">Preparando consulta…</span></div><div class="tablewrap"><table><thead><tr><th>ID</th><th>Nombre</th><th>Teléfono</th><th>Correo</th><th>Folio de registro</th><th>Número de servicio</th><th>Referencia de servicio</th><th>Saldo pendiente</th><th>Recibo</th><th>Código diario</th><th>Días de pago</th></tr></thead><tbody id="clientsBody"><tr><td colspan="11" class="empty">Conectando con la base de datos…</td></tr></tbody></table></div></section>
+</main><footer class="footer">Corporación 2026 Grupo García Corona · Todos los derechos reservados</footer>
+<script>
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const $ = id => document.getElementById(id);
+let clients = [];
+let isLoading = false;
+let lastSuccessfulSync = null;
+const REFRESH_INTERVAL_MS = 1000;
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(v){return new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(Number(v||0))}
+function safeUrl(v){try{const u=new URL(v);return ['https:','http:'].includes(u.protocol)?u.href:null}catch{return null}}
+function render(){const q=$('search').value.trim().toLocaleLowerCase('es-MX');const rows=clients.filter(c=>[c.id,c.nombre,c.telefono,c.correo,c.folio_registro,c.numero_servicio,c.referencia_servicio].some(v=>String(v??'').toLocaleLowerCase('es-MX').includes(q)));$('count').textContent=`Mostrando ${rows.length} de ${clients.length} clientes`;if(!rows.length){$('clientsBody').innerHTML='<tr><td colspan="11" class="empty">No hay clientes que coincidan con la búsqueda.</td></tr>';return} $('clientsBody').innerHTML=rows.map(c=>{const u=safeUrl(c.link_recibo);const ds=(Array.isArray(c.dias_pago)?c.dias_pago:[]).slice().map(Number).filter(n=>n>=1&&n<=31).sort((a,b)=>a-b).map(n=>`<span class="day">${n}</span>`).join(' ')||'—';return `<tr><td title="${esc(c.id)}">${esc(c.id)}</td><td>${esc(c.nombre)}</td><td>${esc(c.telefono)}</td><td>${esc(c.correo)}</td><td>${esc(c.folio_registro)||'—'}</td><td><span class="code">${esc(c.numero_servicio)||'—'}</span></td><td><span class="code">${esc(c.referencia_servicio)||'—'}</span></td><td class="money">${money(c.saldo_debe)}</td><td>${u?`<a class="receipt" href="${esc(u)}" target="_blank" rel="noopener noreferrer">Abrir recibo ↗</a>`:'—'}</td><td><span class="code">${esc(c.codigo_diario)||'—'}</span>${c.codigo_fecha?`<div class="muted" style="font-size:10px;margin-top:4px">${esc(c.codigo_fecha)}</div>`:''}</td><td><div class="days">${ds}</div></td></tr>`}).join('')}
+async function load(silent=false){
+  if(isLoading)return;
+  isLoading=true;
+  const btn=$('refreshBtn');
+  if(!silent){btn.disabled=true;btn.textContent='Consultando…';if(!clients.length)$('clientsBody').innerHTML='<tr><td colspan="11" class="empty">Consultando Supabase…</td></tr>'}
+  try{
+    const {data,error}=await db.from('clientes').select('id,nombre,telefono,correo,folio_registro,numero_servicio,referencia_servicio,saldo_debe,link_recibo,codigo_diario,codigo_fecha,dias_pago,creado_en').order('creado_en',{ascending:false});
+    if(error)throw error;
+    clients=data||[];lastSuccessfulSync=new Date();render();$('notice').style.display='none';$('liveStatus').textContent='En vivo · actualizado '+lastSuccessfulSync.toLocaleTimeString('es-MX');
+  }catch(e){
+    $('liveStatus').textContent='Sin conexión · reintentando';
+    if(!clients.length){$('count').textContent='No se pudo completar la consulta';$('clientsBody').innerHTML=`<tr><td colspan="11"><div class="error"><strong>No fue posible cargar los clientes.</strong><br>${esc(e.message||'Error de conexión')}<br><br>Comprueba que la tabla public.clientes exista y que Supabase tenga una política RLS que permita SELECT a anon. No desactives RLS ni otorgues permisos de escritura para resolverlo.</div></td></tr>`}
+  }finally{isLoading=false;btn.disabled=false;btn.textContent='↻ Actualizar tabla'}
+}
+$('search').addEventListener('input',render);
+$('refreshBtn').addEventListener('click',()=>load(false));
+// Consulta automática cada segundo; no requiere que el usuario pulse Actualizar.
+load(false);
+setInterval(()=>load(true),REFRESH_INTERVAL_MS);
+// Si Realtime está habilitado para public.clientes, los cambios también se reflejan al instante.
+db.channel('ggc-clientes-live').on('postgres_changes',{event:'*',schema:'public',table:'clientes'},()=>load(true)).subscribe();
+</script>
+</body>
+</html>
