@@ -1,0 +1,971 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123451">
+<title>Solicitud de Servicios | Grupo García Corona</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --navy:#123451;
+  --blue:#17669a;
+  --cyan:#14a3c7;
+  --light:#f3f7fa;
+  --border:#d8e2e9;
+  --text:#243746;
+  --muted:#657786;
+  --white:#fff;
+  --success:#16784b;
+  --danger:#b42318;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--light);
+  color:var(--text);
+  line-height:1.55;
+}
+header{
+  background:var(--navy);
+  color:white;
+  padding:25px 16px;
+  border-bottom:5px solid var(--cyan);
+}
+.header-inner{
+  max-width:920px;
+  margin:auto;
+}
+.brand{
+  font-size:13px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  opacity:.85;
+}
+header h1{
+  font-size:clamp(23px,4vw,34px);
+  margin:7px 0;
+}
+header p{margin:0;color:#dceaf4}
+main{
+  max-width:920px;
+  margin:28px auto;
+  padding:0 15px 35px;
+}
+.card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:clamp(18px,4vw,32px);
+  box-shadow:0 5px 22px rgba(18,52,81,.06);
+}
+.progress-area{margin-bottom:25px}
+.progress-label{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:9px;
+}
+.progress-track{
+  height:7px;
+  background:#e5edf2;
+  border-radius:20px;
+  overflow:hidden;
+}
+.progress-bar{
+  height:100%;
+  width:25%;
+  background:var(--cyan);
+  transition:width .25s ease;
+}
+.step{display:none}
+.step.active{display:block}
+h2{
+  color:var(--navy);
+  font-size:23px;
+  margin:0 0 8px;
+}
+.intro{color:var(--muted);margin:0 0 23px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+}
+.field{min-width:0}
+.field.full{grid-column:1/-1}
+label{
+  display:block;
+  font-weight:700;
+  font-size:14px;
+  margin-bottom:7px;
+}
+.required{color:var(--danger)}
+input,select,textarea{
+  width:100%;
+  border:1px solid #cbd7e0;
+  border-radius:8px;
+  padding:12px 13px;
+  font:inherit;
+  color:var(--text);
+  background:#fff;
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 3px rgba(20,163,199,.12);
+}
+textarea{min-height:110px;resize:vertical}
+small,.hint{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  margin-top:5px;
+}
+.choice-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin:22px 0;
+}
+.choice{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:18px;
+  cursor:pointer;
+  background:#fff;
+  text-align:left;
+  color:var(--text);
+  font:inherit;
+}
+.choice strong{display:block;color:var(--navy);font-size:17px}
+.choice span{font-size:13px;color:var(--muted)}
+.choice.selected{
+  border:2px solid var(--blue);
+  background:#f1f8fc;
+}
+.notice{
+  background:#f0f7fb;
+  border-left:4px solid var(--cyan);
+  padding:13px 15px;
+  border-radius:5px;
+  font-size:13px;
+  margin:18px 0;
+}
+.terms{
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:17px;
+  background:#fbfdfe;
+  margin:18px 0;
+}
+.terms h3{color:var(--navy);margin:0 0 12px;font-size:17px}
+.terms-copy{
+  font-size:13px;
+  color:#405362;
+  white-space:normal;
+}
+.terms-copy p{margin:0 0 12px}
+.terms-extra{display:none}
+.terms-extra.open{display:block}
+.text-button{
+  border:0;
+  background:transparent;
+  color:var(--blue);
+  text-decoration:underline;
+  padding:8px 0;
+  font-weight:bold;
+  cursor:pointer;
+}
+.check-row{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:15px 0;
+  font-size:13px;
+}
+.check-row input{
+  width:18px;
+  height:18px;
+  margin-top:2px;
+  flex-shrink:0;
+}
+.check-row label{font-weight:normal;margin:0}
+.actions{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:28px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+}
+.btn{
+  border:0;
+  border-radius:8px;
+  padding:13px 20px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-primary{background:var(--navy);color:white}
+.btn-primary:hover{background:var(--blue)}
+.btn-secondary{background:#eaf0f4;color:var(--navy)}
+.error{
+  color:var(--danger);
+  background:#fff2f0;
+  border:1px solid #ffd5d0;
+  padding:12px;
+  border-radius:7px;
+  margin-top:15px;
+  display:none;
+  font-size:13px;
+}
+.success-screen{text-align:center;padding:20px 0}
+.success-icon{
+  width:68px;height:68px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 18px;background:#e8f6ee;color:var(--success);
+  font-size:34px;font-weight:bold;
+}
+.folio{
+  display:inline-block;
+  padding:12px 18px;
+  border:1px dashed #aabfce;
+  background:#f6fafc;
+  border-radius:8px;
+  color:var(--navy);
+  font-size:20px;
+  font-weight:bold;
+  letter-spacing:.5px;
+  overflow-wrap:anywhere;
+  margin:12px 0;
+}
+.status-pill{
+  display:inline-block;
+  padding:6px 14px;
+  border-radius:20px;
+  background:#fff2d8;
+  color:#805300;
+  font-size:13px;
+  font-weight:bold;
+}
+#loadingScreen{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:rgba(244,248,251,.97);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.loading-box{
+  width:100%;
+  max-width:420px;
+  text-align:center;
+  background:#fff;
+  padding:35px 25px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  box-shadow:0 10px 40px rgba(18,52,81,.12);
+}
+.spinner{
+  width:45px;height:45px;
+  border:4px solid #dce8ef;
+  border-top-color:var(--cyan);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  margin:0 auto 20px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loadingMessage{color:var(--navy);font-weight:bold}
+footer{
+  text-align:center;
+  padding:20px 12px;
+  color:var(--muted);
+  font-size:12px;
+}
+.hidden{display:none!important}
+@media(max-width:650px){
+  .grid,.choice-grid{grid-template-columns:1fr}
+  .field.full{grid-column:auto}
+  .actions .btn{flex:1;padding:12px 10px}
+  header{padding:22px 16px}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="header-inner">
+    <div class="brand">Grupo García Corona</div>
+    <h1>Solicitud de servicios</h1>
+    <p>Cuéntanos qué necesitas y nuestro equipo revisará tu solicitud.</p>
+  </div>
+</header>
+
+<main>
+  <div class="card" id="formCard">
+    <div class="progress-area" id="progressArea">
+      <div class="progress-label">
+        <span id="stepLabel">Paso 1 de 4</span>
+        <span id="stepPercent">25%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+
+    <form id="requestForm" novalidate>
+      <!-- PASO 1: DATOS PERSONALES -->
+      <section class="step active" data-step="1">
+        <h2>1. Tus datos personales</h2>
+        <p class="intro">Comencemos con la información necesaria para identificar y contactar al solicitante.</p>
+
+        <div class="grid">
+          <div class="field full">
+            <label for="nombre">Nombre completo <span class="required">*</span></label>
+            <input id="nombre" name="nombre" autocomplete="name" maxlength="150" required>
+          </div>
+          <div class="field">
+            <label for="correo">Correo electrónico <span class="required">*</span></label>
+            <input id="correo" name="correo" type="email" autocomplete="email" maxlength="180" required>
+          </div>
+          <div class="field">
+            <label for="telefono">Número de teléfono <span class="required">*</span></label>
+            <input id="telefono" name="telefono" type="tel" inputmode="numeric"
+              maxlength="10" minlength="10" pattern="[0-9]{10}"
+              placeholder="10 dígitos" autocomplete="tel" required>
+            <small>Escribe los 10 dígitos sin espacios ni guiones.</small>
+          </div>
+        </div>
+
+        <div class="notice">
+          Utilizaremos estos datos para dar seguimiento a tu solicitud y, cuando sea necesario, confirmar información contigo.
+        </div>
+      </section>
+
+      <!-- PASO 2: EMPRESA -->
+      <section class="step" data-step="2">
+        <h2>2. ¿Representas a una empresa o comercio?</h2>
+        <p class="intro">Selecciona la opción que corresponda. También puedes solicitar un servicio a título personal.</p>
+
+        <input type="hidden" id="representa_empresa" value="">
+
+        <div class="choice-grid">
+          <button class="choice" type="button" data-company="si" id="choiceYes">
+            <strong>Sí, represento una empresa</strong>
+            <span>Registraré los datos del negocio o institución.</span>
+          </button>
+          <button class="choice" type="button" data-company="no" id="choiceNo">
+            <strong>No, solicito a título personal</strong>
+            <span>Continuaré sin registrar datos de una empresa.</span>
+          </button>
+        </div>
+
+        <div id="companyFields" class="hidden">
+          <div class="notice">Los campos marcados con asterisco son obligatorios cuando representas a una empresa.</div>
+          <div class="grid">
+            <div class="field full">
+              <label for="empresa">Nombre comercial o de la empresa <span class="required">*</span></label>
+              <input id="empresa" maxlength="180">
+            </div>
+            <div class="field">
+              <label for="razon_social">Razón social</label>
+              <input id="razon_social" maxlength="180">
+            </div>
+            <div class="field">
+              <label for="rfc">RFC</label>
+              <input id="rfc" maxlength="13" placeholder="Opcional">
+            </div>
+            <div class="field">
+              <label for="cantidad_integrantes">Número de empleados o integrantes</label>
+              <input id="cantidad_integrantes" maxlength="50" placeholder="Ej. 12, 50 o 100+">
+            </div>
+            <div class="field">
+              <label for="puesto_representante">Tu puesto dentro de la organización <span class="required">*</span></label>
+              <select id="puesto_representante">
+                <option value="">Selecciona una opción</option>
+                <option value="Dueño">Dueño/a</option>
+                <option value="Director general">Director/a general</option>
+                <option value="Director de área">Director/a de área</option>
+                <option value="Asistente personal del dueño">Asistente personal del dueño/a</option>
+                <option value="Empleado o colaborador">Empleado/a o colaborador/a</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div class="field hidden" id="areaField">
+              <label for="area_directiva">Área que diriges <span class="required">*</span></label>
+              <input id="area_directiva" maxlength="100" placeholder="Ej. Finanzas, Recursos Humanos">
+            </div>
+            <div class="field hidden" id="otherPositionField">
+              <label for="otro_puesto">Especifica tu puesto <span class="required">*</span></label>
+              <input id="otro_puesto" maxlength="100">
+            </div>
+            <div class="field">
+              <label for="correo_empresa">Correo de contacto de la empresa</label>
+              <input id="correo_empresa" type="email" maxlength="180">
+            </div>
+            <div class="field">
+              <label for="telefono_empresa">Teléfono de la empresa <span class="required">*</span></label>
+              <input id="telefono_empresa" type="tel" inputmode="numeric"
+                maxlength="10" minlength="10" pattern="[0-9]{10}" placeholder="10 dígitos">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASO 3: SERVICIO -->
+      <section class="step" data-step="3">
+        <h2>3. Describe el servicio que necesitas</h2>
+        <p class="intro">Indícanos qué sistema deseas y qué funciones debería realizar.</p>
+
+        <div class="grid">
+          <div class="field full">
+            <label for="nombre_sistema">Nombre del sistema o servicio <span class="required">*</span></label>
+            <input id="nombre_sistema" maxlength="180" required
+              placeholder="Ej. Sistema de inventario, control escolar, punto de venta">
+          </div>
+          <div class="field full">
+            <label for="funciones_sistema">¿Qué funciones necesitas? <span class="required">*</span></label>
+            <textarea id="funciones_sistema" maxlength="10000" required
+              placeholder="Describe qué debe hacer el sistema, qué procesos deseas mejorar y qué funciones consideras indispensables."></textarea>
+          </div>
+          <div class="field">
+            <label for="cantidad_usuarios">¿Cuántas personas utilizarán el sistema? <span class="required">*</span></label>
+            <select id="cantidad_usuarios" required>
+              <option value="">Selecciona una opción</option>
+              <option value="1">1 persona</option>
+              <option value="2 a 5">2 a 5 personas</option>
+              <option value="6 a 10">6 a 10 personas</option>
+              <option value="11 a 25">11 a 25 personas</option>
+              <option value="26 a 50">26 a 50 personas</option>
+              <option value="51 a 100">51 a 100 personas</option>
+              <option value="Más de 100">Más de 100 personas</option>
+              <option value="No tengo límite de personas">No tengo límite de personas</option>
+              <option value="Por definir">Todavía no lo sé</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="archivo_para_dominio">¿Deseas recibir un archivo HTML para instalarlo en tu propio dominio? <span class="required">*</span></label>
+            <select id="archivo_para_dominio" required>
+              <option value="">Selecciona una opción</option>
+              <option value="Sí">Sí, quiero el archivo HTML</option>
+              <option value="No">No, prefiero otra modalidad</option>
+              <option value="Necesito orientación">Necesito orientación</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="informacion_adicional">Información adicional</label>
+            <textarea id="informacion_adicional" maxlength="10000"
+              placeholder="Presupuesto aproximado, fecha deseada, sistemas de referencia, necesidades especiales u otros detalles."></textarea>
+          </div>
+        </div>
+        <div class="notice">
+          El envío de esta solicitud no significa que el desarrollo haya sido aprobado ni que exista una fecha de entrega confirmada.
+        </div>
+      </section>
+
+      <!-- PASO 4: CONDICIONES -->
+      <section class="step" data-step="4">
+        <h2>4. Revisión y aceptación</h2>
+        <p class="intro">Lee las condiciones antes de enviar tu solicitud.</p>
+
+        <div class="terms">
+          <h3>Condiciones de solicitud de servicios</h3>
+          <div class="terms-copy">
+            <p><strong>1. Registro de solicitud.</strong> El presente formulario sirve para registrar una solicitud de servicio ante Grupo García Corona. Su envío no constituye por sí mismo un contrato de prestación de servicios, una aceptación del proyecto, una promesa de entrega ni una cotización definitiva.</p>
+            <p><strong>2. Revisión y seguimiento.</strong> La solicitud comenzará con el estado “Pendiente”. El equipo podrá revisarla, pedir información adicional, proponer ajustes, rechazarla o comunicar las condiciones necesarias para continuar. Los estados de seguimiento pueden incluir: Pendiente, En revisión, Aprobación, En espera, En desarrollo y Entregado y verificado.</p>
+            <p><strong>3. Costos y pagos.</strong> El solicitante reconoce que el servicio podrá tener costos de desarrollo, configuración, mantenimiento, alojamiento, licencias, soporte u otros conceptos que se informarán antes de formalizar el servicio. Cuando exista una obligación de pago aceptada en una propuesta o contrato, el cliente deberá cumplir las fechas, montos y condiciones acordadas. No se debe interpretar este formulario como una autorización automática de cobro.</p>
+            <p><strong>4. Promociones o periodos de prueba.</strong> En determinados servicios o para los primeros usuarios podría ofrecerse un primer mes gratuito, únicamente cuando Grupo García Corona lo confirme expresamente por escrito. La disponibilidad, duración, servicios incluidos y costos posteriores dependerán de las condiciones particulares comunicadas. No todos los proyectos califican automáticamente para esta promoción.</p>
+            <p><strong>5. Alcance y cambios.</strong> Las funciones solicitadas serán evaluadas para determinar su viabilidad. Las funciones finales, fechas, costos, entregables y responsabilidades deberán confirmarse mediante una propuesta o acuerdo. Las modificaciones posteriores podrán afectar el precio o el plazo.</p>
+            <p><strong>6. Seguridad y vulnerabilidades.</strong> Se podrán aplicar medidas razonables de seguridad conforme al alcance acordado. Sin embargo, ningún sistema, sitio web, base de datos, dispositivo o conexión puede garantizarse absolutamente libre de errores, interrupciones, ataques o vulnerabilidades. El cliente debe proteger sus credenciales, realizar respaldos cuando corresponda y comunicar incidentes oportunamente. Las responsabilidades específicas se establecerán en el acuerdo aplicable.</p>
+            <p><strong>7. Verificación de información.</strong> El solicitante declara que los datos proporcionados son correctos y que cuenta con autorización para entregar la información de la empresa o institución que representa. Grupo García Corona podrá solicitar aclaraciones y realizar verificaciones razonables mediante los datos de contacto proporcionados, WhatsApp, documentos, fuentes oficiales, registros gubernamentales o terceros pertinentes. La verificación deberá limitarse a fines legítimos relacionados con la solicitud y realizarse conforme a la normativa aplicable.</p>
+            <p><strong>8. Contacto y confirmación.</strong> El solicitante acepta que se le contacte para confirmar su identidad, la información proporcionada, el alcance del servicio o los siguientes pasos. Cuando se comunique una cita de revisión, podrá solicitarse que la información se confirme con al menos un día de anticipación. Este plazo se aplicará cuando se haya comunicado expresamente para una cita o revisión específica.</p>
+            <p><strong>9. Entrega de archivos HTML y dominio propio.</strong> Si el solicitante pide un archivo HTML, el formato de entrega, las funciones incluidas, las dependencias externas y los requisitos de instalación se definirán en la propuesta aceptada. Tener un archivo HTML no incluye automáticamente dominio, alojamiento, correo empresarial, base de datos, servicios de terceros, certificados, mantenimiento ni costos de infraestructura. Estos conceptos deberán especificarse por separado.</p>
+            <p><strong>10. Propiedad intelectual.</strong> Los derechos de uso, titularidad, licencias, código fuente, diseño, estructura, documentación y demás entregables se establecerán en el contrato o propuesta correspondiente. Cuando se acuerde un esquema de participación de derechos del 60% para Grupo García Corona y 40% para la institución o cliente, dicho reparto solo será aplicable si queda expresamente establecido en un documento aceptado por ambas partes, donde se definan su alcance y las condiciones legales. La presente casilla no sustituye ese acuerdo ni transfiere por sí sola derechos de propiedad intelectual.</p>
+            <p><strong>11. Privacidad y uso de datos.</strong> Los datos se recopilan para registrar, evaluar y dar seguimiento a la solicitud, contactar al interesado y documentar el proceso. Se deberán manejar de manera razonable y conforme a las obligaciones de protección de datos aplicables. No introduzcas contraseñas, datos bancarios, información especialmente sensible ni datos personales de terceros que no sean necesarios. Los avisos de privacidad y mecanismos para ejercer derechos deberán consultarse a través de los canales oficiales de Grupo García Corona.</p>
+            <p><strong>12. Aceptación final.</strong> Al marcar las casillas, el solicitante confirma que leyó estas condiciones, que los datos son veraces y que está autorizado para presentar la solicitud. La contratación solo se formalizará mediante la aceptación expresa de las condiciones específicas del servicio.</p>
+
+            <div class="terms-extra" id="termsExtra">
+              <p><strong>13. Servicios de terceros.</strong> Un proyecto puede depender de proveedores externos, servicios en la nube, plataformas, APIs, sistemas de mensajería o licencias de terceros. Su disponibilidad y sus términos pueden cambiar independientemente de Grupo García Corona. Cualquier costo o requisito relevante deberá comunicarse en el alcance acordado.</p>
+              <p><strong>14. Disponibilidad del servicio.</strong> Las fechas estimadas dependerán de la complejidad del proyecto, la entrega oportuna de información, las autorizaciones, las pruebas y la disponibilidad de recursos. Una estimación no será una garantía de plazo salvo que se pacte expresamente por escrito.</p>
+              <p><strong>15. Conservación de la solicitud.</strong> La información registrada podrá conservarse durante el tiempo necesario para gestionar la solicitud, cumplir obligaciones aplicables y mantener un registro de seguimiento, de acuerdo con las políticas de privacidad correspondientes.</p>
+            </div>
+          </div>
+          <button class="text-button" type="button" id="toggleTerms">Abrir lo demás</button>
+        </div>
+
+        <div class="check-row">
+          <input type="checkbox" id="acepta_pagos" required>
+          <label for="acepta_pagos">Confirmo que entiendo que los costos, pagos y posibles promociones se definirán y confirmarán para mi proyecto antes de contratarlo. <span class="required">*</span></label>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="acepta_verificacion_y_privacidad" required>
+          <label for="acepta_verificacion_y_privacidad">Declaro que la información proporcionada es correcta, que tengo autorización para enviarla y que he leído las condiciones de verificación y privacidad. <span class="required">*</span></label>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="acepta_condiciones_propiedad_intelectual" required>
+          <label for="acepta_condiciones_propiedad_intelectual">He leído y acepto las condiciones de solicitud, entrega y propiedad intelectual descritas anteriormente. <span class="required">*</span></label>
+        </div>
+        <div class="notice">
+          Al finalizar, se intentará guardar tu solicitud en la base de datos de Grupo García Corona. No cierres la página mientras se procesa el registro.
+        </div>
+      </section>
+
+      <div class="error" id="formError" role="alert"></div>
+
+      <div class="actions" id="formActions">
+        <button class="btn btn-secondary" type="button" id="backBtn" disabled>Anterior</button>
+        <button class="btn btn-primary" type="button" id="nextBtn">Continuar</button>
+      </div>
+    </form>
+
+    <!-- CONFIRMACIÓN -->
+    <section class="success-screen hidden" id="successScreen">
+      <div class="success-icon">✓</div>
+      <h2>Solicitud registrada</h2>
+      <p>Tu solicitud se guardó correctamente en la base de datos de Grupo García Corona.</p>
+      <p>Tu folio de seguimiento es:</p>
+      <div class="folio" id="folioResult"></div>
+      <p><span class="status-pill">Estado inicial: Pendiente</span></p>
+      <p class="intro">Conserva tu folio. El envío no significa que el proyecto ya haya sido aprobado o iniciado.</p>
+      <button class="btn btn-secondary" type="button" id="copyFolioBtn">Copiar folio</button>
+    </section>
+  </div>
+</main>
+
+<footer>
+  Corporación 2026 Grupo García Corona. Todos los derechos reservados.
+</footer>
+
+<div id="loadingScreen" role="status" aria-live="polite">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <div id="loadingMessage">Accediendo a la base de datos...</div>
+    <p class="hint">Estamos procesando tu solicitud. Por favor, espera.</p>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* CONFIGURACIÓN SUPABASE */
+const SUPABASE_URL = "https://fgaltrkjkhmurmkfzepb.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_5TT2kDET33HdZN9aIWz7ow_pEe94gZQ";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+const form = document.getElementById("requestForm");
+const steps = Array.from(document.querySelectorAll(".step"));
+const backBtn = document.getElementById("backBtn");
+const nextBtn = document.getElementById("nextBtn");
+const errorBox = document.getElementById("formError");
+const loadingScreen = document.getElementById("loadingScreen");
+const loadingMessage = document.getElementById("loadingMessage");
+
+let currentStep = 1;
+const totalSteps = 4;
+let companyChoice = "";
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function valueOf(id) {
+  const element = $(id);
+  return element ? element.value.trim() : "";
+}
+
+function checkedOf(id) {
+  return $(id).checked;
+}
+
+function digitsOnly(value) {
+  return value.replace(/\D/g, "");
+}
+
+function showError(message) {
+  errorBox.textContent = message;
+  errorBox.style.display = "block";
+  errorBox.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function clearError() {
+  errorBox.textContent = "";
+  errorBox.style.display = "none";
+}
+
+function updateStep() {
+  steps.forEach(section => {
+    section.classList.toggle(
+      "active",
+      Number(section.dataset.step) === currentStep
+    );
+  });
+
+  $("stepLabel").textContent = `Paso ${currentStep} de ${totalSteps}`;
+  $("stepPercent").textContent =
+    `${Math.round((currentStep / totalSteps) * 100)}%`;
+  $("progressBar").style.width =
+    `${(currentStep / totalSteps) * 100}%`;
+
+  backBtn.disabled = currentStep === 1;
+  nextBtn.textContent = currentStep === totalSteps
+    ? "Finalizar registro"
+    : "Continuar";
+
+  clearError();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function markCompanyChoice(choice) {
+  companyChoice = choice;
+  $("representa_empresa").value = choice === "si" ? "true" : "false";
+
+  $("choiceYes").classList.toggle("selected", choice === "si");
+  $("choiceNo").classList.toggle("selected", choice === "no");
+
+  $("companyFields").classList.toggle("hidden", choice !== "si");
+  clearError();
+}
+
+$("choiceYes").addEventListener("click", () => markCompanyChoice("si"));
+$("choiceNo").addEventListener("click", () => markCompanyChoice("no"));
+
+$("puesto_representante").addEventListener("change", () => {
+  const position = valueOf("puesto_representante");
+  $("areaField").classList.toggle("hidden", position !== "Director de área");
+  $("otherPositionField").classList.toggle("hidden", position !== "Otro");
+});
+
+$("telefono").addEventListener("input", event => {
+  event.target.value = digitsOnly(event.target.value).slice(0, 10);
+});
+
+$("telefono_empresa").addEventListener("input", event => {
+  event.target.value = digitsOnly(event.target.value).slice(0, 10);
+});
+
+$("rfc").addEventListener("input", event => {
+  event.target.value = event.target.value.toUpperCase().replace(/\s/g, "");
+});
+
+function validateStep(stepNumber) {
+  clearError();
+
+  if (stepNumber === 1) {
+    if (!valueOf("nombre")) {
+      showError("Escribe tu nombre completo.");
+      $("nombre").focus();
+      return false;
+    }
+
+    const email = valueOf("correo");
+    if (!email || !$("correo").checkValidity()) {
+      showError("Escribe un correo electrónico válido.");
+      $("correo").focus();
+      return false;
+    }
+
+    if (!/^\d{10}$/.test(valueOf("telefono"))) {
+      showError("El teléfono debe contener exactamente 10 dígitos.");
+      $("telefono").focus();
+      return false;
+    }
+  }
+
+  if (stepNumber === 2) {
+    if (!companyChoice) {
+      showError("Selecciona si representas a una empresa o si solicitas a título personal.");
+      return false;
+    }
+
+    if (companyChoice === "si") {
+      if (!valueOf("empresa")) {
+        showError("Escribe el nombre de la empresa o comercio.");
+        $("empresa").focus();
+        return false;
+      }
+
+      if (!valueOf("puesto_representante")) {
+        showError("Selecciona tu puesto dentro de la organización.");
+        $("puesto_representante").focus();
+        return false;
+      }
+
+      if (valueOf("puesto_representante") === "Director de área" &&
+          !valueOf("area_directiva")) {
+        showError("Especifica el área que diriges.");
+        $("area_directiva").focus();
+        return false;
+      }
+
+      if (valueOf("puesto_representante") === "Otro" &&
+          !valueOf("otro_puesto")) {
+        showError("Especifica tu puesto.");
+        $("otro_puesto").focus();
+        return false;
+      }
+
+      if (!/^\d{10}$/.test(valueOf("telefono_empresa"))) {
+        showError("El teléfono de la empresa debe contener exactamente 10 dígitos.");
+        $("telefono_empresa").focus();
+        return false;
+      }
+
+      const companyEmail = valueOf("correo_empresa");
+      if (companyEmail && !$("correo_empresa").checkValidity()) {
+        showError("El correo de la empresa no parece válido.");
+        $("correo_empresa").focus();
+        return false;
+      }
+
+      const rfc = valueOf("rfc");
+      if (rfc && !/^([A-ZÑ&]{3,4})\d{6}[A-Z0-9]{3}$/.test(rfc)) {
+        showError("Revisa el RFC. Debe tener el formato habitual de 12 o 13 caracteres.");
+        $("rfc").focus();
+        return false;
+      }
+    }
+  }
+
+  if (stepNumber === 3) {
+    if (!valueOf("nombre_sistema")) {
+      showError("Escribe el nombre del sistema o servicio que necesitas.");
+      $("nombre_sistema").focus();
+      return false;
+    }
+
+    if (!valueOf("funciones_sistema")) {
+      showError("Describe las funciones que necesitas.");
+      $("funciones_sistema").focus();
+      return false;
+    }
+
+    if (!valueOf("cantidad_usuarios")) {
+      showError("Selecciona cuántas personas utilizarán el sistema.");
+      $("cantidad_usuarios").focus();
+      return false;
+    }
+
+    if (!valueOf("archivo_para_dominio")) {
+      showError("Indica si deseas recibir un archivo HTML para tu propio dominio.");
+      $("archivo_para_dominio").focus();
+      return false;
+    }
+  }
+
+  if (stepNumber === 4) {
+    if (!checkedOf("acepta_pagos") ||
+        !checkedOf("acepta_verificacion_y_privacidad") ||
+        !checkedOf("acepta_condiciones_propiedad_intelectual")) {
+      showError("Para enviar la solicitud debes marcar las tres casillas de aceptación.");
+      return false;
+    }
+  }
+
+  return true;
+}
+
+backBtn.addEventListener("click", () => {
+  if (currentStep > 1) {
+    currentStep--;
+    updateStep();
+  }
+});
+
+nextBtn.addEventListener("click", async () => {
+  if (!validateStep(currentStep)) return;
+
+  if (currentStep < totalSteps) {
+    currentStep++;
+    updateStep();
+    return;
+  }
+
+  await submitRequest();
+});
+
+$("toggleTerms").addEventListener("click", () => {
+  const extra = $("termsExtra");
+  const open = extra.classList.toggle("open");
+  $("toggleTerms").textContent = open ? "Leer menos" : "Abrir lo demás";
+});
+
+function makeFolio() {
+  const date = new Date();
+  const datePart = [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0")
+  ].join("");
+
+  let randomPart;
+  if (window.crypto && typeof window.crypto.randomUUID === "function") {
+    randomPart = window.crypto.randomUUID()
+      .replace(/-/g, "")
+      .slice(0, 8)
+      .toUpperCase();
+  } else {
+    randomPart = Math.random().toString(36).slice(2, 10).toUpperCase();
+  }
+
+  return `GGC-${datePart}-${randomPart}`;
+}
+
+function buildPayload(folio) {
+  const isCompany = companyChoice === "si";
+  const position = valueOf("puesto_representante");
+
+  let finalPosition = position;
+  if (position === "Otro") {
+    finalPosition = `Otro: ${valueOf("otro_puesto")}`;
+  }
+
+  return {
+    folio: folio,
+
+    nombre: valueOf("nombre"),
+    correo: valueOf("correo").toLowerCase(),
+    telefono: valueOf("telefono"),
+
+    representa_empresa: isCompany,
+    empresa: isCompany ? valueOf("empresa") : null,
+    rfc: isCompany && valueOf("rfc") ? valueOf("rfc") : null,
+    razon_social: isCompany && valueOf("razon_social")
+      ? valueOf("razon_social") : null,
+    cantidad_integrantes: isCompany && valueOf("cantidad_integrantes")
+      ? valueOf("cantidad_integrantes") : null,
+    puesto_representante: isCompany ? finalPosition : null,
+    area_directiva: isCompany && valueOf("area_directiva")
+      ? valueOf("area_directiva") : null,
+    correo_empresa: isCompany && valueOf("correo_empresa")
+      ? valueOf("correo_empresa").toLowerCase() : null,
+    telefono_empresa: isCompany ? valueOf("telefono_empresa") : null,
+
+    nombre_sistema: valueOf("nombre_sistema"),
+    funciones_sistema: valueOf("funciones_sistema"),
+    cantidad_usuarios: valueOf("cantidad_usuarios"),
+    archivo_para_dominio: valueOf("archivo_para_dominio"),
+    informacion_adicional: valueOf("informacion_adicional") || null,
+
+    acepta_pagos: checkedOf("acepta_pagos"),
+    acepta_verificacion_y_privacidad:
+      checkedOf("acepta_verificacion_y_privacidad"),
+    acepta_condiciones_propiedad_intelectual:
+      checkedOf("acepta_condiciones_propiedad_intelectual"),
+
+    estado: "Pendiente",
+    origen: "Formulario web"
+  };
+}
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function submitRequest() {
+  if (!validateStep(4)) return;
+
+  nextBtn.disabled = true;
+  backBtn.disabled = true;
+  loadingScreen.style.display = "flex";
+
+  const messages = [
+    "Accediendo a la base de datos...",
+    "Guardando información...",
+    "Ajustando últimos detalles...",
+    "Espera un poco más...",
+    "Ya casi terminamos..."
+  ];
+
+  let messageIndex = 0;
+  loadingMessage.textContent = messages[messageIndex];
+
+  const messageTimer = setInterval(() => {
+    messageIndex = Math.min(messageIndex + 1, messages.length - 1);
+    loadingMessage.textContent = messages[messageIndex];
+  }, 1200);
+
+  const folio = makeFolio();
+  const payload = buildPayload(folio);
+
+  try {
+    /*
+      Se realiza un INSERT sin .select().
+      Esto permite mantener deshabilitada la lectura pública de solicitudes
+      en Supabase, siempre que la tabla tenga la política de inserción correcta.
+    */
+    const { error } = await db
+      .from("solicitudes_servicio")
+      .insert([payload]);
+
+    if (error) {
+      console.error("Error de Supabase:", error);
+      throw error;
+    }
+
+    loadingMessage.textContent = "Registro completado.";
+    await sleep(500);
+
+    $("folioResult").textContent = folio;
+    $("formActions").classList.add("hidden");
+    $("progressArea").classList.add("hidden");
+    form.classList.add("hidden");
+    $("successScreen").classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+  } catch (error) {
+    console.error(error);
+
+    let message = "No se pudo guardar tu solicitud. Inténtalo nuevamente.";
+
+    if (error && error.code === "23505") {
+      message = "Se produjo un conflicto con el folio. Vuelve a intentar el registro.";
+    } else if (error && error.code === "42501") {
+      message = "Supabase rechazó el registro por permisos. Revisa las políticas RLS de la tabla solicitudes_servicio.";
+    } else if (error && error.code === "42P01") {
+      message = "No existe la tabla solicitudes_servicio. Primero ejecuta el SQL de configuración en Supabase.";
+    } else if (error && error.message) {
+      message += " Detalle: " + error.message;
+    }
+
+    loadingScreen.style.display = "none";
+    showError(message);
+    nextBtn.disabled = false;
+    backBtn.disabled = currentStep === 1;
+  } finally {
+    clearInterval(messageTimer);
+    loadingScreen.style.display = "none";
+  }
+}
+
+$("copyFolioBtn").addEventListener("click", async () => {
+  const folio = $("folioResult").textContent;
+
+  try {
+    await navigator.clipboard.writeText(folio);
+    $("copyFolioBtn").textContent = "Folio copiado";
+  } catch {
+    const temp = document.createElement("textarea");
+    temp.value = folio;
+    document.body.appendChild(temp);
+    temp.select();
+    document.execCommand("copy");
+    temp.remove();
+    $("copyFolioBtn").textContent = "Folio copiado";
+  }
+});
+
+updateStep();
+</script>
+</body>
+</html>
