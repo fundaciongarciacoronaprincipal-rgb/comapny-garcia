@@ -72,12 +72,25 @@ const supabaseClient = window.supabase.createClient(
 );
 
 // ==========================================
+// VARIABLES DE CONTROL
+// ==========================================
+
+const iframe = document.getElementById("pagina");
+
+let ultimoEnlace = "";
+let consultando = false;
+let paginaCargada = false;
+
+// ==========================================
 // OBTENER ENLACE GUARDADO EN SUPABASE
 // ==========================================
 
 async function cargarPagina() {
 
-    const iframe = document.getElementById("pagina");
+    // Evitar consultas simultáneas
+    if (consultando) return;
+
+    consultando = true;
 
     try {
 
@@ -93,6 +106,10 @@ async function cargarPagina() {
 
         const enlace = data.url_pagina;
 
+        if (!enlace) {
+            throw new Error("No existe un enlace configurado.");
+        }
+
         // VALIDAR ENLACE
         const url = new URL(enlace);
 
@@ -100,47 +117,89 @@ async function cargarPagina() {
             throw new Error("El enlace debe utilizar HTTPS.");
         }
 
-        // MOSTRAR PÁGINA
-        iframe.src = url.href;
+        // ==================================
+        // DETECTAR SI EL ENLACE CAMBIÓ
+        // ==================================
+
+        if (url.href !== ultimoEnlace) {
+
+            console.log("Se detectó un cambio de enlace.");
+
+            ultimoEnlace = url.href;
+
+            // Cargar únicamente cuando cambia
+            iframe.src = url.href;
+
+            paginaCargada = true;
+
+            console.log("Nueva página cargada:", url.href);
+
+        } else {
+
+            console.log("Sin cambios en la configuración.");
+
+        }
 
     } catch (error) {
 
         console.error(
-            "Error al obtener la página de Supabase:",
+            "Error al consultar Supabase:",
             error
         );
 
-        document.body.innerHTML = `
-            <div style="
-                width:100%;
-                height:100%;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                padding:25px;
-                font-family:Arial,sans-serif;
-                text-align:center;
-                color:#12345a;
-            ">
-                <div>
-                    <h2>No se pudo cargar la aplicación</h2>
-                    <p style="margin-top:12px;">
-                        Verifica la conexión y la configuración
-                        de Supabase.
-                    </p>
+        // No borrar el iframe ni interrumpir
+        // la página que ya se encuentra cargada.
+
+        if (!paginaCargada) {
+
+            document.body.innerHTML = `
+                <div style="
+                    width:100%;
+                    height:100%;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    padding:25px;
+                    font-family:Arial,sans-serif;
+                    text-align:center;
+                    color:#12345a;
+                ">
+                    <div>
+                        <h2>No se pudo cargar la aplicación</h2>
+                        <p style="margin-top:12px;">
+                            Verifica la conexión y la configuración
+                            de Supabase.
+                        </p>
+                        <p style="margin-top:12px;font-size:13px;">
+                            Reintentando automáticamente...
+                        </p>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+
+        }
+
+    } finally {
+
+        consultando = false;
 
     }
 
 }
 
 // ==========================================
-// INICIAR APLICACIÓN
+// ACTUALIZACIÓN AUTOMÁTICA CADA SEGUNDO
 // ==========================================
 
+// Primera consulta inmediata
 cargarPagina();
+
+// Consultar nuevamente cada 1000 milisegundos
+setInterval(() => {
+
+    cargarPagina();
+
+}, 1000);
 
 // ==========================================
 // REGISTRO PWA
@@ -152,16 +211,23 @@ if ("serviceWorker" in navigator) {
 
         navigator.serviceWorker.register("./sw.js")
             .then(registration => {
+
                 console.log(
                     "PWA registrada:",
                     registration.scope
                 );
+
+                // Comprobar actualizaciones del SW
+                registration.update();
+
             })
             .catch(error => {
+
                 console.error(
                     "Error al registrar PWA:",
                     error
                 );
+
             });
 
     });
