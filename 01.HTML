@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#12345a">
+<meta name="description" content="Aplicación web instalable">
+
+<title>Aplicación Web</title>
+
+<!-- CONFIGURACIÓN PWA -->
+<link rel="manifest" href="./manifest.webmanifest">
+
+<link rel="icon" href="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png">
+
+<link rel="apple-touch-icon" href="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: white;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+</style>
+
+</head>
+
+<body>
+
+<iframe
+    id="pagina"
+    title="Contenido de la aplicación"
+    allow="fullscreen">
+</iframe>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+// ==========================================
+// CONFIGURACIÓN DE SUPABASE
+// ==========================================
+
+const SUPABASE_URL =
+"https://rxnsunvfqwludwouwkhi.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_qXgFXk2fQLrnKjJdKmZLmg_QRaRLsTy";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+// ==========================================
+// OBTENER ENLACE GUARDADO EN SUPABASE
+// ==========================================
+
+async function cargarPagina() {
+
+    const iframe = document.getElementById("pagina");
+
+    try {
+
+        const { data, error } = await supabaseClient
+            .from("configuracion_pagina")
+            .select("url_pagina")
+            .eq("id", 1)
+            .single();
+
+        if (error) {
+            throw error;
+        }
+
+        const enlace = data.url_pagina;
+
+        // VALIDAR ENLACE
+        const url = new URL(enlace);
+
+        if (url.protocol !== "https:") {
+            throw new Error("El enlace debe utilizar HTTPS.");
+        }
+
+        // MOSTRAR PÁGINA
+        iframe.src = url.href;
+
+    } catch (error) {
+
+        console.error(
+            "Error al obtener la página de Supabase:",
+            error
+        );
+
+        document.body.innerHTML = `
+            <div style="
+                width:100%;
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                padding:25px;
+                font-family:Arial,sans-serif;
+                text-align:center;
+                color:#12345a;
+            ">
+                <div>
+                    <h2>No se pudo cargar la aplicación</h2>
+                    <p style="margin-top:12px;">
+                        Verifica la conexión y la configuración
+                        de Supabase.
+                    </p>
+                </div>
+            </div>
+        `;
+
+    }
+
+}
+
+// ==========================================
+// INICIAR APLICACIÓN
+// ==========================================
+
+cargarPagina();
+
+// ==========================================
+// REGISTRO PWA
+// ==========================================
+
+if ("serviceWorker" in navigator) {
+
+    window.addEventListener("load", () => {
+
+        navigator.serviceWorker.register("./sw.js")
+            .then(registration => {
+                console.log(
+                    "PWA registrada:",
+                    registration.scope
+                );
+            })
+            .catch(error => {
+                console.error(
+                    "Error al registrar PWA:",
+                    error
+                );
+            });
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
