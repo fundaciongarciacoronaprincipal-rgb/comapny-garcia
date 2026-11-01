@@ -1,11 +1,11 @@
-const CACHE_NAME = "ggc-music-v2";
+const CACHE_NAME = "ggc-digital-scan";
 
 const APP_FILES = [
   "./",
-  "./1.html",
+  "./index.html",
   "./manifest.webmanifest",
-  "./icon-192.png",
-  "./icon-512.png"
+  "https://companygarciacorona.com.mx/corporativo_nexel_digital/gc_digital_scann/imagenes/ggc_digital_scan_icono.png",
+  "https://companygarciacorona.com.mx/corporativo_nexel_digital/gc_digital_scann/imagenes/ggc_digital_scan_icono.png"
 ];
 
 self.addEventListener("install", event => {
