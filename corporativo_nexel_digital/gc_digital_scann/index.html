@@ -830,6 +830,12 @@ body.dark .code-frame{
 }
 
 </style>
+
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#071525">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
 </head>
 
 <body>
@@ -4088,6 +4094,22 @@ document.getElementById(
 
 iniciarScanner();
 
+</script>
+
+
+<script>
+/* Registro de instalación PWA de GGC DIGITAL SCAN */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => {
+        console.log("GGC DIGITAL SCAN: aplicación lista para instalar.");
+      })
+      .catch(error => {
+        console.error("No se pudo registrar el Service Worker:", error);
+      });
+  });
+}
 </script>
 
 </body>
