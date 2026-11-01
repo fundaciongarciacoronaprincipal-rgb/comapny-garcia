@@ -1,0 +1,28 @@
+
+{
+  "id": "./",
+  "name": "OFTV Francisco Villa",
+  "short_name": "OFTV Villa",
+  "description": "Aplicación web institucional",
+  "lang": "es-MX",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#12345a",
+  "icons": [
+    {
+      "src": "https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
