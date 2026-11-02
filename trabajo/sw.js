@@ -1,117 +1,75 @@
-const CACHE_NAME = "grupo-garcia-corona-v1";
+const CACHE_NAME = "grupo-garcia-corona-trabajo-v3";
+const APP_ROOT = "/trabajo/";
 
-const ARCHIVOS = [
-    "./",
-    "./manifiesto.webmanifiesto"
-];
-
-// INSTALACIÓN
 self.addEventListener("install", event => {
-    event.waitUntil(
-        caches.open(CACHE_NAME).then(async cache => {
-            await Promise.all(
-                ARCHIVOS.map(async archivo => {
-                    try {
-                        await cache.add(archivo);
-                    } catch (error) {
-                        console.warn("No se pudo almacenar:", archivo);
-                    }
-                })
-            );
-        })
-    );
-
-    self.skipWaiting();
+    event.waitUntil((async () => {
+        const cache = await caches.open(CACHE_NAME);
+        // No se bloquea la instalación si algún recurso opcional falla.
+        for (const url of [APP_ROOT, APP_ROOT + "index.html", APP_ROOT + "manifiesto.webmanifiesto"]) {
+            try {
+                const response = await fetch(url, { cache: "reload" });
+                if (response.ok) await cache.put(url, response);
+            } catch (error) {
+                console.warn("No se pudo precargar:", url, error);
+            }
+        }
+        await self.skipWaiting();
+    })());
 });
 
-// ACTIVACIÓN
 self.addEventListener("activate", event => {
-    event.waitUntil(
-        caches.keys().then(keys => {
-            return Promise.all(
-                keys
-                    .filter(key => key !== CACHE_NAME)
-                    .map(key => caches.delete(key))
-            );
-        })
-    );
-
-    self.clients.claim();
+    event.waitUntil((async () => {
+        const keys = await caches.keys();
+        await Promise.all(keys
+            .filter(key => key.startsWith("grupo-garcia-corona-") && key !== CACHE_NAME)
+            .map(key => caches.delete(key)));
+        await self.clients.claim();
+    })());
 });
 
-// SOLICITUDES
 self.addEventListener("fetch", event => {
+    const request = event.request;
+    const url = new URL(request.url);
 
-    const solicitud = event.request;
+    if (request.method !== "GET" ||
+        url.origin !== self.location.origin ||
+        !url.pathname.startsWith(APP_ROOT)) return;
 
-    // Solo solicitudes GET
-    if (solicitud.method !== "GET") return;
-
-    const url = new URL(solicitud.url);
-
-    // No interceptar páginas externas
-    if (url.origin !== self.location.origin) return;
-
-    // Páginas: primero intentar conexión a internet
-    if (solicitud.mode === "navigate") {
-
-        event.respondWith(
-            fetch(solicitud)
-                .then(respuesta => {
-
-                    if (respuesta.ok) {
-                        const copia = respuesta.clone();
-
-                        caches.open(CACHE_NAME).then(cache => {
-                            cache.put(solicitud, copia);
-                        });
-                    }
-
-                    return respuesta;
-                })
-                .catch(async () => {
-
+    if (request.mode === "navigate") {
+        event.respondWith((async () => {
+            try {
+                const response = await fetch(request);
+                if (response && response.ok) {
                     const cache = await caches.open(CACHE_NAME);
-
-                    return (
-                        await cache.match(solicitud) ||
-                        await cache.match("./") ||
-                        await cache.match("./index.html") ||
-                        new Response(
-                            "No hay conexión a internet.",
-                            {
-                                status: 503,
-                                headers: {
-                                    "Content-Type": "text/plain; charset=utf-8"
-                                }
-                            }
-                        )
-                    );
-                })
-        );
-
+                    await cache.put(request, response.clone());
+                }
+                return response;
+            } catch (error) {
+                const cache = await caches.open(CACHE_NAME);
+                return (await cache.match(request)) ||
+                       (await cache.match(APP_ROOT)) ||
+                       (await cache.match(APP_ROOT + "index.html")) ||
+                       new Response("Sin conexión a internet.", {
+                           status: 503,
+                           headers: { "Content-Type": "text/plain; charset=utf-8" }
+                       });
+            }
+        })());
         return;
     }
 
-    // Archivos: utilizar caché y actualizar desde internet
-    event.respondWith(
-        caches.match(solicitud).then(respuestaCache => {
+    event.respondWith((async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cached = await cache.match(request);
 
-            const actualizacion = fetch(solicitud)
-                .then(respuesta => {
-
-                    if (respuesta.ok) {
-                        const copia = respuesta.clone();
-
-                        caches.open(CACHE_NAME).then(cache => {
-                            cache.put(solicitud, copia);
-                        });
-                    }
-
-                    return respuesta;
-                });
-
-            return respuestaCache || actualizacion;
-        })
-    );
+        try {
+            const response = await fetch(request);
+            if (response && response.ok) {
+                await cache.put(request, response.clone());
+            }
+            return response;
+        } catch (error) {
+            return cached || Response.error();
+        }
+    })());
 });
