@@ -1,16 +1,16 @@
-
 {
   "id": "./",
-  "name": "Mi Trabajo Grupo Garcia Corona",
-  "short_name": "GGC WOKS",
-  "description": "Aplicación web corporativa especial de GRUPO GARCIA CORONA y sus trabajadores internos por areas y en general",
+  "name": "Grupo García Corona",
+  "short_name": "Grupo GC",
+  "description": "Portal corporativo de Grupo García Corona",
   "lang": "es-MX",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#ffffff",
-  "theme_color": "#12345a",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png",
