@@ -1,28 +1,24 @@
 {
   "id": "/trabajo/",
   "name": "Grupo García Corona",
-  "short_name": "Grupo GC",
-  "description": "Portal corporativo de empresas de Grupo García Corona",
+  "short_name": "CGC WORKS",
+  "description": "Portal corporativo de Grupo García Corona. Acceso a servicios, empresas y herramientas digitales.",
   "lang": "es-MX",
+  "dir": "ltr",
   "start_url": "/trabajo/",
   "scope": "/trabajo/",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "any",
   "background_color": "#07111f",
   "theme_color": "#07111f",
   "prefer_related_applications": false,
-  "icons": [
-    {
-      "src": "https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    }
+  "categories": [
+    "business",
+    "productivity",
+    "utilities"
   ]
 }
