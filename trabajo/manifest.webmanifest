@@ -1,16 +1,16 @@
+
 {
   "id": "./",
-  "name": "Grupo García Corona",
-  "short_name": "Grupo GC",
-  "description": "Portal corporativo de Grupo García Corona",
+  "name": "Mi Trabajo Grupo Gracia Corona",
+  "short_name": "GGC WORKS",
+  "description": "Aplicación web institucional",
   "lang": "es-MX",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#07111f",
-  "theme_color": "#07111f",
-  "prefer_related_applications": false,
+  "background_color": "#ffffff",
+  "theme_color": "#12345a",
   "icons": [
     {
       "src": "https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png",
