@@ -6,9 +6,22 @@
 
     <title>Tu Trabajo GRUPO GARCIA CORONA</title>
 
-     <!-- LOGOTIPO EN LA PESTAÑA DE CHROME -->
-<link rel="icon" type="image/png"
-href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
+    <!-- LOGOTIPO EN LA PESTAÑA DE CHROME -->
+    <link rel="icon" type="image/png"
+    href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
+
+    <!-- CONFIGURACIÓN PWA -->
+    <link rel="manifest" href="./manifiesto.webmanifiesto"
+    type="application/manifest+json">
+
+    <meta name="theme-color" content="#07111f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Grupo García Corona">
+
+    <link rel="apple-touch-icon"
+    href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
 
     <meta name="description" content="Portal corporativo de empresas de Company García Corona. Selecciona la empresa o área a la que deseas acceder.">
 
@@ -115,6 +128,41 @@ href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
             color: #b9c7d8;
             font-size: 16px;
             line-height: 1.7;
+        }
+
+        /* =========================
+           BOTÓN INSTALAR PWA
+        ========================= */
+
+        .boton-instalar {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 22px;
+            padding: 13px 23px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.18);
+            background: linear-gradient(135deg, #1769ff, #5944d6);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(23,105,255,0.25);
+            transition: 0.3s ease;
+        }
+
+        .boton-instalar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(23,105,255,0.4);
+        }
+
+        .boton-instalar:active {
+            transform: scale(0.97);
+        }
+
+        .boton-instalar[hidden] {
+            display: none;
         }
 
         /* =========================
@@ -475,6 +523,11 @@ href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
             a la que deseas acceder.
         </p>
 
+        <!-- BOTÓN PARA INSTALAR LA APLICACIÓN -->
+        <button id="instalarPWA" class="boton-instalar" type="button">
+            📲 Instalar aplicación
+        </button>
+
     </header>
 
 
@@ -683,7 +736,75 @@ href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
         Todos los derechos reservados.
 
     </footer>
- 
+
+    <!-- =====================================
+         INSTALACIÓN Y SERVICE WORKER PWA
+    ===================================== -->
+
+    <script>
+        let instalacionPendiente = null;
+
+        const botonInstalar = document.getElementById("instalarPWA");
+
+        // Detectar si el navegador permite instalar la PWA
+        window.addEventListener("beforeinstallprompt", (evento) => {
+            evento.preventDefault();
+            instalacionPendiente = evento;
+            botonInstalar.textContent = "📲 Instalar aplicación";
+        });
+
+        // Instalar aplicación
+        botonInstalar.addEventListener("click", async () => {
+
+            if (instalacionPendiente) {
+
+                instalacionPendiente.prompt();
+
+                const resultado = await instalacionPendiente.userChoice;
+
+                if (resultado.outcome === "accepted") {
+                    botonInstalar.textContent = "✓ Instalación aceptada";
+                }
+
+                instalacionPendiente = null;
+
+            } else {
+
+                const instalada =
+                    window.matchMedia("(display-mode: standalone)").matches ||
+                    window.navigator.standalone === true;
+
+                if (instalada) {
+                    alert("La aplicación ya está instalada.");
+                } else {
+                    alert(
+                        "Para instalar Grupo García Corona:\n\n" +
+                        "Android: abre el menú de Chrome y selecciona 'Instalar aplicación' o 'Agregar a pantalla principal'.\n\n" +
+                        "iPhone: abre el menú Compartir de Safari y selecciona 'Agregar a pantalla de inicio'.\n\n" +
+                        "Computadora: busca el icono de instalación en la barra de direcciones de Chrome o Edge."
+                    );
+                }
+            }
+        });
+
+        // Detectar instalación completada
+        window.addEventListener("appinstalled", () => {
+            botonInstalar.textContent = "✓ Aplicación instalada";
+            instalacionPendiente = null;
+        });
+
+        // Registrar Service Worker
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", async () => {
+                try {
+                    await navigator.serviceWorker.register("./sw.js");
+                    console.log("PWA: Service Worker registrado correctamente.");
+                } catch (error) {
+                    console.error("Error al registrar Service Worker:", error);
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>
