@@ -71,12 +71,49 @@
       .archivo-acciones button{width:100%;flex:initial}
       .tab{padding:10px 9px;font-size:14px}
     }
+
+    /* Identidad visual Grupo García Corona y composición centrada */
+    body{max-width:none;min-height:100vh;margin:0;padding:34px 18px;background:radial-gradient(circle at 15% 0%,#e8f1ff 0,transparent 34%),linear-gradient(135deg,#f4f7fb,#eef3f9);color:#172338}
+    #seccion-auth,#seccion-app{width:min(100%,980px);margin:0 auto}
+    .card{border:1px solid #e5ebf3;border-radius:20px;padding:28px;box-shadow:0 14px 40px rgba(15,35,65,.07)}
+    .auth-card{width:min(100%,480px);margin:5vh auto 0;padding:34px;text-align:center}
+    .marca-principal{display:flex;flex-direction:column;align-items:center;gap:9px;margin:0 auto 25px;color:#53647b;font-size:11px;font-weight:800;letter-spacing:2px}
+    .logo-cgc{width:92px;height:92px;object-fit:contain;display:block}
+    .auth-card h1{font-size:23px;line-height:1.25;margin:0 0 25px;color:#10243a}
+    .auth-card h2{text-align:left;margin:18px 0 12px}
+    .auth-card input{text-align:left;height:48px;border-radius:11px;background:#fbfdff}
+    .auth-card button{height:48px;border-radius:11px;margin-top:10px}
+    .encabezado-app{align-items:center;margin:0 0 24px;padding:16px 20px;background:#fff;border:1px solid #e5ebf3;border-radius:18px;box-shadow:0 8px 26px rgba(15,35,65,.05)}
+    .marca-app{display:flex;align-items:center;gap:13px}.marca-app .logo-cgc{width:54px;height:54px}.marca-app h1{font-size:23px;margin:0;color:#10243a}.submarca{font-size:10px;letter-spacing:1.6px;font-weight:800;color:#718198}
+    .usuario-barra{justify-content:flex-end}.usuario-barra button{border-radius:9px;padding:10px 17px}
+    .nav-tabs{border:0;background:#e8eef6;border-radius:13px;padding:5px;gap:5px}
+    .tab{border:0;border-radius:9px;padding:11px 17px;color:#52647b}.tab.activa{background:#fff;color:#1557a6;box-shadow:0 2px 8px #0f172a12}
+    .card h2{color:#142c49;margin-top:0;margin-bottom:16px}
+    .zona-subida{border-radius:15px;background:#f8fbff;border-color:#b8c9dd;padding:36px 18px}
+    .zona-subida:hover,.zona-subida.arrastrando{background:#edf5ff;border-color:#3478c8}
+    input,button{border-radius:10px}button{min-height:40px}
+    .archivo-item{padding:17px 4px}.archivo-info strong{color:#183451}
+    .visor-publico{position:fixed;inset:0;z-index:20000;overflow-y:auto;padding:30px 18px 24px;background:radial-gradient(circle at 50% -10%,#254c79 0,#142b49 42%,#0b1728 100%);color:#fff;display:flex;align-items:center;justify-content:center}
+    .publico-shell{width:min(100%,1120px);margin:auto;display:flex;flex-direction:column;align-items:stretch;gap:17px}
+    .publico-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 4px}
+    .publico-marca{display:flex;align-items:center;gap:14px;min-width:0}.logo-publico{width:62px;height:62px;object-fit:contain;background:#fff;border-radius:15px;padding:6px;flex:none}
+    .publico-marca>div{display:flex;flex-direction:column;gap:5px;min-width:0}.publico-overline{font-size:10px;letter-spacing:2px;color:#9eb7d5;font-weight:800}.publico-marca strong{font-size:clamp(15px,2.5vw,21px);overflow-wrap:anywhere;color:#fff}
+    .publico-cerrar{width:auto;min-width:104px;margin:0;padding:11px 17px;border:1px solid #ffffff38;background:#ffffff12;color:#fff;border-radius:11px}.publico-cerrar span{font-size:20px;vertical-align:-1px;margin-right:4px}
+    .publico-documento{width:100%;height:min(72vh,780px);min-height:360px;padding:9px;background:#fff;border-radius:18px;box-shadow:0 24px 70px #0005}
+    .publico-contenido{width:100%;height:100%;overflow:hidden;border-radius:11px;background:#f8fafc;color:#25364b;display:flex;align-items:center;justify-content:center;text-align:center}
+    .publico-contenido img{max-width:100%;max-height:100%;object-fit:contain}.publico-contenido iframe{width:100%;height:100%;border:0;border-radius:9px}
+    .publico-nota{text-align:center;color:#b7c8dc;font-size:12px;line-height:1.5;margin:0}.candado{display:inline-grid;place-items:center;width:19px;height:19px;border:1px solid #7893b2;border-radius:50%;margin-right:5px}
+    @media(max-width:600px){body{padding:15px 11px}.auth-card{margin:3vh auto 0;padding:25px 20px}.card{padding:19px;border-radius:16px}.encabezado-app{padding:13px;gap:10px}.marca-app{gap:9px}.marca-app .logo-cgc{width:43px;height:43px}.marca-app h1{font-size:20px}.usuario-barra{width:100%;justify-content:space-between}.publico-shell{gap:13px}.visor-publico{padding:16px 11px}.logo-publico{width:48px;height:48px;border-radius:12px}.publico-overline{font-size:9px;letter-spacing:1.2px}.publico-cerrar{min-width:86px;padding:9px 11px}.publico-documento{height:calc(100dvh - 150px);min-height:300px;padding:5px;border-radius:13px}}
   </style>
 </head>
 <body>
 
-<div id="seccion-auth" class="card">
-  <h1>🔐 Acceso al Sistema de Archivos</h1>
+<div id="seccion-auth" class="card auth-card">
+  <div class="marca-principal">
+    <img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png" alt="Grupo García Corona" class="logo-cgc">
+    <span>GRUPO GARCÍA CORONA</span>
+  </div>
+  <h1>Acceso al Sistema de Archivos</h1>
 
   <div id="form-login">
     <h2>Iniciar sesión</h2>
@@ -98,7 +135,7 @@
 
 <div id="seccion-app" class="oculto">
   <div class="encabezado-app">
-    <h1>📂 Mis Archivos</h1>
+    <div class="marca-app"><img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png" alt="Grupo García Corona" class="logo-cgc"><div><h1>Mis Archivos</h1><span class="submarca">GRUPO GARCÍA CORONA</span></div></div>
     <div class="usuario-barra">
       <span id="usuario-email" class="etiqueta"></span>
       <button class="btn-peligro" onclick="cerrarSesion()">Salir</button>
@@ -145,13 +182,20 @@
   <button class="visor-cerrar" type="button" onclick="cerrarVisorImagen()">Cerrar</button>
 </div>
 
-<div id="visor-enlace-publico" class="oculto" style="position:fixed;inset:0;z-index:20000;background:#0f172a;color:#fff;padding:18px;overflow:auto">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;max-width:1100px;margin:0 auto 14px">
-    <strong id="publico-nombre">Visualización de archivo</strong>
-    <button type="button" onclick="cerrarVistaUnica()" style="width:auto;background:#dc2626;color:#fff;padding:10px 16px">Cerrar ×</button>
-  </div>
-  <div id="publico-contenido" style="height:calc(100vh - 90px);max-width:1100px;margin:auto;background:#fff;border-radius:10px;overflow:hidden;color:#111;display:flex;align-items:center;justify-content:center"></div>
-  <p style="text-align:center;color:#cbd5e1;font-size:12px;margin-top:8px">Este enlace es de un solo uso. Al cerrar esta vista no podrás volver a abrirlo.</p>
+<div id="visor-enlace-publico" class="visor-publico oculto">
+  <main class="publico-shell">
+    <header class="publico-header">
+      <div class="publico-marca">
+        <img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png" alt="Grupo García Corona" class="logo-publico">
+        <div><span class="publico-overline">GRUPO GARCÍA CORONA</span><strong id="publico-nombre">Visualización de archivo</strong></div>
+      </div>
+      <button type="button" class="publico-cerrar" onclick="cerrarVistaUnica()"><span aria-hidden="true">×</span> Cerrar</button>
+    </header>
+    <section class="publico-documento">
+      <div id="publico-contenido" class="publico-contenido">Preparando visualización…</div>
+    </section>
+    <p class="publico-nota"><span class="candado">⌑</span> Acceso privado de un solo uso. Al cerrar esta vista, el enlace dejará de estar disponible.</p>
+  </main>
 </div>
 
 <script>
@@ -616,13 +660,16 @@ async function abrirVistaUnica(token) {
     const hashBuffer=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(token));
     const tokenHash=Array.from(new Uint8Array(hashBuffer)).map(x=>x.toString(16).padStart(2,'0')).join('');
     const {data,error}=await db.rpc('consumir_enlace_visualizacion_unica',{p_token_hash:tokenHash});
-    if(error || !data || !data.url_firmada) throw new Error(error?.message || 'El enlace ya fue utilizado, venció o fue revocado.');
-    document.getElementById('publico-nombre').textContent=data.nombre_archivo;
+    // PostgREST devuelve RETURNS TABLE como un arreglo; tomar el primer registro.
+    const registro = Array.isArray(data) ? data[0] : data;
+    if(error) throw new Error(error.message || 'No se pudo validar el enlace.');
+    if(!registro || !registro.url_firmada) throw new Error('El enlace ya fue utilizado, venció o fue revocado. Genera uno nuevo desde tu cuenta.');
+    document.getElementById('publico-nombre').textContent=registro.nombre_archivo || 'Archivo compartido';
     contenido.innerHTML='';
-    if (/\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(data.nombre_archivo)) {
-      const img=document.createElement('img'); img.src=data.url_firmada; img.alt=data.nombre_archivo; img.style='max-width:100%;max-height:100%;object-fit:contain'; contenido.appendChild(img);
+    if (/\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(registro.nombre_archivo || '')) {
+      const img=document.createElement('img'); img.src=registro.url_firmada; img.alt=registro.nombre_archivo || 'Vista previa'; img.style='max-width:100%;max-height:100%;object-fit:contain'; contenido.appendChild(img);
     } else {
-      const frame=document.createElement('iframe'); frame.src=data.url_firmada; frame.title=data.nombre_archivo; frame.style='width:100%;height:100%;border:0'; contenido.appendChild(frame);
+      const frame=document.createElement('iframe'); frame.src=registro.url_firmada; frame.title=registro.nombre_archivo || 'Vista previa'; frame.style='width:100%;height:100%;border:0'; contenido.appendChild(frame);
     }
     history.replaceState({},'',location.pathname);
   } catch(err) { contenido.textContent='No se pudo abrir la visualización: '+err.message; }
