@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102b46">
+<meta name="description" content="Sistema de Administración de Trabajadores de Grupo García Corona">
+<title>Administración de Trabajadores | GGC</title>
+<link rel="icon" href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--navy:#102b46;--blue:#175b88;--cyan:#0e7490;--ink:#172b3d;--muted:#718096;--line:#e3eaf0;--bg:#f3f6f9;--white:#fff;--green:#16804a;--red:#bd3434;--shadow:0 12px 35px rgba(16,43,70,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Arial,sans-serif;color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.topbar{background:var(--navy);color:#fff;padding:15px 4%;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 4px 16px #102b4625}.brand{display:flex;align-items:center;gap:13px;min-width:0}.brand img{width:54px;height:54px;object-fit:contain;background:#fff;border-radius:10px;padding:4px}.brand strong{display:block;font-size:15px;letter-spacing:.4px}.brand small{display:block;color:#c7d8e6;font-size:11px;margin-top:4px}.top-actions{display:flex;align-items:center;gap:10px}.user-label{font-size:12px;color:#d6e2ec}
+.wrap{max-width:1500px;margin:28px auto;padding:0 24px}.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:22px}.eyebrow{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}.page-head h1{margin:7px 0 5px;font-size:27px;color:var(--navy)}.page-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+.tabs{display:flex;gap:8px;margin:22px 0 18px;border-bottom:1px solid var(--line)}.tab{border:0;background:transparent;color:#65788a;padding:13px 17px;font-weight:700;font-size:13px;border-bottom:3px solid transparent}.tab.active{color:var(--blue);border-color:var(--blue)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);padding:22px;margin-bottom:20px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.panel-head h2{font-size:17px;color:var(--navy);margin:0}.panel-head p{font-size:12px;color:var(--muted);margin:5px 0 0}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}.stat{padding:17px;border:1px solid var(--line);border-radius:12px;background:#fff}.stat span{font-size:11px;color:var(--muted);font-weight:600}.stat strong{display:block;font-size:25px;color:var(--navy);margin-top:8px}
+.btn{border:0;border-radius:9px;padding:11px 15px;font-size:12px;font-weight:700;transition:.15s}.btn-primary{background:var(--blue);color:#fff}.btn-primary:hover{background:var(--navy)}.btn-light{background:#edf3f7;color:var(--navy)}.btn-danger{background:#fff0f0;color:var(--red)}.btn-success{background:#eaf7ef;color:var(--green)}.btn:disabled{opacity:.55;cursor:not-allowed}
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px}.search{max-width:420px;flex:1}.field input,.field select,.search{width:100%;border:1px solid #d7e0e8;border-radius:9px;padding:12px 13px;background:#fff;color:var(--ink);outline:none;font-size:13px}.field input:focus,.field select:focus,.search:focus{border-color:#3984b5;box-shadow:0 0 0 3px #175b8815}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px}table{width:100%;border-collapse:collapse;min-width:1100px}th{background:#f5f8fa;color:#607487;font-size:10px;text-transform:uppercase;letter-spacing:.65px;text-align:left;padding:13px 12px;white-space:nowrap}td{padding:13px 12px;border-top:1px solid #edf1f4;font-size:12px;vertical-align:middle}tbody tr:hover{background:#fafcfd}.person{font-weight:700;color:var(--navy)}.sub{font-size:11px;color:var(--muted);margin-top:4px}.pill{display:inline-block;padding:5px 9px;border-radius:30px;font-size:10px;font-weight:800}.pill.active{background:#e8f6ed;color:#167342}.pill.inactive{background:#fff0f0;color:#b33232}.actions{display:flex;gap:6px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.field label{display:block;font-size:11px;font-weight:700;color:#41576a;margin:0 0 7px}.field small{display:block;color:var(--muted);font-size:10px;margin-top:5px}.section-label{grid-column:1/-1;border-bottom:1px solid var(--line);padding-bottom:9px;margin-top:7px;color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}.full{grid-column:1/-1}.generated{background:#f3f7fa!important;color:var(--blue)!important;font-weight:700}.notice{padding:12px 14px;background:#eef6fb;border:1px solid #d9eaf5;border-radius:9px;color:#36566e;font-size:11px;line-height:1.6}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+.message{padding:11px 13px;border-radius:9px;font-size:12px;margin-bottom:14px;line-height:1.5}.message.error{background:#fff0f0;color:#a12e2e}.message.ok{background:#eaf7ef;color:#176b40}
+.overlay{position:fixed;inset:0;background:#071a2bd9;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px}.login{width:100%;max-width:420px;background:#fff;border-radius:17px;padding:30px;box-shadow:0 20px 70px #0004}.login img{width:75px;height:75px;object-fit:contain;display:block;margin:0 auto 15px}.login h2{text-align:center;color:var(--navy);font-size:20px;margin:0 0 7px}.login p{text-align:center;color:var(--muted);font-size:12px;margin:0 0 22px}.login .field{margin:13px 0}.login button{width:100%;margin-top:10px}.footer{text-align:center;color:#8a99a7;font-size:10px;padding:20px}
+#toast{position:fixed;bottom:20px;right:20px;z-index:40;max-width:360px;padding:13px 17px;background:var(--navy);color:white;border-radius:10px;font-size:12px;box-shadow:var(--shadow)}
+@media(max-width:760px){.topbar{padding:12px 16px}.brand img{width:44px;height:44px}.brand strong{font-size:12px}.user-label{display:none}.wrap{padding:0 13px;margin:20px auto}.page-head{display:block}.page-head h1{font-size:23px}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:21px}.panel{padding:15px}.form-grid{grid-template-columns:1fr}.section-label,.full{grid-column:1}.toolbar{flex-wrap:wrap}.search{max-width:none;min-width:100%}.tabs{overflow:auto}.tab{white-space:nowrap;padding:12px 10px}.form-actions{flex-direction:column-reverse}.form-actions button{width:100%}}
+</style>
+</head>
+<body>
+<header class="topbar">
+ <div class="brand"><img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png" alt="Logo GGC"><div><strong>GRUPO GARCÍA CORONA</strong><small>SISTEMA DE ADMINISTRACIÓN DE TRABAJADORES</small></div></div>
+ <div class="top-actions"><span class="user-label" id="adminEmail"></span><button class="btn btn-light hidden" id="logoutBtn" onclick="logout()">Cerrar sesión</button></div>
+</header>
+
+<div class="wrap hidden" id="app">
+ <div class="page-head"><div><div class="eyebrow">Administración corporativa</div><h1>Gestión de trabajadores</h1><p>Consulta, registra y administra las cuentas institucionales del personal.</p></div></div>
+ <div class="stats">
+  <div class="stat"><span>TOTAL DE TRABAJADORES</span><strong id="totalCount">0</strong></div>
+  <div class="stat"><span>CUENTAS ACTIVAS</span><strong id="activeCount">0</strong></div>
+  <div class="stat"><span>CUENTAS INACTIVAS</span><strong id="inactiveCount">0</strong></div>
+ </div>
+ <nav class="tabs">
+  <button class="tab active" id="tabList" onclick="showSection('list')">Trabajadores registrados</button>
+  <button class="tab" id="tabForm" onclick="showSection('form')">Registrar trabajador</button>
+ </nav>
+ <section id="listSection" class="panel">
+  <div class="panel-head"><div><h2>Directorio de trabajadores</h2><p>La contraseña nunca se muestra ni se almacena en esta tabla.</p></div><button class="btn btn-light" onclick="loadWorkers()">↻ Actualizar</button></div>
+  <div class="toolbar"><input class="search" id="searchBox" placeholder="Buscar por nombre, correo, CURP o número de trabajador..." oninput="renderWorkers()"></div>
+  <div id="listMessage"></div>
+  <div class="table-wrap"><table><thead><tr>
+   <th>Trabajador</th><th>Número de trabajador</th><th>Correo institucional</th><th>CURP</th><th>RFC</th><th>Fecha nacimiento</th><th>Teléfono</th><th>Correo personal</th><th>Estado</th><th>Acciones</th>
+  </tr></thead><tbody id="workersBody"><tr><td colspan="10">Cargando información...</td></tr></tbody></table></div>
+ </section>
+ <section id="formSection" class="panel hidden">
+  <div class="panel-head"><div><h2>Alta de trabajador</h2><p>Completa la información para generar sus credenciales institucionales.</p></div></div>
+  <div id="formMessage"></div>
+  <form id="workerForm" onsubmit="createWorker(event)">
+   <div class="form-grid">
+    <div class="section-label">Información personal</div>
+    <div class="field"><label for="nombre">Nombre(s) *</label><input id="nombre" required maxlength="100" autocomplete="given-name"></div>
+    <div class="field"><label for="apellidos">Apellidos *</label><input id="apellidos" required maxlength="120" autocomplete="family-name"></div>
+    <div class="field"><label for="curp">CURP *</label><input id="curp" required maxlength="18" minlength="18" style="text-transform:uppercase" placeholder="18 caracteres"></div>
+    <div class="field"><label for="rfc">RFC (opcional)</label><input id="rfc" maxlength="13" style="text-transform:uppercase" placeholder="RFC si cuenta con él"></div>
+    <div class="field"><label for="fecha_nacimiento">Fecha de nacimiento *</label><input id="fecha_nacimiento" type="date" required></div>
+    <div class="field"><label for="telefono">Número de teléfono *</label><input id="telefono" type="tel" required maxlength="20" autocomplete="tel"></div>
+    <div class="field full"><label for="correo_personal">Correo electrónico personal *</label><input id="correo_personal" type="email" required maxlength="254" autocomplete="email"></div>
+    <div class="section-label">Credenciales institucionales</div>
+    <div class="field full"><label>Correo institucional generado</label><input id="correo_preview" class="generated" readonly placeholder="Se genera automáticamente al escribir nombre y apellidos"><small>Dominio institucional: @grupogarciacorona.com.mx</small></div>
+    <div class="field full"><label>Número de trabajador</label><input class="generated" value="Se asignará automáticamente (10 dígitos)" readonly></div>
+    <div class="field full"><label>Contraseña inicial</label><div style="display:flex;gap:8px"><input id="passwordPreview" class="generated" readonly style="flex:1" value="Se generará automáticamente"><button type="button" class="btn btn-light" onclick="generatePassword()">Generar otra</button></div><small>Se mostrará una sola vez al finalizar el registro. Entrégala al trabajador por un canal seguro.</small></div>
+    <div class="field"><label for="estado">Estado de la cuenta *</label><select id="estado"><option value="true">Activo</option><option value="false">Inactivo</option></select></div>
+    <div class="field"><label>Acceso institucional</label><input class="generated" readonly value="Correo o número de trabajador + contraseña"></div>
+    <div class="full notice">Al registrar, se creará una cuenta en Supabase Authentication y su expediente en la tabla de trabajadores. El correo institucional es un identificador de acceso; para recibir correos reales en ese dominio deberá existir el servicio de correo correspondiente.</div>
+   </div>
+   <div class="form-actions"><button type="button" class="btn btn-light" onclick="resetForm()">Limpiar formulario</button><button type="submit" class="btn btn-primary" id="submitBtn">Registrar trabajador</button></div>
+  </form>
+  <div id="credentialsResult" class="hidden" style="margin-top:18px"></div>
+ </section>
+</div>
+
+<div class="overlay" id="loginOverlay">
+ <form class="login" onsubmit="login(event)">
+  <img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png" alt="GGC">
+  <h2>Acceso administrativo</h2><p>Inicia sesión con una cuenta autorizada para administrar trabajadores.</p>
+  <div id="loginMessage"></div>
+  <div class="field"><label for="loginEmail">Correo de administrador</label><input id="loginEmail" type="email" required autocomplete="username"></div>
+  <div class="field"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
+  <button class="btn btn-primary" id="loginBtn" type="submit">Iniciar sesión</button>
+ </form>
+</div>
+<div class="footer">Corporación 2026 Grupo García Corona · Todos los derechos reservados</div>
+<div id="toast" class="hidden"></div>
+
+<script>
+const SUPABASE_URL = "https://hzktqlwqhjskafwtrirg.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_w7pi0be3XWd7yK46fKw7PA_nkwCKho4";
+const FUNCTION_URL = SUPABASE_URL + "/functions/v1/administrar-trabajadores";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+let workers = [];
+let generatedPassword = "";
+
+function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.remove("hidden");setTimeout(()=>el.classList.add("hidden"),4200)}
+function showMessage(id,msg,type="error"){const el=document.getElementById(id);el.innerHTML="";const d=document.createElement("div");d.className="message "+type;d.textContent=msg;el.appendChild(d)}
+function clearMessage(id){document.getElementById(id).innerHTML=""}
+function showSection(which){
+ document.getElementById("listSection").classList.toggle("hidden",which!=="list");
+ document.getElementById("formSection").classList.toggle("hidden",which!=="form");
+ document.getElementById("tabList").classList.toggle("active",which==="list");
+ document.getElementById("tabForm").classList.toggle("active",which==="form");
+ if(which==="list")loadWorkers();
+}
+async function login(e){
+ e.preventDefault();clearMessage("loginMessage");
+ const btn=document.getElementById("loginBtn");btn.disabled=true;btn.textContent="Verificando...";
+ const {data,error}=await sb.auth.signInWithPassword({email:document.getElementById("loginEmail").value.trim(),password:document.getElementById("loginPassword").value});
+ btn.disabled=false;btn.textContent="Iniciar sesión";
+ if(error){showMessage("loginMessage","No fue posible iniciar sesión. Verifica tus credenciales.");return}
+ await initialize();
+}
+async function logout(){await sb.auth.signOut();document.getElementById("app").classList.add("hidden");document.getElementById("logoutBtn").classList.add("hidden");document.getElementById("loginOverlay").classList.remove("hidden")}
+async function initialize(){
+ const {data:{user}}=await sb.auth.getUser();
+ if(!user)return;
+ document.getElementById("loginOverlay").classList.add("hidden");
+ document.getElementById("app").classList.remove("hidden");
+ document.getElementById("logoutBtn").classList.remove("hidden");
+ document.getElementById("adminEmail").textContent=user.email||"Administrador";
+ await loadWorkers();
+}
+async function loadWorkers(){
+ const body=document.getElementById("workersBody");body.innerHTML='<tr><td colspan="10">Cargando información...</td></tr>';
+ const {data,error}=await sb.from("trabajadores").select("id,nombre,apellidos,curp,rfc,fecha_nacimiento,telefono,correo_personal,correo_institucional,numero_trabajador,activo,created_at").order("created_at",{ascending:false});
+ if(error){body.innerHTML='<tr><td colspan="10">No se pudo cargar el directorio. Verifica que tu cuenta tenga permisos de administrador y que hayas ejecutado el SQL.</td></tr>';return}
+ workers=data||[];renderWorkers();
+ document.getElementById("totalCount").textContent=workers.length;
+ document.getElementById("activeCount").textContent=workers.filter(x=>x.activo).length;
+ document.getElementById("inactiveCount").textContent=workers.filter(x=>!x.activo).length;
+}
+function cell(value){const td=document.createElement("td");td.textContent=value||"—";return td}
+function renderWorkers(){
+ const q=(document.getElementById("searchBox").value||"").toLowerCase();
+ const body=document.getElementById("workersBody");body.innerHTML="";
+ const rows=workers.filter(w=>[w.nombre,w.apellidos,w.curp,w.rfc,w.telefono,w.correo_personal,w.correo_institucional,w.numero_trabajador].join(" ").toLowerCase().includes(q));
+ if(!rows.length){body.innerHTML='<tr><td colspan="10">No hay trabajadores que coincidan con la búsqueda.</td></tr>';return}
+ rows.forEach(w=>{
+  const tr=document.createElement("tr");
+  const person=document.createElement("td");const n=document.createElement("div");n.className="person";n.textContent=w.nombre+" "+w.apellidos;const s=document.createElement("div");s.className="sub";s.textContent="Registrado: "+new Date(w.created_at).toLocaleDateString("es-MX");person.append(n,s);tr.append(person);
+  tr.append(cell(w.numero_trabajador),cell(w.correo_institucional),cell(w.curp),cell(w.rfc),cell(w.fecha_nacimiento),cell(w.telefono),cell(w.correo_personal));
+  const status=document.createElement("td");const pill=document.createElement("span");pill.className="pill "+(w.activo?"active":"inactive");pill.textContent=w.activo?"ACTIVO":"INACTIVO";status.append(pill);tr.append(status);
+  const actions=document.createElement("td");const btn=document.createElement("button");btn.className="btn "+(w.activo?"btn-danger":"btn-success");btn.textContent=w.activo?"Desactivar":"Activar";btn.onclick=()=>changeStatus(w,!w.activo);actions.append(btn);tr.append(actions);body.append(tr);
+ });
+}
+async function invokeAdmin(payload){
+ const {data:{session}}=await sb.auth.getSession();
+ if(!session)throw new Error("La sesión expiró. Inicia sesión nuevamente.");
+ const response=await fetch(FUNCTION_URL,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_PUBLISHABLE_KEY,"Authorization":"Bearer "+session.access_token},body:JSON.stringify(payload)});
+ const result=await response.json().catch(()=>({}));
+ if(!response.ok)throw new Error(result.error||result.detalle||"No se pudo completar la operación.");
+ return result;
+}
+async function changeStatus(worker,active){
+ const action=active?"activar":"desactivar";
+ if(!confirm("¿Confirmas "+action+" la cuenta de "+worker.nombre+" "+worker.apellidos+"?"))return;
+ try{await invokeAdmin({action:"set_status",id:worker.id,activo:active});toast("Estado actualizado correctamente.");await loadWorkers()}
+ catch(e){toast(e.message)}
+}
+function normalizeName(s){return s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"").trim()}
+function updateEmailPreview(){const n=normalizeName(document.getElementById("nombre").value);const a=normalizeName(document.getElementById("apellidos").value);document.getElementById("correo_preview").value=(n&&a)?n+"."+a+"@grupogarciacorona.com.mx":""}
+document.getElementById("nombre").addEventListener("input",updateEmailPreview);
+document.getElementById("apellidos").addEventListener("input",updateEmailPreview);
+function generatePassword(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";const bytes=new Uint8Array(18);crypto.getRandomValues(bytes);generatedPassword=Array.from(bytes,b=>chars[b%chars.length]).join("");document.getElementById("passwordPreview").value=generatedPassword}
+function resetForm(){document.getElementById("workerForm").reset();generatedPassword="";document.getElementById("passwordPreview").value="Se generará automáticamente";document.getElementById("correo_preview").value="";clearMessage("formMessage");document.getElementById("credentialsResult").classList.add("hidden")}
+async function createWorker(e){
+ e.preventDefault();clearMessage("formMessage");document.getElementById("credentialsResult").classList.add("hidden");
+ const curp=document.getElementById("curp").value.trim().toUpperCase();
+ if(!/^[A-Z0-9]{18}$/.test(curp)){showMessage("formMessage","La CURP debe contener exactamente 18 caracteres alfanuméricos.");return}
+ const rfc=document.getElementById("rfc").value.trim().toUpperCase();
+ if(rfc && !/^[A-Z0-9Ñ&]{12,13}$/.test(rfc)){showMessage("formMessage","Verifica el formato del RFC.");return}
+ if(!generatedPassword)generatePassword();
+ const payload={action:"create",nombre:document.getElementById("nombre").value.trim(),apellidos:document.getElementById("apellidos").value.trim(),curp,rfc:rfc||null,fecha_nacimiento:document.getElementById("fecha_nacimiento").value,telefono:document.getElementById("telefono").value.trim(),correo_personal:document.getElementById("correo_personal").value.trim(),password:generatedPassword,activo:document.getElementById("estado").value==="true"};
+ const btn=document.getElementById("submitBtn");btn.disabled=true;btn.textContent="Registrando...";
+ try{
+  const result=await invokeAdmin(payload);
+  const box=document.getElementById("credentialsResult");box.classList.remove("hidden");box.innerHTML="";
+  const title=document.createElement("h3");title.textContent="Trabajador registrado correctamente";title.style.color="#176b40";box.append(title);
+  const p=document.createElement("p");p.textContent="Guarda y entrega estas credenciales al trabajador. La contraseña no volverá a mostrarse.";box.append(p);
+  const pre=document.createElement("pre");pre.style.cssText="white-space:pre-wrap;background:#f2f6f9;padding:15px;border-radius:9px;font:13px Inter,Arial;color:#173b57";
+  const trabajador=result.trabajador||{};
+  pre.textContent="Nombre: "+(trabajador.nombre||payload.nombre)+" "+(trabajador.apellidos||payload.apellidos)+"\nCorreo institucional: "+(trabajador.correo_institucional||"No devuelto por el servidor")+"\nNúmero de trabajador: "+(trabajador.numero_trabajador||"No devuelto por el servidor")+"\nContraseña temporal: "+(result.password_temporal||generatedPassword)+"\nEstado: "+((trabajador.activo??payload.activo)?"ACTIVO":"INACTIVO");box.append(pre);
+  const copy=document.createElement("button");copy.className="btn btn-light";copy.textContent="Copiar credenciales";copy.onclick=()=>navigator.clipboard.writeText(pre.textContent).then(()=>toast("Credenciales copiadas."));box.append(copy);
+  document.getElementById("workerForm").reset();generatedPassword="";document.getElementById("passwordPreview").value="Se generará automáticamente";document.getElementById("correo_preview").value="";
+  toast("Registro completado.");await loadWorkers();
+ }catch(err){showMessage("formMessage",err.message)}
+ finally{btn.disabled=false;btn.textContent="Registrar trabajador"}
+}
+(async()=>{const {data:{session}}=await sb.auth.getSession();if(session)await initialize()})();
+</script>
+</body>
+</html>
