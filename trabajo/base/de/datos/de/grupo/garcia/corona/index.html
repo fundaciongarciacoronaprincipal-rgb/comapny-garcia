@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2563eb">
+  <title>Mis Archivos | Grupo García Corona</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif}
+    body{background:#f8fafc;color:#1e293b;max-width:1000px;margin:0 auto;padding:20px}
+    .oculto{display:none!important}
+    .card{background:#fff;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+    h1{font-size:24px;margin-bottom:24px;color:#0f172a}
+    h2{font-size:18px;margin:20px 0 12px;color:#334155}
+    input,button{width:100%;padding:12px 14px;border-radius:8px;font-size:15px;margin:6px 0}
+    input{border:1px solid #cbd5e1}
+    button{border:0;cursor:pointer;font-weight:600;transition:background .2s}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .btn-primario{background:#2563eb;color:#fff}
+    .btn-primario:hover{background:#1d4ed8}
+    .btn-exito{background:#16a34a;color:#fff}
+    .btn-exito:hover{background:#15803d}
+    .btn-peligro{background:#dc2626;color:#fff;padding:7px 10px;width:auto}
+    .btn-compartir{background:#f59e0b;color:#fff;padding:7px 10px;width:auto}
+    .mensaje{padding:10px 14px;border-radius:6px;margin:10px 0;display:none;overflow-wrap:anywhere}
+    .mensaje.exito{background:#dcfce7;color:#166534;display:block}
+    .mensaje.error{background:#fee2e2;color:#991b1b;display:block}
+    .archivo-item{padding:14px 0;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+    .archivo-item:last-child{border-bottom:0}
+    .archivo-info{min-width:180px;flex:1;overflow-wrap:anywhere}
+    .archivo-acciones{display:flex;flex-wrap:wrap;gap:6px}
+    .archivo-acciones button{width:auto;margin:0}
+    .etiqueta{font-size:13px;color:#64748b}
+    .compartido-badge{display:inline-block;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:12px;font-size:12px;margin:5px 5px 0 0}
+    .nav-tabs{display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #e2e8f0;overflow-x:auto}
+    .tab{padding:10px 16px;cursor:pointer;border-bottom:3px solid transparent;font-weight:600;white-space:nowrap}
+    .tab.activa{border-bottom-color:#2563eb;color:#2563eb}
+    .zona-subida{border:2px dashed #cbd5e1;border-radius:8px;padding:30px;text-align:center;margin:15px 0;cursor:pointer;transition:.2s}
+    .zona-subida:hover,.zona-subida.arrastrando{border-color:#2563eb;background:#eff6ff}
+    .encabezado-app{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+    .encabezado-app h1{margin:0}
+    .usuario-barra{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .usuario-barra button{margin:0}
+    .nota{font-size:13px;color:#64748b;line-height:1.5;margin-top:8px}
+    .btn-ver{background:#0f766e;color:#fff;padding:8px 10px;width:auto;margin:0}
+    .btn-reemplazar{background:#7c3aed;color:#fff;padding:8px 10px;width:auto;margin:0}
+    .btn-descargar{background:#2563eb;color:#fff;padding:8px 10px;width:auto;margin:0}
+    .btn-accion-compartir{background:#d97706;color:#fff;padding:8px 10px;width:auto;margin:0}
+    .panel-compartir{position:fixed;inset:0;z-index:10000;width:100%;min-height:100vh;background:#fff;border:0;border-radius:0;padding:28px 20px 40px;overflow-y:auto;margin:0;box-shadow:0 0 0 100vmax rgba(15,23,42,.72)}
+    .panel-compartir h3{font-size:16px;margin-bottom:6px;color:#0f172a;overflow-wrap:anywhere}
+    .panel-compartir label{display:flex;align-items:center;gap:9px;font-size:14px;margin:8px 0;color:#334155}
+    .panel-compartir input[type=email]{width:100%;margin:8px 0}
+    .panel-compartir input[type=checkbox]{width:18px;height:18px;margin:0}
+    .permisos-lista{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:4px 12px;margin:10px 0}
+    .archivo-acciones{width:100%}
+    .archivo-acciones button{font-size:13px}
+    .reemplazo-input{display:none}
+    .visor-imagen{position:fixed;inset:0;background:rgba(2,6,23,.96);z-index:9999;display:none;align-items:center;justify-content:center;padding:58px 16px 76px}
+    .visor-imagen.abierto{display:flex}
+    .visor-imagen img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;box-shadow:0 10px 40px #0008}
+    .visor-cerrar-x{position:absolute;top:14px;right:16px;width:46px;height:46px;margin:0;border-radius:50%;background:#dc2626;color:#fff;font-size:28px;line-height:1;padding:0}
+    .visor-cerrar{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);width:auto;margin:0;background:#fff;color:#0f172a;padding:11px 24px}
+    .visor-titulo{position:absolute;top:22px;left:16px;right:75px;text-align:center;color:#fff;font-size:14px;overflow-wrap:anywhere}
+    body.sin-scroll{overflow:hidden}
+    @media(max-width:600px){
+      body{padding:12px}
+      .card{padding:17px}
+      .encabezado-app{align-items:flex-start}
+      .archivo-acciones{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+      .archivo-acciones button{width:100%;flex:initial}
+      .tab{padding:10px 9px;font-size:14px}
+    }
+  </style>
+</head>
+<body>
+
+<div id="seccion-auth" class="card">
+  <h1>🔐 Acceso al Sistema de Archivos</h1>
+
+  <div id="form-login">
+    <h2>Iniciar sesión</h2>
+    <input type="email" id="correo-login" placeholder="Tu correo electrónico" autocomplete="email">
+    <input type="password" id="pass-login" placeholder="Tu contraseña" autocomplete="current-password">
+    <button class="btn-primario" id="btn-login" onclick="iniciarSesion()">Entrar</button>
+    <p style="margin-top:12px;font-size:14px">¿No tienes cuenta? <a href="#" onclick="mostrarRegistro();return false">Regístrate aquí</a></p>
+  </div>
+
+  <div id="form-registro" class="oculto">
+    <h2>Crear cuenta</h2>
+    <input type="email" id="correo-registro" placeholder="Tu correo electrónico" autocomplete="email">
+    <input type="password" id="pass-registro" placeholder="Crea una contraseña (mínimo 6 caracteres)" autocomplete="new-password">
+    <button class="btn-exito" id="btn-registro" onclick="registrarse()">Crear cuenta</button>
+    <p style="margin-top:12px;font-size:14px">¿Ya tienes cuenta? <a href="#" onclick="mostrarLogin();return false">Inicia sesión</a></p>
+  </div>
+  <div id="mensaje-auth" class="mensaje" role="status"></div>
+</div>
+
+<div id="seccion-app" class="oculto">
+  <div class="encabezado-app">
+    <h1>📂 Mis Archivos</h1>
+    <div class="usuario-barra">
+      <span id="usuario-email" class="etiqueta"></span>
+      <button class="btn-peligro" onclick="cerrarSesion()">Salir</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <div class="tab activa" onclick="cambiarTab('mis')" id="tab-mis" role="button" tabindex="0">📁 Mis archivos</div>
+    <div class="tab" onclick="cambiarTab('compartidos')" id="tab-compartidos" role="button" tabindex="0">🤝 Compartidos conmigo</div>
+  </div>
+
+  <div id="zona-mis">
+    <div class="card">
+      <h2>⬆️ Subir nuevo archivo</h2>
+      <div class="zona-subida" id="zona-archivo" onclick="document.getElementById('entrada-archivo').click()">
+        <p><strong>Haz clic o arrastra tu archivo aquí</strong></p>
+        <p class="etiqueta">Formatos permitidos: PNG, JPG, PDF, Word (.doc, .docx), Excel (.xls, .xlsx)</p>
+        <input type="file" id="entrada-archivo" class="oculto" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx" onchange="archivoSeleccionado(this)">
+      </div>
+      <div id="archivo-nombre" style="margin:10px 0;font-weight:500"></div>
+      <button class="btn-exito oculto" id="btn-subir" onclick="subirArchivo()">📤 Subir archivo</button>
+      <div id="mensaje-subida" class="mensaje" role="status"></div>
+      <p class="nota">Los archivos se guardan en un bucket privado. Cada usuario solo puede consultar sus propios archivos; los compartidos requieren autorización.</p>
+    </div>
+
+    <div class="card">
+      <h2>Mis archivos subidos</h2>
+      <div id="lista-mis"><p class="etiqueta">Cargando archivos...</p></div>
+    </div>
+  </div>
+
+  <div id="zona-compartidos" class="oculto">
+    <div class="card">
+      <h2>Archivos compartidos conmigo</h2>
+      <div id="lista-compartidos"><p class="etiqueta">Cargando archivos...</p></div>
+    </div>
+  </div>
+</div>
+
+<div id="visor-imagen" class="visor-imagen" role="dialog" aria-modal="true" aria-label="Vista de imagen" onclick="cerrarVisorImagen(event)">
+  <div id="visor-titulo" class="visor-titulo"></div>
+  <button class="visor-cerrar-x" type="button" aria-label="Cerrar" onclick="cerrarVisorImagen()">×</button>
+  <img id="visor-img" alt="Vista previa del archivo">
+  <button class="visor-cerrar" type="button" onclick="cerrarVisorImagen()">Cerrar</button>
+</div>
+
+<div id="visor-enlace-publico" class="oculto" style="position:fixed;inset:0;z-index:20000;background:#0f172a;color:#fff;padding:18px;overflow:auto">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;max-width:1100px;margin:0 auto 14px">
+    <strong id="publico-nombre">Visualización de archivo</strong>
+    <button type="button" onclick="cerrarVistaUnica()" style="width:auto;background:#dc2626;color:#fff;padding:10px 16px">Cerrar ×</button>
+  </div>
+  <div id="publico-contenido" style="height:calc(100vh - 90px);max-width:1100px;margin:auto;background:#fff;border-radius:10px;overflow:hidden;color:#111;display:flex;align-items:center;justify-content:center"></div>
+  <p style="text-align:center;color:#cbd5e1;font-size:12px;margin-top:8px">Este enlace es de un solo uso. Al cerrar esta vista no podrás volver a abrirlo.</p>
+</div>
+
+<script>
+'use strict';
+
+// CONFIGURACIÓN DE SUPABASE
+const SUPABASE_URL = 'https://tgiqazzonhzbkestodmq.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_tDBsj8J95dngohfPsWoyZA_Q-3gdnMK';
+const NOMBRE_BUCKET = 'archivos-usuarios';
+
+// Se usa "db" para no chocar con la variable global "supabase" de la librería UMD.
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let archivoActual = null;
+let usuarioActivo = null;
+let cargando = false;
+
+const EXTENSIONES_PERMITIDAS = ['png','jpg','jpeg','pdf','doc','docx','xls','xlsx'];
+
+function mostrarMensaje(id, texto, tipo) {
+  const elemento = document.getElementById(id);
+  elemento.textContent = texto;
+  elemento.className = 'mensaje ' + tipo;
+}
+function limpiarMensaje(id) {
+  const elemento = document.getElementById(id);
+  elemento.textContent = '';
+  elemento.className = 'mensaje';
+}
+function cambiarEstadoBoton(id, deshabilitado, texto) {
+  const boton = document.getElementById(id);
+  if (!boton) return;
+  boton.disabled = deshabilitado;
+  if (texto) boton.textContent = texto;
+}
+
+function mostrarRegistro() {
+  document.getElementById('form-login').classList.add('oculto');
+  document.getElementById('form-registro').classList.remove('oculto');
+  limpiarMensaje('mensaje-auth');
+}
+function mostrarLogin() {
+  document.getElementById('form-registro').classList.add('oculto');
+  document.getElementById('form-login').classList.remove('oculto');
+  limpiarMensaje('mensaje-auth');
+}
+
+async function registrarse() {
+  const email = document.getElementById('correo-registro').value.trim();
+  const password = document.getElementById('pass-registro').value;
+  if (!email || !password) return mostrarMensaje('mensaje-auth','Completa el correo y la contraseña.','error');
+  if (password.length < 6) return mostrarMensaje('mensaje-auth','La contraseña debe tener al menos 6 caracteres.','error');
+
+  cambiarEstadoBoton('btn-registro',true,'Creando cuenta...');
+  const { error } = await db.auth.signUp({ email, password });
+  cambiarEstadoBoton('btn-registro',false,'Crear cuenta');
+
+  if (error) mostrarMensaje('mensaje-auth','❌ ' + error.message,'error');
+  else mostrarMensaje('mensaje-auth','✅ Cuenta creada. Revisa tu correo para confirmar la cuenta si tu proyecto lo requiere.','exito');
+}
+
+async function iniciarSesion() {
+  const email = document.getElementById('correo-login').value.trim();
+  const password = document.getElementById('pass-login').value;
+  if (!email || !password) return mostrarMensaje('mensaje-auth','Escribe tu correo y contraseña.','error');
+
+  cambiarEstadoBoton('btn-login',true,'Ingresando...');
+  const { data, error } = await db.auth.signInWithPassword({ email, password });
+  cambiarEstadoBoton('btn-login',false,'Entrar');
+
+  if (error) mostrarMensaje('mensaje-auth','❌ ' + error.message,'error');
+  else {
+    usuarioActivo = data.user;
+    await mostrarApp();
+  }
+}
+
+async function cerrarSesion() {
+  const { error } = await db.auth.signOut();
+  if (error) return alert('No se pudo cerrar la sesión: ' + error.message);
+  usuarioActivo = null;
+  archivoActual = null;
+  document.getElementById('seccion-auth').classList.remove('oculto');
+  document.getElementById('seccion-app').classList.add('oculto');
+  document.getElementById('pass-login').value = '';
+}
+
+async function mostrarApp() {
+  if (!usuarioActivo) return;
+  document.getElementById('seccion-auth').classList.add('oculto');
+  document.getElementById('seccion-app').classList.remove('oculto');
+  document.getElementById('usuario-email').textContent = usuarioActivo.email || '';
+  cambiarTab('mis');
+}
+
+function cambiarTab(tab) {
+  const esMis = tab === 'mis';
+  document.getElementById('zona-mis').classList.toggle('oculto',!esMis);
+  document.getElementById('zona-compartidos').classList.toggle('oculto',esMis);
+  document.getElementById('tab-mis').classList.toggle('activa',esMis);
+  document.getElementById('tab-compartidos').classList.toggle('activa',!esMis);
+  if (esMis) listarMisArchivos();
+  else listarCompartidos();
+}
+
+function archivoSeleccionado(input) {
+  if (!input.files || input.files.length === 0) return;
+  const archivo = input.files[0];
+  const extension = (archivo.name.split('.').pop() || '').toLowerCase();
+  if (!EXTENSIONES_PERMITIDAS.includes(extension)) {
+    input.value = '';
+    archivoActual = null;
+    document.getElementById('archivo-nombre').textContent = '';
+    document.getElementById('btn-subir').classList.add('oculto');
+    return mostrarMensaje('mensaje-subida','❌ Tipo de archivo no permitido.','error');
+  }
+  archivoActual = archivo;
+  document.getElementById('archivo-nombre').textContent = '✅ Seleccionado: ' + archivo.name;
+  document.getElementById('btn-subir').classList.remove('oculto');
+  limpiarMensaje('mensaje-subida');
+}
+
+async function subirArchivo() {
+  if (!archivoActual || !usuarioActivo || cargando) return;
+  cargando = true;
+  cambiarEstadoBoton('btn-subir',true,'Subiendo...');
+  const nombreSeguro = archivoActual.name.replace(/[^\w.\-() ]/g,'_');
+  const ruta = `${usuarioActivo.id}/${Date.now()}_${nombreSeguro}`;
+
+  const { error: errorSubida } = await db.storage.from(NOMBRE_BUCKET).upload(ruta,archivoActual,{
+    cacheControl:'3600',upsert:false,contentType:archivoActual.type || undefined
+  });
+
+  if (errorSubida) {
+    mostrarMensaje('mensaje-subida','❌ Error al subir: ' + errorSubida.message,'error');
+    cambiarEstadoBoton('btn-subir',false,'📤 Subir archivo');
+    cargando = false;
+    return;
+  }
+
+  const { error: errorTabla } = await db.from('archivos').insert({
+    nombre_archivo:archivoActual.name,
+    ruta_archivo:ruta,
+    tipo_archivo:archivoActual.type,
+    tamano:archivoActual.size,
+    usuario_id:usuarioActivo.id
+  });
+
+  if (errorTabla) {
+    // Si falla el registro, se intenta retirar el objeto para no dejar un archivo huérfano.
+    await db.storage.from(NOMBRE_BUCKET).remove([ruta]);
+    mostrarMensaje('mensaje-subida','❌ El archivo se subió, pero no se pudo registrar en la tabla: ' + errorTabla.message,'error');
+  } else {
+    mostrarMensaje('mensaje-subida','✅ Archivo subido correctamente.','exito');
+  }
+
+  archivoActual = null;
+  document.getElementById('archivo-nombre').textContent = '';
+  document.getElementById('btn-subir').classList.add('oculto');
+  document.getElementById('entrada-archivo').value = '';
+  cambiarEstadoBoton('btn-subir',false,'📤 Subir archivo');
+  cargando = false;
+  await listarMisArchivos();
+}
+
+function escaparHTML(valor) {
+  return String(valor ?? '').replace(/[&<>"']/g, caracter => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[caracter]);
+}
+
+async function listarMisArchivos() {
+  if (!usuarioActivo) return;
+  const lista = document.getElementById('lista-mis');
+  lista.innerHTML = '<p class="etiqueta">Cargando...</p>';
+  try {
+    const { data, error } = await db.from('archivos').select('*')
+      .eq('usuario_id', usuarioActivo.id).order('creado_en', { ascending: false });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      lista.innerHTML = '<p class="etiqueta">No has subido archivos todavía.</p>';
+      return;
+    }
+    lista.innerHTML = '';
+    data.forEach(archivo => {
+      const fecha = archivo.creado_en ? new Date(archivo.creado_en).toLocaleString('es-MX') : 'Fecha no disponible';
+      const compartidoCon = archivo.correo_compartido
+        ? `<span class="compartido-badge">✓ Compartido con: ${escaparHTML(archivo.correo_compartido)}</span>` : '<span class="etiqueta">No compartido</span>';
+      const item = document.createElement('div');
+      item.className = 'archivo-item';
+      item.innerHTML = `
+        <div class="archivo-info">
+          <strong>${escaparHTML(archivo.nombre_archivo)}</strong><br>
+          <span class="etiqueta">${escaparHTML(fecha)} · ${((Number(archivo.tamano)||0)/1024).toFixed(1)} KB</span><br>
+          ${compartidoCon}
+        </div>
+        <div class="archivo-acciones">
+          ${esImagen(archivo.nombre_archivo) ? '<button class="btn-ver" data-accion="ver">👁️ Ver</button>' : '<button class="btn-ver" data-accion="ver" disabled title="Vista previa disponible para imágenes">👁️ Ver</button>'}
+          <button class="btn-reemplazar" data-accion="reemplazar">🔄 Reemplazar</button>
+          <button class="btn-accion-compartir" data-accion="compartir">🤝 Compartir</button>
+          <button class="btn-descargar" data-accion="descargar">⬇️ Descargar</button>
+          <button class="btn-peligro" data-accion="eliminar">🗑️ Eliminar</button>
+        </div>
+        <input class="reemplazo-input" type="file" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx">
+        <div class="panel-compartir oculto"></div>`;
+      const botonVer = item.querySelector('[data-accion="ver"]');
+      if (botonVer && !botonVer.disabled) botonVer.addEventListener('click', () => verImagen(archivo.ruta_archivo, archivo.nombre_archivo));
+      item.querySelector('[data-accion="reemplazar"]').addEventListener('click', () => item.querySelector('.reemplazo-input').click());
+      item.querySelector('.reemplazo-input').addEventListener('change', e => {
+        if (e.target.files && e.target.files[0]) reemplazarArchivo(archivo, e.target.files[0], e.target);
+      });
+      item.querySelector('[data-accion="compartir"]').addEventListener('click', () => mostrarFormularioCompartir(item, archivo, false));
+      item.querySelector('[data-accion="descargar"]').addEventListener('click', () => descargarArchivo(archivo.ruta_archivo, archivo.nombre_archivo));
+      item.querySelector('[data-accion="eliminar"]').addEventListener('click', () => eliminarArchivo(archivo.id, archivo.ruta_archivo));
+      lista.appendChild(item);
+    });
+  } catch (error) {
+    lista.innerHTML = '<p class="etiqueta">No se pudieron cargar los archivos: ' + escaparHTML(error.message || error) + '</p>';
+    console.error('Error consultando public.archivos:', error);
+  }
+}
+
+async function listarCompartidos() {
+  if (!usuarioActivo) return;
+  const lista = document.getElementById('lista-compartidos');
+  lista.innerHTML = '<p class="etiqueta">Cargando...</p>';
+  const { data: accesos, error } = await db.from('archivo_compartidos').select('archivo_id, permite_visualizar, permite_descargar, permite_compartir, permite_eliminar').ilike('correo', usuarioActivo.email).eq('permite_visualizar',true);
+  if (error) { lista.innerHTML = '<p class="etiqueta">No se pudieron cargar los archivos compartidos: ' + escaparHTML(error.message) + '</p>'; return; }
+  if (!accesos || !accesos.length) { lista.innerHTML = '<p class="etiqueta">No hay archivos compartidos contigo aún.</p>'; return; }
+  const ids = [...new Set(accesos.map(x => x.archivo_id))];
+  const { data: archivos, error: errorArchivos } = await db.from('archivos').select('*').in('id', ids).order('creado_en', {ascending:false});
+  if (errorArchivos) { lista.innerHTML = '<p class="etiqueta">No se pudieron consultar los archivos: ' + escaparHTML(errorArchivos.message) + '</p>'; return; }
+  lista.innerHTML = '';
+  (archivos || []).forEach(archivo => {
+    const permiso = accesos.find(x => x.archivo_id === archivo.id) || {};
+    if (permiso.permite_visualizar === false) return;
+    const item = document.createElement('div'); item.className = 'archivo-item';
+    item.innerHTML = `
+      <div class="archivo-info"><strong>${escaparHTML(archivo.nombre_archivo)}</strong><br>
+      <span class="etiqueta">Compartido contigo · ${((Number(archivo.tamano)||0)/1024).toFixed(1)} KB</span><br>
+      <span class="compartido-badge">Visualizar</span>${permiso.permite_descargar?'<span class="compartido-badge">Descargar</span>':''}${permiso.permite_compartir?'<span class="compartido-badge">Compartir</span>':''}${permiso.permite_eliminar?'<span class="compartido-badge">Eliminar</span>':''}</div>
+      <div class="archivo-acciones">
+      ${esImagen(archivo.nombre_archivo)?'<button class="btn-ver" data-accion="ver">👁️ Ver</button>':'<button class="btn-ver" disabled>👁️ Ver</button>'}
+      ${permiso.permite_descargar?'<button class="btn-descargar" data-accion="descargar">⬇️ Descargar</button>':''}
+      ${permiso.permite_compartir?'<button class="btn-accion-compartir" data-accion="compartir">🤝 Compartir</button>':''}
+      ${permiso.permite_eliminar?'<button class="btn-peligro" data-accion="eliminar">🗑️ Eliminar</button>':''}</div><div class="panel-compartir oculto"></div>`;
+    const v=item.querySelector('[data-accion="ver"]'); if(v) v.addEventListener('click',()=>verImagen(archivo.ruta_archivo,archivo.nombre_archivo));
+    const d=item.querySelector('[data-accion="descargar"]'); if(d) d.addEventListener('click',()=>descargarArchivo(archivo.ruta_archivo,archivo.nombre_archivo));
+    const c=item.querySelector('[data-accion="compartir"]'); if(c) c.addEventListener('click',()=>mostrarFormularioCompartir(item,archivo,true));
+    const e=item.querySelector('[data-accion="eliminar"]'); if(e) e.addEventListener('click',()=>eliminarArchivoCompartido(archivo.id,archivo.ruta_archivo));
+    lista.appendChild(item);
+  });
+}
+
+async function mostrarFormularioCompartir(item, archivo, esReenvio) {
+  const panel = item.querySelector('.panel-compartir');
+  if (!panel) return;
+  if (!panel.classList.contains('oculto')) { panel.classList.add('oculto'); panel.innerHTML=''; return; }
+  panel.classList.remove('oculto');
+  panel.innerHTML = `
+    <h3>${escaparHTML(archivo.nombre_archivo)}</h3>
+    <p class="etiqueta">Agrega varios correos pegándolos uno por línea o separados por coma o punto y coma. Puedes registrar miles de destinatarios.</p>
+    <form class="form-compartir">
+      <label>Correos nuevos o por actualizar</label>
+      <textarea name="correos" rows="5" placeholder="persona1@correo.com&#10;persona2@correo.com" style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:8px;resize:vertical"></textarea>
+      <div class="permisos-lista">
+        <label><input type="checkbox" name="visualizar" checked> Permitir visualizar</label>
+        <label><input type="checkbox" name="descargar"> Permitir descargar</label>
+        <label><input type="checkbox" name="compartir"> Permitir compartir</label>
+        <label><input type="checkbox" name="eliminar"> Permitir eliminar</label>
+      </div>
+      <button class="btn-primario" type="submit">Guardar / actualizar correos</button>
+      <button class="btn-exito" type="button" data-enlace-unico>🔗 Compartir sin correo (enlace de un solo uso)</button>
+      <div class="mensaje" data-mensaje-enlace></div>
+      <button class="btn-peligro" type="button" data-cancelar>Cancelar</button>
+    </form>
+    <hr style="margin:18px 0;border:0;border-top:1px solid #e2e8f0">
+    <h3>Personas con acceso</h3><div class="lista-destinatarios"><p class="etiqueta">Cargando destinatarios...</p></div>`;
+  panel.querySelector('[data-cancelar]').addEventListener('click',()=>{panel.classList.add('oculto');panel.innerHTML='';});
+  const listaDest = panel.querySelector('.lista-destinatarios');
+  const cargarDestinatarios = async () => {
+    const {data,error}=await db.from('archivo_compartidos').select('id,correo,permite_visualizar,permite_descargar,permite_compartir,permite_eliminar').eq('archivo_id',archivo.id).order('correo');
+    if(error){listaDest.innerHTML='<p class="etiqueta">Error: '+escaparHTML(error.message)+'</p>';return;}
+    if(!data?.length){listaDest.innerHTML='<p class="etiqueta">Todavía no hay correos registrados.</p>';return;}
+    listaDest.innerHTML='';
+    data.forEach(acceso=>{
+      const fila=document.createElement('div'); fila.style.cssText='padding:12px 0;border-bottom:1px solid #e2e8f0';
+      fila.innerHTML=`<strong style="overflow-wrap:anywhere">${escaparHTML(acceso.correo)}</strong>
+        <div class="permisos-lista">
+          <label><input type="checkbox" name="v" ${acceso.permite_visualizar!==false?'checked':''}> Visualizar</label>
+          <label><input type="checkbox" name="d" ${acceso.permite_descargar?'checked':''}> Descargar</label>
+          <label><input type="checkbox" name="c" ${acceso.permite_compartir?'checked':''}> Compartir</label>
+          <label><input type="checkbox" name="e" ${acceso.permite_eliminar?'checked':''}> Eliminar</label>
+        </div><button class="btn-primario" type="button" style="width:auto">Guardar permisos</button>
+        <button class="btn-peligro" type="button">Revocar acceso</button>`;
+      const [bv,bd,bc,be]=fila.querySelectorAll('input');
+      fila.querySelector('.btn-primario').addEventListener('click',async()=>{
+        const {error}=await db.rpc('editar_permiso_compartido',{p_compartido_id:acceso.id,p_visualizar:bv.checked,p_descargar:bd.checked,p_compartir:bc.checked,p_eliminar:be.checked});
+        alert(error?'No se pudieron actualizar los permisos: '+error.message:'Permisos actualizados.');
+      });
+      fila.querySelector('.btn-peligro').addEventListener('click',async()=>{
+        if(!confirm('¿Revocar el acceso de '+acceso.correo+'?'))return;
+        const {error}=await db.rpc('revocar_compartido',{p_compartido_id:acceso.id});
+        if(error)alert('No se pudo revocar: '+error.message);else{fila.remove();if(esReenvio)await listarCompartidos();}
+      });
+      listaDest.appendChild(fila);
+    });
+  };
+  panel.querySelector('[data-enlace-unico]').addEventListener('click', async () => {
+    const btn = panel.querySelector('[data-enlace-unico]');
+    const msg = panel.querySelector('[data-mensaje-enlace]');
+    btn.disabled = true; btn.textContent = 'Generando enlace…';
+    try {
+      // URL firmada de vida corta: el token de visualización se consume una sola vez.
+      const {data:signed,error:signedError}=await db.storage.from(NOMBRE_BUCKET).createSignedUrl(archivo.ruta_archivo,300);
+      if(signedError) throw signedError;
+      const token = Array.from(crypto.getRandomValues(new Uint8Array(32))).map(x=>x.toString(16).padStart(2,'0')).join('');
+      const hashBuffer=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(token));
+      const tokenHash=Array.from(new Uint8Array(hashBuffer)).map(x=>x.toString(16).padStart(2,'0')).join('');
+      const {error}=await db.rpc('crear_enlace_visualizacion_unica',{p_archivo_id:archivo.id,p_token_hash:tokenHash,p_url_firmada:signed.signedUrl,p_expira_en_segundos:300});
+      if(error) throw error;
+      const link=new URL(location.href); link.search=''; link.hash=''; link.searchParams.set('vista_unica',token);
+      await navigator.clipboard.writeText(link.toString());
+      msg.className='mensaje exito'; msg.textContent='Enlace copiado. Se puede abrir una sola vez y caduca en 5 minutos.';
+    } catch(err) { msg.className='mensaje error'; msg.textContent='No se pudo generar el enlace: '+err.message; }
+    finally {btn.disabled=false;btn.textContent='🔗 Compartir sin correo (enlace de un solo uso)';}
+  });
+  await cargarDestinatarios();
+  panel.querySelector('form').addEventListener('submit',async event=>{
+    event.preventDefault(); const form=event.currentTarget;
+    const correos=[...new Set(form.elements.correos.value.split(/[\n,;]+/).map(x=>x.trim().toLowerCase()).filter(Boolean))];
+    if(!correos.length)return alert('Escribe al menos un correo.');
+    const invalidos=correos.filter(x=>!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x));
+    if(invalidos.length)return alert('Hay correos no válidos. Revisa: '+invalidos.slice(0,5).join(', '));
+    const boton=form.querySelector('button[type="submit"]'); boton.disabled=true;boton.textContent='Guardando '+correos.length+' correos...';
+    const destinatarios=correos.map(correo=>({correo,visualizar:form.elements.visualizar.checked,descargar:form.elements.descargar.checked,compartir:form.elements.compartir.checked,eliminar:form.elements.eliminar.checked}));
+    const {data,error}=await db.rpc('guardar_compartidos',{p_archivo_id:archivo.id,p_destinatarios:destinatarios});
+    boton.disabled=false;boton.textContent='Guardar / actualizar correos';
+    if(error)return alert('No se pudieron guardar los correos: '+error.message+'. Verifica que ejecutaste el SQL nuevo.');
+    form.elements.correos.value=''; alert('Se guardaron o actualizaron '+(data??correos.length)+' accesos.'); await cargarDestinatarios();
+    if(esReenvio)await listarCompartidos();else await listarMisArchivos();
+  });
+}
+
+async function reemplazarArchivo(archivo, nuevoArchivo, input) {
+  const extension = (nuevoArchivo.name.split('.').pop() || '').toLowerCase();
+  if (!EXTENSIONES_PERMITIDAS.includes(extension)) { input.value = ''; return alert('Tipo de archivo no permitido.'); }
+  if (!confirm(`¿Reemplazar "${archivo.nombre_archivo}" por "${nuevoArchivo.name}"? El archivo anterior se eliminará después de guardar el nuevo.`)) { input.value = ''; return; }
+  const nombreSeguro = nuevoArchivo.name.replace(/[^\w.\-() ]/g, '_');
+  const nuevaRuta = `${usuarioActivo.id}/${Date.now()}_${nombreSeguro}`;
+  input.disabled = true;
+  try {
+    const { error: subidaError } = await db.storage.from(NOMBRE_BUCKET).upload(nuevaRuta, nuevoArchivo, {cacheControl:'3600', upsert:false, contentType:nuevoArchivo.type || undefined});
+    if (subidaError) throw subidaError;
+    const { error: updateError } = await db.from('archivos').update({
+      nombre_archivo:nuevoArchivo.name, ruta_archivo:nuevaRuta,
+      tipo_archivo:nuevoArchivo.type, tamano:nuevoArchivo.size
+    }).eq('id', archivo.id).eq('usuario_id', usuarioActivo.id);
+    if (updateError) {
+      await db.storage.from(NOMBRE_BUCKET).remove([nuevaRuta]);
+      throw updateError;
+    }
+    const { error: borrarError } = await db.storage.from(NOMBRE_BUCKET).remove([archivo.ruta_archivo]);
+    if (borrarError) alert('El archivo se reemplazó, pero no se pudo retirar el objeto anterior del almacenamiento: ' + borrarError.message);
+    else alert('Archivo reemplazado correctamente.');
+    await listarMisArchivos();
+  } catch (error) {
+    alert('No se pudo reemplazar el archivo: ' + error.message);
+  } finally { input.disabled = false; input.value = ''; }
+}
+
+async function eliminarArchivoCompartido(id, ruta) {
+  if (!confirm('¿Eliminar este archivo compartido? Se eliminará el archivo original y dejará de estar disponible para todos.')) return;
+  // Primero se elimina el objeto mientras el registro compartido aún existe
+  // para que la política de Storage pueda comprobar el permiso del destinatario.
+  const { error: storageError } = await db.storage.from(NOMBRE_BUCKET).remove([ruta]);
+  if (storageError) return alert('No se pudo eliminar el archivo del almacenamiento: ' + storageError.message);
+  const { error } = await db.from('archivos').delete().eq('id', id);
+  if (error) return alert('El archivo del almacenamiento se eliminó, pero no se pudo borrar su registro: ' + error.message);
+  alert('Archivo eliminado.');
+  await listarCompartidos();
+}
+
+function esImagen(nombre) {
+  return /\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(String(nombre || ''));
+}
+
+async function verImagen(ruta, nombre) {
+  const visor = document.getElementById('visor-imagen');
+  const imagen = document.getElementById('visor-img');
+  const titulo = document.getElementById('visor-titulo');
+  titulo.textContent = nombre || 'Vista previa';
+  imagen.removeAttribute('src');
+  visor.classList.add('abierto');
+  document.body.classList.add('sin-scroll');
+  titulo.textContent = 'Cargando imagen…';
+
+  const { data, error } = await db.storage.from(NOMBRE_BUCKET).createSignedUrl(ruta, 300);
+  if (error) {
+    cerrarVisorImagen();
+    alert('No se pudo abrir la imagen: ' + error.message);
+    return;
+  }
+  imagen.onload = () => { titulo.textContent = nombre || 'Vista previa'; };
+  imagen.onerror = () => {
+    cerrarVisorImagen();
+    alert('No se pudo mostrar la imagen. Comprueba los permisos del archivo.');
+  };
+  imagen.src = data.signedUrl;
+}
+
+function cerrarVisorImagen(event) {
+  if (event && event.target !== document.getElementById('visor-imagen')) return;
+  const visor = document.getElementById('visor-imagen');
+  const imagen = document.getElementById('visor-img');
+  visor.classList.remove('abierto');
+  imagen.removeAttribute('src');
+  document.body.classList.remove('sin-scroll');
+}
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') cerrarVisorImagen();
+});
+
+async function descargarArchivo(ruta,nombre) {
+  const { data, error } = await db.storage.from(NOMBRE_BUCKET).download(ruta);
+  if (error) { alert('No se pudo descargar el archivo: ' + error.message); return; }
+  const url = URL.createObjectURL(data);
+  const enlace = document.createElement('a');
+  enlace.href = url;
+  enlace.download = nombre || 'archivo';
+  document.body.appendChild(enlace); enlace.click(); enlace.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+
+async function eliminarArchivo(id,ruta) {
+  if (!confirm('¿Seguro que deseas eliminar este archivo? Esta acción no se puede deshacer.')) return;
+
+  const { error: errorTabla } = await db.from('archivos').delete()
+    .eq('id',id).eq('usuario_id',usuarioActivo.id);
+  if (errorTabla) {
+    alert('No se pudo eliminar el registro: ' + errorTabla.message);
+    return;
+  }
+
+  const { error: errorStorage } = await db.storage.from(NOMBRE_BUCKET).remove([ruta]);
+  if (errorStorage) {
+    alert('El registro fue eliminado, pero no se pudo borrar el archivo del almacenamiento: ' + errorStorage.message);
+  } else {
+    alert('Archivo eliminado correctamente.');
+  }
+  await listarMisArchivos();
+}
+
+async function abrirVistaUnica(token) {
+  document.getElementById('seccion-auth').classList.add('oculto');
+  document.getElementById('seccion-app').classList.add('oculto');
+  const visor=document.getElementById('visor-enlace-publico');
+  const contenido=document.getElementById('publico-contenido');
+  visor.classList.remove('oculto'); contenido.textContent='Validando enlace…';
+  try {
+    const hashBuffer=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(token));
+    const tokenHash=Array.from(new Uint8Array(hashBuffer)).map(x=>x.toString(16).padStart(2,'0')).join('');
+    const {data,error}=await db.rpc('consumir_enlace_visualizacion_unica',{p_token_hash:tokenHash});
+    if(error || !data || !data.url_firmada) throw new Error(error?.message || 'El enlace ya fue utilizado, venció o fue revocado.');
+    document.getElementById('publico-nombre').textContent=data.nombre_archivo;
+    contenido.innerHTML='';
+    if (/\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(data.nombre_archivo)) {
+      const img=document.createElement('img'); img.src=data.url_firmada; img.alt=data.nombre_archivo; img.style='max-width:100%;max-height:100%;object-fit:contain'; contenido.appendChild(img);
+    } else {
+      const frame=document.createElement('iframe'); frame.src=data.url_firmada; frame.title=data.nombre_archivo; frame.style='width:100%;height:100%;border:0'; contenido.appendChild(frame);
+    }
+    history.replaceState({},'',location.pathname);
+  } catch(err) { contenido.textContent='No se pudo abrir la visualización: '+err.message; }
+}
+function cerrarVistaUnica(){
+  const visor=document.getElementById('visor-enlace-publico');
+  const contenido=document.getElementById('publico-contenido');
+  contenido.innerHTML='<p style="padding:24px;text-align:center">Visualización cerrada. Este enlace ya no puede volver a utilizarse.</p>';
+  document.getElementById('publico-nombre').textContent='Enlace cerrado';
+  // Retira la URL del historial y deja la pantalla cerrada.
+  history.replaceState({},'',location.pathname);
+}
+
+// Soporte para arrastrar y soltar archivos.
+const zona = document.getElementById('zona-archivo');
+zona.addEventListener('dragover',event => { event.preventDefault(); zona.classList.add('arrastrando'); });
+zona.addEventListener('dragleave',() => zona.classList.remove('arrastrando'));
+zona.addEventListener('drop',event => {
+  event.preventDefault();
+  zona.classList.remove('arrastrando');
+  const archivos = event.dataTransfer.files;
+  if (!archivos || !archivos.length) return;
+  const entrada = document.getElementById('entrada-archivo');
+  entrada.files = archivos;
+  archivoSeleccionado(entrada);
+});
+
+// Recuperar sesión existente al abrir o recargar la página.
+(async function iniciarAplicacion() {
+  const tokenVista = new URLSearchParams(location.search).get('vista_unica');
+  if (tokenVista) { await abrirVistaUnica(tokenVista); return; }
+  const { data, error } = await db.auth.getSession();
+  if (error) {
+    mostrarMensaje('mensaje-auth','No se pudo verificar la sesión: ' + error.message,'error');
+    return;
+  }
+  if (data.session && data.session.user) {
+    usuarioActivo = data.session.user;
+    await mostrarApp();
+  }
+})();
+
+db.auth.onAuthStateChange((_evento,session) => {
+  if (!session) {
+    usuarioActivo = null;
+    document.getElementById('seccion-app').classList.add('oculto');
+    document.getElementById('seccion-auth').classList.remove('oculto');
+  }
+});
+</script>
+</body>
+</html>
