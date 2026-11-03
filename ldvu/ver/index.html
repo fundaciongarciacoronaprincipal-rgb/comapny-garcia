@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102b46">
+<meta name="description" content="Visor LDVU de Grupo García Corona">
+
+<link rel="icon" href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
+
+<title>LDVU | Visor - Grupo García Corona</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --navy:#102b46;
+    --blue:#175b88;
+    --cyan:#0e7490;
+    --text:#203244;
+    --muted:#64748b;
+    --line:#dbe4ec;
+    --bg:#f3f6f9;
+}
+
+* {
+    box-sizing:border-box;
+}
+
+html,body {
+    height:100%;
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    color:var(--text);
+    background:var(--bg);
+}
+
+header {
+    height:66px;
+    background:var(--navy);
+    color:white;
+    display:flex;
+    align-items:center;
+    padding:9px 18px;
+    gap:12px;
+}
+
+header img {
+    width:42px;
+    height:42px;
+    object-fit:contain;
+    background:white;
+    border-radius:8px;
+    padding:3px;
+}
+
+header strong {
+    font-size:15px;
+}
+
+header small {
+    display:block;
+    color:#d6e5f1;
+    margin-top:3px;
+    font-size:11px;
+}
+
+#statusScreen {
+    min-height:calc(100% - 66px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.box {
+    background:white;
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:25px;
+    max-width:510px;
+    width:100%;
+    box-shadow:0 6px 22px #102b460c;
+    text-align:center;
+}
+
+.box h1 {
+    font-size:20px;
+    color:var(--navy);
+    margin:0 0 10px;
+}
+
+.box p {
+    font-size:14px;
+    line-height:1.6;
+    color:var(--muted);
+    margin:0;
+}
+
+.spinner {
+    width:28px;
+    height:28px;
+    border:3px solid #dbe4ec;
+    border-top-color:var(--blue);
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    margin:0 auto 15px;
+}
+
+@keyframes spin {
+    to { transform:rotate(360deg); }
+}
+
+#frameWrap {
+    height:calc(100% - 66px);
+    display:none;
+    background:white;
+}
+
+iframe {
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <img
+        src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png"
+        alt="Grupo García Corona"
+    >
+
+    <div>
+        <strong>LDVU · Visor de enlaces</strong>
+        <small>GRUPO GARCIA CORONA</small>
+    </div>
+
+</header>
+
+
+<!-- PANTALLA DE VALIDACIÓN -->
+
+<div id="statusScreen">
+
+    <div class="box">
+
+        <div class="spinner"></div>
+
+        <h1 id="statusTitle">
+            Validando enlace
+        </h1>
+
+        <p id="message">
+            Estamos verificando que el enlace sea válido
+            y que no haya sido utilizado.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- CONTENEDOR DEL CONTENIDO -->
+
+<div id="frameWrap">
+
+    <iframe
+        id="destinationFrame"
+        title="Contenido autorizado"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="camera; microphone; clipboard-read; clipboard-write; fullscreen"
+        sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-downloads">
+    </iframe>
+
+</div>
+
+
+<script>
+(() => {
+
+/* ==========================================
+   CONEXIÓN SUPABASE GGC-LDVDUU
+========================================== */
+
+const SUPABASE_URL =
+"https://bxmtxogbuhwzxznpwndm.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_UehtQp5UkzPNbZ7DYCvMXQ_VXjtllc";
+
+const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* ==========================================
+   ELEMENTOS
+========================================== */
+
+const statusScreen =
+document.getElementById("statusScreen");
+
+const statusTitle =
+document.getElementById("statusTitle");
+
+const message =
+document.getElementById("message");
+
+const frameWrap =
+document.getElementById("frameWrap");
+
+const frame =
+document.getElementById("destinationFrame");
+
+
+/* ==========================================
+   MOSTRAR ERROR
+========================================== */
+
+function fail(text) {
+
+    statusScreen.style.display = "flex";
+
+    message.textContent = text;
+
+    const spinner = document.querySelector(".spinner");
+
+    if (spinner) {
+        spinner.style.display = "none";
+    }
+
+    statusTitle.textContent =
+    "No fue posible abrir el enlace";
+
+}
+
+
+/* ==========================================
+   VALIDAR Y CONSUMIR TOKEN
+========================================== */
+
+async function start() {
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    const token = params.get("token");
+
+    if (
+        !token ||
+        !/^[a-f0-9]{64}$/i.test(token)
+    ) {
+
+        return fail(
+            "El enlace no contiene un token válido. Solicita uno nuevo al administrador."
+        );
+
+    }
+
+    try {
+
+        const { data, error } = await db.rpc(
+            "consume_ldvu_link",
+            {
+                p_token: token
+            }
+        );
+
+        if (error) {
+            throw error;
+        }
+
+        /*
+          La función RPC puede devolver
+          directamente el texto de la URL
+          o una fila con target_url.
+        */
+
+        const target = Array.isArray(data)
+            ? data[0]
+            : data;
+
+        const targetUrl =
+            typeof target === "string"
+                ? target
+                : target?.target_url;
+
+        if (!targetUrl) {
+
+            return fail(
+                "El enlace ya fue utilizado, está desactivado o no existe. Solicita un enlace nuevo."
+            );
+
+        }
+
+        let parsed;
+
+        try {
+
+            parsed = new URL(targetUrl);
+
+        } catch {
+
+            return fail(
+                "La dirección asociada al enlace no es válida."
+            );
+
+        }
+
+        if (parsed.protocol !== "https:") {
+
+            return fail(
+                "La dirección de destino no cumple con el protocolo HTTPS."
+            );
+
+        }
+
+        /*
+          Se retira el token de la barra
+          de direcciones después de validarlo.
+        */
+
+        history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+
+        /*
+          Cargar destino.
+        */
+
+        frame.onload = function() {
+
+            statusScreen.style.display = "none";
+
+            frameWrap.style.display = "block";
+
+        };
+
+        frame.src = parsed.href;
+
+        /*
+          Algunos sitios bloquean la carga
+          dentro de iframe mediante X-Frame-Options
+          o Content-Security-Policy.
+        */
+
+        setTimeout(() => {
+
+            if (frame.src) {
+
+                statusScreen.style.display = "none";
+
+                frameWrap.style.display = "block";
+
+            }
+
+        }, 1800);
+
+    } catch (error) {
+
+        fail(
+            "No se pudo validar el enlace. " +
+            (error.message || "Intenta nuevamente o solicita un enlace nuevo.")
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   INICIAR
+========================================== */
+
+start();
+
+})();
+</script>
+
+</body>
+</html>
