@@ -1,0 +1,881 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102b46">
+<meta name="description" content="Panel administrativo LDVU - Grupo García Corona">
+<link rel="icon" href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
+<title>LDVU | Administración - Grupo García Corona</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --navy:#102b46;
+    --blue:#175b88;
+    --cyan:#0e7490;
+    --text:#203244;
+    --muted:#64748b;
+    --line:#dbe4ec;
+    --bg:#f3f6f9;
+    --white:#fff;
+    --red:#b42318;
+    --green:#137547;
+}
+
+* {
+    box-sizing:border-box;
+}
+
+body {
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+header {
+    background:var(--navy);
+    color:white;
+    padding:19px 22px;
+}
+
+.header-content {
+    max-width:1100px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+header img {
+    width:48px;
+    height:48px;
+    object-fit:contain;
+    background:white;
+    border-radius:9px;
+    padding:4px;
+}
+
+header h1 {
+    font-size:19px;
+    margin:0 0 4px;
+}
+
+header p {
+    margin:0;
+    color:#d6e5f1;
+    font-size:13px;
+}
+
+main {
+    max-width:1100px;
+    margin:28px auto;
+    padding:0 16px;
+}
+
+.panel {
+    background:white;
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow:0 5px 18px #102b460b;
+}
+
+h2 {
+    font-size:18px;
+    color:var(--navy);
+    margin:0 0 17px;
+}
+
+.grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+label {
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin:0 0 7px;
+    color:#334155;
+}
+
+input {
+    width:100%;
+    padding:12px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    font-size:15px;
+    background:white;
+    color:var(--text);
+}
+
+input:focus {
+    outline:2px solid #9ac6df;
+    border-color:var(--blue);
+}
+
+button {
+    border:0;
+    border-radius:8px;
+    padding:12px 17px;
+    background:var(--blue);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:14px;
+}
+
+button:hover {
+    filter:brightness(1.08);
+}
+
+button:disabled {
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+button.secondary {
+    background:#e8eef4;
+    color:var(--navy);
+}
+
+.actions {
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+    margin-top:15px;
+}
+
+.muted {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+.status {
+    margin-top:12px;
+    padding:11px 13px;
+    border-radius:8px;
+    background:#edf3f8;
+    color:var(--navy);
+    font-size:13px;
+    display:none;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+}
+
+.status.error {
+    display:block;
+    background:#fff0ef;
+    color:var(--red);
+}
+
+.status.ok {
+    display:block;
+    background:#edf8f1;
+    color:var(--green);
+}
+
+.hidden {
+    display:none!important;
+}
+
+.topline {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+table {
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+}
+
+th,td {
+    text-align:left;
+    padding:11px 9px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+}
+
+th {
+    color:var(--navy);
+    background:#f7f9fb;
+}
+
+.pill {
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:20px;
+    background:#e8eef4;
+    color:#334155;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.pill.used {
+    background:#fff0df;
+    color:#9a4d00;
+}
+
+.pill.active {
+    background:#e8f6ed;
+    color:#137547;
+}
+
+.linkcell {
+    max-width:280px;
+    overflow-wrap:anywhere;
+}
+
+.tablewrap {
+    overflow-x:auto;
+}
+
+footer {
+    text-align:center;
+    color:#718096;
+    font-size:12px;
+    padding:10px 15px 25px;
+}
+
+@media(max-width:700px) {
+    .grid {
+        grid-template-columns:1fr;
+    }
+
+    header {
+        padding:15px;
+    }
+
+    main {
+        margin:17px auto;
+    }
+
+    .panel {
+        padding:17px;
+    }
+
+    table {
+        min-width:650px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png"
+             alt="Grupo García Corona">
+
+        <div>
+            <h1>LDVU · Panel de administración</h1>
+            <p>GRUPO GARCIA CORONA</p>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- INICIO DE SESIÓN -->
+<section class="panel" id="loginPanel">
+
+    <h2>Acceso administrativo</h2>
+
+    <p class="muted">
+        Inicia sesión con el usuario creado en Supabase Authentication
+        y registrado en la tabla public.usuarios.
+    </p>
+
+    <div class="grid">
+
+        <div>
+            <label for="email">Correo electrónico</label>
+            <input id="email" type="email"
+                   autocomplete="username"
+                   placeholder="usuario@dominio.com">
+        </div>
+
+        <div>
+            <label for="password">Contraseña</label>
+            <input id="password" type="password"
+                   autocomplete="current-password"
+                   placeholder="Contraseña">
+        </div>
+
+    </div>
+
+    <div class="actions">
+        <button id="loginBtn">Iniciar sesión</button>
+    </div>
+
+    <div id="loginStatus" class="status"></div>
+
+</section>
+
+
+<!-- PANEL ADMINISTRATIVO -->
+<section class="panel hidden" id="appPanel">
+
+    <div class="topline">
+
+        <div>
+            <h2 style="margin-bottom:5px">
+                Administración de enlaces
+            </h2>
+
+            <div class="muted" id="signedUser"></div>
+        </div>
+
+        <button class="secondary" id="logoutBtn">
+            Cerrar sesión
+        </button>
+
+    </div>
+
+    <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+
+    <h2>Crear enlace de un solo uso</h2>
+
+    <label for="targetUrl">
+        Dirección de la página de destino
+    </label>
+
+    <input
+        id="targetUrl"
+        type="url"
+        placeholder="https://companygarciacorona.com.mx/..."
+        autocomplete="url"
+    >
+
+    <p class="muted">
+        Introduce la dirección completa de la página que deseas
+        compartir. La dirección debe utilizar HTTPS.
+    </p>
+
+    <div class="actions">
+        <button id="createBtn">Generar enlace</button>
+    </div>
+
+    <div id="createStatus" class="status"></div>
+
+    <div id="newLinkArea" class="hidden" style="margin-top:15px">
+
+        <label for="newLink">Enlace generado</label>
+
+        <input id="newLink" readonly>
+
+        <div class="actions">
+            <button class="secondary" id="copyBtn">
+                Copiar enlace
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- HISTORIAL -->
+<section class="panel hidden" id="historyPanel">
+
+    <div class="topline">
+
+        <h2 style="margin:0">Historial de enlaces</h2>
+
+        <button class="secondary" id="refreshBtn">
+            Actualizar
+        </button>
+
+    </div>
+
+    <p class="muted">
+        Se muestran los enlaces creados por la cuenta que inició sesión.
+    </p>
+
+    <div class="tablewrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Destino</th>
+                    <th>Estado</th>
+                    <th>Token</th>
+                </tr>
+            </thead>
+
+            <tbody id="historyBody">
+                <tr>
+                    <td colspan="4">Cargando...</td>
+                </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div id="historyStatus" class="status"></div>
+
+</section>
+
+</main>
+
+<footer>
+    Corporación 2026 Grupo García Corona · Todos los derechos reservados
+</footer>
+
+
+<script>
+(() => {
+
+/* ==========================================
+   CONEXIÓN CON SUPABASE GGC-LDVDUU
+========================================== */
+
+const SUPABASE_URL =
+"https://bxmtxogbuhwzxznpwndm.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_UehtQp5UkzPNbZ7DYCvMXQ_VXjtllc";
+
+const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+let currentUser = null;
+
+const $ = id => document.getElementById(id);
+
+
+/* ==========================================
+   MENSAJES
+========================================== */
+
+function showStatus(id, message, type = "") {
+
+    const el = $(id);
+
+    el.textContent = message;
+
+    el.className = "status" + (type ? " " + type : "");
+
+}
+
+
+/* ==========================================
+   VERIFICAR ADMINISTRADOR
+========================================== */
+
+async function verifyProfile(user) {
+
+    const { data, error } = await db
+        .from("usuarios")
+        .select("id,correo,rol,activo")
+        .eq("id", user.id)
+        .maybeSingle();
+
+    if (error) throw error;
+
+    if (
+        !data ||
+        data.activo !== true ||
+        data.rol !== "administrador"
+    ) {
+
+        await db.auth.signOut();
+
+        throw new Error(
+            "Esta cuenta no está registrada como administrador activo en public.usuarios."
+        );
+
+    }
+
+    return data;
+
+}
+
+
+/* ==========================================
+   MOSTRAR PANEL
+========================================== */
+
+function showApp(user) {
+
+    currentUser = user;
+
+    $("loginPanel").classList.add("hidden");
+
+    $("appPanel").classList.remove("hidden");
+
+    $("historyPanel").classList.remove("hidden");
+
+    $("signedUser").textContent =
+        "Sesión iniciada: " + user.email;
+
+    loadHistory();
+
+}
+
+
+/* ==========================================
+   INICIAR SESIÓN
+========================================== */
+
+$("loginBtn").addEventListener("click", async () => {
+
+    showStatus("loginStatus", "Verificando acceso...");
+
+    const email = $("email").value.trim();
+
+    const password = $("password").value;
+
+    if (!email || !password) {
+
+        return showStatus(
+            "loginStatus",
+            "Escribe tu correo y contraseña.",
+            "error"
+        );
+
+    }
+
+    const { data, error } = await db.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if (error) {
+
+        return showStatus(
+            "loginStatus",
+            error.message,
+            "error"
+        );
+
+    }
+
+    try {
+
+        await verifyProfile(data.user);
+
+        showApp(data.user);
+
+    } catch (e) {
+
+        showStatus("loginStatus", e.message, "error");
+
+    }
+
+});
+
+
+/* ==========================================
+   CERRAR SESIÓN
+========================================== */
+
+$("logoutBtn").addEventListener("click", async () => {
+
+    await db.auth.signOut();
+
+    currentUser = null;
+
+    $("appPanel").classList.add("hidden");
+
+    $("historyPanel").classList.add("hidden");
+
+    $("loginPanel").classList.remove("hidden");
+
+    $("password").value = "";
+
+});
+
+
+/* ==========================================
+   GENERAR TOKEN
+========================================== */
+
+function generateToken() {
+
+    const bytes = new Uint8Array(32);
+
+    crypto.getRandomValues(bytes);
+
+    return Array.from(
+        bytes,
+        b => b.toString(16).padStart(2, "0")
+    ).join("");
+
+}
+
+
+/* ==========================================
+   CREAR ENLACE
+========================================== */
+
+$("createBtn").addEventListener("click", async () => {
+
+    if (!currentUser) return;
+
+    const raw = $("targetUrl").value.trim();
+
+    let parsed;
+
+    try {
+
+        parsed = new URL(raw);
+
+    } catch {
+
+        return showStatus(
+            "createStatus",
+            "Escribe una dirección URL válida.",
+            "error"
+        );
+
+    }
+
+    if (parsed.protocol !== "https:") {
+
+        return showStatus(
+            "createStatus",
+            "La dirección debe comenzar con https://",
+            "error"
+        );
+
+    }
+
+    $("createBtn").disabled = true;
+
+    showStatus("createStatus", "Generando enlace...");
+
+    try {
+
+        const token = generateToken();
+
+        const { error } = await db
+            .from("ldvu_enlaces")
+            .insert({
+                token: token,
+                target_url: parsed.href,
+                creado_por: currentUser.id,
+                activo: true,
+                usado: false
+            });
+
+        if (error) throw error;
+
+        const viewerUrl = new URL(
+            "https://companygarciacorona.com.mx/ldvu/ver/index.html"
+        );
+
+        viewerUrl.searchParams.set("token", token);
+
+        $("newLink").value = viewerUrl.toString();
+
+        $("newLinkArea").classList.remove("hidden");
+
+        showStatus(
+            "createStatus",
+            "Enlace creado correctamente.",
+            "ok"
+        );
+
+        $("targetUrl").value = "";
+
+        await loadHistory();
+
+    } catch (e) {
+
+        showStatus(
+            "createStatus",
+            "No se pudo crear el enlace: " + e.message,
+            "error"
+        );
+
+    } finally {
+
+        $("createBtn").disabled = false;
+
+    }
+
+});
+
+
+/* ==========================================
+   COPIAR ENLACE
+========================================== */
+
+$("copyBtn").addEventListener("click", async () => {
+
+    try {
+
+        await navigator.clipboard.writeText(
+            $("newLink").value
+        );
+
+        showStatus(
+            "createStatus",
+            "Enlace copiado correctamente.",
+            "ok"
+        );
+
+    } catch {
+
+        $("newLink").select();
+
+        document.execCommand("copy");
+
+        showStatus(
+            "createStatus",
+            "Selecciona y copia el enlace.",
+            ""
+        );
+
+    }
+
+});
+
+
+/* ==========================================
+   HISTORIAL
+========================================== */
+
+$("refreshBtn").addEventListener("click", loadHistory);
+
+
+async function loadHistory() {
+
+    if (!currentUser) return;
+
+    $("historyBody").innerHTML =
+        '<tr><td colspan="4">Cargando...</td></tr>';
+
+    const { data, error } = await db
+        .from("ldvu_enlaces")
+        .select("token,target_url,creado_en,usado,activo,usado_en")
+        .eq("creado_por", currentUser.id)
+        .order("creado_en", { ascending: false })
+        .limit(100);
+
+    if (error) {
+
+        $("historyBody").innerHTML =
+            '<tr><td colspan="4">No fue posible cargar el historial.</td></tr>';
+
+        return showStatus(
+            "historyStatus",
+            error.message,
+            "error"
+        );
+
+    }
+
+    $("historyStatus").className = "status";
+
+    if (!data || !data.length) {
+
+        $("historyBody").innerHTML =
+            '<tr><td colspan="4">Todavía no hay enlaces registrados.</td></tr>';
+
+        return;
+
+    }
+
+    $("historyBody").innerHTML = data.map(row => {
+
+        let state;
+
+        if (row.usado) {
+
+            state = '<span class="pill used">Utilizado</span>';
+
+        } else if (row.activo) {
+
+            state = '<span class="pill active">Disponible</span>';
+
+        } else {
+
+            state = '<span class="pill">Inactivo</span>';
+
+        }
+
+        const date = row.creado_en
+            ? new Date(row.creado_en).toLocaleString("es-MX")
+            : "—";
+
+        return `
+            <tr>
+                <td>${escapeHtml(date)}</td>
+                <td class="linkcell">${escapeHtml(row.target_url)}</td>
+                <td>${state}</td>
+                <td>${escapeHtml(row.token.slice(0,12))}…</td>
+            </tr>
+        `;
+
+    }).join("");
+
+}
+
+
+/* ==========================================
+   PROTEGER TEXTO MOSTRADO EN TABLA
+========================================== */
+
+function escapeHtml(value) {
+
+    return String(value).replace(/[&<>"']/g, c => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+    }[c]));
+
+}
+
+
+/* ==========================================
+   RESTAURAR SESIÓN
+========================================== */
+
+db.auth.getSession().then(async ({ data: { session } }) => {
+
+    if (!session) return;
+
+    try {
+
+        await verifyProfile(session.user);
+
+        showApp(session.user);
+
+    } catch (e) {
+
+        showStatus(
+            "loginStatus",
+            e.message,
+            "error"
+        );
+
+    }
+
+});
+
+})();
+</script>
+
+</body>
+</html>
