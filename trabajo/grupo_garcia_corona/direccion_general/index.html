@@ -1114,6 +1114,76 @@ select.form-control{
 
 }
 
+
+/* Módulo de Personal integrado; estilos aislados para no alterar el resto del sistema */
+#personal .worker-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}
+#personal .worker-stat{padding:17px;border:1px solid var(--line);border-radius:12px;background:#fff}
+#personal .worker-stat span{font-size:11px;color:var(--muted);font-weight:600}
+#personal .worker-stat strong{display:block;font-size:25px;color:var(--navy);margin-top:8px}
+#personal .worker-tabs{display:flex;gap:8px;margin:22px 0 18px;border-bottom:1px solid var(--line);overflow:auto}
+#personal .worker-tab{border:0;background:transparent;color:#65788a;padding:13px 17px;font-weight:700;font-size:13px;border-bottom:3px solid transparent;white-space:nowrap}
+#personal .worker-tab.active{color:var(--blue);border-color:var(--blue)}
+#personal .worker-panel{background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);padding:22px;margin-bottom:20px}
+#personal .worker-panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+#personal .worker-panel-head h3{font-size:17px;color:var(--navy);margin:0}
+#personal .worker-panel-head p{font-size:12px;color:var(--muted);margin:5px 0 0}
+#personal .worker-toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+#personal .worker-search{max-width:420px;flex:1;width:100%;border:1px solid #d7e0e8;border-radius:9px;padding:12px 13px;background:#fff;color:var(--ink);outline:none;font-size:13px}
+#personal .worker-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px}
+#personal .worker-table{width:100%;border-collapse:collapse;min-width:1100px}
+#personal .worker-table th{background:#f5f8fa;color:#607487;font-size:10px;text-transform:uppercase;letter-spacing:.65px;text-align:left;padding:13px 12px;white-space:nowrap}
+#personal .worker-table td{padding:13px 12px;border-top:1px solid #edf1f4;font-size:12px;vertical-align:middle}
+#personal .worker-table tbody tr:hover{background:#fafcfd}
+#personal .worker-person{font-weight:700;color:var(--navy)}
+#personal .worker-sub{font-size:11px;color:var(--muted);margin-top:4px}
+#personal .worker-pill{display:inline-block;padding:5px 9px;border-radius:30px;font-size:10px;font-weight:800}
+#personal .worker-pill.active{background:#e8f6ed;color:#167342}
+#personal .worker-pill.inactive{background:#fff0f0;color:#b33232}
+#personal .worker-actions{display:flex;gap:6px}
+#personal .worker-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#personal .worker-field label{display:block;font-size:11px;font-weight:700;color:#41576a;margin:0 0 7px}
+#personal .worker-field input,#personal .worker-field select{width:100%;border:1px solid #d7e0e8;border-radius:9px;padding:12px 13px;background:#fff;color:var(--ink);outline:none;font-size:13px}
+#personal .worker-field input:focus,#personal .worker-field select:focus{border-color:#3984b5;box-shadow:0 0 0 3px #175b8815}
+#personal .worker-field small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+#personal .worker-section-label{grid-column:1/-1;border-bottom:1px solid var(--line);padding-bottom:9px;margin-top:7px;color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+#personal .worker-full{grid-column:1/-1}
+#personal .worker-generated{background:#f3f7fa!important;color:var(--blue)!important;font-weight:700}
+#personal .worker-notice{padding:12px 14px;background:#eef6fb;border:1px solid #d9eaf5;border-radius:9px;color:#36566e;font-size:11px;line-height:1.6}
+#personal .worker-form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+#personal .worker-message{padding:11px 13px;border-radius:9px;font-size:12px;margin-bottom:14px;line-height:1.5}
+#personal .worker-message.error{background:#fff0f0;color:#a12e2e}
+#personal .worker-message.ok{background:#eaf7ef;color:#176b40}
+#personal .worker-btn{border:0;border-radius:9px;padding:11px 15px;font-size:12px;font-weight:700;transition:.15s;cursor:pointer}
+#personal .worker-btn-primary{background:var(--blue);color:#fff}
+#personal .worker-btn-primary:hover{background:var(--navy)}
+#personal .worker-btn-light{background:#edf3f7;color:var(--navy)}
+#personal .worker-btn-danger{background:#fff0f0;color:var(--red)}
+#personal .worker-btn-success{background:#eaf7ef;color:var(--green)}
+#personal .worker-btn:disabled{opacity:.55;cursor:not-allowed}
+#personal .worker-hidden{display:none!important}
+@media(max-width:760px){
+ #personal .worker-stats{gap:8px}
+ #personal .worker-stat{padding:12px}
+ #personal .worker-stat strong{font-size:21px}
+ #personal .worker-panel{padding:15px}
+ #personal .worker-form-grid{grid-template-columns:1fr}
+ #personal .worker-section-label,#personal .worker-full{grid-column:1}
+ #personal .worker-toolbar{flex-wrap:wrap}
+ #personal .worker-search{max-width:none;min-width:100%}
+ #personal .worker-form-actions{flex-direction:column-reverse}
+ #personal .worker-form-actions button{width:100%}
+}
+
+
+/* Módulo de archivos integrado en Documentos */
+.file-module{margin-top:28px;border-top:1px solid var(--border,#e5e7eb);padding-top:24px}
+.file-module h3{margin:0 0 8px}.file-note{font-size:12px;line-height:1.6;opacity:.8;margin:8px 0 14px}
+.file-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.file-tabs button{border:1px solid #d8e0ea;border-radius:8px;padding:9px 13px;background:#f4f7fb;color:#183451;cursor:pointer}.file-tabs button.active{background:#175b88;color:#fff;border-color:#175b88}
+.file-drop{border:2px dashed #b8c9dd;background:#f8fbff;border-radius:12px;padding:24px;text-align:center;cursor:pointer;margin:12px 0}.file-drop.drag{background:#edf5ff;border-color:#3478c8}.file-list{display:grid;gap:10px}.file-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px;border:1px solid #e3eaf0;border-radius:10px;background:#fff}.file-meta{min-width:180px;flex:1;overflow-wrap:anywhere}.file-meta small{display:block;color:#718096;margin-top:5px}.file-actions{display:flex;gap:6px;flex-wrap:wrap}.file-actions button{font-size:12px;padding:8px 10px;border-radius:7px;border:0;cursor:pointer}.file-actions .view{background:#0f766e;color:white}.file-actions .download{background:#2563eb;color:white}.file-actions .share{background:#d97706;color:white}.file-actions .replace{background:#7c3aed;color:white}.file-actions .delete{background:#fee2e2;color:#991b1b}.file-message{font-size:12px;padding:10px 12px;border-radius:8px;margin:10px 0;display:none;overflow-wrap:anywhere}.file-message.ok{display:block;background:#dcfce7;color:#166534}.file-message.err{display:block;background:#fee2e2;color:#991b1b}.file-hidden{display:none!important}.file-share-panel{padding:14px;background:#f8fafc;border:1px solid #dbe4ee;border-radius:10px;margin-top:10px}.file-share-panel textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;min-height:85px}.file-perms{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0;font-size:12px}.file-perms label{display:flex;align-items:center;gap:5px}.file-perms input{width:auto}.file-viewer{position:fixed;inset:0;background:#071a2bf0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px}.file-viewer.open{display:flex}.file-viewer-inner{width:min(100%,1000px);height:min(90vh,900px);background:#fff;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}.file-viewer-head{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#17324d}.file-viewer-content{flex:1;min-height:0;display:flex;justify-content:center;align-items:center;overflow:auto}.file-viewer-content img{max-width:100%;max-height:100%;object-fit:contain}.file-viewer-content iframe{width:100%;height:100%;border:0}
+@media(max-width:650px){.file-row{align-items:flex-start}.file-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.file-actions button{width:100%}.file-drop{padding:18px}}
+
+
+.file-auth-fields{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.file-auth-fields input{flex:1;min-width:220px;padding:11px 12px;border:1px solid #d8e0e8;border-radius:8px}.file-auth-pane{padding:10px 0 18px}
 </style>
 </head>
 
@@ -1583,47 +1653,73 @@ select.form-control{
                  PERSONAL
             ============================== -->
 
-            <section class="section" id="personal">
+            
+<section class="section" id="personal">
 
-                <div class="section-header">
+    <div class="section-header">
+        <div>
+            <h2>Personal</h2>
+            <p>Administración de trabajadores: consulta, alta y control de cuentas institucionales.</p>
+        </div>
+    </div>
 
-                    <div>
-                        <h2>Personal</h2>
-                        <p>Directorio interno de colaboradores.</p>
-                    </div>
+    <div class="worker-stats">
+        <div class="worker-stat"><span>TOTAL DE TRABAJADORES</span><strong id="totalCount">0</strong></div>
+        <div class="worker-stat"><span>CUENTAS ACTIVAS</span><strong id="activeCount">0</strong></div>
+        <div class="worker-stat"><span>CUENTAS INACTIVAS</span><strong id="inactiveCount">0</strong></div>
+    </div>
 
-                    <button
-                        class="btn btn-gold"
-                        onclick="openModal('employeeModal')"
-                    >
-                        + Nuevo personal
-                    </button>
+    <nav class="worker-tabs">
+        <button type="button" class="worker-tab active" id="tabList" onclick="showWorkerSection('list')">Trabajadores registrados</button>
+        <button type="button" class="worker-tab" id="tabForm" onclick="showWorkerSection('form')">Registrar trabajador</button>
+    </nav>
 
-                </div>
+    <section id="listSection" class="worker-panel">
+        <div class="worker-panel-head">
+            <div><h3>Directorio de trabajadores</h3><p>La contraseña nunca se muestra ni se almacena en esta tabla.</p></div>
+            <button type="button" class="worker-btn worker-btn-light" onclick="loadWorkers()">↻ Actualizar</button>
+        </div>
+        <div class="worker-toolbar">
+            <input class="worker-search" id="searchBox" placeholder="Buscar por nombre, correo, CURP o número de trabajador..." oninput="renderWorkers()">
+        </div>
+        <div id="listMessage"></div>
+        <div class="worker-table-wrap">
+            <table class="worker-table">
+                <thead><tr>
+                    <th>Trabajador</th><th>Número de trabajador</th><th>Correo institucional</th><th>CURP</th><th>RFC</th><th>Fecha nacimiento</th><th>Teléfono</th><th>Correo personal</th><th>Estado</th><th>Acciones</th>
+                </tr></thead>
+                <tbody id="workersBody"><tr><td colspan="10">Cargando información...</td></tr></tbody>
+            </table>
+        </div>
+    </section>
 
-                <div class="table-container">
+    <section id="formSection" class="worker-panel worker-hidden">
+        <div class="worker-panel-head"><div><h3>Alta de trabajador</h3><p>Completa la información para generar sus credenciales institucionales.</p></div></div>
+        <div id="formMessage"></div>
+        <form id="workerForm" onsubmit="createWorker(event)">
+            <div class="worker-form-grid">
+                <div class="worker-section-label">Información personal</div>
+                <div class="worker-field"><label for="nombre">Nombre(s) *</label><input id="nombre" required maxlength="100" autocomplete="given-name"></div>
+                <div class="worker-field"><label for="apellidos">Apellidos *</label><input id="apellidos" required maxlength="120" autocomplete="family-name"></div>
+                <div class="worker-field"><label for="curp">CURP *</label><input id="curp" required maxlength="18" minlength="18" style="text-transform:uppercase" placeholder="18 caracteres"></div>
+                <div class="worker-field"><label for="rfc">RFC (opcional)</label><input id="rfc" maxlength="13" style="text-transform:uppercase" placeholder="RFC si cuenta con él"></div>
+                <div class="worker-field"><label for="fecha_nacimiento">Fecha de nacimiento *</label><input id="fecha_nacimiento" type="date" required></div>
+                <div class="worker-field"><label for="telefono">Número de teléfono *</label><input id="telefono" type="tel" required maxlength="20" autocomplete="tel"></div>
+                <div class="worker-field worker-full"><label for="correo_personal">Correo electrónico personal *</label><input id="correo_personal" type="email" required maxlength="254" autocomplete="email"></div>
+                <div class="worker-section-label">Credenciales institucionales</div>
+                <div class="worker-field worker-full"><label>Correo institucional generado</label><input id="correo_preview" class="worker-generated" readonly placeholder="Se genera automáticamente al escribir nombre y apellidos"><small>Dominio institucional: @grupogarciacorona.com.mx</small></div>
+                <div class="worker-field worker-full"><label>Número de trabajador</label><input class="worker-generated" value="Se asignará automáticamente (10 dígitos)" readonly></div>
+                <div class="worker-field worker-full"><label>Contraseña inicial</label><div style="display:flex;gap:8px"><input id="passwordPreview" class="worker-generated" readonly style="flex:1" value="Se generará automáticamente"><button type="button" class="worker-btn worker-btn-light" onclick="generatePassword()">Generar otra</button></div><small>Se mostrará una sola vez al finalizar el registro. Entrégala al trabajador por un canal seguro.</small></div>
+                <div class="worker-field"><label for="estado">Estado de la cuenta *</label><select id="estado"><option value="true">Activo</option><option value="false">Inactivo</option></select></div>
+                <div class="worker-field"><label>Acceso institucional</label><input class="worker-generated" readonly value="Correo o número de trabajador + contraseña"></div>
+                <div class="worker-full worker-notice">Al registrar, se creará una cuenta en Supabase Authentication y su expediente en la tabla de trabajadores. El correo institucional es un identificador de acceso; para recibir correos reales en ese dominio deberá existir el servicio de correo correspondiente.</div>
+            </div>
+            <div class="worker-form-actions"><button type="button" class="worker-btn worker-btn-light" onclick="resetForm()">Limpiar formulario</button><button type="submit" class="worker-btn worker-btn-primary" id="submitBtn">Registrar trabajador</button></div>
+        </form>
+        <div id="credentialsResult" class="worker-hidden" style="margin-top:18px"></div>
+    </section>
+</section>
 
-                    <table class="table">
-
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Puesto</th>
-                                <th>Área</th>
-                                <th>Empresa</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="employeesTable">
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
 
 
             <!-- ==============================
@@ -1631,47 +1727,24 @@ select.form-control{
             ============================== -->
 
             <section class="section" id="documentos">
-
-                <div class="section-header">
-
-                    <div>
-                        <h2>Documentos</h2>
-                        <p>Control y registro documental.</p>
+                <div class="section-header"><div><h2>Documentos</h2><p>Gestión de archivos digitales, igual que en el HTML de archivos original.</p></div></div>
+                <div class="file-module">
+                    <div id="filesAuthPane" class="file-auth-pane">
+                      <h3>Conectar Archivos digitales</h3>
+                      <p class="file-note">Este módulo conserva su proyecto Supabase original. Inicia sesión con la cuenta que usabas en el HTML de Archivos; no cambia el acceso de Dirección General ni el módulo Personal.</p>
+                      <div class="file-auth-fields"><input id="filesAuthEmail" type="email" placeholder="Correo de Archivos" autocomplete="username"><input id="filesAuthPassword" type="password" placeholder="Contraseña de Archivos" autocomplete="current-password"><button type="button" class="btn btn-primary" onclick="connectFilesAccount()">Conectar</button></div>
+                      <div id="filesAuthMessage" class="file-message"></div>
                     </div>
-
-                    <button
-                        class="btn btn-gold"
-                        onclick="openModal('documentModal')"
-                    >
-                        + Nuevo documento
-                    </button>
-
+                    <div id="filesWorkspace" class="file-hidden">
+                      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><p class="file-note">Sesión de Archivos: <strong id="filesAuthUserLabel"></strong></p><button type="button" class="btn btn-light" onclick="disconnectFilesAccount()">Cerrar sesión de Archivos</button></div>
+                      <div class="file-tabs"><button type="button" id="fileTabMine" class="active" onclick="switchFileTab('mine')">📁 Mis archivos</button><button type="button" id="fileTabShared" onclick="switchFileTab('shared')">🤝 Compartidos conmigo</button></div>
+                      <div id="fileMinePane"><div class="file-drop" id="fileDropZone" onclick="document.getElementById('fileInput').click()"><strong>Haz clic o arrastra un archivo aquí</strong><br><small>PNG, JPG, PDF, DOC, DOCX, XLS o XLSX</small><input type="file" id="fileInput" class="file-hidden" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx" onchange="selectManagedFile(this)"></div><div id="fileSelectedName" class="file-note"></div><button type="button" id="fileUploadBtn" class="btn btn-primary file-hidden" onclick="uploadManagedFile()">📤 Subir archivo</button><div id="fileUploadMessage" class="file-message"></div><h3 style="margin-top:20px">Mis archivos subidos</h3><div id="fileMineList" class="file-list">Conecta tu cuenta para cargar archivos.</div></div>
+                      <div id="fileSharedPane" class="file-hidden"><div id="fileSharedList" class="file-list">Conecta tu cuenta para cargar archivos compartidos.</div></div>
+                    </div>
+                    <p class="file-note">La privacidad depende de las políticas RLS de Supabase y de los permisos del bucket privado.</p>
                 </div>
-
-                <div class="table-container">
-
-                    <table class="table">
-
-                        <thead>
-                            <tr>
-                                <th>Documento</th>
-                                <th>Tipo</th>
-                                <th>Responsable</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="documentsTable">
-                        </tbody>
-
-                    </table>
-
-                </div>
-
             </section>
-
+            <div id="managedFileViewer" class="file-viewer" role="dialog" aria-modal="true" onclick="if(event.target===this)closeManagedViewer()"><div class="file-viewer-inner"><div class="file-viewer-head"><strong id="managedViewerTitle">Vista previa</strong><button type="button" class="btn btn-light" onclick="closeManagedViewer()">Cerrar ✕</button></div><div id="managedViewerContent" class="file-viewer-content"></div></div></div>
 
             <!-- ==============================
                  FINANZAS
@@ -2334,6 +2407,25 @@ const supabase = createClient(
     SUPABASE_ANON_KEY
 );
 
+// Cliente separado para conservar el proyecto del HTML original de Archivos.
+const FILES_SUPABASE_URL = "https://tgiqazzonhzbkestodmq.supabase.co";
+const FILES_SUPABASE_KEY = "sb_publishable_tDBsj8J95dngohfPsWoyZA_Q-3gdnMK";
+const filesSupabase = createClient(FILES_SUPABASE_URL, FILES_SUPABASE_KEY);
+let filesUser = null;
+
+async function connectFilesAccount(){
+  const email=document.getElementById('filesAuthEmail').value.trim();
+  const password=document.getElementById('filesAuthPassword').value;
+  const msg=document.getElementById('filesAuthMessage');
+  if(!email||!password){msg.textContent='Escribe el correo y la contraseña de tu cuenta de Archivos.';msg.className='file-message err';return;}
+  msg.textContent='Conectando...';msg.className='file-message';
+  try{const {data,error}=await filesSupabase.auth.signInWithPassword({email,password});if(error)throw error;filesUser=data.user;showFilesWorkspace();}
+  catch(e){msg.textContent='No se pudo conectar: '+(e.message||e);msg.className='file-message err';}
+}
+async function disconnectFilesAccount(){await filesSupabase.auth.signOut();filesUser=null;document.getElementById('filesWorkspace').classList.add('file-hidden');document.getElementById('filesAuthPane').classList.remove('file-hidden');document.getElementById('fileMineList').textContent='Conecta tu cuenta para cargar archivos.';document.getElementById('fileSharedList').textContent='Conecta tu cuenta para cargar archivos compartidos.';}
+function showFilesWorkspace(){document.getElementById('filesAuthPane').classList.add('file-hidden');document.getElementById('filesWorkspace').classList.remove('file-hidden');document.getElementById('filesAuthUserLabel').textContent=filesUser?.email||'';listManagedFiles();listManagedSharedFiles();}
+filesSupabase.auth.getSession().then(({data})=>{if(data.session?.user){filesUser=data.session.user;showFilesWorkspace();}});
+
 // Diagnóstico visible: evita que un error de permisos/esquema parezca una tabla vacía.
 function showDataError(area, error){
     console.error(`[PRUEVA] ${area}:`, error);
@@ -2670,6 +2762,10 @@ function showSection(id,button){
 
     if(button){
         button.classList.add("active");
+    }
+
+    if(id === "personal"){
+        loadWorkers();
     }
 
     const info = pageNames[id];
@@ -3068,6 +3164,8 @@ async function deleteEmployee(id){
 
 async function renderEmployees(){
 
+    if(!document.getElementById("employeesTable")) return;
+
     const data = await getEmployees();
 
     const tbody = document.getElementById("employeesTable");
@@ -3129,6 +3227,268 @@ async function renderEmployees(){
     `).join("");
 
 }
+
+
+
+/* ==============================
+   MÓDULO PERSONAL: ADMINISTRACIÓN DE TRABAJADORES
+   Usa la sesión Supabase ya abierta por la aplicación principal.
+============================== */
+
+let workers = [];
+let generatedPassword = "";
+
+function showWorkerSection(which){
+    document.getElementById("listSection").classList.toggle("worker-hidden", which !== "list");
+    document.getElementById("formSection").classList.toggle("worker-hidden", which !== "form");
+    document.getElementById("tabList").classList.toggle("active", which === "list");
+    document.getElementById("tabForm").classList.toggle("active", which === "form");
+    if(which === "list") loadWorkers();
+}
+
+function showWorkerMessage(id, msg, type = "error"){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.textContent = "";
+    const d = document.createElement("div");
+    d.className = "worker-message " + type;
+    d.textContent = msg;
+    el.appendChild(d);
+}
+
+function clearWorkerMessage(id){
+    const el = document.getElementById(id);
+    if(el) el.textContent = "";
+}
+
+function workerToast(msg){
+    if(typeof toast === "function") toast(msg);
+    else alert(msg);
+}
+
+async function loadWorkers(){
+    const body = document.getElementById("workersBody");
+    if(!body) return;
+    body.innerHTML = '<tr><td colspan="10">Cargando información...</td></tr>';
+    clearWorkerMessage("listMessage");
+    const { data, error } = await supabase
+        .from("trabajadores")
+        .select("id,nombre,apellidos,curp,rfc,fecha_nacimiento,telefono,correo_personal,correo_institucional,numero_trabajador,activo,created_at")
+        .order("created_at", { ascending: false });
+
+    if(error){
+        console.error("[Personal] Error al cargar trabajadores:", error);
+        body.innerHTML = '<tr><td colspan="10">No se pudo cargar el directorio.</td></tr>';
+        showWorkerMessage("listMessage", "No se pudo cargar el directorio: " + (error.message || "Error desconocido") + ". Verifica la tabla trabajadores y las políticas RLS.", "error");
+        return;
+    }
+
+    workers = data || [];
+    renderWorkers();
+    document.getElementById("totalCount").textContent = workers.length;
+    document.getElementById("activeCount").textContent = workers.filter(x => x.activo).length;
+    document.getElementById("inactiveCount").textContent = workers.filter(x => !x.activo).length;
+}
+
+function workerCell(value){
+    const td = document.createElement("td");
+    td.textContent = value ?? "—";
+    if(value === null || value === undefined || value === "") td.textContent = "—";
+    return td;
+}
+
+function renderWorkers(){
+    const search = document.getElementById("searchBox");
+    const body = document.getElementById("workersBody");
+    if(!search || !body) return;
+    const q = (search.value || "").toLowerCase().trim();
+    body.innerHTML = "";
+    const rows = workers.filter(w =>
+        [w.nombre,w.apellidos,w.curp,w.rfc,w.telefono,w.correo_personal,w.correo_institucional,w.numero_trabajador]
+            .join(" ").toLowerCase().includes(q)
+    );
+
+    if(!rows.length){
+        body.innerHTML = `<tr><td colspan="10">${workers.length ? "No hay trabajadores que coincidan con la búsqueda." : "Todavía no hay trabajadores registrados."}</td></tr>`;
+        return;
+    }
+
+    rows.forEach(w => {
+        const tr = document.createElement("tr");
+        const person = document.createElement("td");
+        const name = document.createElement("div");
+        name.className = "worker-person";
+        name.textContent = `${w.nombre || ""} ${w.apellidos || ""}`.trim() || "—";
+        const sub = document.createElement("div");
+        sub.className = "worker-sub";
+        sub.textContent = "Registrado: " + (w.created_at ? new Date(w.created_at).toLocaleDateString("es-MX") : "—");
+        person.append(name, sub);
+        tr.append(person);
+        tr.append(
+            workerCell(w.numero_trabajador),
+            workerCell(w.correo_institucional),
+            workerCell(w.curp),
+            workerCell(w.rfc),
+            workerCell(w.fecha_nacimiento),
+            workerCell(w.telefono),
+            workerCell(w.correo_personal)
+        );
+        const status = document.createElement("td");
+        const pill = document.createElement("span");
+        pill.className = "worker-pill " + (w.activo ? "active" : "inactive");
+        pill.textContent = w.activo ? "ACTIVO" : "INACTIVO";
+        status.append(pill);
+        tr.append(status);
+        const actions = document.createElement("td");
+        actions.className = "worker-actions";
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "worker-btn " + (w.activo ? "worker-btn-danger" : "worker-btn-success");
+        btn.textContent = w.activo ? "Desactivar" : "Activar";
+        btn.onclick = () => changeWorkerStatus(w, !w.activo);
+        actions.append(btn);
+        tr.append(actions);
+        body.append(tr);
+    });
+}
+
+async function invokeWorkerAdmin(payload){
+    const { data: { session } } = await supabase.auth.getSession();
+    if(!session) throw new Error("La sesión expiró. Inicia sesión nuevamente.");
+    const functionUrl = SUPABASE_URL + "/functions/v1/administrar-trabajadores";
+    const response = await fetch(functionUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": "Bearer " + session.access_token
+        },
+        body: JSON.stringify(payload)
+    });
+    const result = await response.json().catch(() => ({}));
+    if(!response.ok) throw new Error(result.error || result.detalle || `No se pudo completar la operación (HTTP ${response.status}).`);
+    return result;
+}
+
+async function changeWorkerStatus(worker, active){
+    const action = active ? "activar" : "desactivar";
+    if(!confirm(`¿Confirmas ${action} la cuenta de ${worker.nombre} ${worker.apellidos}?`)) return;
+    try{
+        await invokeWorkerAdmin({action:"set_status", id:worker.id, activo:active});
+        workerToast("Estado actualizado correctamente.");
+        await loadWorkers();
+    }catch(e){
+        workerToast(e.message || "No se pudo actualizar el estado.");
+    }
+}
+
+function normalizeWorkerName(value){
+    return value.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"").trim();
+}
+
+function updateWorkerEmailPreview(){
+    const n = normalizeWorkerName(document.getElementById("nombre").value);
+    const a = normalizeWorkerName(document.getElementById("apellidos").value);
+    document.getElementById("correo_preview").value = (n && a) ? n + "." + a + "@grupogarciacorona.com.mx" : "";
+}
+
+function generatePassword(){
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+    const bytes = new Uint8Array(18);
+    crypto.getRandomValues(bytes);
+    generatedPassword = Array.from(bytes, b => chars[b % chars.length]).join("");
+    document.getElementById("passwordPreview").value = generatedPassword;
+}
+
+function resetForm(){
+    const form = document.getElementById("workerForm");
+    if(form) form.reset();
+    generatedPassword = "";
+    document.getElementById("passwordPreview").value = "Se generará automáticamente";
+    document.getElementById("correo_preview").value = "";
+    clearWorkerMessage("formMessage");
+    document.getElementById("credentialsResult").classList.add("worker-hidden");
+}
+
+async function createWorker(event){
+    event.preventDefault();
+    clearWorkerMessage("formMessage");
+    document.getElementById("credentialsResult").classList.add("worker-hidden");
+    const curp = document.getElementById("curp").value.trim().toUpperCase();
+    if(!/^[A-Z0-9]{18}$/.test(curp)){
+        showWorkerMessage("formMessage", "La CURP debe contener exactamente 18 caracteres alfanuméricos.");
+        return;
+    }
+    const rfc = document.getElementById("rfc").value.trim().toUpperCase();
+    if(rfc && !/^[A-Z0-9Ñ&]{12,13}$/.test(rfc)){
+        showWorkerMessage("formMessage", "Verifica el formato del RFC.");
+        return;
+    }
+    if(!generatedPassword) generatePassword();
+
+    const payload = {
+        action:"create",
+        nombre:document.getElementById("nombre").value.trim(),
+        apellidos:document.getElementById("apellidos").value.trim(),
+        curp,
+        rfc:rfc || null,
+        fecha_nacimiento:document.getElementById("fecha_nacimiento").value,
+        telefono:document.getElementById("telefono").value.trim(),
+        correo_personal:document.getElementById("correo_personal").value.trim(),
+        password:generatedPassword,
+        activo:document.getElementById("estado").value === "true"
+    };
+
+    const btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.textContent = "Registrando...";
+    try{
+        const result = await invokeWorkerAdmin(payload);
+        const box = document.getElementById("credentialsResult");
+        box.classList.remove("worker-hidden");
+        box.innerHTML = "";
+        const title = document.createElement("h3");
+        title.textContent = "Trabajador registrado correctamente";
+        title.style.color = "#176b40";
+        box.append(title);
+        const p = document.createElement("p");
+        p.textContent = "Guarda y entrega estas credenciales al trabajador. La contraseña no volverá a mostrarse.";
+        box.append(p);
+        const pre = document.createElement("pre");
+        pre.style.cssText = "white-space:pre-wrap;background:#f2f6f9;padding:15px;border-radius:9px;font:13px Inter,Arial;color:#173b57";
+        const worker = result.trabajador || {};
+        pre.textContent = "Nombre: " + (worker.nombre || payload.nombre) + " " + (worker.apellidos || payload.apellidos) +
+            "\nCorreo institucional: " + (worker.correo_institucional || "No devuelto por el servidor") +
+            "\nNúmero de trabajador: " + (worker.numero_trabajador || "No devuelto por el servidor") +
+            "\nContraseña temporal: " + (result.password_temporal || generatedPassword) +
+            "\nEstado: " + ((worker.activo ?? payload.activo) ? "ACTIVO" : "INACTIVO");
+        box.append(pre);
+        const copy = document.createElement("button");
+        copy.type = "button";
+        copy.className = "worker-btn worker-btn-light";
+        copy.textContent = "Copiar credenciales";
+        copy.onclick = () => navigator.clipboard.writeText(pre.textContent)
+            .then(() => workerToast("Credenciales copiadas."))
+            .catch(() => workerToast("No se pudieron copiar automáticamente; selecciona el texto de las credenciales."));
+        box.append(copy);
+
+        resetForm();
+        // Volver a mostrar las credenciales recién generadas tras limpiar el formulario.
+        box.classList.remove("worker-hidden");
+        await loadWorkers();
+        showWorkerSection("list");
+        box.classList.remove("worker-hidden");
+        document.getElementById("formSection").append(box);
+    }catch(err){
+        showWorkerMessage("formMessage", err.message || "No se pudo registrar el trabajador.");
+    }finally{
+        btn.disabled = false;
+        btn.textContent = "Registrar trabajador";
+    }
+}
+
+document.getElementById("nombre").addEventListener("input", updateWorkerEmailPreview);
+document.getElementById("apellidos").addEventListener("input", updateWorkerEmailPreview);
 
 
 /* ==============================
@@ -4270,6 +4630,14 @@ window.logout = logout;
 window.showSection = showSection;
 window.goToSection = goToSection;
 window.toggleMobileMenu = toggleMobileMenu;
+
+window.showWorkerSection = showWorkerSection;
+window.loadWorkers = loadWorkers;
+window.renderWorkers = renderWorkers;
+window.generatePassword = generatePassword;
+window.resetForm = resetForm;
+window.createWorker = createWorker;
+
 window.closeMobileMenu = closeMobileMenu;
 window.openModal = openModal;
 window.closeModal = closeModal;
@@ -4301,6 +4669,95 @@ window.resetSystem = resetSystem;
 window.saveGeneralConfig = saveGeneralConfig;
 window.showSection = showSection;
 window.toggleMobileMenu = toggleMobileMenu;
+
+/* ==============================
+   MÓDULO DE ARCHIVOS EN DOCUMENTOS
+   Reutiliza la sesión Supabase de Dirección General.
+============================== */
+const MANAGED_FILE_BUCKET = 'archivos-usuarios';
+const MANAGED_FILE_EXTS = ['png','jpg','jpeg','pdf','doc','docx','xls','xlsx'];
+let managedFileSelected = null;
+let managedFileBusy = false;
+
+function managedFileMsg(text, ok=false){
+  const el=document.getElementById('fileUploadMessage'); if(!el)return;
+  el.textContent=text; el.className='file-message '+(ok?'ok':'err');
+}
+function clearManagedFileMsg(){const el=document.getElementById('fileUploadMessage');if(el){el.textContent='';el.className='file-message';}}
+function managedFileEsc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function managedFileExtension(name){return (String(name||'').split('.').pop()||'').toLowerCase();}
+function managedFileIsImage(name){return /\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(String(name||''));}
+function switchFileTab(which){
+  const mine=which==='mine';
+  document.getElementById('fileMinePane').classList.toggle('file-hidden',!mine);
+  document.getElementById('fileSharedPane').classList.toggle('file-hidden',mine);
+  document.getElementById('fileTabMine').classList.toggle('active',mine);
+  document.getElementById('fileTabShared').classList.toggle('active',!mine);
+  if(mine)listManagedFiles();else listManagedSharedFiles();
+}
+function selectManagedFile(input){
+  const f=input.files&&input.files[0]; if(!f)return;
+  if(!MANAGED_FILE_EXTS.includes(managedFileExtension(f.name))){input.value='';managedFileSelected=null;document.getElementById('fileUploadBtn').classList.add('file-hidden');return managedFileMsg('Tipo de archivo no permitido.');}
+  managedFileSelected=f;document.getElementById('fileSelectedName').textContent='Seleccionado: '+f.name+' ('+(f.size/1024).toFixed(1)+' KB)';document.getElementById('fileUploadBtn').classList.remove('file-hidden');clearManagedFileMsg();
+}
+function managedFileOwner(){if(!filesUser||!filesUser.id)throw new Error('Conecta primero la cuenta del HTML original de Archivos.');return filesUser.id;}
+async function uploadManagedFile(){
+  if(!managedFileSelected||managedFileBusy)return;
+  managedFileBusy=true;const btn=document.getElementById('fileUploadBtn');btn.disabled=true;btn.textContent='Subiendo...';
+  let path='';
+  try{
+    const owner=managedFileOwner();const f=managedFileSelected;const safe=f.name.replace(/[^\w.\-() ]/g,'_');path=owner+'/'+Date.now()+'_'+safe;
+    const {error:upErr}=await filesSupabase.storage.from(MANAGED_FILE_BUCKET).upload(path,f,{cacheControl:'3600',upsert:false,contentType:f.type||undefined});if(upErr)throw upErr;
+    const {error:dbErr}=await filesSupabase.from('archivos').insert({nombre_archivo:f.name,ruta_archivo:path,tipo_archivo:f.type||null,tamano:f.size,usuario_id:owner});
+    if(dbErr){await filesSupabase.storage.from(MANAGED_FILE_BUCKET).remove([path]);throw dbErr;}
+    managedFileMsg('Archivo subido correctamente.',true);managedFileSelected=null;document.getElementById('fileInput').value='';document.getElementById('fileSelectedName').textContent='';btn.classList.add('file-hidden');await listManagedFiles();
+  }catch(e){managedFileMsg('No se pudo subir el archivo: '+(e.message||e));}
+  finally{managedFileBusy=false;btn.disabled=false;btn.textContent='📤 Subir archivo';}
+}
+async function listManagedFiles(){
+  const list=document.getElementById('fileMineList');if(!list||!filesUser)return;list.textContent='Cargando archivos...';
+  try{
+    const {data,error}=await filesSupabase.from('archivos').select('id,nombre_archivo,ruta_archivo,tipo_archivo,tamano,usuario_id,creado_en,correo_compartido').eq('usuario_id',managedFileOwner()).order('creado_en',{ascending:false});if(error)throw error;
+    if(!data||!data.length){list.innerHTML='<p class="file-note">Todavía no has subido archivos.</p>';return;}
+    list.innerHTML='';data.forEach(f=>{
+      const row=document.createElement('div');row.className='file-row';
+      const meta=document.createElement('div');meta.className='file-meta';meta.innerHTML='<strong>'+managedFileEsc(f.nombre_archivo)+'</strong><small>'+managedFileEsc(f.creado_en?new Date(f.creado_en).toLocaleString('es-MX'):'Fecha no disponible')+' · '+((Number(f.tamano)||0)/1024).toFixed(1)+' KB · '+(f.correo_compartido?'Compartido con '+managedFileEsc(f.correo_compartido):'Privado')+'</small>';
+      const actions=document.createElement('div');actions.className='file-actions';
+      const add=(label,cls,fn,disabled=false)=>{const b=document.createElement('button');b.textContent=label;b.className=cls;b.disabled=disabled;b.onclick=fn;actions.appendChild(b);};
+      add('👁 Ver','view',()=>viewManagedFile(f),!managedFileIsImage(f.nombre_archivo));
+      add('⬇ Descargar','download',()=>downloadManagedFile(f));
+      add('🔄 Reemplazar','replace',()=>chooseManagedReplacement(f));
+      add('🤝 Compartir','share',()=>openManagedShare(row,f));
+      add('🗑 Eliminar','delete',()=>deleteManagedFile(f));
+      const replacement=document.createElement('input');replacement.type='file';replacement.accept='.png,.jpg,.jpeg,.pdf,.doc,.docx,.xls,.xlsx';replacement.className='file-hidden';replacement.onchange=()=>{if(replacement.files&&replacement.files[0])replaceManagedFile(f,replacement.files[0],replacement);};row.append(meta,actions,replacement);row._replacement=replacement;
+      const panel=document.createElement('div');panel.className='file-share-panel file-hidden';panel.style.width='100%';row.appendChild(panel);row._sharePanel=panel;list.appendChild(row);
+    });
+  }catch(e){list.textContent='No se pudieron cargar los archivos: '+(e.message||e);}
+}
+function chooseManagedReplacement(f){const rows=[...document.querySelectorAll('#fileMineList .file-row')];const row=rows.find(x=>x.querySelector('.file-meta strong')?.textContent===f.nombre_archivo);if(row&&row._replacement)row._replacement.click();}
+async function replaceManagedFile(oldFile,newFile,input){
+  if(!MANAGED_FILE_EXTS.includes(managedFileExtension(newFile.name))){input.value='';return alert('Tipo de archivo no permitido.');}
+  if(!confirm('¿Reemplazar "'+oldFile.nombre_archivo+'" por "'+newFile.name+'"?')){input.value='';return;}
+  const owner=managedFileOwner(),safe=newFile.name.replace(/[^\w.\-() ]/g,'_'),newPath=owner+'/'+Date.now()+'_'+safe;input.disabled=true;
+  try{const {error:up}=await filesSupabase.storage.from(MANAGED_FILE_BUCKET).upload(newPath,newFile,{cacheControl:'3600',upsert:false,contentType:newFile.type||undefined});if(up)throw up;
+    const {error:upd}=await filesSupabase.from('archivos').update({nombre_archivo:newFile.name,ruta_archivo:newPath,tipo_archivo:newFile.type||null,tamano:newFile.size}).eq('id',oldFile.id).eq('usuario_id',owner);if(upd){await filesSupabase.storage.from(MANAGED_FILE_BUCKET).remove([newPath]);throw upd;}
+    const {error:rm}=await filesSupabase.storage.from(MANAGED_FILE_BUCKET).remove([oldFile.ruta_archivo]);if(rm)alert('El archivo nuevo quedó guardado, pero no se pudo retirar el anterior: '+rm.message);else alert('Archivo reemplazado correctamente.');await listManagedFiles();
+  }catch(e){alert('No se pudo reemplazar: '+(e.message||e));}finally{input.disabled=false;input.value='';}
+}
+async function downloadManagedFile(f){try{const {data,error}=await filesSupabase.storage.from(MANAGED_FILE_BUCKET).download(f.ruta_archivo);if(error)throw error;const url=URL.createObjectURL(data),a=document.createElement('a');a.href=url;a.download=f.nombre_archivo||'archivo';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}catch(e){alert('No se pudo descargar: '+(e.message||e));}}
+async function viewManagedFile(f){const modal=document.getElementById('managedFileViewer'),content=document.getElementById('managedViewerContent');document.getElementById('managedViewerTitle').textContent=f.nombre_archivo;content.textContent='Cargando...';modal.classList.add('open');try{const {data,error}=await filesSupabase.storage.from(MANAGED_FILE_BUCKET).createSignedUrl(f.ruta_archivo,300);if(error)throw error;content.innerHTML='';const img=document.createElement('img');img.src=data.signedUrl;img.alt=f.nombre_archivo;content.appendChild(img);}catch(e){content.textContent='No se pudo abrir la imagen: '+(e.message||e);}}
+function closeManagedViewer(){document.getElementById('managedFileViewer').classList.remove('open');document.getElementById('managedViewerContent').innerHTML='';}
+async function deleteManagedFile(f){if(!confirm('¿Eliminar permanentemente "'+f.nombre_archivo+'"?'))return;try{const {error:dbErr}=await filesSupabase.from('archivos').delete().eq('id',f.id).eq('usuario_id',managedFileOwner());if(dbErr)throw dbErr;const {error:stErr}=await filesSupabase.storage.from(MANAGED_FILE_BUCKET).remove([f.ruta_archivo]);if(stErr)alert('El registro se borró, pero Storage reportó: '+stErr.message);else alert('Archivo eliminado.');await listManagedFiles();}catch(e){alert('No se pudo eliminar: '+(e.message||e));}}
+async function openManagedShare(row,f){
+  const panel=row._sharePanel;if(!panel)return;if(!panel.classList.contains('file-hidden')){panel.classList.add('file-hidden');panel.innerHTML='';return;}panel.classList.remove('file-hidden');
+  panel.innerHTML='<strong>Compartir: '+managedFileEsc(f.nombre_archivo)+'</strong><p class="file-note">Escribe correos separados por coma, punto y coma o salto de línea. Requiere las funciones RPC de permisos configuradas en Supabase.</p><textarea class="shareEmails" placeholder="persona@empresa.com"></textarea><div class="file-perms"><label><input type="checkbox" class="permView" checked> Visualizar</label><label><input type="checkbox" class="permDownload"> Descargar</label><label><input type="checkbox" class="permShare"> Compartir</label><label><input type="checkbox" class="permDelete"> Eliminar</label></div><button type="button" class="btn btn-primary saveShare">Guardar accesos</button><button type="button" class="btn btn-light revokeList">Ver accesos existentes</button><div class="shareResult file-note"></div><div class="shareExisting"></div>';
+  panel.querySelector('.saveShare').onclick=async()=>{const emails=[...new Set(panel.querySelector('.shareEmails').value.split(/[\n,;]+/).map(x=>x.trim().toLowerCase()).filter(Boolean))];if(!emails.length)return alert('Escribe al menos un correo.');const bad=emails.filter(x=>!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x));if(bad.length)return alert('Correo no válido: '+bad.slice(0,4).join(', '));const b=panel.querySelector('.saveShare');b.disabled=true;b.textContent='Guardando...';try{const recipients=emails.map(correo=>({correo,visualizar:panel.querySelector('.permView').checked,descargar:panel.querySelector('.permDownload').checked,compartir:panel.querySelector('.permShare').checked,eliminar:panel.querySelector('.permDelete').checked}));const {data,error}=await filesSupabase.rpc('guardar_compartidos',{p_archivo_id:f.id,p_destinatarios:recipients});if(error)throw error;panel.querySelector('.shareResult').textContent='Accesos guardados: '+(data??emails.length);panel.querySelector('.shareEmails').value='';}catch(e){panel.querySelector('.shareResult').textContent='No se pudo compartir: '+(e.message||e);}finally{b.disabled=false;b.textContent='Guardar accesos';}};
+  panel.querySelector('.revokeList').onclick=async()=>{const box=panel.querySelector('.shareExisting');box.textContent='Consultando...';try{const {data,error}=await filesSupabase.from('archivo_compartidos').select('id,correo,permite_visualizar,permite_descargar,permite_compartir,permite_eliminar').eq('archivo_id',f.id).order('correo');if(error)throw error;if(!data?.length){box.textContent='No hay accesos registrados.';return;}box.innerHTML='';data.forEach(a=>{const line=document.createElement('div');line.style.cssText='padding:8px 0;border-top:1px solid #ddd;overflow-wrap:anywhere';const label=document.createElement('span');label.textContent=a.correo+' ';const btn=document.createElement('button');btn.className='btn btn-light';btn.textContent='Revocar';btn.onclick=async()=>{if(!confirm('¿Revocar el acceso de '+a.correo+'?'))return;const {error}=await filesSupabase.rpc('revocar_compartido',{p_compartido_id:a.id});if(error)alert(error.message);else{line.remove();alert('Acceso revocado.');}};line.append(label,btn);box.appendChild(line);});}catch(e){box.textContent='Error: '+(e.message||e);}};
+}
+async function listManagedSharedFiles(){const list=document.getElementById('fileSharedList');if(!list||!filesUser)return;list.textContent='Cargando archivos compartidos...';try{const {data:access,error}=await filesSupabase.from('archivo_compartidos').select('archivo_id,permite_visualizar,permite_descargar,permite_compartir,permite_eliminar').ilike('correo',filesUser.email||'').eq('permite_visualizar',true);if(error)throw error;if(!access?.length){list.innerHTML='<p class="file-note">No hay archivos compartidos contigo.</p>';return;}const ids=[...new Set(access.map(a=>a.archivo_id))];const {data:files,error:fe}=await filesSupabase.from('archivos').select('id,nombre_archivo,ruta_archivo,tamano,creado_en,usuario_id').in('id',ids).order('creado_en',{ascending:false});if(fe)throw fe;list.innerHTML='';(files||[]).forEach(f=>{const perm=access.find(a=>a.archivo_id===f.id)||{};const row=document.createElement('div');row.className='file-row';const meta=document.createElement('div');meta.className='file-meta';meta.innerHTML='<strong>'+managedFileEsc(f.nombre_archivo)+'</strong><small>Compartido contigo · '+((Number(f.tamano)||0)/1024).toFixed(1)+' KB</small>';const actions=document.createElement('div');actions.className='file-actions';const add=(label,cls,fn)=>{const b=document.createElement('button');b.textContent=label;b.className=cls;b.onclick=fn;actions.appendChild(b);};add('👁 Ver','view',()=>viewManagedFile(f));if(perm.permite_descargar)add('⬇ Descargar','download',()=>downloadManagedFile(f));if(perm.permite_compartir)add('🤝 Compartir','share',()=>openManagedShare(row,f));if(perm.permite_eliminar)add('🗑 Eliminar','delete',()=>deleteSharedManagedFile(f));row.append(meta,actions);list.appendChild(row);});}catch(e){list.textContent='No se pudieron cargar los compartidos: '+(e.message||e);}}
+async function deleteSharedManagedFile(f){if(!confirm('¿Eliminar este archivo compartido?'))return;try{const {error:st}=await filesSupabase.storage.from(MANAGED_FILE_BUCKET).remove([f.ruta_archivo]);if(st)throw st;const {error}=await filesSupabase.from('archivos').delete().eq('id',f.id);if(error)throw error;alert('Archivo eliminado.');await listManagedSharedFiles();}catch(e){alert('No se pudo eliminar: '+(e.message||e));}}
+const managedDrop=document.getElementById('fileDropZone');if(managedDrop){managedDrop.addEventListener('dragover',e=>{e.preventDefault();managedDrop.classList.add('drag');});managedDrop.addEventListener('dragleave',()=>managedDrop.classList.remove('drag'));managedDrop.addEventListener('drop',e=>{e.preventDefault();managedDrop.classList.remove('drag');const f=e.dataTransfer.files&&e.dataTransfer.files[0];if(!f)return;const dt=new DataTransfer();dt.items.add(f);const input=document.getElementById('fileInput');input.files=dt.files;selectManagedFile(input);});}
+window.connectFilesAccount=connectFilesAccount;window.disconnectFilesAccount=disconnectFilesAccount;window.switchFileTab=switchFileTab;window.selectManagedFile=selectManagedFile;window.uploadManagedFile=uploadManagedFile;window.closeManagedViewer=closeManagedViewer;
 
 /* ==============================
    INICIO DEL SISTEMA
