@@ -1,0 +1,712 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#102b46">
+<meta name="description" content="Cambio de contraseña para trabajadores de Grupo García Corona">
+
+<link rel="icon" href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
+
+<title>Cambio de contraseña | Grupo García Corona</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --navy:#102b46;
+    --blue:#175b88;
+    --cyan:#0e7490;
+    --text:#203244;
+    --muted:#64748b;
+    --line:#dbe4ec;
+    --bg:#f3f6f9;
+    --green:#137547;
+    --red:#b42318;
+}
+
+* {
+    box-sizing:border-box;
+}
+
+body {
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
+    display:flex;
+    flex-direction:column;
+}
+
+header {
+    background:var(--navy);
+    color:white;
+    padding:17px 20px;
+}
+
+.header-content {
+    max-width:1050px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+header img {
+    width:48px;
+    height:48px;
+    object-fit:contain;
+    background:white;
+    border-radius:9px;
+    padding:4px;
+}
+
+header h1 {
+    font-size:18px;
+    margin:0 0 4px;
+}
+
+header p {
+    font-size:12px;
+    margin:0;
+    color:#d6e5f1;
+}
+
+main {
+    width:100%;
+    max-width:520px;
+    margin:auto;
+    padding:28px 16px;
+}
+
+.card {
+    background:white;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:25px;
+    box-shadow:0 6px 22px #102b460c;
+}
+
+h2 {
+    color:var(--navy);
+    font-size:21px;
+    margin:0 0 9px;
+}
+
+.description {
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.6;
+    margin:0 0 22px;
+}
+
+.field {
+    margin-bottom:16px;
+}
+
+label {
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:7px;
+    color:#334155;
+}
+
+input {
+    width:100%;
+    padding:13px;
+    border:1px solid #cbd5e1;
+    border-radius:8px;
+    font-size:15px;
+    outline:none;
+}
+
+input:focus {
+    border-color:var(--blue);
+    box-shadow:0 0 0 2px #175b8820;
+}
+
+.password-wrap {
+    display:flex;
+    gap:7px;
+}
+
+.password-wrap input {
+    min-width:0;
+    flex:1;
+}
+
+.toggle {
+    background:#e8eef4;
+    color:var(--navy);
+    padding:0 12px;
+    border-radius:8px;
+    font-size:12px;
+}
+
+button {
+    border:0;
+    border-radius:8px;
+    padding:13px 17px;
+    background:var(--blue);
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:14px;
+}
+
+button:disabled {
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.primary {
+    width:100%;
+    margin-top:5px;
+}
+
+.status {
+    display:none;
+    padding:12px;
+    border-radius:8px;
+    font-size:13px;
+    line-height:1.5;
+    margin-top:16px;
+    overflow-wrap:anywhere;
+}
+
+.status.ok {
+    display:block;
+    background:#edf8f1;
+    color:var(--green);
+}
+
+.status.error {
+    display:block;
+    background:#fff0ef;
+    color:var(--red);
+}
+
+.status.info {
+    display:block;
+    background:#edf3f8;
+    color:var(--navy);
+}
+
+.hint {
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+    margin-top:7px;
+}
+
+.hidden {
+    display:none!important;
+}
+
+footer {
+    text-align:center;
+    color:#718096;
+    font-size:11px;
+    padding:18px;
+}
+
+@media(max-width:480px) {
+    .card {
+        padding:20px;
+    }
+
+    header h1 {
+        font-size:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+
+        <img
+            src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png"
+            alt="Grupo García Corona"
+        >
+
+        <div>
+            <h1>GRUPO GARCIA CORONA</h1>
+            <p>Portal de trabajadores</p>
+        </div>
+
+    </div>
+</header>
+
+
+<main>
+
+<section class="card">
+
+    <h2>Cambio de contraseña</h2>
+
+    <p class="description">
+        Verifica tu identidad con tu correo institucional y tu
+        contraseña actual. Después podrás establecer una nueva
+        contraseña para tu cuenta de trabajador.
+    </p>
+
+
+    <!-- VERIFICACIÓN DE IDENTIDAD -->
+
+    <div id="verifySection">
+
+        <div class="field">
+            <label for="email">Correo institucional</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="usuario@grupogarciacorona.com.mx"
+                autocomplete="username"
+                required
+            >
+        </div>
+
+        <div class="field">
+            <label for="currentPassword">Contraseña actual</label>
+
+            <div class="password-wrap">
+                <input
+                    type="password"
+                    id="currentPassword"
+                    placeholder="Escribe tu contraseña actual"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="toggle"
+                    data-toggle="currentPassword"
+                >Ver</button>
+            </div>
+        </div>
+
+        <button
+            type="button"
+            class="primary"
+            id="verifyBtn"
+        >
+            Verificar identidad
+        </button>
+
+    </div>
+
+
+    <!-- NUEVA CONTRASEÑA -->
+
+    <div id="changeSection" class="hidden">
+
+        <p class="description">
+            Identidad verificada. Ahora registra tu nueva contraseña.
+        </p>
+
+        <div class="field">
+            <label for="newPassword">Nueva contraseña</label>
+
+            <div class="password-wrap">
+                <input
+                    type="password"
+                    id="newPassword"
+                    placeholder="Escribe tu nueva contraseña"
+                    autocomplete="new-password"
+                >
+
+                <button
+                    type="button"
+                    class="toggle"
+                    data-toggle="newPassword"
+                >Ver</button>
+            </div>
+
+            <p class="hint">
+                Utiliza al menos 8 caracteres, incluyendo letras y números.
+            </p>
+        </div>
+
+        <div class="field">
+            <label for="confirmPassword">Confirmar nueva contraseña</label>
+
+            <div class="password-wrap">
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Repite tu nueva contraseña"
+                    autocomplete="new-password"
+                >
+
+                <button
+                    type="button"
+                    class="toggle"
+                    data-toggle="confirmPassword"
+                >Ver</button>
+            </div>
+        </div>
+
+        <button
+            type="button"
+            class="primary"
+            id="changeBtn"
+        >
+            Actualizar contraseña
+        </button>
+
+    </div>
+
+
+    <!-- MENSAJES -->
+
+    <div id="status" class="status"></div>
+
+</section>
+
+</main>
+
+
+<footer>
+    Corporación 2026 Grupo García Corona · Todos los derechos reservados
+</footer>
+
+
+<script>
+(() => {
+
+/* ==========================================
+   CONEXIÓN CON SUPABASE DE TRABAJADORES
+========================================== */
+
+const SUPABASE_URL =
+"https://hzktqlwqhjskafwtrirg.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_w7pi0be3XWd7yK46fKw7PA_nkwCKho4";
+
+const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+        auth: {
+            persistSession: false,
+            autoRefreshToken: false,
+            detectSessionInUrl: false
+        }
+    }
+);
+
+
+/* ==========================================
+   ELEMENTOS
+========================================== */
+
+const $ = id => document.getElementById(id);
+
+const verifySection = $("verifySection");
+const changeSection = $("changeSection");
+const statusBox = $("status");
+
+let verifiedUser = null;
+
+
+/* ==========================================
+   MENSAJES
+========================================== */
+
+function showStatus(message, type = "info") {
+
+    statusBox.textContent = message;
+
+    statusBox.className = "status " + type;
+
+}
+
+function hideStatus() {
+
+    statusBox.textContent = "";
+
+    statusBox.className = "status";
+
+}
+
+
+/* ==========================================
+   MOSTRAR / OCULTAR CONTRASEÑAS
+========================================== */
+
+document.querySelectorAll("[data-toggle]").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const input = $(button.dataset.toggle);
+
+        if (input.type === "password") {
+
+            input.type = "text";
+
+            button.textContent = "Ocultar";
+
+        } else {
+
+            input.type = "password";
+
+            button.textContent = "Ver";
+
+        }
+
+    });
+
+});
+
+
+/* ==========================================
+   VALIDAR CUENTA DE TRABAJADOR
+========================================== */
+
+function isAuthorizedWorker(user) {
+
+    const email = (user.email || "").toLowerCase();
+
+    const institutionalDomain =
+        "@grupogarciacorona.com.mx";
+
+    const correctEmail =
+        email.endsWith(institutionalDomain);
+
+    const correctAccount =
+        user.user_metadata?.tipo_cuenta === "trabajador";
+
+    const activeAccount =
+        user.app_metadata?.trabajador_activo === true;
+
+    return (
+        correctEmail &&
+        correctAccount &&
+        activeAccount
+    );
+
+}
+
+
+/* ==========================================
+   VERIFICAR IDENTIDAD
+========================================== */
+
+$("verifyBtn").addEventListener("click", async () => {
+
+    hideStatus();
+
+    const email = $("email").value.trim().toLowerCase();
+
+    const password = $("currentPassword").value;
+
+    if (!email || !password) {
+
+        return showStatus(
+            "Escribe tu correo institucional y tu contraseña actual.",
+            "error"
+        );
+
+    }
+
+    if (!email.endsWith("@grupogarciacorona.com.mx")) {
+
+        return showStatus(
+            "Debes utilizar tu correo institucional de Grupo García Corona.",
+            "error"
+        );
+
+    }
+
+    $("verifyBtn").disabled = true;
+
+    $("verifyBtn").textContent = "Verificando...";
+
+    try {
+
+        /*
+          Autenticación en el proyecto
+          donde están registrados los trabajadores.
+        */
+
+        const { data, error } = await db.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        const user = data.user;
+
+        if (!isAuthorizedWorker(user)) {
+
+            await db.auth.signOut();
+
+            throw new Error(
+                "La cuenta no cumple los requisitos de trabajador activo. Contacta con el área administrativa."
+            );
+
+        }
+
+        verifiedUser = user;
+
+        verifySection.classList.add("hidden");
+
+        changeSection.classList.remove("hidden");
+
+        showStatus(
+            "Tu identidad fue verificada correctamente. Puedes registrar tu nueva contraseña.",
+            "ok"
+        );
+
+    } catch (error) {
+
+        showStatus(
+            error.message || "No fue posible verificar tu identidad.",
+            "error"
+        );
+
+    } finally {
+
+        $("verifyBtn").disabled = false;
+
+        $("verifyBtn").textContent = "Verificar identidad";
+
+    }
+
+});
+
+
+/* ==========================================
+   ACTUALIZAR CONTRASEÑA
+========================================== */
+
+$("changeBtn").addEventListener("click", async () => {
+
+    hideStatus();
+
+    if (!verifiedUser) {
+
+        return showStatus(
+            "Primero debes verificar tu identidad.",
+            "error"
+        );
+
+    }
+
+    const newPassword = $("newPassword").value;
+
+    const confirmPassword = $("confirmPassword").value;
+
+    if (newPassword.length < 8) {
+
+        return showStatus(
+            "La nueva contraseña debe tener al menos 8 caracteres.",
+            "error"
+        );
+
+    }
+
+    if (!/[A-Za-z]/.test(newPassword) || !/[0-9]/.test(newPassword)) {
+
+        return showStatus(
+            "La contraseña debe contener al menos una letra y un número.",
+            "error"
+        );
+
+    }
+
+    if (newPassword !== confirmPassword) {
+
+        return showStatus(
+            "Las contraseñas no coinciden.",
+            "error"
+        );
+
+    }
+
+    $("changeBtn").disabled = true;
+
+    $("changeBtn").textContent = "Actualizando...";
+
+    try {
+
+        /*
+          Actualiza la contraseña del usuario
+          que acaba de autenticarse.
+        */
+
+        const { data, error } = await db.auth.updateUser({
+            password: newPassword
+        });
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data.user) {
+
+            throw new Error(
+                "Supabase no confirmó la actualización de la cuenta."
+            );
+
+        }
+
+        showStatus(
+            "Tu contraseña fue actualizada correctamente. Se cerrará tu sesión.",
+            "ok"
+        );
+
+        $("newPassword").value = "";
+
+        $("confirmPassword").value = "";
+
+        $("changeBtn").textContent = "Contraseña actualizada";
+
+        /*
+          Cerrar sesión después del cambio.
+        */
+
+        await db.auth.signOut();
+
+        verifiedUser = null;
+
+        setTimeout(() => {
+
+            window.location.href =
+                "https://companygarciacorona.com.mx";
+
+        }, 2500);
+
+    } catch (error) {
+
+        showStatus(
+            error.message || "No fue posible actualizar la contraseña.",
+            "error"
+        );
+
+        $("changeBtn").disabled = false;
+
+        $("changeBtn").textContent =
+            "Actualizar contraseña";
+
+    }
+
+});
+
+})();
+</script>
+
+</body>
+</html>
