@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asignación de Comisiones | OFTV No. 0216</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f3f6fa;color:#172033}
+header{background:#102b46;color:#fff;padding:22px;text-align:center;font-size:22px;font-weight:bold}
+main{max-width:1100px;margin:28px auto;padding:0 16px}
+.panel{background:#fff;border:1px solid #dbe3ec;border-radius:14px;padding:22px;box-shadow:0 5px 18px #102b4612}
+p{color:#536273;line-height:1.5}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin-top:18px;min-width:560px}
+th,td{padding:13px;border-bottom:1px solid #e5eaf0;text-align:left}th{background:#edf3f8;color:#173c5c}
+select,button{padding:10px 12px;border-radius:8px;font-size:15px}select{width:100%;border:1px solid #cbd5e1;background:#fff}
+button{border:0;background:#175b88;color:white;font-weight:bold;cursor:pointer}
+#estado{margin-top:14px;padding:12px;background:#edf3f8;border-radius:8px}
+@media(max-width:600px){.panel{padding:14px}}
+</style>
+</head>
+<body>
+<header>OFTV No. 0216 “FRANCISCO VILLA”<br>Asignación de Comisiones Docentes</header>
+<main><div class="panel">
+<h2>Docentes y comisión asignada</h2>
+<p>Selecciona una comisión para cada docente. Cada docente puede tener solamente una comisión. El cambio se guarda al presionar “Guardar asignación”.</p>
+<div class="table-wrap"><table><thead><tr><th>Docentes</th><th>Comisión</th><th>Acción</th></tr></thead><tbody id="docentes"><tr><td colspan="3">Cargando docentes...</td></tr></tbody></table></div>
+<div id="estado">Conectando con Supabase...</div>
+</div></main>
+<script>
+const sb=supabase.createClient(
+ "https://nlpdpvjtdxknhvgqbfls.supabase.co",
+ "sb_publishable_E-rWcFlW68C6ygPUtRhbNQ_Oxcf0ymf"
+);
+let docentes=[];
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+async function cargar(){
+ const body=document.getElementById("docentes");
+ try{
+  const [{data:d,error:de},{data:c,error:ce}]=await Promise.all([
+   sb.from("docentes").select("numero_servidor,nombre_completo").order("nombre_completo"),
+   sb.from("docente_comisiones").select("numero_servidor,comision")
+  ]);
+  if(de)throw de;if(ce)throw ce;
+  docentes=d||[];const map=new Map((c||[]).map(x=>[String(x.numero_servidor),x.comision]));
+  if(!docentes.length){body.innerHTML='<tr><td colspan="3">No hay docentes registrados.</td></tr>';return;}
+  body.innerHTML=docentes.map((x,i)=>`<tr><td><strong>${esc(x.nombre_completo)}</strong><br><small>Número de servidor: ${esc(x.numero_servidor)}</small></td><td><select id="com_${i}"><option value="">Sin comisión</option><option value="Fortalecimiento Académico" ${map.get(String(x.numero_servidor))==="Fortalecimiento Académico"?"selected":""}>Fortalecimiento Académico</option><option value="Biblioteca" ${map.get(String(x.numero_servidor))==="Biblioteca"?"selected":""}>Biblioteca</option></select></td><td><button onclick="guardar(${i})">Guardar asignación</button></td></tr>`).join("");
+  document.getElementById("estado").textContent=`Se cargaron ${docentes.length} docentes.`;
+ }catch(e){console.error(e);body.innerHTML='<tr><td colspan="3">No se pudieron cargar los docentes. Revisa el SQL y los permisos.</td></tr>';document.getElementById("estado").textContent=e.message||"Error de conexión";}
+}
+async function guardar(i){
+ const d=docentes[i],comision=document.getElementById("com_"+i).value;
+ try{
+  if(!comision){
+   const {error}=await sb.from("docente_comisiones").delete().eq("numero_servidor",String(d.numero_servidor));
+   if(error)throw error;
+  }else{
+   const {error}=await sb.from("docente_comisiones").upsert({numero_servidor:String(d.numero_servidor),comision,updated_at:new Date().toISOString()},{onConflict:"numero_servidor"});
+   if(error)throw error;
+  }
+  document.getElementById("estado").textContent=`Asignación actualizada para ${d.nombre_completo}.`;
+ }catch(e){console.error(e);alert("No se pudo guardar la asignación: "+e.message);}
+}
+cargar();
+</script>
+</body>
+</html>
