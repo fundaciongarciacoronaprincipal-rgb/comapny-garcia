@@ -10,7 +10,8 @@
 
 <title>Portal Escolar | OFTV No. 0216</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
 
 <style>
 
@@ -1185,13 +1186,13 @@ tbody tr:hover{
 
 .row-bajo{
 
-    background:#a91616 !important;
+    background:#dc2626 !important;color:#fff !important;
 
 }
 
 .row-medio{
 
-    background:#e5b900 !important;
+    background:#facc15 !important;color:#111 !important;
 
     color:#111 !important;
 
@@ -1199,10 +1200,16 @@ tbody tr:hover{
 
 .row-alto{
 
-    background:#197844 !important;
+    background:#16a34a !important;color:#fff !important;
 
 }
 
+
+/* VISOR DE MATERIAL EN PANTALLA COMPLETA */
+#visorMaterialCompleto{position:fixed;inset:0;z-index:99999;background:#111;display:flex;flex-direction:column;}
+#visorMaterialCompleto .visor-barra{display:flex;align-items:center;justify-content:space-between;background:#111827;color:#fff;padding:12px 18px;gap:12px;}
+#visorMaterialCompleto .visor-barra button{width:auto;background:#dc2626;color:white;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;}
+#visorMaterialCompleto iframe,#visorMaterialCompleto img{flex:1;width:100%;height:calc(100vh - 55px);border:0;background:white;object-fit:contain;}
 
 /* =====================================================
    REPORTES
@@ -1499,6 +1506,11 @@ tbody tr:hover{
 .contactoSoloLectura{background:#f2f7fb;border:1px solid #dce7f0;padding:12px;border-radius:10px;color:#24384a}
 @media(max-width:600px){.perfilGrid,.contactosForm,.soporteAcciones{grid-template-columns:1fr}.perfilBloque{padding:17px 13px}}
 
+
+.nivel-alumno{background:#fff;color:#172033;border-radius:14px;padding:18px;margin:14px 0}
+.material-alumno{background:#f4f7fb;border:1px solid #d9e2ec;padding:13px;border-radius:10px;margin:9px 0}
+.material-alumno button{width:auto;display:inline-block;margin-right:8px}
+.material-alumno iframe{width:100%;height:520px;border:1px solid #d0d7de;border-radius:8px;background:#fff}
 </style>
 
 </head>
@@ -1590,6 +1602,10 @@ tbody tr:hover{
 
 </div>
 
+
+<div class="menuItem" id="menuFortalecimiento" onclick="mostrarSeccion('fortalecimiento')">
+    <span class="menuIcon">📚</span><span>Fortalecimiento Académico</span>
+</div>
 
 <div
     class="menuItem"
@@ -2504,7 +2520,7 @@ function abrirEncuestas(){
    SECCIONES
 ===================================================== */
 
-function mostrarSeccion(tipo){cerrarMenu();if(!usuarioActual)return;if(tipo==="calificaciones")cargarCalificaciones();if(tipo==="asistencias")cargarAsistencias();if(tipo==="reportes")cargarReportes();if(tipo==="horarios")mostrarHorarios();if(tipo==="calendario")mostrarCalendarioEscolar();if(tipo==="perfil")cargarPerfil();if(tipo==="soporte")mostrarSoporte();}
+function mostrarSeccion(tipo){cerrarMenu();if(!usuarioActual)return;if(tipo==="fortalecimiento"){cargarFortalecimientoAcademico();return;}if(tipo==="calificaciones")cargarCalificaciones();if(tipo==="asistencias")cargarAsistencias();if(tipo==="reportes")cargarReportes();if(tipo==="horarios")mostrarHorarios();if(tipo==="calendario")mostrarCalendarioEscolar();if(tipo==="perfil")cargarPerfil();if(tipo==="soporte")mostrarSoporte();}
 
 
 function mostrarHorarios(){const c=document.getElementById("contenedor");const dias=[["LUNES","COMPUTACIÓN",[["1C","8:00 - 9:30"]]],["MARTES","EDUCACIÓN FÍSICA",[["1A","8:00 - 8:40"],["2A","8:41 - 9:20"],["3A","9:21 - 10:00"],["1B","10:00 - 10:40"],["2B","10:41 - 11:20"],["3B","11:41 - 12:20"],["1C","12:21 - 13:00"]]],["MIÉRCOLES","COMPUTACIÓN",[["1B","8:00 - 9:30"],["2B","9:31 - 11:00"],["3B","11:21 - 12:50"]]],["JUEVES","EDUCACIÓN FÍSICA",[["1A","8:00 - 8:40"],["2A","8:41 - 9:20"],["3A","9:21 - 10:00"],["1B","10:00 - 10:40"],["2B","10:41 - 11:20"],["3B","11:41 - 12:20"],["1C","12:21 - 13:00"]]],["VIERNES","COMPUTACIÓN",[["1A","8:00 - 9:30"],["2A","9:31 - 11:00"],["3A","11:21 - 12:50"]]]];c.innerHTML=`<div class="interno"><button class="btnVolver" onclick="mostrarInicioPanel()">← Volver</button><div class="horariosBox"><div class="horariosHead"><img src="https://companygarciacorona.com.mx/francisco_villa/imagenes/logo_telesecundaria.png"><div><h2>OFTV No. 0216 Francisco Villa</h2><p>Clave de Centro de Trabajo: 15ETV0217V</p></div></div><h1 class="horTitulo">📚 HORARIOS</h1><div class="diasHor">${dias.map(x=>`<div class="diaHor"><div class="diaNom">${x[0]}</div><div class="diaCont"><div class="asig">${x[1]}</div>${x[2].map(r=>`<div class="fila"><span>${r[0]}</span><span>${r[1]}</span></div>`).join("")}</div></div>`).join("")}</div></div></div>`}function mostrarInicioPanel(){document.getElementById("contenedor").innerHTML=`<div class="boleta"><div class="loading">Selecciona una opción del menú para consultar tu información.</div></div>`}
@@ -2808,6 +2824,8 @@ function iniciarPanel(){
     }
 
 
+    const menuFort=document.getElementById("menuFortalecimiento");
+    if(menuFort)menuFort.style.display=tipoUsuario==="alumno"?"flex":"none";
     cargarCalificaciones();
 
 }
@@ -2951,6 +2969,8 @@ async function cargarCalificaciones(){
         `;
 
 
+        data.sort((a,b)=>String(a.materia||"").localeCompare(String(b.materia||""),"es",{sensitivity:"base"}));
+
         data.forEach(e=>{
 
             const cls=
@@ -3044,20 +3064,15 @@ function getColorClass(prom){
     }
 
 
-    if(numero<=4){
-
-        return "row-bajo";
-
+    if(numero>=1 && numero<=6){
+        return "row-bajo"; // rojo: 1 a 6
     }
-
-
-    if(numero===5){
-
-        return "row-medio";
-
+    if(numero>6 && numero<=7){
+        return "row-medio"; // amarillo: 6.1 a 7
     }
-
-
+    if(numero>7 && numero<=10){
+        return "row-alto"; // verde: 7.1 a 10
+    }
     return "row-alto";
 
 }
@@ -3896,6 +3911,91 @@ cargarDatosRecordados();
 console.log(
     "Portal Escolar iniciado correctamente."
 );
+
+/* =====================================================
+   FORTALECIMIENTO ACADÉMICO
+===================================================== */
+async function cargarFortalecimientoAcademico(){
+    const cont=document.getElementById("contenedor");
+    if(!usuarioActual||tipoUsuario!=="alumno")return;
+    cont.innerHTML='<div class="boleta"><div class="loading">Cargando tus niveles y materiales...</div></div>';
+    try{
+        // El alumno se identifica con el id de su registro en la tabla alumnos.
+        const alumnoId=usuarioActual.id;
+        if(alumnoId===null || alumnoId===undefined || alumnoId===""){
+            throw new Error("No se encontró el id del alumno en la sesión (usuarioActual.id).");
+        }
+
+        const {data:niv,error:nivErr}=await supabaseClient.from("evaluaciones_niveles")
+            .select("lectura,matematicas")
+            .eq("alumno_id",alumnoId)
+            .maybeSingle();
+        if(nivErr){console.error("Error consultando evaluaciones_niveles (alumno_id):",nivErr);throw nivErr;}
+
+        const {data:coms,error:comErr}=await supabaseClient.from("docente_comisiones")
+            .select("numero_servidor")
+            .eq("comision","Fortalecimiento Académico");
+        if(comErr){console.error("Error consultando docente_comisiones (comision/numero_servidor):",comErr);throw comErr;}
+
+        const numeros=(coms||[]).map(x=>x.numero_servidor).filter(x=>x!==null && x!==undefined).map(String);
+        let materiales=[];
+        if(numeros.length){
+            const {data,error}=await supabaseClient.from("materiales_academicos").select("*")
+                .in("numero_servidor",numeros).eq("activo",true);
+            if(error){console.error("Error consultando materiales_academicos (numero_servidor/activo):",error);throw error;}
+            materiales=data||[];
+        }
+        const lectura=niv?.lectura||"Sin evaluar",mate=niv?.matematicas||"Sin evaluar";
+        const bloque=(materia,nivel)=>{
+            if(nivel==="Sin evaluar")return `<div class="material-alumno">Aún no se ha registrado tu nivel de ${materia.toLowerCase()}.</div>`;
+            const m=materiales.find(x=>x.materia===materia&&x.nivel===nivel);
+            if(!m)return `<div class="material-alumno">Todavía no hay material disponible para tu nivel (${escaparHTML(nivel)}).</div>`;
+            return `<div class="material-alumno"><strong>${escaparHTML(m.titulo)}</strong><p>${escaparHTML(materia)} · ${escaparHTML(nivel)}</p><button type="button" onclick="abrirMaterialAlumno('${m.id}',false)">Ver material</button>${m.permitir_descarga?`<button type="button" onclick="abrirMaterialAlumno('${m.id}',true)">Descargar</button>`:'<span>Descarga desactivada por el docente</span>'}<div id="preview_${m.id}"></div></div>`;
+        };
+        cont.innerHTML=`<div class="boleta"><div class="nivel-alumno"><h2>📚 Fortalecimiento Académico</h2><h3>Hola, ${escaparHTML(usuarioActual.nombre_completo||"alumno")}</h3><p>Aquí te presentamos tus niveles de conocimiento en Lectura y Matemáticas.</p></div><div class="nivel-alumno"><h3>📖 Lectura</h3><p>Tu nivel de lectura es <strong>${escaparHTML(lectura)}</strong></p>${bloque("Lectura",lectura)}</div><div class="nivel-alumno"><h3>➗ Matemáticas</h3><p>Tu nivel en matemáticas es <strong>${escaparHTML(mate)}</strong></p>${bloque("Matemáticas",mate)}</div></div>`;
+    }catch(e){
+        console.error("Error real al cargar Fortalecimiento Académico:",e);
+        const detalle=e?.message || e?.details || e?.hint || String(e);
+        cont.innerHTML=`<div class="mensaje">❌ No fue posible cargar Fortalecimiento Académico.<br><small>${escaparHTML(detalle)}</small></div>`;
+    }
+}
+
+async function abrirMaterialAlumno(id,descargar){
+    const {data:m,error}=await supabaseClient.from("materiales_academicos").select("*").eq("id",id).maybeSingle();
+    if(error||!m){alert("No se encontró el material.");return;}
+    if(descargar&&!m.permitir_descarga){alert("El docente desactivó la descarga de este material.");return;}
+    const {data,error:signErr}=await supabaseClient.storage.from("materiales-academicos").createSignedUrl(m.storage_path,120);
+    if(signErr){console.error("Error generando enlace del material:",signErr);alert("No se pudo abrir el material: "+signErr.message);return;}
+    if(descargar){
+        try{
+            // Descarga el archivo real almacenado, no solamente el título del registro.
+            const respuesta=await fetch(data.signedUrl);
+            if(!respuesta.ok)throw new Error("No se pudo obtener el archivo ("+respuesta.status+").");
+            const blob=await respuesta.blob();
+            const nombreOriginal=(m.storage_path||"").split("/").pop()||"documento";
+            const extension=nombreOriginal.includes(".")?nombreOriginal.substring(nombreOriginal.lastIndexOf(".")):"";
+            let nombreDescarga=(m.titulo||nombreOriginal).trim();
+            if(extension&&!nombreDescarga.toLowerCase().endsWith(extension.toLowerCase()))nombreDescarga+=extension;
+            if(!extension&&!nombreDescarga.includes("."))nombreDescarga+="."+(blob.type.split("/").pop()||"file");
+            const urlTemporal=URL.createObjectURL(blob);
+            const enlace=document.createElement("a");
+            enlace.href=urlTemporal;enlace.download=nombreDescarga;enlace.style.display="none";
+            document.body.appendChild(enlace);enlace.click();enlace.remove();
+            setTimeout(()=>URL.revokeObjectURL(urlTemporal),1000);
+        }catch(e){console.error("Error descargando archivo material:",e);alert("No se pudo descargar el documento: "+(e.message||e));}
+        return;
+    }
+    const ext=(m.storage_path.split(".").pop()||"").toLowerCase();
+    if(!["pdf","png","jpg","jpeg","gif","webp","txt"].includes(ext)){
+        window.open(data.signedUrl,"_blank","noopener");return;
+    }
+    const visor=document.createElement("div");
+    visor.id="visorMaterialCompleto";
+    visor.innerHTML=`<div class="visor-barra"><strong>${escaparHTML(m.titulo||"Material académico")}</strong><button type="button" onclick="document.getElementById('visorMaterialCompleto')?.remove()">Cerrar ✕</button></div>${["png","jpg","jpeg","gif","webp"].includes(ext)?`<img alt="Material" src="${data.signedUrl}">`:`<iframe title="Material académico" src="${data.signedUrl}#toolbar=0&navpanes=0"></iframe>`}`;
+    document.body.appendChild(visor);
+}
+
+
 
 </script>
 
