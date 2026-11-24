@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,7 +9,6 @@
 <link rel="icon" type="image/png" href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
 <link rel="apple-touch-icon" href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
 
-<!-- Supabase JS: versión compatible con Passkeys -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0"></script>
 
 <style>
@@ -143,7 +141,6 @@ input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #175b8812}
 .drawer-item:hover{background:#e4edf5}
 .drawer-item.active{background:var(--navy);color:white}
 
-/* SOPORTE TECNICO */
 .support-card{max-width:680px;margin:0 auto;padding:0;overflow:hidden}
 .support-header{
  background:var(--navy);padding:30px 22px;text-align:center;
@@ -187,6 +184,16 @@ input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #175b8812}
 .support-foot strong{color:var(--navy)}
 footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
 
+/* Estilos para mensaje PWA */
+.pwa-note{
+ background:#fff8e1;border:1px solid #f5d78e;border-radius:8px;
+ padding:12px;margin-top:10px;font-size:11px;color:#856404;line-height:1.6
+}
+.open-in-chrome{
+ display:inline-flex;align-items:center;gap:6px;background:#4285f4;color:white!important;
+ padding:8px 12px!important;border-radius:6px;font-size:11px!important;margin-top:8px
+}
+
 @media(max-width:720px){
  .login-layout{grid-template-columns:1fr}
  .welcome{padding:25px;min-height:230px}
@@ -229,7 +236,6 @@ footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
 
 <main>
 
-<!-- INICIO DE SESIÓN -->
 <section id="loginView" class="card login-layout">
  <div class="welcome">
   <div>
@@ -256,14 +262,15 @@ footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
    <button id="loginBtn" class="btn primary" style="width:100%">Ingresar al portal →</button>
   </div>
 
-  <!-- NUEVO ACCESO CON PASSKEY -->
   <div class="divider"></div>
   <button id="passkeyLoginBtn" class="btn gold" style="width:100%">
-   <span aria-hidden="true">♧</span> &nbsp; Iniciar con huella digital
+   <span aria-hidden="true">🔐</span> &nbsp; Iniciar con huella digital
   </button>
-  <p class="sub" style="text-align:center;margin:9px 0 0">
+  
+  <!-- MENSAJE DINÁMICO PARA PWA -->
+  <div id="passkeyLoginMsg" class="sub" style="text-align:center;margin:9px 0 0">
    Utiliza la huella, reconocimiento facial o PIN de tu dispositivo.
-  </p>
+  </div>
 
   <div class="links">
    <button class="link" id="newLink">¿Eres nuevo? Presiona aquí</button>
@@ -273,7 +280,6 @@ footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
  </div>
 </section>
 
-<!-- ACTIVACIÓN -->
 <section id="activateView" class="card form-card hidden">
  <div class="form-head">
   <div class="eyebrow">Primer acceso</div>
@@ -301,7 +307,6 @@ footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
  </div>
 </section>
 
-<!-- RECUPERACIÓN -->
 <section id="forgotView" class="card form-card hidden">
  <div class="form-head">
   <div class="eyebrow">Seguridad de la cuenta</div>
@@ -336,7 +341,6 @@ footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
  <div id="forgotMsg" class="notice hidden"></div>
 </section>
 
-<!-- PERFIL -->
 <section id="profileView" class="card hidden">
  <div class="profile-head">
   <div>
@@ -354,686 +358,4 @@ footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
    <div class="photo-sub">Fotografía de perfil</div>
 
    <div class="photo-actions">
-    <button id="choosePhoto" class="btn primary">Cambiar fotografía</button>
-    <button id="deletePhoto" class="btn outline">Eliminar fotografía</button>
-   </div>
-
-   <input id="photoInput" class="hidden" type="file" accept="image/png,image/jpeg,image/webp">
-   <div id="photoMsg" class="notice hidden"></div>
-  </div>
-
-  <div>
-   <!-- NUEVA CONFIGURACIÓN DE ACCESO BIOMÉTRICO -->
-   <div class="data-section">
-    <h3>SEGURIDAD DE MI CUENTA</h3>
-    <p class="sub">
-     Registra una llave de acceso en este dispositivo para iniciar sesión
-     sin escribir tu contraseña.
-    </p>
-    <button id="registerPasskeyBtn" class="btn gold" style="width:100%">
-     ♧ Registrar huella digital
-    </button>
-    <div id="passkeyMsg" class="notice hidden"></div>
-    <p class="sub" style="font-size:10px;margin:12px 0 0">
-     La autenticación se realiza mediante el sistema de seguridad de tu dispositivo.
-     La huella digital nunca se comparte con Grupo García Corona.
-    </p>
-   </div>
-
-   <div class="data-section">
-    <h3>INFORMACIÓN PERSONAL</h3>
-    <div class="data-row"><span>Nombre completo</span><strong id="pNombre">—</strong></div>
-    <div class="data-row"><span>Correo personal</span><strong id="pPersonal">—</strong></div>
-    <div class="data-row"><span>Teléfono</span><strong id="pTelefono">—</strong></div>
-   </div>
-
-   <div class="data-section">
-    <h3>INFORMACIÓN CORPORATIVA</h3>
-    <div class="data-row"><span>Empresa</span><strong id="pEmpresa">—</strong></div>
-    <div class="data-row"><span>Área</span><strong id="pArea">—</strong></div>
-    <div class="data-row"><span>Puesto</span><strong id="pPuesto">—</strong></div>
-   </div>
-
-   <div class="data-section">
-    <h3>IDENTIFICACIÓN INSTITUCIONAL</h3>
-    <div class="data-row"><span>Número de trabajador</span><strong id="pNumero">—</strong></div>
-    <div class="data-row"><span>Correo corporativo</span><strong id="pCorreo">—</strong></div>
-    <div class="data-row"><span>Folio de expediente</span><strong id="pExpediente">—</strong></div>
-    <div class="data-row"><span>Folio de seguimiento</span><strong id="pFolio">—</strong></div>
-    <div class="data-row"><span>Fecha de registro</span><strong id="pFecha">—</strong></div>
-   </div>
-  </div>
- </div>
-</section>
-
-<!-- SOPORTE TÉCNICO INTEGRADO -->
-<section id="supportView" class="card support-card hidden">
- <div class="support-header">
-  <img class="support-logo"
-   src="https://companygarciacorona.com.mx/ggc/soporte_tecnico/logo_soporte_tecnico_ggc.png"
-   alt="Logo de Soporte Técnico Grupo García Corona">
-  <h2>Soporte Técnico</h2>
-  <p>Portal Corporativo · Grupo García Corona, S.A.S.</p>
- </div>
- <div class="support-content">
-  <h3 class="support-subtitle">¿Necesitas ayuda?</h3>
-  <p class="support-description">
-   Estamos para ayudarte. Si tienes dificultades para ingresar al Portal Corporativo,
-   consultar tu información o utilizar alguna de sus funciones, comunícate con nuestro
-   equipo de soporte mediante cualquiera de nuestros canales oficiales.
-  </p>
-  <div class="support-data">
-   <div class="support-data-row">
-    <strong>Correo electrónico</strong>
-    <a href="mailto:grupogarciacorona@gmail.com">grupogarciacorona@gmail.com</a>
-   </div>
-   <div class="support-data-row">
-    <strong>Teléfono de atención</strong>
-    <a href="tel:+525537186669">55 3718 6669</a>
-   </div>
-   <div class="support-data-row">
-    <strong>Página web oficial</strong>
-    <a href="https://companygarciacorona.com.mx" target="_blank" rel="noopener noreferrer">
-     companygarciacorona.com.mx
-    </a>
-   </div>
-  </div>
-  <div class="support-buttons">
-   <a class="support-button support-email"
-    href="mailto:grupogarciacorona@gmail.com?subject=Soporte%20t%C3%A9cnico%20-%20Portal%20Corporativo&body=Hola%2C%20necesito%20apoyo%20con%20el%20Portal%20Corporativo%20de%20Grupo%20Garc%C3%ADa%20Corona.%0A%0ADescribo%20mi%20situaci%C3%B3n%3A">
-    <span class="support-icon">✉</span> Enviar correo electrónico
-   </a>
-   <a class="support-button support-phone" href="tel:+525537186669">
-    <span class="support-icon">☎</span> Llamar a soporte técnico
-   </a>
-   <a class="support-button support-whatsapp"
-    href="https://wa.me/525537186669?text=Hola%2C%20necesito%20apoyo%20con%20el%20Portal%20Corporativo%20de%20Grupo%20Garc%C3%ADa%20Corona."
-    target="_blank" rel="noopener noreferrer">
-    <span class="support-icon">◉</span> Contactar por WhatsApp
-   </a>
-   <a class="support-button support-web"
-    href="https://companygarciacorona.com.mx" target="_blank" rel="noopener noreferrer">
-    <span class="support-icon">🌐</span> Visitar página web oficial
-   </a>
-  </div>
- </div>
- <div class="support-foot">
-  <strong>Grupo García Corona, S.A.S.</strong><br>
-  Departamento de Soporte Técnico<br>
-  © 2026 Todos los derechos reservados.
- </div>
-</section>
-
-</main>
-
-<!-- MENÚ -->
-<div id="drawer" class="drawer hidden">
- <div class="drawer-panel">
-  <button id="closeMenu" class="btn light">✕ Cerrar</button>
-  <img src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png" alt="Grupo García Corona">
-  <div class="drawer-title">Menú corporativo</div>
-  <button id="goProfile" class="drawer-item active">♙ &nbsp; Mi perfil</button>
-  <button id="goSupport" class="drawer-item">✆ &nbsp; Soporte técnico</button>
-  <button id="drawerLogout" class="drawer-item">↪ &nbsp; Cerrar sesión</button>
- </div>
-</div>
-
-<footer>Corporación 2026 · Grupo García Corona, S.A.S.</footer>
-
-<script>
-"use strict";
-
-// ==========================================
-// CONFIGURACIÓN
-// ==========================================
-const SUPABASE_URL = "https://ivzvtquprndajglezrgf.supabase.co";
-const SUPABASE_KEY = "sb_publishable_YAsSsAsQvoirMY_TqVi65w_V8SJ3gyt";
-const API_URL = SUPABASE_URL + "/functions/v1/ggc-api";
-
-// Passkeys habilitadas en el cliente de Supabase.
-const sb = window.supabase.createClient(
- SUPABASE_URL,
- SUPABASE_KEY,
- {
-  auth:{
-   experimental:{
-    passkey:true
-   }
-  }
- }
-);
-
-const $ = id => document.getElementById(id);
-
-let activationValidated = false;
-let currentView = "loginView";
-
-// ==========================================
-// FUNCIONES GENERALES
-// ==========================================
-function show(el){
- if(typeof el === "string") el = $(el);
- if(el) el.classList.remove("hidden");
-}
-function hide(el){
- if(typeof el === "string") el = $(el);
- if(el) el.classList.add("hidden");
-}
-function showView(id){
- ["loginView","activateView","forgotView","profileView","supportView"].forEach(hide);
- show(id);
- currentView = id;
- $("menuBtn").classList.toggle("hidden",!["profileView","supportView"].includes(id));
- $("headerCaption").textContent =
-  id==="profileView" ? "Sesión institucional" :
-  id==="supportView" ? "Soporte al trabajador" : "Acceso institucional";
- $("goProfile").classList.toggle("active",id==="profileView");
- $("goSupport").classList.toggle("active",id==="supportView");
- hide("drawer");
-}
-function notice(el,text,type=""){
- if(typeof el === "string") el = $(el);
- el.textContent = text;
- el.className = "notice " + type;
-}
-function showNotice(el){
- if(typeof el === "string") el = $(el);
- if(el) el.classList.remove("hidden");
-}
-function hideNotice(el){
- if(typeof el === "string") el = $(el);
- if(el) el.classList.add("hidden");
-}
-function validPassword(p){
- return typeof p === "string" && p.length >= 10;
-}
-function showLoginError(text){
- notice("loginMsg",text,"error");
- showNotice("loginMsg");
-}
-
-// ==========================================
-// VALIDAR COMPATIBILIDAD CON PASSKEYS
-// ==========================================
-function checkPasskeySupport(){
- if(!window.isSecureContext){
-  return "La autenticación segura requiere que el portal esté publicado mediante HTTPS.";
- }
- if(!window.PublicKeyCredential || !navigator.credentials){
-  return "Tu navegador no es compatible con Passkeys. Utiliza tu contraseña.";
- }
- return null;
-}
-
-function passkeyErrorMessage(error){
- if(error?.name==="NotAllowedError"){
-  return "La autenticación fue cancelada o no se completó. Inténtalo nuevamente.";
- }
- if(error?.name==="NotSupportedError"){
-  return "Este dispositivo o navegador no admite el método de autenticación solicitado.";
- }
- if(error?.name==="InvalidStateError"){
-  return "Esta llave de acceso ya está registrada en el dispositivo.";
- }
- return error?.message || "No fue posible completar la autenticación con Passkey.";
-}
-
-// ==========================================
-// CONEXIÓN CON EDGE FUNCTION
-// ==========================================
-async function publicAPI(action,data={}){
- const response = await fetch(API_URL,{
-  method:"POST",
-  headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},
-  body:JSON.stringify({action,...data})
- });
- const out = await response.json();
- if(!response.ok || out.error){
-  throw new Error(out.error || "No fue posible completar la solicitud.");
- }
- return out;
-}
-async function privateAPI(action,data={}){
- const {data:s} = await sb.auth.getSession();
- if(!s.session) throw new Error("Tu sesión expiró. Inicia sesión nuevamente.");
- const response = await fetch(API_URL,{
-  method:"POST",
-  headers:{
-   "Content-Type":"application/json",
-   "apikey":SUPABASE_KEY,
-   "Authorization":"Bearer "+s.session.access_token
-  },
-  body:JSON.stringify({action,...data})
- });
- const out = await response.json();
- if(!response.ok || out.error){
-  throw new Error(out.error || "No fue posible completar la solicitud.");
- }
- return out;
-}
-
-// ==========================================
-// INICIAR SESIÓN TRADICIONAL
-// ==========================================
-$("loginBtn").onclick = async()=>{
- const b=$("loginBtn");
- b.disabled=true;
- hideNotice("loginMsg");
-
- try{
-  const out=await publicAPI("login",{
-   identificador:$("identifier").value.trim(),
-   password:$("password").value
-  });
-
-  const session={
-   access_token:out.access_token||out.session?.access_token,
-   refresh_token:out.refresh_token||out.session?.refresh_token,
-   token_type:out.token_type||"bearer",
-   expires_in:out.expires_in,
-   expires_at:out.expires_at
-  };
-
-  if(!session.access_token||!session.refresh_token){
-   throw new Error("La función no devolvió una sesión válida. Revisa la respuesta de ggc-api.");
-  }
-
-  const {error}=await sb.auth.setSession(session);
-  if(error) throw error;
-
-  await loadProfile();
-  showView("profileView");
-
- }catch(e){
-  showLoginError(e.message);
- }finally{
-  b.disabled=false;
- }
-};
-
-// ==========================================
-// NUEVO: INICIAR SESIÓN CON PASSKEY
-// ==========================================
-$("passkeyLoginBtn").onclick=async()=>{
- const b=$("passkeyLoginBtn");
- b.disabled=true;
- hideNotice("loginMsg");
-
- try{
-  const supportError=checkPasskeySupport();
-  if(supportError) throw new Error(supportError);
-
-  const {data,error}=await sb.auth.signInWithPasskey();
-
-  if(error) throw error;
-  if(!data?.session) throw new Error("No se recibió una sesión válida de Supabase.");
-
-  // Supabase inicia la sesión mediante la Passkey.
-  await loadProfile();
-  showView("profileView");
-
- }catch(e){
-  showLoginError(passkeyErrorMessage(e));
- }finally{
-  b.disabled=false;
- }
-};
-
-// ==========================================
-// NAVEGACIÓN
-// ==========================================
-$("newLink").onclick=()=>{
- activationValidated=false;
- hide("activationPasswordBox");
- hideNotice("activationMsg");
- showView("activateView");
-};
-$("forgotLink").onclick=()=>{
- hideNotice("forgotMsg");
- showView("forgotView");
-};
-document.querySelectorAll(".backLogin").forEach(b=>{
- b.onclick=()=>showView("loginView");
-});
-
-// ==========================================
-// VALIDAR PRIMER ACCESO
-// ==========================================
-$("checkActivation").onclick=async()=>{
- const b=$("checkActivation");
- b.disabled=true;
- activationValidated=false;
- hideNotice("activationMsg");
- hide("activationPasswordBox");
-
- try{
-  const folio=$("activationFolio").value.trim().toUpperCase();
-  const identifier=$("activationId").value.trim();
-
-  if(!/^GGC[A-Z0-9]{17}$/.test(folio)){
-   throw new Error("El folio debe contener 20 caracteres y comenzar con GGC.");
-  }
-  if(!identifier) throw new Error("Escribe tu número de trabajador o correo corporativo.");
-
-  await publicAPI("check_activation",{folio_seguimiento:folio,identificador:identifier});
-
-  activationValidated=true;
-  show("activationPasswordBox");
-  notice("activationMsg","Registro validado correctamente. Crea tu contraseña para activar tu cuenta.","success");
-  showNotice("activationMsg");
-
- }catch(e){
-  notice("activationMsg",e.message,"error");
-  showNotice("activationMsg");
- }finally{
-  b.disabled=false;
- }
-};
-
-// ==========================================
-// ACTIVAR CUENTA
-// ==========================================
-$("activateBtn").onclick=async()=>{
- const b=$("activateBtn");
- b.disabled=true;
-
- try{
-  if(!activationValidated) throw new Error("Primero valida tu registro.");
-
-  const password=$("newPassword").value;
-  const confirmation=$("confirmPassword").value;
-
-  if(!validPassword(password)) throw new Error("La contraseña debe tener al menos 10 caracteres.");
-  if(password!==confirmation) throw new Error("Las contraseñas no coinciden.");
-
-  await publicAPI("activate",{
-   folio_seguimiento:$("activationFolio").value.trim().toUpperCase(),
-   identificador:$("activationId").value.trim(),
-   password,
-   confirm_password:confirmation
-  });
-
-  notice("activationMsg","FELICIDADES, YA ERES MIEMBRO DE GRUPO GARCÍA CORONA. Tu cuenta ha sido activada. Ahora puedes iniciar sesión.","success");
-  showNotice("activationMsg");
-  hide("activationPasswordBox");
-
-  $("password").value=password;
-  $("identifier").value=$("activationId").value.trim();
-  activationValidated=false;
-
- }catch(e){
-  notice("activationMsg",e.message,"error");
-  showNotice("activationMsg");
- }finally{
-  b.disabled=false;
- }
-};
-
-// ==========================================
-// SOLICITAR CÓDIGO POR WHATSAPP
-// ==========================================
-$("requestWhatsapp").onclick=()=>{
- const name=$("forgotName").value.trim();
- const number=$("forgotNumber").value.trim();
-
- if(!name||!/^\d{10}$/.test(number)){
-  notice("forgotMsg","Escribe tu nombre y un número de trabajador válido de 10 dígitos.","error");
-  showNotice("forgotMsg");
-  return;
- }
-
- const text=`¡Hola! soy ${name} y mi numero de trabajador es ${number}, me comunico desde el portal corporativo por el motivo de perdida de contraseña y queria pedirle un codigo de verificacion para poder realizar mi cambio de contraseña.`;
-
- window.open("https://wa.me/525537186669?text="+encodeURIComponent(text),"_blank");
-
- notice("forgotMsg","Se abrió WhatsApp para solicitar tu código. Cuando el administrador te lo proporcione, ingrésalo en el apartado de cambio de contraseña.","success");
- showNotice("forgotMsg");
-};
-
-// ==========================================
-// RESTABLECER CONTRASEÑA
-// ==========================================
-$("resetBtn").onclick=async()=>{
- const b=$("resetBtn");
- b.disabled=true;
- hideNotice("forgotMsg");
-
- try{
-  const number=$("resetNumber").value.trim();
-  const code=$("resetCode").value.trim();
-  const password=$("resetPassword").value;
-  const confirmation=$("resetConfirm").value;
-
-  if(!/^\d{10}$/.test(number)) throw new Error("El número de trabajador debe tener 10 dígitos.");
-  if(!/^\d{6}$/.test(code)) throw new Error("El código debe contener 6 dígitos.");
-  if(!validPassword(password)) throw new Error("La contraseña debe tener al menos 10 caracteres.");
-  if(password!==confirmation) throw new Error("Las contraseñas no coinciden.");
-
-  await publicAPI("reset_password",{
-   numero_trabajador:number,codigo:code,password,confirm_password:confirmation
-  });
-
-  notice("forgotMsg","Tu contraseña se actualizó correctamente. Ya puedes iniciar sesión.","success");
-  showNotice("forgotMsg");
-
-  $("resetCode").value="";
-  $("resetPassword").value="";
-  $("resetConfirm").value="";
-
- }catch(e){
-  notice("forgotMsg",e.message,"error");
-  showNotice("forgotMsg");
- }finally{
-  b.disabled=false;
- }
-};
-
-// ==========================================
-// CARGAR PERFIL
-// ==========================================
-async function loadProfile(){
- const {data:{user},error:userError}=await sb.auth.getUser();
-
- if(userError||!user) throw new Error("No se pudo verificar tu sesión.");
-
- const {data,error}=await sb.from("trabajadores")
-  .select("*,empresas(nombre),areas(nombre)")
-  .eq("id",user.id).single();
-
- if(error) throw error;
-
- $("photoName").textContent=data.nombre_completo||"Trabajador";
- $("pNombre").textContent=data.nombre_completo||"—";
- $("pPersonal").textContent=data.correo_personal||"—";
- $("pTelefono").textContent=data.telefono_personal||"—";
- $("pEmpresa").textContent=data.empresas?.nombre||"—";
- $("pArea").textContent=data.areas?.nombre||"—";
- $("pPuesto").textContent=data.puesto||"—";
- $("pNumero").textContent=data.numero_trabajador||"—";
- $("pCorreo").textContent=data.correo_corporativo||user.email||"—";
- $("pExpediente").textContent=data.folio_expediente||"—";
- $("pFolio").textContent=data.folio_seguimiento||"—";
-
- $("pFecha").textContent=data.fecha_registro
-  ?new Date(data.fecha_registro).toLocaleDateString("es-MX"):"—";
-
- if(data.foto_perfil_path){
-  const {data:publicData}=sb.storage.from("fotos-perfil-trabajadores").getPublicUrl(data.foto_perfil_path);
-  $("avatar").src=publicData.publicUrl;
- }else{
-  $("avatar").src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png";
- }
-}
-
-// ==========================================
-// NUEVO: REGISTRAR HUELLA / PASSKEY
-// ==========================================
-$("registerPasskeyBtn").onclick=async()=>{
- const b=$("registerPasskeyBtn");
- b.disabled=true;
- hideNotice("passkeyMsg");
-
- try{
-  const supportError=checkPasskeySupport();
-  if(supportError) throw new Error(supportError);
-
-  const {data:{user},error:userError}=await sb.auth.getUser();
-
-  if(userError||!user){
-   throw new Error("Tu sesión no está activa. Inicia sesión nuevamente.");
-  }
-
-  // Se registra la Passkey para el usuario autenticado.
-  const {data,error}=await sb.auth.registerPasskey();
-
-  if(error) throw error;
-
-  notice(
-   "passkeyMsg",
-   "¡Acceso biométrico registrado correctamente! La próxima vez podrás utilizar el botón Iniciar con huella digital desde este dispositivo.",
-   "success"
-  );
-  showNotice("passkeyMsg");
-
- }catch(e){
-  notice("passkeyMsg",passkeyErrorMessage(e),"error");
-  showNotice("passkeyMsg");
- }finally{
-  b.disabled=false;
- }
-};
-
-// ==========================================
-// CAMBIAR FOTOGRAFÍA
-// ==========================================
-$("choosePhoto").onclick=()=>{$("photoInput").click();};
-
-$("photoInput").onchange=async()=>{
- const file=$("photoInput").files[0];
- if(!file)return;
-
- const b=$("choosePhoto");
- b.disabled=true;
- hideNotice("photoMsg");
-
- try{
-  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
-   throw new Error("Solo se permiten imágenes JPG, PNG o WEBP.");
-  }
-
-  if(file.size>5*1024*1024) throw new Error("La imagen no debe superar 5 MB.");
-
-  const {data:{user}}=await sb.auth.getUser();
-  if(!user) throw new Error("Inicia sesión nuevamente.");
-
-  const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
-  const path=`${user.id}/perfil.${ext}`;
-
-  const {error:uploadError}=await sb.storage.from("fotos-perfil-trabajadores")
-   .upload(path,file,{upsert:true,contentType:file.type});
-
-  if(uploadError)throw uploadError;
-
-  await privateAPI("set_photo",{path});
-  await loadProfile();
-
-  notice("photoMsg","Fotografía actualizada correctamente.","success");
-  showNotice("photoMsg");
-
- }catch(e){
-  notice("photoMsg",e.message,"error");
-  showNotice("photoMsg");
- }finally{
-  b.disabled=false;
-  $("photoInput").value="";
- }
-};
-
-// ==========================================
-// ELIMINAR FOTOGRAFÍA
-// ==========================================
-$("deletePhoto").onclick=async()=>{
- if(!confirm("¿Deseas eliminar tu fotografía de perfil?"))return;
-
- try{
-  const {data:{user}}=await sb.auth.getUser();
-  if(!user)throw new Error("Inicia sesión nuevamente.");
-
-  const {data,error}=await sb.from("trabajadores")
-   .select("foto_perfil_path").eq("id",user.id).single();
-
-  if(error)throw error;
-
-  if(data?.foto_perfil_path){
-   const {error:removeError}=await sb.storage.from("fotos-perfil-trabajadores")
-    .remove([data.foto_perfil_path]);
-
-   if(removeError)throw removeError;
-  }
-
-  await privateAPI("set_photo",{path:null});
-  await loadProfile();
-
-  notice("photoMsg","Fotografía eliminada.","success");
-  showNotice("photoMsg");
-
- }catch(e){
-  notice("photoMsg",e.message,"error");
-  showNotice("photoMsg");
- }
-};
-
-// ==========================================
-// MENÚ CORPORATIVO
-// ==========================================
-$("menuBtn").onclick=()=>show("drawer");
-$("closeMenu").onclick=()=>hide("drawer");
-
-$("goProfile").onclick=()=>{
- hide("drawer");
- showView("profileView");
-};
-
-$("goSupport").onclick=()=>{
- hide("drawer");
- showView("supportView");
-};
-
-// ==========================================
-// CERRAR SESIÓN
-// ==========================================
-async function logout(){
- const {error}=await sb.auth.signOut();
-
- if(error){
-  alert("No se pudo cerrar la sesión: "+error.message);
-  return;
- }
-
- location.reload();
-}
-
-$("profileLogout").onclick=logout;
-$("drawerLogout").onclick=logout;
-
-// ==========================================
-// RESTAURAR SESIÓN
-// ==========================================
-(async()=>{
- const {data:{session}}=await sb.auth.getSession();
-
- if(session){
-  try{
-   await loadProfile();
-   showView("profileView");
-  }catch(e){
-   await sb.auth.signOut();
-   showView("loginView");
-   showLoginError("No se pudo cargar tu perfil. "+e.message);
-  }
- }
-})();
-</script>
-
-</body>
-</html>
+    <button id="choosePhoto" class
