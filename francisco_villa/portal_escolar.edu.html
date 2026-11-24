@@ -3082,43 +3082,62 @@ function getColorClass(prom){
    HORA
 ===================================================== */
 
-function hora(fecha){
+function hora(fechaHora, fechaRegistro){
 
-    if(!fecha){
-
+    if(!fechaHora){
         return "-";
-
     }
 
+    // Se leen literalmente la fecha y la hora recibidas; no se usa Date()
+    // para evitar conversiones automáticas de zona horaria.
+    const textoHora = String(fechaHora).trim();
+    const coincidencia = textoHora.match(/(\d{2}):(\d{2})(?::\d{2})?/);
 
-    try{
-
-        return new Date(fecha).toLocaleTimeString(
-
-            "es-MX",
-
-            {
-
-                timeZone:"America/Mexico_City",
-
-                hour:"2-digit",
-
-                minute:"2-digit",
-
-                hour12:true
-
-            }
-
-        );
-
-    }
-
-    catch{
-
+    if(!coincidencia){
         return "-";
-
     }
 
+    const textoFecha = String(fechaRegistro || fechaHora).trim();
+    const fechaISO = textoFecha.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    let fechaClave = "";
+
+    if(fechaISO){
+        fechaClave = `${fechaISO[1]}-${fechaISO[2]}-${fechaISO[3]}`;
+    }else{
+        const fechaLocal = textoFecha.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/);
+        if(fechaLocal){
+            fechaClave = `${fechaLocal[3]}-${String(fechaLocal[2]).padStart(2,"0")}-${String(fechaLocal[1]).padStart(2,"0")}`;
+        }
+    }
+
+    let horaMostrada = Number(coincidencia[1]);
+    const fechaLimite = "2026-11-10";
+
+    // Antes del 10/11/2026: restar exactamente seis horas.
+    // Desde el 10/11/2026 inclusive: conservar la hora registrada.
+    if(fechaClave && fechaClave < fechaLimite){
+        horaMostrada = (horaMostrada - 6 + 24) % 24;
+    }
+
+    return `${String(horaMostrada).padStart(2, "0")}:${coincidencia[2]}`;
+}
+
+function separarFechaYHoraReporte(fechaRegistro){
+    if(!fechaRegistro) return {fecha:"-", hora:"-"};
+
+    const texto = String(fechaRegistro).trim();
+    const fechaISO = texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    let fecha = texto;
+
+    if(fechaISO){
+        fecha = `${fechaISO[3]}/${fechaISO[2]}/${fechaISO[1]}`;
+    }
+
+    const tieneHora = /(\d{2}):(\d{2})(?::\d{2})?/.test(texto);
+    return {
+        fecha,
+        hora: tieneHora ? hora(texto, texto) : "-"
+    };
 }
 
 
@@ -3272,7 +3291,7 @@ async function cargarAsistencias(){
                     <td>
                         ${
                             a.hora_entrada
-                            ? hora(a.hora_entrada)
+                            ? hora(a.hora_entrada, a.fecha)
                             : "-"
                         }
                     </td>
@@ -3280,7 +3299,7 @@ async function cargarAsistencias(){
                     <td>
                         ${
                             a.hora_salida
-                            ? hora(a.hora_salida)
+                            ? hora(a.hora_salida, a.fecha)
                             : "-"
                         }
                     </td>
@@ -3441,44 +3460,9 @@ async function cargarReportes(){
 
         data.forEach(r=>{
 
-            let fecha="-";
-
-
-            if(r.fecha){
-
-                try{
-
-                    fecha=
-
-                        new Date(r.fecha)
-
-                        .toLocaleString(
-
-                            "es-MX",
-
-                            {
-
-                                timeZone:"America/Mexico_City",
-
-                                dateStyle:"medium",
-
-                                timeStyle:"short",
-
-                                hour12:true
-
-                            }
-
-                        );
-
-                }
-
-                catch{
-
-                    fecha=r.fecha;
-
-                }
-
-            }
+            // Fecha y hora del reporte sin conversión automática de zona horaria.
+            // La hora sigue la misma regla de corte que las asistencias.
+            const datosFechaReporte = separarFechaYHoraReporte(r.fecha);
 
 
             html+=`
@@ -3491,8 +3475,13 @@ async function cargarReportes(){
                             📅 Fecha:
                         </b>
 
-                        ${escaparHTML(fecha)}
+                        ${escaparHTML(datosFechaReporte.fecha)}
 
+                    </p>
+
+                    <p>
+                        <b>🕒 Hora:</b>
+                        ${escaparHTML(datosFechaReporte.hora)}
                     </p>
 
                     <p>
