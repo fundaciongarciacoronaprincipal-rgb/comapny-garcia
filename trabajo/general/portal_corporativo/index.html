@@ -10,7 +10,8 @@
 <link rel="icon" type="image/png" href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
 <link rel="apple-touch-icon" href="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Supabase JS: versión compatible con Passkeys -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.105.0"></script>
 
 <style>
 :root{
@@ -141,7 +142,6 @@ input:focus{border-color:var(--blue);box-shadow:0 0 0 3px #175b8812}
 }
 .drawer-item:hover{background:#e4edf5}
 .drawer-item.active{background:var(--navy);color:white}
-footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
 
 /* SOPORTE TECNICO */
 .support-card{max-width:680px;margin:0 auto;padding:0;overflow:hidden}
@@ -185,13 +185,15 @@ footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
  border-top:1px solid #e8edf2;font-size:11px;color:#788695;line-height:1.8
 }
 .support-foot strong{color:var(--navy)}
+footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
+
 @media(max-width:720px){
  .login-layout{grid-template-columns:1fr}
  .welcome{padding:25px;min-height:230px}
  .welcome h1{font-size:24px}
  .login-form{padding:26px}
  .profile-layout{grid-template-columns:1fr}
- .photo-actions{flex-direction:row;justify-content:center}
+ .photo-actions{flex-direction:row;justify-content:center;flex-wrap:wrap}
 }
 @media(max-width:520px){
  main{margin:19px auto;padding:0 11px}
@@ -238,17 +240,31 @@ footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
   </div>
   <div class="welcome-foot">ORGANIZACIÓN · INNOVACIÓN · FUTURO</div>
  </div>
+
  <div class="login-form">
   <div class="eyebrow">Portal de trabajadores</div>
   <h2>Iniciar sesión</h2>
   <p class="sub">Ingresa tus credenciales institucionales.</p>
+
   <label>Número de trabajador o correo corporativo</label>
   <input id="identifier" autocomplete="username" placeholder="Número o correo institucional">
+
   <label>Contraseña</label>
   <input id="password" type="password" autocomplete="current-password" placeholder="Tu contraseña">
+
   <div class="actions">
    <button id="loginBtn" class="btn primary" style="width:100%">Ingresar al portal →</button>
   </div>
+
+  <!-- NUEVO ACCESO CON PASSKEY -->
+  <div class="divider"></div>
+  <button id="passkeyLoginBtn" class="btn gold" style="width:100%">
+   <span aria-hidden="true">♧</span> &nbsp; Iniciar con huella digital
+  </button>
+  <p class="sub" style="text-align:center;margin:9px 0 0">
+   Utiliza la huella, reconocimiento facial o PIN de tu dispositivo.
+  </p>
+
   <div class="links">
    <button class="link" id="newLink">¿Eres nuevo? Presiona aquí</button>
    <button class="link" id="forgotLink">¿Olvidaste tu contraseña?</button>
@@ -330,31 +346,54 @@ footer{text-align:center;padding:27px 12px;color:#8995a2;font-size:10px}
   </div>
   <button id="profileLogout" class="btn light">Cerrar sesión</button>
  </div>
+
  <div class="profile-layout">
   <div class="photo-card">
    <img id="avatar" class="avatar" src="https://companygarciacorona.com.mx/LOGO_GRUPO_GARCIA_CORONA.png" alt="Fotografía de perfil">
    <div id="photoName" class="photo-name">Trabajador</div>
    <div class="photo-sub">Fotografía de perfil</div>
+
    <div class="photo-actions">
     <button id="choosePhoto" class="btn primary">Cambiar fotografía</button>
     <button id="deletePhoto" class="btn outline">Eliminar fotografía</button>
    </div>
+
    <input id="photoInput" class="hidden" type="file" accept="image/png,image/jpeg,image/webp">
    <div id="photoMsg" class="notice hidden"></div>
   </div>
+
   <div>
+   <!-- NUEVA CONFIGURACIÓN DE ACCESO BIOMÉTRICO -->
+   <div class="data-section">
+    <h3>SEGURIDAD DE MI CUENTA</h3>
+    <p class="sub">
+     Registra una llave de acceso en este dispositivo para iniciar sesión
+     sin escribir tu contraseña.
+    </p>
+    <button id="registerPasskeyBtn" class="btn gold" style="width:100%">
+     ♧ Registrar huella digital
+    </button>
+    <div id="passkeyMsg" class="notice hidden"></div>
+    <p class="sub" style="font-size:10px;margin:12px 0 0">
+     La autenticación se realiza mediante el sistema de seguridad de tu dispositivo.
+     La huella digital nunca se comparte con Grupo García Corona.
+    </p>
+   </div>
+
    <div class="data-section">
     <h3>INFORMACIÓN PERSONAL</h3>
     <div class="data-row"><span>Nombre completo</span><strong id="pNombre">—</strong></div>
     <div class="data-row"><span>Correo personal</span><strong id="pPersonal">—</strong></div>
     <div class="data-row"><span>Teléfono</span><strong id="pTelefono">—</strong></div>
    </div>
+
    <div class="data-section">
     <h3>INFORMACIÓN CORPORATIVA</h3>
     <div class="data-row"><span>Empresa</span><strong id="pEmpresa">—</strong></div>
     <div class="data-row"><span>Área</span><strong id="pArea">—</strong></div>
     <div class="data-row"><span>Puesto</span><strong id="pPuesto">—</strong></div>
    </div>
+
    <div class="data-section">
     <h3>IDENTIFICACIÓN INSTITUCIONAL</h3>
     <div class="data-row"><span>Número de trabajador</span><strong id="pNumero">—</strong></div>
@@ -451,7 +490,19 @@ const SUPABASE_URL = "https://ivzvtquprndajglezrgf.supabase.co";
 const SUPABASE_KEY = "sb_publishable_YAsSsAsQvoirMY_TqVi65w_V8SJ3gyt";
 const API_URL = SUPABASE_URL + "/functions/v1/ggc-api";
 
-const sb = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+// Passkeys habilitadas en el cliente de Supabase.
+const sb = window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY,
+ {
+  auth:{
+   experimental:{
+    passkey:true
+   }
+  }
+ }
+);
+
 const $ = id => document.getElementById(id);
 
 let activationValidated = false;
@@ -502,6 +553,32 @@ function showLoginError(text){
 }
 
 // ==========================================
+// VALIDAR COMPATIBILIDAD CON PASSKEYS
+// ==========================================
+function checkPasskeySupport(){
+ if(!window.isSecureContext){
+  return "La autenticación segura requiere que el portal esté publicado mediante HTTPS.";
+ }
+ if(!window.PublicKeyCredential || !navigator.credentials){
+  return "Tu navegador no es compatible con Passkeys. Utiliza tu contraseña.";
+ }
+ return null;
+}
+
+function passkeyErrorMessage(error){
+ if(error?.name==="NotAllowedError"){
+  return "La autenticación fue cancelada o no se completó. Inténtalo nuevamente.";
+ }
+ if(error?.name==="NotSupportedError"){
+  return "Este dispositivo o navegador no admite el método de autenticación solicitado.";
+ }
+ if(error?.name==="InvalidStateError"){
+  return "Esta llave de acceso ya está registrada en el dispositivo.";
+ }
+ return error?.message || "No fue posible completar la autenticación con Passkey.";
+}
+
+// ==========================================
 // CONEXIÓN CON EDGE FUNCTION
 // ==========================================
 async function publicAPI(action,data={}){
@@ -536,17 +613,19 @@ async function privateAPI(action,data={}){
 }
 
 // ==========================================
-// INICIAR SESIÓN
+// INICIAR SESIÓN TRADICIONAL
 // ==========================================
 $("loginBtn").onclick = async()=>{
  const b=$("loginBtn");
  b.disabled=true;
  hideNotice("loginMsg");
+
  try{
   const out=await publicAPI("login",{
    identificador:$("identifier").value.trim(),
    password:$("password").value
   });
+
   const session={
    access_token:out.access_token||out.session?.access_token,
    refresh_token:out.refresh_token||out.session?.refresh_token,
@@ -554,15 +633,47 @@ $("loginBtn").onclick = async()=>{
    expires_in:out.expires_in,
    expires_at:out.expires_at
   };
+
   if(!session.access_token||!session.refresh_token){
    throw new Error("La función no devolvió una sesión válida. Revisa la respuesta de ggc-api.");
   }
+
   const {error}=await sb.auth.setSession(session);
   if(error) throw error;
+
   await loadProfile();
   showView("profileView");
+
  }catch(e){
   showLoginError(e.message);
+ }finally{
+  b.disabled=false;
+ }
+};
+
+// ==========================================
+// NUEVO: INICIAR SESIÓN CON PASSKEY
+// ==========================================
+$("passkeyLoginBtn").onclick=async()=>{
+ const b=$("passkeyLoginBtn");
+ b.disabled=true;
+ hideNotice("loginMsg");
+
+ try{
+  const supportError=checkPasskeySupport();
+  if(supportError) throw new Error(supportError);
+
+  const {data,error}=await sb.auth.signInWithPasskey();
+
+  if(error) throw error;
+  if(!data?.session) throw new Error("No se recibió una sesión válida de Supabase.");
+
+  // Supabase inicia la sesión mediante la Passkey.
+  await loadProfile();
+  showView("profileView");
+
+ }catch(e){
+  showLoginError(passkeyErrorMessage(e));
  }finally{
   b.disabled=false;
  }
@@ -594,22 +705,29 @@ $("checkActivation").onclick=async()=>{
  activationValidated=false;
  hideNotice("activationMsg");
  hide("activationPasswordBox");
+
  try{
   const folio=$("activationFolio").value.trim().toUpperCase();
   const identifier=$("activationId").value.trim();
+
   if(!/^GGC[A-Z0-9]{17}$/.test(folio)){
    throw new Error("El folio debe contener 20 caracteres y comenzar con GGC.");
   }
   if(!identifier) throw new Error("Escribe tu número de trabajador o correo corporativo.");
+
   await publicAPI("check_activation",{folio_seguimiento:folio,identificador:identifier});
+
   activationValidated=true;
   show("activationPasswordBox");
   notice("activationMsg","Registro validado correctamente. Crea tu contraseña para activar tu cuenta.","success");
   showNotice("activationMsg");
+
  }catch(e){
   notice("activationMsg",e.message,"error");
   showNotice("activationMsg");
- }finally{b.disabled=false;}
+ }finally{
+  b.disabled=false;
+ }
 };
 
 // ==========================================
@@ -618,28 +736,37 @@ $("checkActivation").onclick=async()=>{
 $("activateBtn").onclick=async()=>{
  const b=$("activateBtn");
  b.disabled=true;
+
  try{
   if(!activationValidated) throw new Error("Primero valida tu registro.");
+
   const password=$("newPassword").value;
   const confirmation=$("confirmPassword").value;
+
   if(!validPassword(password)) throw new Error("La contraseña debe tener al menos 10 caracteres.");
   if(password!==confirmation) throw new Error("Las contraseñas no coinciden.");
+
   await publicAPI("activate",{
    folio_seguimiento:$("activationFolio").value.trim().toUpperCase(),
    identificador:$("activationId").value.trim(),
    password,
    confirm_password:confirmation
   });
+
   notice("activationMsg","FELICIDADES, YA ERES MIEMBRO DE GRUPO GARCÍA CORONA. Tu cuenta ha sido activada. Ahora puedes iniciar sesión.","success");
   showNotice("activationMsg");
   hide("activationPasswordBox");
+
   $("password").value=password;
   $("identifier").value=$("activationId").value.trim();
   activationValidated=false;
+
  }catch(e){
   notice("activationMsg",e.message,"error");
   showNotice("activationMsg");
- }finally{b.disabled=false;}
+ }finally{
+  b.disabled=false;
+ }
 };
 
 // ==========================================
@@ -648,13 +775,17 @@ $("activateBtn").onclick=async()=>{
 $("requestWhatsapp").onclick=()=>{
  const name=$("forgotName").value.trim();
  const number=$("forgotNumber").value.trim();
+
  if(!name||!/^\d{10}$/.test(number)){
   notice("forgotMsg","Escribe tu nombre y un número de trabajador válido de 10 dígitos.","error");
   showNotice("forgotMsg");
   return;
  }
+
  const text=`¡Hola! soy ${name} y mi numero de trabajador es ${number}, me comunico desde el portal corporativo por el motivo de perdida de contraseña y queria pedirle un codigo de verificacion para poder realizar mi cambio de contraseña.`;
+
  window.open("https://wa.me/525537186669?text="+encodeURIComponent(text),"_blank");
+
  notice("forgotMsg","Se abrió WhatsApp para solicitar tu código. Cuando el administrador te lo proporcione, ingrésalo en el apartado de cambio de contraseña.","success");
  showNotice("forgotMsg");
 };
@@ -666,27 +797,35 @@ $("resetBtn").onclick=async()=>{
  const b=$("resetBtn");
  b.disabled=true;
  hideNotice("forgotMsg");
+
  try{
   const number=$("resetNumber").value.trim();
   const code=$("resetCode").value.trim();
   const password=$("resetPassword").value;
   const confirmation=$("resetConfirm").value;
+
   if(!/^\d{10}$/.test(number)) throw new Error("El número de trabajador debe tener 10 dígitos.");
   if(!/^\d{6}$/.test(code)) throw new Error("El código debe contener 6 dígitos.");
   if(!validPassword(password)) throw new Error("La contraseña debe tener al menos 10 caracteres.");
   if(password!==confirmation) throw new Error("Las contraseñas no coinciden.");
+
   await publicAPI("reset_password",{
    numero_trabajador:number,codigo:code,password,confirm_password:confirmation
   });
+
   notice("forgotMsg","Tu contraseña se actualizó correctamente. Ya puedes iniciar sesión.","success");
   showNotice("forgotMsg");
+
   $("resetCode").value="";
   $("resetPassword").value="";
   $("resetConfirm").value="";
+
  }catch(e){
   notice("forgotMsg",e.message,"error");
   showNotice("forgotMsg");
- }finally{b.disabled=false;}
+ }finally{
+  b.disabled=false;
+ }
 };
 
 // ==========================================
@@ -694,11 +833,15 @@ $("resetBtn").onclick=async()=>{
 // ==========================================
 async function loadProfile(){
  const {data:{user},error:userError}=await sb.auth.getUser();
+
  if(userError||!user) throw new Error("No se pudo verificar tu sesión.");
+
  const {data,error}=await sb.from("trabajadores")
   .select("*,empresas(nombre),areas(nombre)")
   .eq("id",user.id).single();
+
  if(error) throw error;
+
  $("photoName").textContent=data.nombre_completo||"Trabajador";
  $("pNombre").textContent=data.nombre_completo||"—";
  $("pPersonal").textContent=data.correo_personal||"—";
@@ -710,8 +853,10 @@ async function loadProfile(){
  $("pCorreo").textContent=data.correo_corporativo||user.email||"—";
  $("pExpediente").textContent=data.folio_expediente||"—";
  $("pFolio").textContent=data.folio_seguimiento||"—";
+
  $("pFecha").textContent=data.fecha_registro
   ?new Date(data.fecha_registro).toLocaleDateString("es-MX"):"—";
+
  if(data.foto_perfil_path){
   const {data:publicData}=sb.storage.from("fotos-perfil-trabajadores").getPublicUrl(data.foto_perfil_path);
   $("avatar").src=publicData.publicUrl;
@@ -721,31 +866,80 @@ async function loadProfile(){
 }
 
 // ==========================================
+// NUEVO: REGISTRAR HUELLA / PASSKEY
+// ==========================================
+$("registerPasskeyBtn").onclick=async()=>{
+ const b=$("registerPasskeyBtn");
+ b.disabled=true;
+ hideNotice("passkeyMsg");
+
+ try{
+  const supportError=checkPasskeySupport();
+  if(supportError) throw new Error(supportError);
+
+  const {data:{user},error:userError}=await sb.auth.getUser();
+
+  if(userError||!user){
+   throw new Error("Tu sesión no está activa. Inicia sesión nuevamente.");
+  }
+
+  // Se registra la Passkey para el usuario autenticado.
+  const {data,error}=await sb.auth.registerPasskey();
+
+  if(error) throw error;
+
+  notice(
+   "passkeyMsg",
+   "¡Acceso biométrico registrado correctamente! La próxima vez podrás utilizar el botón Iniciar con huella digital desde este dispositivo.",
+   "success"
+  );
+  showNotice("passkeyMsg");
+
+ }catch(e){
+  notice("passkeyMsg",passkeyErrorMessage(e),"error");
+  showNotice("passkeyMsg");
+ }finally{
+  b.disabled=false;
+ }
+};
+
+// ==========================================
 // CAMBIAR FOTOGRAFÍA
 // ==========================================
 $("choosePhoto").onclick=()=>{$("photoInput").click();};
+
 $("photoInput").onchange=async()=>{
  const file=$("photoInput").files[0];
  if(!file)return;
+
  const b=$("choosePhoto");
  b.disabled=true;
  hideNotice("photoMsg");
+
  try{
   if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
    throw new Error("Solo se permiten imágenes JPG, PNG o WEBP.");
   }
+
   if(file.size>5*1024*1024) throw new Error("La imagen no debe superar 5 MB.");
+
   const {data:{user}}=await sb.auth.getUser();
   if(!user) throw new Error("Inicia sesión nuevamente.");
+
   const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
   const path=`${user.id}/perfil.${ext}`;
+
   const {error:uploadError}=await sb.storage.from("fotos-perfil-trabajadores")
    .upload(path,file,{upsert:true,contentType:file.type});
+
   if(uploadError)throw uploadError;
+
   await privateAPI("set_photo",{path});
   await loadProfile();
+
   notice("photoMsg","Fotografía actualizada correctamente.","success");
   showNotice("photoMsg");
+
  }catch(e){
   notice("photoMsg",e.message,"error");
   showNotice("photoMsg");
@@ -760,21 +954,29 @@ $("photoInput").onchange=async()=>{
 // ==========================================
 $("deletePhoto").onclick=async()=>{
  if(!confirm("¿Deseas eliminar tu fotografía de perfil?"))return;
+
  try{
   const {data:{user}}=await sb.auth.getUser();
   if(!user)throw new Error("Inicia sesión nuevamente.");
+
   const {data,error}=await sb.from("trabajadores")
    .select("foto_perfil_path").eq("id",user.id).single();
+
   if(error)throw error;
+
   if(data?.foto_perfil_path){
    const {error:removeError}=await sb.storage.from("fotos-perfil-trabajadores")
     .remove([data.foto_perfil_path]);
+
    if(removeError)throw removeError;
   }
+
   await privateAPI("set_photo",{path:null});
   await loadProfile();
+
   notice("photoMsg","Fotografía eliminada.","success");
   showNotice("photoMsg");
+
  }catch(e){
   notice("photoMsg",e.message,"error");
   showNotice("photoMsg");
@@ -786,10 +988,12 @@ $("deletePhoto").onclick=async()=>{
 // ==========================================
 $("menuBtn").onclick=()=>show("drawer");
 $("closeMenu").onclick=()=>hide("drawer");
+
 $("goProfile").onclick=()=>{
  hide("drawer");
  showView("profileView");
 };
+
 $("goSupport").onclick=()=>{
  hide("drawer");
  showView("supportView");
@@ -800,9 +1004,15 @@ $("goSupport").onclick=()=>{
 // ==========================================
 async function logout(){
  const {error}=await sb.auth.signOut();
- if(error){alert("No se pudo cerrar la sesión: "+error.message);return;}
+
+ if(error){
+  alert("No se pudo cerrar la sesión: "+error.message);
+  return;
+ }
+
  location.reload();
 }
+
 $("profileLogout").onclick=logout;
 $("drawerLogout").onclick=logout;
 
@@ -811,6 +1021,7 @@ $("drawerLogout").onclick=logout;
 // ==========================================
 (async()=>{
  const {data:{session}}=await sb.auth.getSession();
+
  if(session){
   try{
    await loadProfile();
