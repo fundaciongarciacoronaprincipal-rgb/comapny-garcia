@@ -6,7 +6,8 @@
 
 <title>Portal Docente</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+</script>
 
 <style>
 
@@ -1080,6 +1081,17 @@ tr:hover{
 
 }
 
+
+.nivel-table select{min-width:150px}
+.material-card{background:rgba(255,255,255,.10);padding:15px;border-radius:12px;margin:14px 0}
+.material-card h3{margin:0 0 8px}
+.material-row{display:grid;grid-template-columns:2fr 1fr 1fr auto auto;gap:8px;align-items:center;padding:9px;border-bottom:1px solid rgba(255,255,255,.2)}
+.material-row button{margin:0}
+.material-row input[type="checkbox"]{width:auto}
+.planeacion-item{padding:14px;margin:10px 0;border-radius:9px;background:#fff;color:#172033;border-left:8px solid #16a085}
+.planeacion-item.destiempo{border-left-color:#f1c40f}
+.planeacion-item.noentrego{border-left-color:#e74c3c}
+@media(max-width:700px){.material-row{grid-template-columns:1fr}.material-row button{width:100%}}
 </style>
 </head>
 
@@ -1172,19 +1184,34 @@ tr:hover{
     <div class="menu">
 
         <button onclick="mostrarSeccion('captura')">
-            📝 Captura de Evaluaciones
+            📝 Evaluaciones
         </button>
 
         <button onclick="mostrarSeccion('completos')">
-            👨‍🎓 Alumnos Completos
+            👨‍🎓 Lista de alumnos
+        </button>
+
+        <button onclick="mostrarSeccion('evaluacionNiveles')">
+            📚 Fortalecimiento academico
+        </button>
+
+        <button id="btnMateriales" class="hidden" onclick="mostrarSeccion('materiales')">
+            📂 Material didáctico
+        </button>
+
+        <button id="btnBiblioteca" class="hidden" onclick="mostrarSeccion('biblioteca')">
+            📖 Biblioteca
         </button>
 
         <button onclick="mostrarSeccion('horarios')">
-            🕐 Horarios
+            🕐 Horarios escolares 
         </button>
 
         <button onclick="mostrarSeccion('planeaciones')">
-            📋 Planeaciones
+            📋 Entrega de planeaciones
+        </button>
+        <button onclick="mostrarSeccion('planeacionesDocente')">
+            📑 Planeaciones entregadas
         </button>
 
         <button onclick="mostrarSeccion('calendario')">
@@ -1510,6 +1537,30 @@ tr:hover{
 
     </div>
 
+
+    <div id="seccionEvaluacionNiveles" class="section hidden">
+        <h2>📚 Evaluación de niveles</h2>
+        <p>Selecciona automáticamente el nivel de Lectura y Matemáticas de cada alumno de tu grupo. Los cambios se guardan al modificar cada selector.</p>
+        <div id="tablaNivelesDocente" class="table-container"><div class="mensaje">Cargando alumnos...</div></div>
+    </div>
+
+    <div id="seccionMateriales" class="section hidden">
+        <h2>📂 Material didáctico</h2>
+        <p>Sube materiales para cada nivel. Escribe el nombre que verán los alumnos. Puedes activar o desactivar la descarga.</p>
+        <div id="materialesDocente"></div>
+    </div>
+
+    <div id="seccionBiblioteca" class="section hidden">
+        <h2>📖 Biblioteca</h2>
+        <div id="bibliotecaDocente" class="mensaje">Sección no disponible por el momento.</div>
+    </div>
+
+    <div id="seccionPlaneacionesDocente" class="section hidden">
+        <h2>📋 Mis planeaciones registradas</h2>
+        <p>Consulta únicamente tus registros de tipo Planeación. Esta sección es de solo lectura.</p>
+        <div id="listaPlaneacionesDocente" class="mensaje">Cargando planeaciones...</div>
+    </div>
+
 </div>
 
 </div>
@@ -1745,6 +1796,8 @@ async function login(){
 
 
     await cargarDatos();
+    await cargarComisionDocente();
+    cargarPlaneacionesDocente();
 
 }
 
@@ -2497,7 +2550,11 @@ function mostrarSeccion(seccion){
 
         "seccionCalendario",
 
-        "seccionBuzon"
+        "seccionBuzon",
+        "seccionEvaluacionNiveles",
+        "seccionMateriales",
+        "seccionBiblioteca",
+        "seccionPlaneacionesDocente"
 
     ];
 
@@ -2577,6 +2634,26 @@ function mostrarSeccion(seccion){
 
     }
 
+
+    if(seccion === "evaluacionNiveles"){
+        document.getElementById("seccionEvaluacionNiveles").classList.remove("hidden");
+        cargarEvaluacionNiveles();
+    }
+
+    if(seccion === "materiales"){
+        document.getElementById("seccionMateriales").classList.remove("hidden");
+        cargarMaterialesDocente();
+    }
+
+    if(seccion === "biblioteca"){
+        document.getElementById("seccionBiblioteca").classList.remove("hidden");
+        mostrarBibliotecaDocente();
+    }
+
+    if(seccion === "planeacionesDocente"){
+        document.getElementById("seccionPlaneacionesDocente").classList.remove("hidden");
+        cargarPlaneacionesDocente();
+    }
 
     if(seccion === "buzon"){
 
@@ -2869,6 +2946,134 @@ function escapeHTML(text){
         );
 
 }
+
+/* =========================================================
+   NUEVOS MÓDULOS: COMISIONES, NIVELES, MATERIALES Y PLANEACIONES
+========================================================= */
+let comisionDocenteActual = null;
+const NIVELES_ACADEMICOS = ["Nivel básico","Nivel medio","Nivel bueno"];
+const MATERIAS_ACADEMICAS = ["Lectura","Matemáticas"];
+const BUCKET_MATERIALES = "materiales-academicos";
+
+async function cargarComisionDocente(){
+    const {data,error}=await supabaseClient.from("docente_comisiones")
+        .select("comision").eq("numero_servidor",String(docenteActual.numero_servidor)).maybeSingle();
+    if(error){console.error("Comisión:",error);return;}
+    comisionDocenteActual=data?.comision||null;
+    document.getElementById("btnMateriales")?.classList.toggle("hidden",comisionDocenteActual!=="Fortalecimiento Académico");
+    document.getElementById("btnBiblioteca")?.classList.toggle("hidden",comisionDocenteActual!=="Biblioteca");
+    if(comisionDocenteActual==="Fortalecimiento Académico"){
+        document.getElementById("btnMateriales").classList.remove("hidden");
+    }
+    if(comisionDocenteActual==="Biblioteca"){
+        document.getElementById("btnBiblioteca").classList.remove("hidden");
+    }
+}
+function opcionesNivel(valor){
+    return `<option value="">Seleccionar nivel</option>${NIVELES_ACADEMICOS.map(n=>`<option value="${n}" ${valor===n?"selected":""}>${n}</option>`).join("")}`;
+}
+async function cargarEvaluacionNiveles(){
+    const cont=document.getElementById("tablaNivelesDocente");
+    cont.innerHTML='<div class="mensaje">Cargando niveles...</div>';
+    if(!alumnosGlobal.length){cont.innerHTML='<div class="mensaje">No hay alumnos asignados a tu grupo.</div>';return;}
+    const ids=alumnosGlobal.map(a=>String(a.id));
+    const {data,error}=await supabaseClient.from("evaluaciones_niveles").select("*").in("alumno_id",ids);
+    if(error){console.error(error);cont.innerHTML='<div class="mensaje">No se pudieron consultar los niveles. Verifica que ejecutaste el SQL.</div>';return;}
+    const porAlumno=new Map((data||[]).map(x=>[String(x.alumno_id),x]));
+    cont.innerHTML=`<table class="nivel-table"><thead><tr><th>Alumnos</th><th>Lectura</th><th>Matemáticas</th></tr></thead><tbody>${alumnosGlobal.map(a=>{
+        const r=porAlumno.get(String(a.id))||{};
+        return `<tr><td>${escapeHTML(a.nombre_completo)}</td><td><select onchange="guardarNivelAlumno('${String(a.id).replace(/'/g,"")}','Lectura',this.value)">${opcionesNivel(r.lectura)}</select></td><td><select onchange="guardarNivelAlumno('${String(a.id).replace(/'/g,"")}','Matemáticas',this.value)">${opcionesNivel(r.matematicas)}</select></td></tr>`;
+    }).join("")}</tbody></table><p id="estadoGuardadoNivel" class="mensaje">Los cambios se guardan automáticamente.</p>`;
+}
+async function guardarNivelAlumno(alumnoId,materia,nivel){
+    if(!nivel)return;
+    const payload={alumno_id:String(alumnoId),numero_servidor:String(docenteActual.numero_servidor),grado:docenteActual.grado,grupo:docenteActual.grupo,updated_at:new Date().toISOString()};
+    payload[materia==="Lectura"?"lectura":"matematicas"]=nivel;
+    // Conserva el otro nivel mediante upsert parcial no es posible en PostgREST: recuperar primero.
+    const {data:prev,error:readErr}=await supabaseClient.from("evaluaciones_niveles").select("lectura,matematicas").eq("alumno_id",String(alumnoId)).maybeSingle();
+    if(readErr){alert("No se pudo consultar el registro del alumno: "+readErr.message);return;}
+    if(prev){payload.lectura=prev.lectura;payload.matematicas=prev.matematicas;}
+    payload[materia==="Lectura"?"lectura":"matematicas"]=nivel;
+    const {error}=await supabaseClient.from("evaluaciones_niveles").upsert(payload,{onConflict:"alumno_id"});
+    if(error){console.error(error);alert("No se pudo guardar el nivel: "+error.message);return;}
+    const st=document.getElementById("estadoGuardadoNivel");if(st)st.textContent="✓ Nivel guardado automáticamente.";
+}
+function mostrarBibliotecaDocente(){
+    const url="#";
+    const el=document.getElementById("bibliotecaDocente");
+    if(url==="#"){el.textContent="Sección no disponible por el momento";return;}
+    el.innerHTML=`<a href="${url}" target="_blank" rel="noopener">Abrir Biblioteca</a>`;
+}
+function nivelKey(n){return n==="Nivel básico"?"basico":n==="Nivel medio"?"medio":"bueno";}
+async function cargarMaterialesDocente(){
+    const cont=document.getElementById("materialesDocente");
+    if(comisionDocenteActual!=="Fortalecimiento Académico"){cont.innerHTML='<div class="mensaje">No tienes asignada esta comisión.</div>';return;}
+    const {data,error}=await supabaseClient.from("materiales_academicos").select("*")
+        .eq("numero_servidor",String(docenteActual.numero_servidor)).order("created_at",{ascending:false});
+    if(error){console.error(error);cont.innerHTML='<div class="mensaje">No se pudieron cargar los materiales.</div>';return;}
+    let html="";
+    for(const materia of MATERIAS_ACADEMICAS){
+        html+=`<div class="material-card"><h3>${materia}</h3>`;
+        for(const nivel of NIVELES_ACADEMICOS){
+            html+=`<h4>${nivel}</h4><label>Nombre del material<input id="titulo_${materia}_${nivel}" placeholder="Nombre que verá el alumno"></label><input type="file" id="archivo_${materia}_${nivel}"><button type="button" onclick="subirMaterial('${materia}','${nivel}')">Subir material</button>`;
+            const arr=(data||[]).filter(x=>x.materia===materia&&x.nivel===nivel);
+            if(!arr.length)html+='<p>No hay materiales en esta categoría.</p>';
+            arr.forEach(x=>{
+                html+=`<div class="material-row"><span>${escapeHTML(x.titulo)}</span><label><input type="checkbox" ${x.permitir_descarga?"checked":""} onchange="cambiarPermisoDescarga('${x.id}',this.checked)"> Permitir descarga</label><button type="button" onclick="renombrarMaterial('${x.id}','${escapeHTML(x.titulo).replace(/'/g,"&#39;")}')">Renombrar</button><button type="button" class="btn-danger" onclick="eliminarMaterial('${x.id}','${encodeURIComponent(x.storage_path)}')">Eliminar</button></div>`;
+            });
+        }
+        html+="</div>";
+    }
+    cont.innerHTML=html;
+}
+async function subirMaterial(materia,nivel){
+    const titleEl=document.getElementById(`titulo_${materia}_${nivel}`);
+    const fileEl=document.getElementById(`archivo_${materia}_${nivel}`);
+    const titulo=titleEl.value.trim(),file=fileEl.files[0];
+    if(!titulo||!file){alert("Escribe el nombre del material y selecciona un archivo.");return;}
+    const ext=(file.name.split(".").pop()||"bin").replace(/[^a-z0-9]/gi,"").toLowerCase();
+    const path=`${docenteActual.numero_servidor}/${crypto.randomUUID()}.${ext}`;
+    const {error:upErr}=await supabaseClient.storage.from(BUCKET_MATERIALES).upload(path,file,{upsert:false});
+    if(upErr){alert("No se pudo subir el archivo: "+upErr.message);return;}
+    const {error}=await supabaseClient.from("materiales_academicos").insert({numero_servidor:String(docenteActual.numero_servidor),materia,nivel,titulo,storage_path:path,permitir_descarga:false});
+    if(error){await supabaseClient.storage.from(BUCKET_MATERIALES).remove([path]);alert("No se pudo registrar el material: "+error.message);return;}
+    alert("Material subido correctamente.");cargarMaterialesDocente();
+}
+async function cambiarPermisoDescarga(id,permitir){
+    const {error}=await supabaseClient.from("materiales_academicos").update({permitir_descarga:permitir}).eq("id",id).eq("numero_servidor",String(docenteActual.numero_servidor));
+    if(error)alert("No se pudo cambiar el permiso: "+error.message);
+}
+async function renombrarMaterial(id,actual){
+    const nuevo=prompt("Nuevo nombre del material:",actual);if(!nuevo||!nuevo.trim())return;
+    const {error}=await supabaseClient.from("materiales_academicos").update({titulo:nuevo.trim()}).eq("id",id).eq("numero_servidor",String(docenteActual.numero_servidor));
+    if(error){alert("No se pudo renombrar: "+error.message);return;}cargarMaterialesDocente();
+}
+async function eliminarMaterial(id,pathEncoded){
+    if(!confirm("¿Eliminar definitivamente este material?"))return;
+    const path=decodeURIComponent(pathEncoded);
+    const {error:dbErr}=await supabaseClient.from("materiales_academicos").delete().eq("id",id).eq("numero_servidor",String(docenteActual.numero_servidor));
+    if(dbErr){alert("No se pudo eliminar: "+dbErr.message);return;}
+    const {error:stErr}=await supabaseClient.storage.from(BUCKET_MATERIALES).remove([path]);
+    if(stErr)console.error(stErr);
+    cargarMaterialesDocente();
+}
+async function cargarPlaneacionesDocente(){
+    if(!docenteActual)return;
+    const cont=document.getElementById("listaPlaneacionesDocente");
+    if(!cont)return;
+    cont.innerHTML='<div class="mensaje">Cargando planeaciones...</div>';
+    const {data,error}=await supabaseClient.from("registros_docentes").select("id,fecha,numero_servidor,nombre_docente,tipo_registro,ciclo,estado_planeacion")
+        .eq("tipo_registro","Planeación").eq("numero_servidor",String(docenteActual.numero_servidor)).order("fecha",{ascending:false});
+    if(error){console.error(error);cont.innerHTML='<div class="mensaje">No fue posible consultar tus planeaciones.</div>';return;}
+    if(!data?.length){cont.innerHTML='<div class="mensaje">No tienes planeaciones registradas.</div>';return;}
+    cont.innerHTML=data.map(r=>{
+        const cls=r.estado_planeacion==="Destiempo"?"destiempo":r.estado_planeacion==="No entregó"?"noentrego":"";
+        const color=r.estado_planeacion==="Tiempo"?"#16a085":r.estado_planeacion==="Destiempo"?"#f1c40f":"#e74c3c";
+        const fecha=r.fecha?new Date(r.fecha+"T00:00:00").toLocaleDateString("es-MX",{dateStyle:"long"}):"Fecha no disponible";
+        return `<div class="planeacion-item ${cls}" style="border-left-color:${color}"><strong>${escapeHTML(fecha)}</strong><p>Estado: <b>${escapeHTML(r.estado_planeacion||"Sin estado")}</b></p><small>Ciclo escolar: ${escapeHTML(r.ciclo||"No indicado")}</small></div>`;
+    }).join("");
+}
+
 
 </script>
 
