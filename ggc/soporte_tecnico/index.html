@@ -1,1 +1,316 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Soporte Técnico | Grupo García Corona</title>
+
+<meta name="theme-color" content="#102b46">
+
+<style>
+:root {
+    --azul: #102b46;
+    --azul2: #175b88;
+    --dorado: #c99a32;
+    --blanco: #ffffff;
+    --fondo: #f2f5f9;
+    --texto: #243447;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+
+.contenedor {
+    width: 100%;
+    max-width: 570px;
+    background: var(--blanco);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(16,43,70,0.12);
+}
+
+.encabezado {
+    background: var(--azul);
+    padding: 35px 25px;
+    text-align: center;
+    color: white;
+    border-bottom: 5px solid var(--dorado);
+}
+
+.logo {
+    width: 180px;
+    max-width: 80%;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+
+.encabezado h1 {
+    font-size: 25px;
+    margin-bottom: 9px;
+}
+
+.encabezado p {
+    font-size: 14px;
+    color: #d5e1ed;
+}
+
+.contenido {
+    padding: 30px;
+}
+
+.subtitulo {
+    text-align: center;
+    font-size: 20px;
+    color: var(--azul);
+    margin-bottom: 12px;
+}
+
+.descripcion {
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #68788a;
+    margin-bottom: 25px;
+}
+
+.datos {
+    background: #f5f7fa;
+    border: 1px solid #e4eaf0;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 25px;
+}
+
+.dato {
+    margin-bottom: 15px;
+}
+
+.dato:last-child {
+    margin-bottom: 0;
+}
+
+.dato strong {
+    display: block;
+    color: var(--azul);
+    font-size: 12px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.dato span, .dato a {
+    color: #33475b;
+    font-size: 14px;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+.botones {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+.boton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+    transition: .2s ease;
+    border: 1px solid transparent;
+}
+
+.boton:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+}
+
+.boton .icono {
+    font-size: 21px;
+}
+
+.correo {
+    background: var(--azul);
+    color: white;
+}
+
+.telefono {
+    background: #175b88;
+    color: white;
+}
+
+.whatsapp {
+    background: #168c58;
+    color: white;
+}
+
+.web {
+    background: #f3f5f8;
+    color: var(--azul);
+    border-color: #dce4ec;
+}
+
+.pie {
+    text-align: center;
+    padding: 18px;
+    background: #f8fafc;
+    border-top: 1px solid #e8edf2;
+    font-size: 12px;
+    color: #788695;
+    line-height: 1.7;
+}
+
+.pie strong {
+    color: var(--azul);
+}
+
+@media(max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+
+    .contenido {
+        padding: 23px 18px;
+    }
+
+    .encabezado {
+        padding: 28px 18px;
+    }
+
+    .encabezado h1 {
+        font-size: 22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <header class="encabezado">
+
+        <img
+            class="logo"
+            src="https://companygarciacorona.com.mx/ggc/soporte_tecnico/logo_soporte_tecnico_ggc.png"
+            alt="Logo de Soporte Técnico Grupo García Corona"
+        >
+
+        <h1>Soporte Técnico</h1>
+
+        <p>Grupo García Corona, S.A.S.</p>
+
+    </header>
+
+    <main class="contenido">
+
+        <h2 class="subtitulo">¿Necesitas ayuda?</h2>
+
+        <p class="descripcion">
+            Estamos para ayudarte. Ponte en contacto con nuestro
+            equipo de soporte técnico mediante cualquiera de
+            nuestros canales oficiales.
+        </p>
+
+        <section class="datos">
+
+            <div class="dato">
+                <strong>Correo electrónico</strong>
+                <a href="mailto:grupogarciacorona@gmail.com">
+                    grupogarciacorona@gmail.com
+                </a>
+            </div>
+
+            <div class="dato">
+                <strong>Teléfono de atención</strong>
+                <a href="tel:+525537186669">
+                    55 3718 6669
+                </a>
+            </div>
+
+            <div class="dato">
+                <strong>Página web oficial</strong>
+                <a href="https://companygarciacorona.com.mx"
+                   target="_blank">
+                    companygarciacorona.com.mx
+                </a>
+            </div>
+
+        </section>
+
+        <div class="botones">
+
+            <!-- BOTÓN 1: CORREO -->
+            <a class="boton correo"
+               href="mailto:grupogarciacorona@gmail.com?subject=Solicitud%20de%20soporte%20tecnico">
+                <span class="icono">✉</span>
+                Enviar correo electrónico
+            </a>
+
+            <!-- BOTÓN 2: LLAMADA -->
+            <a class="boton telefono"
+               href="tel:+525537186669">
+                <span class="icono">☎</span>
+                Llamar a soporte técnico
+            </a>
+
+            <!-- BOTÓN 3: WHATSAPP -->
+            <a class="boton whatsapp"
+               href="https://wa.me/525537186669?text=Hola%2C%20necesito%20apoyo%20con%20mi%20plataforma"
+               target="_blank">
+                <span class="icono">◉</span>
+                Contactar por WhatsApp
+            </a>
+
+            <!-- BOTÓN 4: PÁGINA WEB -->
+            <a class="boton web"
+               href="https://companygarciacorona.com.mx"
+               target="_blank">
+                <span class="icono">🌐</span>
+                Visitar página web oficial
+            </a>
+
+        </div>
+
+    </main>
+
+    <footer class="pie">
+
+        <strong>Grupo García Corona, S.A.S.</strong>
+
+        <br>
+
+        Departamento de Soporte Técnico
+
+        <br>
+
+        © 2026 Todos los derechos reservados.
+
+    </footer>
+
+</div>
+
+</body>
+</html>
