@@ -543,10 +543,15 @@ $("loginBtn").onclick = async()=>{
  b.disabled=true;
  hideNotice("loginMsg");
  try{
-  const out=await publicAPI("login",{
-   identificador:$("identifier").value.trim(),
-   password:$("password").value
-  });
+  const identificador=$("identifier").value.trim();
+  if(!identificador) throw new Error("Escribe tu número de trabajador o correo corporativo.");
+  const loginData={password:$("password").value};
+  if(identificador.includes("@")){
+   loginData.correo_corporativo=identificador.toLowerCase();
+  }else{
+   loginData.numero_trabajador=identificador;
+  }
+  const out=await publicAPI("login",loginData);
   const session={
    access_token:out.access_token||out.session?.access_token,
    refresh_token:out.refresh_token||out.session?.refresh_token,
