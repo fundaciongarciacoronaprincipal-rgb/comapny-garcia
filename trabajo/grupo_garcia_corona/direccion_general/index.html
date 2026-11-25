@@ -43,7 +43,47 @@ th{background:#edf3f8;color:var(--navy)}.tablewrap{overflow:auto}
 .file{padding:13px;border:1px solid var(--border);border-radius:9px;margin:9px 0}
 .inline-check{display:flex;align-items:center;gap:8px;font-weight:normal}
 .inline-check input{width:auto;margin:0}
-@media(max-width:850px){.layout{grid-template-columns:1fr}nav{position:static;display:grid;grid-template-columns:repeat(2,1fr)}nav button{font-size:12px}.profile{grid-template-columns:1fr}.info,.grid2{grid-template-columns:1fr}}
+@media(max-width:850px){
+ .container{padding:16px}
+ .layout{grid-template-columns:minmax(0,1fr);gap:14px}
+ nav{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+ nav button{font-size:13px;margin:0;min-width:0;white-space:normal;overflow-wrap:anywhere}
+ .profile{grid-template-columns:1fr}
+ .info,.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* Ajuste fluido para móviles, tabletas y ventanas estrechas */
+html{width:100%;overflow-x:hidden}
+body{min-width:320px;width:100%;overflow-x:hidden}
+.container,.layout,.layout>div,.view,.panel{min-width:0;max-width:100%}
+header{min-width:0;flex-wrap:wrap;padding:clamp(12px,3vw,18px) clamp(12px,4vw,25px)}
+header>div{min-width:0;flex:1}
+header h1{font-size:clamp(16px,2.4vw,19px);line-height:1.25;overflow-wrap:anywhere}
+header small{display:block;line-height:1.35}
+.welcome-panel h2{font-size:clamp(18px,3vw,22px);line-height:1.3;overflow-wrap:anywhere}
+.welcome-panel p{line-height:1.5;margin-bottom:0}
+.cards{grid-template-columns:repeat(auto-fit,minmax(min(100%,145px),1fr))}
+.stat{min-width:0;overflow-wrap:anywhere}
+.tablewrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{min-width:600px}
+input,select{min-width:0;max-width:100%;font-size:16px}
+button{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:560px){
+ .container{padding:10px}
+ .panel{padding:14px;border-radius:11px}
+ nav{padding:10px;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+ nav button{padding:10px 8px;font-size:12px;line-height:1.3}
+ .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .stat{padding:12px;font-size:13px}
+ .stat strong{font-size:clamp(21px,7vw,27px)}
+ .info,.grid2{grid-template-columns:minmax(0,1fr)}
+ .profile img{max-width:120px;height:120px}
+ .login{margin:25px 12px;padding:22px}
+ header img{width:48px;height:48px}
+}
+@media(max-width:360px){
+ nav{grid-template-columns:minmax(0,1fr)}
+ .cards{grid-template-columns:minmax(0,1fr)}
+}
 </style>
 </head>
 <body>
@@ -76,7 +116,7 @@ th{background:#edf3f8;color:var(--navy)}.tablewrap{overflow:auto}
 </nav>
 <div>
 <section id="inicio" class="view">
-<div class="panel"><h2 id="welcomeTitle">Bienvenido</h2><p class="muted">Director General de Grupo García Corona</p><strong id="directorName">Dirección General</strong></div>
+<div class="panel welcome-panel"><h2 id="welcomeTitle">Bienvenido</h2><p class="muted">Director General de Grupo García Corona</p></div>
 <div class="cards">
 <div class="stat">Empresas<strong id="totalCompanies">—</strong></div>
 <div class="stat">Empresas activas<strong id="activeCompanies">—</strong></div>
@@ -217,7 +257,6 @@ function setDirectorIdentity(dashboard){
  const ownWorker=(dashboard?.workers||[]).find(w=>w.id===director.uuid);
  const name=ownWorker?.nombre_completo||director.nombre||director.email||"Director General";
  document.getElementById("welcomeTitle").textContent="Bienvenido, "+name;
- document.getElementById("directorName").textContent="Director General de Grupo García Corona";
 }
 async function loadMyProfile(){
  const box=document.getElementById("myProfileContent");
